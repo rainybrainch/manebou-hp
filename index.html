@@ -121,6 +121,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 .fc-title{font-size:16px;font-weight:700;margin-bottom:7px;line-height:1.4;}
 .fc-desc{font-size:13px;line-height:1.9;color:#555;}
 
+/* BOARD GAME */
+.board-img{width:100%;border-radius:16px;border:3px solid var(--dark);box-shadow:6px 6px 0 var(--dark);margin-bottom:28px;display:block;}
+.board-points{display:flex;flex-direction:column;gap:16px;}
+.bp{display:flex;gap:16px;align-items:flex-start;background:rgba(255,253,245,0.95);border:3px solid var(--dark);border-radius:16px;padding:20px 18px;box-shadow:4px 4px 0 var(--sky);}
+.bp:nth-child(2){box-shadow:4px 4px 0 var(--gold);}
+.bp:nth-child(3){box-shadow:4px 4px 0 var(--green);}
+.bp:nth-child(4){box-shadow:4px 4px 0 var(--purple);}
+.bp-icon{font-size:36px;flex-shrink:0;}
+.bp-title{font-size:17px;font-weight:700;margin-bottom:8px;line-height:1.4;}
+.bp-desc{font-size:14px;line-height:2;color:#444;}
+
 /* FOR WHO */
 .fwgrid{display:grid;grid-template-columns:1fr;gap:14px;}
 .fwc{background:rgba(255,253,245,0.95);border:3px solid var(--dark);border-radius:18px;padding:22px 18px;box-shadow:4px 4px 0 var(--dark);}
@@ -327,6 +338,7 @@ footer strong{color:var(--gold);}
   <button class="drawer-close" onclick="closeDrawer()">✕</button>
   <ul class="drawer-menu">
     <li><a href="#features" onclick="closeDrawer()">Features <span class="dm-sub">特徴</span></a></li>
+    <li><a href="#board" onclick="closeDrawer()">The Game <span class="dm-sub">ゲーム紹介</span></a></li>
     <li><a href="#curriculum" onclick="closeDrawer()">Curriculum <span class="dm-sub">カリキュラム</span></a></li>
     <li><a href="#pricing" onclick="closeDrawer()">Pricing <span class="dm-sub">料金</span></a></li>
     <li><a href="#characters" onclick="closeDrawer()">Characters <span class="dm-sub">キャラクター</span></a></li>
@@ -404,6 +416,21 @@ footer strong{color:var(--gold);}
       <div class="fc"><span class="fc-icon">🎲</span><div><p class="fc-num">FEATURE 01</p><h3 class="fc-title">ボードゲームだから、楽しく学べる！</h3><p class="fc-desc">難しい専門用語は不要。ゲームを楽しむうちに、自然とお金の知識が身につきます。「勉強」ではなく「体験」だから続けられる。</p></div></div>
       <div class="fc"><span class="fc-icon">📅</span><div><p class="fc-num">FEATURE 02</p><h3 class="fc-title">55年の日本経済史を、まるごと体験！</h3><p class="fc-desc">1970年代から2025年まで、オイルショック・バブル崩壊・リーマンショックをゲームの中で経験。歴史を知るほど、投資が上手くなる。</p></div></div>
       <div class="fc"><span class="fc-icon">👨‍👩‍👧</span><div><p class="fc-num">FEATURE 03</p><h3 class="fc-title">難しくない。親子で、一緒に学べる！</h3><p class="fc-desc">ルールはシンプル。投資の知識ゼロでも大丈夫。親子で同じ体験をするから、家に帰ってからもお金の話ができるようになります。</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOARD GAME -->
+<div class="glass section" id="board">
+  <div class="section-inner">
+    <span class="slabel">THE GAME</span>
+    <h2 class="stitle">マネぼう、<br><span class="ac">こんなゲームです</span></h2>
+    <img src="images/img9.webp" alt="マネぼうボードゲーム全体図" class="board-img">
+    <div class="board-points">
+      <div class="bp"><span class="bp-icon">💴</span><div><p class="bp-title">スタートは全員100万円</p><p class="bp-desc">ゲーム開始時に100万円が配られます。株・不動産・金・投資信託など、どの資産に投じるかはあなた次第。選択が将来の資産を大きく変えます。</p></div></div>
+      <div class="bp"><span class="bp-icon">📅</span><div><p class="bp-title">時代ごとのイベントを体験</p><p class="bp-desc">1970年から2025年まで、実際の歴史に基づくイベントカードが次々と登場。オイルショック・バブル・リーマンショックの波に乗れるか？</p></div></div>
+      <div class="bp"><span class="bp-icon">💰</span><div><p class="bp-title">配当でお金が増える・減る</p><p class="bp-desc">保有している資産の種類によって配当が変化します。インフレ・デフレ・金利変動をゲームを通じてリアルに体感できます。</p></div></div>
+      <div class="bp"><span class="bp-icon">🎯</span><div><p class="bp-title">歴史を知るほど有利になる</p><p class="bp-desc">過去のイベントを知っていれば「次の時代に何が来るか」が読めます。勉強した知識がそのままゲームの強さに直結します。</p></div></div>
     </div>
   </div>
 </div>
