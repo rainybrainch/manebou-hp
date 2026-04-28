@@ -123,24 +123,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 
 /* BOARD GAME */
 .board-intro{font-size:15px;line-height:2;color:#333;margin-bottom:24px;padding:18px 20px;background:rgba(91,200,232,0.1);border-left:4px solid var(--sky);border-radius:0 12px 12px 0;}
-.board-hint{text-align:center;font-size:12px;color:#888;letter-spacing:2px;margin-bottom:12px;}
+.board-hint{text-align:center;font-size:13px;color:#999;margin-bottom:12px;}
 .board-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;border-radius:16px;overflow:hidden;border:3px solid var(--dark);box-shadow:6px 6px 0 var(--dark);}
-.bq{position:relative;overflow:hidden;background-image:url('images/img9.webp');background-size:200% 200%;aspect-ratio:1;cursor:pointer;transition:filter 0.35s ease;}
-.bq.dimmed{filter:brightness(0.15);}
+.bq{position:relative;overflow:hidden;background-image:url('images/img9.webp');background-size:200% 200%;aspect-ratio:1;cursor:pointer;transition:filter 0.3s ease;}
+.bq.other{filter:brightness(0.4);}
 .bq-tl{background-position:0% 0%;}
 .bq-tr{background-position:100% 0%;}
 .bq-bl{background-position:0% 100%;}
 .bq-br{background-position:100% 100%;}
-.bq-overlay{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;opacity:0;transition:opacity 0.3s 0.1s;pointer-events:none;}
-.bq.dimmed .bq-overlay{opacity:1;}
-.bq-step{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:3px;margin-bottom:5px;}
-.bq-title{font-family:'Dela Gothic One',sans-serif;font-size:clamp(12px,2.8vw,17px);color:var(--white);margin-bottom:7px;line-height:1.3;}
-.bq-desc{font-size:clamp(10px,2.2vw,12px);color:rgba(255,255,255,0.88);line-height:1.75;}
-.board-flow{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;flex-wrap:wrap;}
-.bf-item{display:flex;align-items:center;gap:6px;background:rgba(255,253,245,0.95);border:2px solid var(--dark);border-radius:12px;padding:8px 12px;font-size:12px;font-weight:700;color:var(--dark);}
-.bf-num{width:22px;height:22px;border-radius:50%;background:var(--gold);border:2px solid var(--dark);display:flex;align-items:center;justify-content:center;font-family:'Dela Gothic One',sans-serif;font-size:12px;color:var(--dark);flex-shrink:0;}
-.bf-num.start{background:var(--red);color:white;}
-.bf-arrow{font-size:14px;color:#aaa;}
+.bq-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 55%,rgba(0,0,0,0) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.bq:hover .bq-overlay{opacity:1;}
+.bq-title{font-family:'Dela Gothic One',sans-serif;font-size:clamp(14px,3.2vw,20px);color:var(--white);margin-bottom:8px;line-height:1.3;}
+.bq-desc{font-size:clamp(12px,2.5vw,14px);color:rgba(255,255,255,0.92);line-height:1.8;}
 
 /* FOR WHO */
 .fwgrid{display:grid;grid-template-columns:1fr;gap:14px;}
@@ -436,49 +430,36 @@ footer strong{color:var(--gold);}
     <span class="slabel">THE GAME</span>
     <h2 class="stitle">現代から1970年へ、<br><span class="ac">タイムスリップ！</span></h2>
     <p class="board-intro">あなたは今から55年前の日本にタイムスリップします。オイルショック・バブル・リーマンショック……実際の日本経済史を投資家として追体験するシミュレーションゲームが、マネぼうです。</p>
-    <p class="board-hint">👆 各エリアにカーソルを合わせると、他のコマに説明が表示されます</p>
+    <p class="board-hint">👆 各エリアにカーソルを合わせてみてください</p>
     <div class="board-grid">
-      <!-- ②左上 -->
+      <!-- 左上 -->
       <div class="bq bq-tl">
         <div class="bq-overlay">
-          <p class="bq-step">STEP 2</p>
           <p class="bq-title">資産を選んで投資しよう</p>
-          <p class="bq-desc">銀行預金・株・金・投資信託の4種から配分。資産ごとに特徴が異なります。</p>
+          <p class="bq-desc">銀行預金・株・金・投資信託の4種から自由に配分。どの資産に投じるかで結果が変わります。</p>
         </div>
       </div>
-      <!-- ③右上 -->
+      <!-- 右上 -->
       <div class="bq bq-tr">
         <div class="bq-overlay">
-          <p class="bq-step">STEP 3</p>
           <p class="bq-title">配当・チャンスで展開が変わる</p>
-          <p class="bq-desc">資産に応じた配当が発生！チャンスカードで予想外のイベントも起こります。</p>
+          <p class="bq-desc">保有資産に応じた配当が発生。チャンスカードで思わぬ出来事も。お金は増えたり減ったり！</p>
         </div>
       </div>
-      <!-- ①左下 -->
+      <!-- 左下 -->
       <div class="bq bq-bl">
         <div class="bq-overlay">
-          <p class="bq-step">STEP 1 ／ スタート</p>
-          <p class="bq-title">100万円で1970年代へ！</p>
-          <p class="bq-desc">全員に100万円が配られスタート。1970年代にタイムスリップして投資の旅へ！</p>
+          <p class="bq-title">100万円を持って1970年代へ！</p>
+          <p class="bq-desc">全員に100万円が配られてスタート。現代からタイムスリップして日本経済史の旅へ出発！</p>
         </div>
       </div>
-      <!-- ④右下 -->
+      <!-- 右下 -->
       <div class="bq bq-br">
         <div class="bq-overlay">
-          <p class="bq-step">STEP 4</p>
           <p class="bq-title">次の時代へタイムスリップ</p>
-          <p class="bq-desc">ネクストヒントで次の時代を予告。歴史の知識が勝負を分ける！①に戻ってループ。</p>
+          <p class="bq-desc">ネクストヒントで次の時代が予告されます。歴史を知っているほど先が読める！</p>
         </div>
       </div>
-    </div>
-    <div class="board-flow">
-      <div class="bf-item"><span class="bf-num start">①</span>スタート（左下）</div>
-      <div class="bf-arrow">→</div>
-      <div class="bf-item"><span class="bf-num">②</span>資産投資（左上）</div>
-      <div class="bf-arrow">→</div>
-      <div class="bf-item"><span class="bf-num">③</span>配当（右上）</div>
-      <div class="bf-arrow">→</div>
-      <div class="bf-item"><span class="bf-num">④</span>次の時代（右下）</div>
     </div>
   </div>
 </div>
@@ -809,10 +790,10 @@ initClickSwap(document.querySelectorAll('.chimg[data-images]'), null);
 const boardQuads = document.querySelectorAll('.bq');
 boardQuads.forEach(bq => {
   bq.addEventListener('mouseenter', () => {
-    boardQuads.forEach(b => { if (b !== bq) b.classList.add('dimmed'); });
+    boardQuads.forEach(b => { b.classList.toggle('other', b !== bq); });
   });
   bq.addEventListener('mouseleave', () => {
-    boardQuads.forEach(b => b.classList.remove('dimmed'));
+    boardQuads.forEach(b => b.classList.remove('other'));
   });
 });
 
