@@ -49,7 +49,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 .hamburger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
 
 /* DRAWER MENU */
-.drawer{position:fixed;top:0;right:-100%;width:80%;max-width:320px;height:100vh;background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);z-index:300;transition:right 0.35s ease;padding:80px 32px 32px;border-left:3px solid var(--gold);}
+.drawer{position:fixed;top:0;right:-100%;width:80%;max-width:320px;height:100vh;background:rgba(20,20,40,0.98);backdrop-filter:blur(20px);z-index:300;transition:right 0.35s ease;padding:80px 32px 100px;border-left:3px solid var(--gold);overflow-y:auto;}
 .drawer.open{right:0;}
 .drawer-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:290;background:rgba(0,0,0,0.5);display:none;}
 .drawer-overlay.open{display:block;}
@@ -133,7 +133,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 .bq-br{background-position:100% 100%;}
 .bq-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 55%,rgba(0,0,0,0) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px;opacity:0;transition:opacity 0.3s;pointer-events:none;}
 .bq-tl .bq-overlay,.bq-tr .bq-overlay{justify-content:flex-start;background:linear-gradient(to bottom,rgba(0,0,0,0.92) 55%,rgba(0,0,0,0) 100%);}
-.bq:hover .bq-overlay{opacity:1;}
+.bq:hover .bq-overlay,.bq.touch-active .bq-overlay{opacity:1;}
+@media(max-width:520px){
+  .bq-overlay{padding:10px;}
+  .bq-title{font-size:13px;margin-bottom:5px;}
+  .bq-desc{font-size:11px;line-height:1.6;}
+}
 .bq-title{font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(15px,3.5vw,20px);color:var(--white);margin-bottom:8px;line-height:1.3;}
 .bq-desc{font-size:clamp(12px,2.5vw,14px);color:rgba(255,255,255,0.92);line-height:1.8;}
 
@@ -436,29 +441,29 @@ footer strong{color:var(--gold);}
       <!-- 左上 -->
       <div class="bq bq-tl">
         <div class="bq-overlay">
-          <p class="bq-title">資産を選んで投資しよう</p>
-          <p class="bq-desc">銀行預金・株式・金・投資信託・国債・ドル・不動産・?????の7種＋1種が登場。それぞれの時代ごとの推移を体験しながら、どう動かすか戦略を考えよう。</p>
+          <p class="bq-title">資産が買える！</p>
+          <p class="bq-desc">銀行預金・株式・金など7種＋1種の資産を運用。時代ごとの推移を体験しよう。</p>
         </div>
       </div>
       <!-- 右上 -->
       <div class="bq bq-tr">
         <div class="bq-overlay">
-          <p class="bq-title">配当・チャンスで展開が変わる</p>
-          <p class="bq-desc">保有資産に応じた配当が発生。チャンスカードで思わぬ出来事も。お金は増えたり減ったり！</p>
+          <p class="bq-title">配当でお金が動く！</p>
+          <p class="bq-desc">資産ごとに配当が変化。チャンスカードで予想外の展開も！</p>
         </div>
       </div>
       <!-- 左下 -->
       <div class="bq bq-bl">
         <div class="bq-overlay">
-          <p class="bq-title">100万円を持って1970年代へ！</p>
-          <p class="bq-desc">全員に100万円が配られてスタート。現代からタイムスリップして日本経済史の旅へ出発！</p>
+          <p class="bq-title">100万円でスタート！</p>
+          <p class="bq-desc">1970年代にタイムスリップして投資の旅へ出発！</p>
         </div>
       </div>
       <!-- 右下 -->
       <div class="bq bq-br">
         <div class="bq-overlay">
-          <p class="bq-title">次の時代へタイムスリップ</p>
-          <p class="bq-desc">ネクストヒントで次の時代が予告されます。歴史を知っているほど先が読める！</p>
+          <p class="bq-title">次の時代へ！</p>
+          <p class="bq-desc">ネクストヒントで次の時代を予告。歴史を知るほど有利になる！</p>
         </div>
       </div>
     </div>
@@ -791,11 +796,20 @@ initClickSwap(document.querySelectorAll('.chimg[data-images]'), null);
 const boardQuads = document.querySelectorAll('.bq');
 boardQuads.forEach(bq => {
   bq.addEventListener('mouseenter', () => {
-    boardQuads.forEach(b => { b.classList.toggle('other', b !== bq); });
+    boardQuads.forEach(b => b.classList.toggle('other', b !== bq));
   });
   bq.addEventListener('mouseleave', () => {
     boardQuads.forEach(b => b.classList.remove('other'));
   });
+  bq.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const already = bq.classList.contains('touch-active');
+    boardQuads.forEach(b => b.classList.remove('touch-active', 'other'));
+    if (!already) {
+      bq.classList.add('touch-active');
+      boardQuads.forEach(b => { if (b !== bq) b.classList.add('other'); });
+    }
+  }, { passive: false });
 });
 
 function toggleMore(panelId, btn) {
