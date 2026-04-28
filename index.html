@@ -122,15 +122,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 .fc-desc{font-size:13px;line-height:1.9;color:#555;}
 
 /* BOARD GAME */
-.board-img{width:100%;border-radius:16px;border:3px solid var(--dark);box-shadow:6px 6px 0 var(--dark);margin-bottom:28px;display:block;}
-.board-points{display:flex;flex-direction:column;gap:16px;}
-.bp{display:flex;gap:16px;align-items:flex-start;background:rgba(255,253,245,0.95);border:3px solid var(--dark);border-radius:16px;padding:20px 18px;box-shadow:4px 4px 0 var(--sky);}
-.bp:nth-child(2){box-shadow:4px 4px 0 var(--gold);}
-.bp:nth-child(3){box-shadow:4px 4px 0 var(--green);}
-.bp:nth-child(4){box-shadow:4px 4px 0 var(--purple);}
-.bp-icon{font-size:36px;flex-shrink:0;}
-.bp-title{font-size:17px;font-weight:700;margin-bottom:8px;line-height:1.4;}
-.bp-desc{font-size:14px;line-height:2;color:#444;}
+.board-intro{font-size:15px;line-height:2;color:#333;margin-bottom:24px;padding:18px 20px;background:rgba(91,200,232,0.1);border-left:4px solid var(--sky);border-radius:0 12px 12px 0;}
+.board-hint{text-align:center;font-size:12px;color:#888;letter-spacing:2px;margin-bottom:12px;}
+.board-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;border-radius:16px;overflow:hidden;border:3px solid var(--dark);box-shadow:6px 6px 0 var(--dark);margin-bottom:0;}
+.bq{position:relative;overflow:hidden;background-image:url('images/img9.webp');background-size:200% 200%;aspect-ratio:1;cursor:pointer;}
+.bq-tl{background-position:0% 0%;}
+.bq-tr{background-position:100% 0%;}
+.bq-bl{background-position:0% 100%;}
+.bq-br{background-position:100% 100%;}
+.bq-badge{position:absolute;top:8px;left:8px;width:28px;height:28px;background:var(--gold);border:2px solid var(--dark);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Dela Gothic One',sans-serif;font-size:14px;color:var(--dark);z-index:5;box-shadow:2px 2px 0 rgba(0,0,0,0.2);}
+.bq-badge.start{background:var(--red);color:white;}
+.bq-overlay{position:absolute;inset:0;background:rgba(26,26,46,0);display:flex;flex-direction:column;justify-content:flex-end;padding:16px;transition:background 0.3s;z-index:4;}
+.bq:hover .bq-overlay{background:rgba(26,26,46,0.87);}
+.bq-step{font-size:9px;color:var(--gold);font-weight:700;letter-spacing:3px;margin-bottom:4px;opacity:0;transform:translateY(10px);transition:opacity 0.25s,transform 0.25s;}
+.bq-title{font-family:'Dela Gothic One',sans-serif;font-size:clamp(13px,3vw,17px);color:white;margin-bottom:6px;line-height:1.3;opacity:0;transform:translateY(10px);transition:opacity 0.25s 0.05s,transform 0.25s 0.05s;}
+.bq-desc{font-size:clamp(11px,2.5vw,13px);color:rgba(255,255,255,0.9);line-height:1.75;opacity:0;transform:translateY(10px);transition:opacity 0.25s 0.1s,transform 0.25s 0.1s;}
+.bq:hover .bq-step,.bq:hover .bq-title,.bq:hover .bq-desc{opacity:1;transform:translateY(0);}
 
 /* FOR WHO */
 .fwgrid{display:grid;grid-template-columns:1fr;gap:14px;}
@@ -424,13 +431,46 @@ footer strong{color:var(--gold);}
 <div class="glass section" id="board">
   <div class="section-inner">
     <span class="slabel">THE GAME</span>
-    <h2 class="stitle">マネぼう、<br><span class="ac">こんなゲームです</span></h2>
-    <img src="images/img9.webp" alt="マネぼうボードゲーム全体図" class="board-img">
-    <div class="board-points">
-      <div class="bp"><span class="bp-icon">💴</span><div><p class="bp-title">スタートは全員100万円</p><p class="bp-desc">ゲーム開始時に100万円が配られます。株・不動産・金・投資信託など、どの資産に投じるかはあなた次第。選択が将来の資産を大きく変えます。</p></div></div>
-      <div class="bp"><span class="bp-icon">📅</span><div><p class="bp-title">時代ごとのイベントを体験</p><p class="bp-desc">1970年から2025年まで、実際の歴史に基づくイベントカードが次々と登場。オイルショック・バブル・リーマンショックの波に乗れるか？</p></div></div>
-      <div class="bp"><span class="bp-icon">💰</span><div><p class="bp-title">配当でお金が増える・減る</p><p class="bp-desc">保有している資産の種類によって配当が変化します。インフレ・デフレ・金利変動をゲームを通じてリアルに体感できます。</p></div></div>
-      <div class="bp"><span class="bp-icon">🎯</span><div><p class="bp-title">歴史を知るほど有利になる</p><p class="bp-desc">過去のイベントを知っていれば「次の時代に何が来るか」が読めます。勉強した知識がそのままゲームの強さに直結します。</p></div></div>
+    <h2 class="stitle">現代から1970年へ、<br><span class="ac">タイムスリップ！</span></h2>
+    <p class="board-intro">あなたは今から55年前の日本にタイムスリップします。オイルショック・バブル・リーマンショック……実際の日本経済史を投資家として追体験するシミュレーションゲームが、マネぼうです。</p>
+    <p class="board-hint">🔄 時計回りに進行 ／ カーソルを合わせると内容が表示されます</p>
+    <div class="board-grid">
+      <!-- ②左上 -->
+      <div class="bq bq-tl">
+        <div class="bq-badge">②</div>
+        <div class="bq-overlay">
+          <p class="bq-step">STEP 2</p>
+          <p class="bq-title">資産を選んで投資しよう</p>
+          <p class="bq-desc">銀行預金・株・金・投資信託、4種の資産から選んで配分。資産ごとに特徴が異なります。</p>
+        </div>
+      </div>
+      <!-- ③右上 -->
+      <div class="bq bq-tr">
+        <div class="bq-badge">③</div>
+        <div class="bq-overlay">
+          <p class="bq-step">STEP 3</p>
+          <p class="bq-title">配当・チャンスで展開が変わる</p>
+          <p class="bq-desc">資産に応じた配当が発生！チャンスカードで予想外のイベントも。お金が増えたり減ったり。</p>
+        </div>
+      </div>
+      <!-- ①左下 -->
+      <div class="bq bq-bl">
+        <div class="bq-badge start">①</div>
+        <div class="bq-overlay">
+          <p class="bq-step">STEP 1 ／ スタート</p>
+          <p class="bq-title">100万円を持って1970年代へ！</p>
+          <p class="bq-desc">全員に100万円が配られてゲーム開始。1970年代にタイムスリップして投資の旅へ出発！</p>
+        </div>
+      </div>
+      <!-- ④右下 -->
+      <div class="bq bq-br">
+        <div class="bq-badge">④</div>
+        <div class="bq-overlay">
+          <p class="bq-step">STEP 4</p>
+          <p class="bq-title">次の時代へタイムスリップ</p>
+          <p class="bq-desc">ネクストヒントで次の時代を予告。歴史の知識が直接ゲームに活きる！また①に戻ってループ。</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
