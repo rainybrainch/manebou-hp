@@ -29,10 +29,10 @@ html{scroll-behavior:smooth;}
 body{font-family:'Zen Maru Gothic',sans-serif;color:var(--dark);overflow-x:hidden;padding-bottom:80px;}
 
 /* SLIDESHOW */
-.slideshow-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;}
+.slideshow-bg{position:fixed;top:0;left:0;right:0;bottom:0;z-index:-1;transform:translate3d(0,0,0);will-change:transform;}
 .slide{position:absolute;top:0;left:0;right:0;bottom:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.5s ease-in-out;}
 .slide.active{opacity:1;}
-.bg-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;background:rgba(10,10,30,0.5);}
+.bg-overlay{position:fixed;top:0;left:0;right:0;bottom:0;z-index:0;background:rgba(10,10,30,0.5);transform:translate3d(0,0,0);}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.92);backdrop-filter:blur(16px);border-bottom:3px solid var(--gold);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;}
