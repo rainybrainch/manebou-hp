@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>マネぼう塾 | お金を楽しく学ぼう！ by RAINY BRAIN</title>
+<meta name="description" content="ボードゲームで日本経済史55年を体験！楽しみながらお金を学べる少人数制スクール。東京都文京区千石（巣鴨駅近く）。無料体験会受付中。">
+<meta property="og:title" content="マネぼう塾 | お金を楽しく学ぼう！">
+<meta property="og:description" content="ボードゲームで日本経済史55年を体験！楽しみながらお金を学べる少人数制スクール。無料体験会受付中。">
+<meta property="og:image" content="https://rainybrainch.github.io/manebou-hp/images/logo.webp">
+<meta property="og:url" content="https://rainybrainch.github.io/manebou-hp/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="マネぼう塾">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="マネぼう塾 | お金を楽しく学ぼう！">
+<meta name="twitter:description" content="ボードゲームで日本経済史55年を体験！楽しみながらお金を学べる少人数制スクール。無料体験会受付中。">
+<meta name="twitter:image" content="https://rainybrainch.github.io/manebou-hp/images/logo.webp">
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -64,6 +75,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 .menu-btn:hover{background:rgba(255,255,255,0.22);transform:scale(1.03);}
 .menu-btn .mb-icon{font-size:20px;display:block;margin-bottom:5px;}
 .hero-loc{display:inline-block;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,0.3);border-radius:50px;padding:9px 22px;font-size:12px;color:var(--white);font-weight:700;animation:fadeUp 0.8s ease 0.55s both;}
+.char-hint{font-size:10px;color:rgba(255,255,255,0.55);letter-spacing:1px;margin-top:-16px;margin-bottom:20px;animation:fadeUp 0.8s ease 0.4s both;}
 .scroll-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.6);font-size:10px;letter-spacing:3px;animation:bounce 2s infinite;display:flex;flex-direction:column;align-items:center;gap:5px;}
 .scroll-hint::after{content:'▼';font-size:13px;color:var(--gold);}
 @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
@@ -274,6 +286,8 @@ footer strong{color:var(--gold);}
 .dot.active{background:var(--gold);transform:scale(1.3);}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.fade-in-ready{opacity:0;transform:translateY(24px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.fade-in-visible{opacity:1;transform:translateY(0);}
 @media(max-width:480px){
   .cgrid{grid-template-columns:1fr;}
   .lflow{grid-template-columns:1fr;gap:6px;}
@@ -326,7 +340,7 @@ footer strong{color:var(--gold);}
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <img src="images/logo.png" alt="マネぼう">
+    <img src="images/logo.webp" alt="マネぼう">
     <div class="nav-logo-text">マネぼう塾<span class="nav-logo-sub">by RAINY BRAIN</span></div>
   </div>
   <div class="hamburger" id="hamburger" onclick="toggleDrawer()">
@@ -346,6 +360,7 @@ footer strong{color:var(--gold);}
     <div class="hero-char" data-name="ためぞう" data-images='["images/img7.webp","images/img7-2.webp","images/img7-3.webp"]'><img src="images/img7.webp" alt="ためぞう"></div>
     <div class="hero-char" data-name="カウッシー" data-images='["images/img8.webp","images/img8-2.webp","images/img8-3.webp"]'><img src="images/img8.webp" alt="カウッシー"></div>
   </div>
+  <p class="char-hint">👆 タップで差分表示</p>
   <div class="menu-grid">
     <a href="#features" class="menu-btn"><span class="mb-icon">🎲</span>ボードゲーム塾</a>
     <a href="#curriculum" class="menu-btn"><span class="mb-icon">📅</span>カリキュラム</a>
@@ -490,15 +505,14 @@ footer strong{color:var(--gold);}
       <button class="news-tab" onclick="switchTab('camp-panel')">Campaign …キャンペーン</button>
     </div>
     <div class="news-panel active" id="news-panel">
-      <div class="news-item"><p class="news-date">2026.04.27</p><p class="news-text">🎲 マネぼう塾、オープン準備中！無料体験会の受付を開始しました</p></div>
       <div class="news-item"><p class="news-date">2026.04.28</p><p class="news-text">📢 ホームページを公開しました</p></div>
-      <div class="news-item"><p class="news-date">2026.03.01</p><p class="news-text">🎉 RAINY BRAIN 始動のお知らせ</p></div>
-      <div class="news-more"><span>view more</span><div class="news-more-circle">▶</div></div>
+      <div class="news-item"><p class="news-date">2026.04.27</p><p class="news-text">🎲 マネぼう塾、オープン準備中！無料体験会の受付を開始しました</p></div>
+      <div class="news-item news-hidden" style="display:none;"><p class="news-date">2026.03.01</p><p class="news-text">🎉 RAINY BRAIN 始動のお知らせ</p></div>
+      <div class="news-more" onclick="toggleMore('news-panel', this)"><span>view more</span><div class="news-more-circle">▶</div></div>
     </div>
     <div class="news-panel" id="camp-panel">
       <div class="news-item"><p class="news-date">2026.04.28</p><p class="news-text">🎉 マネぼう塾公開記念！無料体験会 開催中</p></div>
       <div class="news-item"><p class="news-date">2026.04.28</p><p class="news-text">🌟 先着限定・完全無料で参加できます。お気軽にご応募ください！</p></div>
-      <div class="news-more"><span>view more</span><div class="news-more-circle">▶</div></div>
     </div>
   </div>
 </div>
@@ -638,7 +652,7 @@ footer strong{color:var(--gold);}
 <!-- FOOTER -->
 <footer>
   <div class="flogo-wrap">
-    <img class="flogo-img" src="images/logo.png" alt="マネぼう">
+    <img class="flogo-img" src="images/logo.webp" alt="マネぼう">
     <div class="flogo-text">マネぼう塾</div>
   </div>
   <div class="footer-sns">
@@ -713,6 +727,28 @@ function initClickSwap(els, imgSelector) {
 }
 initClickSwap(document.querySelectorAll('.hero-char[data-images]'), 'img');
 initClickSwap(document.querySelectorAll('.chimg[data-images]'), null);
+
+function toggleMore(panelId, btn) {
+  const hidden = document.querySelectorAll('#' + panelId + ' .news-hidden');
+  const isOpen = btn.dataset.open === '1';
+  hidden.forEach(el => el.style.display = isOpen ? 'none' : 'block');
+  btn.querySelector('span').textContent = isOpen ? 'view more' : 'view less';
+  btn.querySelector('.news-more-circle').style.transform = isOpen ? '' : 'rotate(90deg)';
+  btn.dataset.open = isOpen ? '0' : '1';
+}
+
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('fade-in-visible');
+      fadeObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.section, .cta-section, .strip').forEach(el => {
+  el.classList.add('fade-in-ready');
+  fadeObserver.observe(el);
+});
 </script>
 </body>
 </html>
