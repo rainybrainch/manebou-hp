@@ -132,6 +132,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 .bq-bl{background-position:0% 100%;}
 .bq-br{background-position:100% 100%;}
 .bq-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.92) 55%,rgba(0,0,0,0) 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px;opacity:0;transition:opacity 0.3s;pointer-events:none;}
+.bq-tl .bq-overlay,.bq-tr .bq-overlay{justify-content:flex-start;background:linear-gradient(to bottom,rgba(0,0,0,0.92) 55%,rgba(0,0,0,0) 100%);}
 .bq:hover .bq-overlay{opacity:1;}
 .bq-title{font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(15px,3.5vw,20px);color:var(--white);margin-bottom:8px;line-height:1.3;}
 .bq-desc{font-size:clamp(12px,2.5vw,14px);color:rgba(255,255,255,0.92);line-height:1.8;}
@@ -436,7 +437,7 @@ footer strong{color:var(--gold);}
       <div class="bq bq-tl">
         <div class="bq-overlay">
           <p class="bq-title">資産を選んで投資しよう</p>
-          <p class="bq-desc">銀行預金・株・金・投資信託の4種から自由に配分。どの資産に投じるかで結果が変わります。</p>
+          <p class="bq-desc">銀行預金・株式・金・投資信託・国債・ドル・不動産・?????の7種＋1種が登場。それぞれの時代ごとの推移を体験しながら、どう動かすか戦略を考えよう。</p>
         </div>
       </div>
       <!-- 右上 -->
