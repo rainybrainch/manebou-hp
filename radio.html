@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RAINYBRAIN Radio - Topic Grid</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060b14;
+      --panel: #0a1323;
+      --line: #273b57;
+      --line-strong: #3b5578;
+      --ink: #8da3bf;
+      --ink-dark: #d9e7fb;
+      --accent: #7fb6ff;
+      --board-bg: #0a1221;
+      --board-bg-2: #08101d;
+      --board-line: #1f2f47;
+      --board-line-strong: #324b6b;
+      --board-text: #6e87ac;
+      --board-text-strong: #d6e6ff;
+      --board-accent: #84aeea;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% -15%, rgba(66, 120, 205, 0.2), transparent 55%), var(--bg);
+      color: var(--ink);
+      font-family: "Space Mono", monospace;
+      padding: 42px 16px 64px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20% 0 0 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.22;
+      background-image: repeating-linear-gradient(
+        100deg,
+        rgba(170, 210, 255, 0.16) 0px,
+        rgba(170, 210, 255, 0.16) 1px,
+        transparent 1px,
+        transparent 28px
+      );
+      animation: rain-fall 14s linear infinite;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(122, 172, 240, 0.12), transparent 45%),
+        radial-gradient(ellipse at 80% 70%, rgba(122, 172, 240, 0.08), transparent 45%);
+      filter: blur(12px);
+      opacity: 0.7;
+      animation: mist-breathe 8s ease-in-out infinite;
+    }
+
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.2rem, 6.5vw, 4.4rem);
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      color: #cfe2ff;
+      text-align: center;
+      margin-bottom: 10px;
+      text-shadow: 0 0 24px rgba(127, 182, 255, 0.2);
+    }
+
+    h1 span {
+      color: #7fb6ff;
+      text-shadow: 0 0 20px rgba(127, 182, 255, 0.45);
+    }
+
+    .sub {
+      text-align: center;
+      color: var(--ink);
+      letter-spacing: 0.3em;
+      font-size: 0.56rem;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      opacity: 0.9;
+    }
+
+    .tagline {
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      text-align: center;
+      color: var(--ink);
+      font-size: 0.95rem;
+      margin-bottom: 36px;
+      opacity: 0.9;
+    }
+
+    .divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      column-gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--line-strong), transparent);
+    }
+
+    .divider span {
+      font-size: 0.55rem;
+      letter-spacing: 0.24em;
+      color: var(--ink);
+      text-transform: uppercase;
+    }
+
+    .hint {
+      background: linear-gradient(180deg, rgba(10, 18, 33, 0.92), rgba(7, 14, 27, 0.96));
+      border: 1px solid var(--board-line);
+      border-bottom: none;
+      padding: 10px 12px;
+      margin-bottom: 0;
+      color: var(--board-text);
+      font-size: 0.58rem;
+      line-height: 1.8;
+    }
+
+    .settings {
+      background: linear-gradient(180deg, rgba(10, 18, 33, 0.8), rgba(7, 14, 27, 0.9));
+      border: 1px solid var(--board-line);
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .top-controls {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .admin-badge {
+      border: 1px solid #5e89bd;
+      background: rgba(132, 174, 234, 0.18);
+      color: #d5e8ff;
+      font-size: 0.56rem;
+      letter-spacing: 0.12em;
+      padding: 5px 8px;
+      text-transform: uppercase;
+      display: none;
+    }
+
+    .admin-btn {
+      background: #0d1b30;
+      color: var(--board-text-strong);
+      border: 1px solid var(--board-line-strong);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+
+    .admin-btn:hover {
+      border-color: var(--board-accent);
+    }
+
+    .auth-panel {
+      background: linear-gradient(180deg, rgba(10, 18, 33, 0.8), rgba(7, 14, 27, 0.9));
+      border: 1px solid var(--board-line);
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      display: none;
+      gap: 8px;
+    }
+
+    .auth-error {
+      color: #ffb7b7;
+      font-size: 0.58rem;
+      letter-spacing: 0.04em;
+      min-height: 1.2em;
+    }
+
+    .public-only {
+      display: block;
+    }
+
+    body.admin-mode .admin-badge {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    body.public-mode .admin-only {
+      display: none !important;
+    }
+
+    body.admin-mode .public-only {
+      display: none !important;
+    }
+
+    .settings-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--board-text);
+      text-transform: uppercase;
+    }
+
+    .preview {
+      background: linear-gradient(180deg, rgba(8, 16, 29, 0.96), rgba(5, 12, 22, 0.98));
+      border: 1px solid var(--board-line);
+      border-top: none;
+      min-height: 82px;
+      padding: 14px 16px;
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      color: var(--board-text-strong);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1rem, 2.1vw, 1.28rem);
+      line-height: 1.45;
+    }
+
+    .preview.is-idle {
+      color: var(--board-text);
+      font-family: "Space Mono", monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .topic-stage {
+      background: linear-gradient(180deg, rgba(8, 16, 29, 0.84), rgba(6, 12, 21, 0.93));
+      border: 1px solid var(--board-line);
+      border-top: none;
+      margin-bottom: 14px;
+      padding: 18px 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .stage-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--board-text);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .stage-title {
+      color: var(--board-text-strong);
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.1rem, 2.1vw, 1.45rem);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .stage-meta {
+      color: var(--board-text);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      line-height: 1.8;
+    }
+
+    .stage-tools {
+      margin-top: 14px;
+      border-top: 1px solid rgba(50, 75, 107, 0.45);
+      padding-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 2px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: #0a172c;
+      color: var(--board-text);
+      border: 1px solid var(--board-line);
+      padding: 6px 9px;
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      color: var(--board-text-strong);
+      border-color: var(--board-accent);
+      background: rgba(121, 169, 235, 0.12);
+    }
+
+    .tab-panel {
+      display: none;
+      gap: 10px;
+    }
+
+    .tab-panel.active {
+      display: grid;
+    }
+
+    .tool-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .status-btn,
+    .save-btn {
+      background: #0d1b30;
+      color: var(--board-text-strong);
+      border: 1px solid var(--board-line-strong);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+
+    .status-btn:hover,
+    .save-btn:hover {
+      border-color: var(--board-accent);
+    }
+
+    .status-chip {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      color: var(--board-text);
+      border: 1px solid var(--board-line);
+      padding: 5px 8px;
+    }
+
+    .status-chip.done {
+      color: #bfe1ff;
+      border-color: #4f79a9;
+      background: rgba(132, 174, 234, 0.12);
+    }
+
+    .status-chip.watched {
+      color: #d5e8ff;
+      border-color: #6b8db8;
+      background: rgba(145, 190, 255, 0.12);
+    }
+
+    .stage-input,
+    .stage-memo {
+      width: 100%;
+      background: #091325;
+      color: var(--board-text-strong);
+      border: 1px solid var(--board-line);
+      font-family: "Space Mono", monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.02em;
+      padding: 9px 10px;
+    }
+
+    .stage-input::placeholder,
+    .stage-memo::placeholder {
+      color: var(--board-text);
+    }
+
+    .stage-memo {
+      resize: vertical;
+      min-height: 76px;
+    }
+
+    .summary-box {
+      border: 1px solid var(--board-line);
+      background: #081322;
+      color: var(--board-text-strong);
+      padding: 10px;
+      min-height: 80px;
+      font-size: 0.68rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .mini-note {
+      color: var(--board-text);
+      font-size: 0.55rem;
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+    }
+
+    .player-wrap {
+      border: 1px solid var(--board-line);
+      background: #081322;
+      padding: 8px;
+    }
+
+    .player-wrap audio {
+      width: 100%;
+      height: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 2px;
+      background: linear-gradient(180deg, #13213a, #0f1a2d);
+      border: 1px solid var(--board-line);
+      border-top: none;
+      padding: 2px;
+      box-shadow: 0 10px 28px rgba(3, 8, 17, 0.45);
+    }
+
+    .cell {
+      background: linear-gradient(180deg, var(--board-bg), var(--board-bg-2));
+      border: 1px solid #111b2f;
+      aspect-ratio: 1 / 1;
+      padding: 8px;
+      cursor: pointer;
+      color: var(--board-text);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cell:hover {
+      transform: translateY(-1px);
+      border-color: var(--board-line-strong);
+      background: linear-gradient(160deg, rgba(132, 174, 234, 0.15), transparent 65%), #0b1729;
+      box-shadow: inset 0 0 0 1px rgba(132, 174, 234, 0.22), 0 0 14px rgba(91, 144, 221, 0.22);
+    }
+
+    .cell:focus-visible {
+      outline: 1px solid var(--board-accent);
+      outline-offset: 1px;
+    }
+
+    .cell-num {
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      opacity: 0.9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border: 1px solid var(--board-line-strong);
+      background: transparent;
+      opacity: 0.8;
+    }
+
+    .cell-icons {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+      display: flex;
+      gap: 3px;
+      opacity: 0.25;
+      transition: opacity 0.15s ease;
+      font-size: 0.65rem;
+      pointer-events: none;
+    }
+
+    .cell:hover .cell-icons,
+    .cell:focus-visible .cell-icons {
+      opacity: 1;
+    }
+
+    .cell-icon {
+      border: 1px solid rgba(132, 174, 234, 0.35);
+      color: #d6e6ff;
+      background: rgba(9, 22, 39, 0.7);
+      width: 15px;
+      height: 15px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      line-height: 1;
+      visibility: hidden;
+    }
+
+    .cell-icon.show {
+      visibility: visible;
+    }
+
+    .status-dot.done {
+      background: var(--board-accent);
+      box-shadow: 0 0 8px rgba(132, 174, 234, 0.75);
+    }
+
+    .cell-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 0.82rem;
+      line-height: 1.3;
+      color: var(--board-text-strong);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cell:hover .cell-title,
+    .cell:focus-visible .cell-title {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .category {
+      margin-top: 22px;
+      color: var(--ink);
+      font-size: 0.56rem;
+      letter-spacing: 0.06em;
+      line-height: 1.8;
+      opacity: 0.9;
+    }
+
+    @keyframes rain-fall {
+      from { transform: translateY(-12%); }
+      to { transform: translateY(12%); }
+    }
+
+    @keyframes mist-breathe {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 0.8; }
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .cell-title { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>RAINY<span>BRAIN</span></h1>
+    <p class="sub">Radio</p>
+    <p class="tagline">雨の夜に、思考は深まる。</p>
+
+    <div class="divider"><span>100 Topics Grid</span></div>
+
+    <div class="top-controls">
+      <span class="admin-badge" id="adminBadge">管理中</span>
+      <button class="admin-btn public-only" id="enterAdminBtn" type="button">管理モード</button>
+      <button class="admin-btn admin-only" id="logoutAdminBtn" type="button">ログアウト</button>
+    </div>
+
+    <div class="auth-panel public-only" id="authPanel">
+      <p class="settings-label">管理パスワード認証</p>
+      <div class="tool-row">
+        <input class="stage-input" id="adminPasswordInput" type="password" placeholder="管理パスワードを入力">
+        <button class="save-btn" id="unlockAdminBtn" type="button">認証して入る</button>
+      </div>
+      <p class="auth-error" id="authError"></p>
+    </div>
+
+    <div class="settings admin-only">
+      <p class="settings-label">Anthropic API Settings</p>
+      <div class="tool-row">
+        <input class="stage-input" id="apiKeyInput" type="password" placeholder="Anthropic API Key (例: sk-ant-...)">
+        <input class="stage-input" id="modelInput" type="text" placeholder="モデル名（既定: claude-3-5-sonnet-latest）">
+      </div>
+      <p class="mini-note">APIキーはブラウザの localStorage に保存され、この端末内でのみ利用されます。</p>
+    </div>
+
+    <div class="hint">
+      マスにカーソルを合わせるとテーマが表示されます。<br>
+      クリックすると下のエリアで収録管理できます。
+    </div>
+
+    <div class="grid" id="topicGrid" aria-label="ラジオテーマ一覧"></div>
+
+    <div class="preview is-idle" id="preview">Hover a square to preview the topic</div>
+    <div class="topic-stage" id="topicStage">
+      <p class="stage-label" id="stageLabel">Selected Topic</p>
+      <h2 class="stage-title" id="stageTitle">マスをクリックすると、ここにテーマ詳細が表示されます</h2>
+      <p class="stage-meta" id="stageMeta">このページ内でテーマを確認しながら収録運用できます。外部ページへの遷移は不要です。</p>
+      <div class="stage-tools">
+        <div class="tabs">
+          <button class="tab-btn active" id="manageTabBtn" type="button">管理</button>
+          <button class="tab-btn" id="transcriptTabBtn" type="button">文字起こし</button>
+        </div>
+        <div class="tab-panel active" id="managePanel">
+          <div class="tool-row">
+            <button class="status-btn" id="toggleStatusBtn" type="button">収録済みにする</button>
+            <button class="status-btn" id="toggleWatchedBtn" type="button">視聴済みにする</button>
+            <span class="status-chip" id="statusChip">未収録</span>
+            <span class="status-chip" id="watchedChip">未視聴</span>
+          </div>
+          <div class="tool-row">
+            <a href="https://open.spotify.com/show/71GP94kWhM97ZodVFBwJoS" target="_blank" class="save-btn" style="text-decoration:none;background:#1DB954;border-color:#1DB954;color:#fff;">🎙️ Spotifyで聴く</a>
+          </div>
+          <textarea class="stage-memo" id="memoInput" placeholder="このテーマの収録メモ"></textarea>
+          <div class="tool-row">
+            <button class="save-btn" id="saveMemoBtn" type="button">メモ保存</button>
+            <span class="mini-note">保存データはこのブラウザ内に保持されます（localStorage）。</span>
+          </div>
+        </div>
+        <div class="tab-panel" id="transcriptPanel">
+          <textarea class="stage-memo" id="transcriptInput" placeholder="文字起こし全文を貼り付け"></textarea>
+          <div class="tool-row">
+            <button class="save-btn" id="saveTranscriptBtn" type="button">文字起こし保存</button>
+            <button class="save-btn" id="summarizeBtn" type="button">AIで要約する</button>
+          </div>
+          <div class="summary-box" id="summaryBox">要約結果がここに表示されます。</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="category">
+      01-20: 自己認識 / 21-40: 対人関係 / 41-60: 生活と労働 / 61-80: 時間と変化 / 81-100: 哲学と形而上
+    </p>
+  </div>
+
+  <script>
+    const topics = [
+      "「自分らしさ」という呪縛について",
+      "なぜ私たちは他人と自分を比較してしまうのか",
+      "コンプレックスは克服すべきか、飼いならすべきか",
+      "自分の「機嫌」を自分で取る方法",
+      "「誠実」であることのコストとリターン",
+      "嘘をつくとき、人は何を守っているのか",
+      "才能がないと自覚した日から始まること",
+      "「大人になる」とは、何を諦めることか",
+      "自分の弱さをさらけ出す勇気の正体",
+      "自尊心（プライド）が邪魔をするとき",
+      "「一生モノ」の趣味に出会う条件",
+      "飽きっぽい性格は欠点なのか",
+      "沈黙が怖い理由",
+      "鏡の中の自分と、他人が見ている自分のズレ",
+      "「正義感」に潜む攻撃性について",
+      "怒りの感情をどう逃がすべきか",
+      "孤独と孤立の決定的な違い",
+      "運の良し悪しは、解釈で決まるのか",
+      "自分の名前を好きになれるか",
+      "「何者かになりたい」という病",
+      "親友の定義とは何か",
+      "親との距離感をどう詰め、どう離すか",
+      "嫌いな人とどう共存するか",
+      "「優しさ」と「お節介」の境界線",
+      "謝罪の作法。なぜ「ごめん」が言えないのか",
+      "縁が切れるときの予兆",
+      "誰かを許すことは、自分のためか他人のためか",
+      "褒め言葉を素直に受け取れない心理",
+      "集団の中の孤独について",
+      "恋と愛の違いを、言葉にしてみる",
+      "裏切られたとき、何を学ぶべきか",
+      "初対面で相手のどこを見るか",
+      "恩返しと恩着せがましさ",
+      "雑談の価値。無駄な話ほど大切な理由",
+      "嫉妬をエネルギーに変える変換術",
+      "尊敬できる人の共通点",
+      "「察してほしい」という甘えと絶望",
+      "贈り物を選ぶとき、私たちは何を贈っているのか",
+      "絶縁した相手を思い出す夜",
+      "信頼を築くのに10年、壊すのに1秒",
+      "なぜ働かなければならないのか",
+      "お金で買える幸せ、買えない幸せ",
+      "「丁寧な暮らし」への憧れと挫折",
+      "片付けられない理由は、心にあるのか",
+      "理想の休日の過ごし方",
+      "労働における「やりがい」の搾取について",
+      "贅沢の定義。100円の贅沢と100万円の贅沢",
+      "習慣を作る技術、壊す技術",
+      "職場の人間関係を割り切る方法",
+      "「定年」のない人生をどう設計するか",
+      "都会の喧騒と、田舎の静寂。どちらが不自然か",
+      "食欲と精神状態の関係",
+      "睡眠不足が奪うもの",
+      "「何もしない時間」の恐怖",
+      "道具への愛着。なぜ物に魂が宿ると感じるのか",
+      "効率化の果てに残るもの",
+      "成功の定義。他人の物差しを捨てる",
+      "失敗を「ネタ」に昇華する力",
+      "自分の適職をどう見つけるか",
+      "満員電車の中で考えること",
+      "10年前の自分に言いたいこと、言いたくないこと",
+      "記憶の改ざん。思い出はなぜ美化されるのか",
+      "老いることへの恐怖と、わずかな希望",
+      "変わる勇気、変わらない勇気",
+      "時代遅れになることをどう受け入れるか",
+      "「一生のお願い」を何回使ったか",
+      "時間が解決してくれること、してくれないこと",
+      "死ぬまでにやりたいことリストの虚実",
+      "遺品整理について考える",
+      "伝統を守るとは、形を守ることか精神を守ることか",
+      "忘れたい記憶ほど鮮明なのはなぜか",
+      "誕生日の憂鬱",
+      "季節の変わり目に感じる、あの独特のソワソワ感",
+      "流行を追う虚しさと楽しさ",
+      "予感と直感。どちらを信じるべきか",
+      "100年後の世界に、自分の爪痕を残したいか",
+      "タイムマシンがあったら、過去か未来か",
+      "待つ時間の愉しみ方",
+      "飽和する情報の中で、何を捨て、何を拾うか",
+      "終わりのある美学",
+      "運命はあると思うか",
+      "善悪の境界線はどこにあるのか",
+      "宗教とスピリチュアル。人は何を信じて救われるのか",
+      "美しいものを見たとき、なぜ涙が出るのか",
+      "自由とは、選択肢が多いことなのか",
+      "「普通」という言葉の暴力性",
+      "言葉にできない感情に、名前をつけるべきか",
+      "神様はいると思うか",
+      "宇宙の広さを考えると、悩みは小さくなるか",
+      "「生きてるだけで丸儲け」は本当か",
+      "偶然の一致（シンクロニシティ）をどう解釈するか",
+      "恐怖心の正体",
+      "祈ることの心理的効果",
+      "ユーモアは世界を救えるか",
+      "悲しみとの正しい付き合い方",
+      "音楽が心に刺さるメカニズム",
+      "嘘も方便。優しい嘘は必要か",
+      "人生は物語か、それともただの現象か",
+      "最後に残る「愛」について",
+      "ラジオを通して、私たちは何を伝えようとしているのか"
+    ];
+
+    const grid = document.getElementById("topicGrid");
+    const preview = document.getElementById("preview");
+    const stageLabel = document.getElementById("stageLabel");
+    const stageTitle = document.getElementById("stageTitle");
+    const stageMeta = document.getElementById("stageMeta");
+    const statusChip = document.getElementById("statusChip");
+    const watchedChip = document.getElementById("watchedChip");
+    const toggleStatusBtn = document.getElementById("toggleStatusBtn");
+    const toggleWatchedBtn = document.getElementById("toggleWatchedBtn");
+    const memoInput = document.getElementById("memoInput");
+    const saveMemoBtn = document.getElementById("saveMemoBtn");
+    const transcriptInput = document.getElementById("transcriptInput");
+    const saveTranscriptBtn = document.getElementById("saveTranscriptBtn");
+    const summarizeBtn = document.getElementById("summarizeBtn");
+    const summaryBox = document.getElementById("summaryBox");
+    const apiKeyInput = document.getElementById("apiKeyInput");
+    const modelInput = document.getElementById("modelInput");
+    const enterAdminBtn = document.getElementById("enterAdminBtn");
+    const logoutAdminBtn = document.getElementById("logoutAdminBtn");
+    const unlockAdminBtn = document.getElementById("unlockAdminBtn");
+    const adminPasswordInput = document.getElementById("adminPasswordInput");
+    const authPanel = document.getElementById("authPanel");
+    const authError = document.getElementById("authError");
+    const manageTabBtn = document.getElementById("manageTabBtn");
+    const transcriptTabBtn = document.getElementById("transcriptTabBtn");
+    const managePanel = document.getElementById("managePanel");
+    const transcriptPanel = document.getElementById("transcriptPanel");
+    const idleText = "Hover a square to preview the topic";
+    const STORE_KEY = "rainybrain-topics-v1";
+    const SETTINGS_KEY = "rainybrain-settings-v1";
+    const ADMIN_STATE_KEY = "rainybrain-admin-mode-v1";
+    const APP_CONFIG_PATH = "./app-config.json";
+    const topicState = loadState();
+    const cells = [];
+    let activeIndex = null;
+    let activeCell = null;
+    let adminPassword = "";
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORE_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (_) {
+        return {};
+      }
+    }
+
+    function persistState() {
+      localStorage.setItem(STORE_KEY, JSON.stringify(topicState));
+    }
+
+    function getTopicData(index) {
+      if (!topicState[index]) {
+        topicState[index] = {
+          recorded: false,
+          watched: false,
+          audioUrl: "",
+          memo: "",
+          transcript: "",
+          summary: ""
+        };
+      }
+      if (typeof topicState[index].recorded === "undefined") {
+        topicState[index].recorded = Boolean(topicState[index].done);
+      }
+      if (typeof topicState[index].watched === "undefined") {
+        topicState[index].watched = false;
+      }
+      if (typeof topicState[index].transcript !== "string") {
+        topicState[index].transcript = "";
+      }
+      if (typeof topicState[index].summary !== "string") {
+        topicState[index].summary = "";
+      }
+      return topicState[index];
+    }
+
+    function renderCellStatus(index) {
+      const cell = cells[index - 1];
+      if (!cell) return;
+      const dot = cell.querySelector(".status-dot");
+      if (!dot) return;
+      const data = getTopicData(index);
+      dot.classList.toggle("done", data.recorded || data.watched);
+
+      const watchedIcon = cell.querySelector('[data-icon="watched"]');
+      const audioIcon = cell.querySelector('[data-icon="audio"]');
+      const summaryIcon = cell.querySelector('[data-icon="summary"]');
+      watchedIcon.classList.toggle("show", data.watched);
+      audioIcon.classList.toggle("show", Boolean(data.audioUrl));
+      summaryIcon.classList.toggle("show", Boolean(data.summary));
+
+      cell.classList.toggle("is-watched", data.watched);
+    }
+
+    function renderStage(index, title) {
+      const data = getTopicData(index);
+      stageLabel.textContent = `EP.${String(index).padStart(3, "0")} / Selected Topic`;
+      stageTitle.textContent = title;
+      stageMeta.textContent = "このテーマをこのまま収録テーマとして使用できます。必要なら音声URLとメモを保存してください。";
+
+      statusChip.textContent = data.recorded ? "収録済み" : "未収録";
+      statusChip.classList.toggle("done", data.recorded);
+      toggleStatusBtn.textContent = data.recorded ? "未収録に戻す" : "収録済みにする";
+
+      watchedChip.textContent = data.watched ? "視聴済み" : "未視聴";
+      watchedChip.classList.toggle("watched", data.watched);
+      toggleWatchedBtn.textContent = data.watched ? "未視聴に戻す" : "視聴済みにする";
+
+
+      memoInput.value = data.memo || "";
+      transcriptInput.value = data.transcript || "";
+      summaryBox.textContent = data.summary || "要約結果がここに表示されます。";
+    }
+
+    function loadSettings() {
+      try {
+        const raw = localStorage.getItem(SETTINGS_KEY);
+        return raw ? JSON.parse(raw) : {};
+      } catch (_) {
+        return {};
+      }
+    }
+
+    function saveSettings() {
+      const settings = {
+        apiKey: apiKeyInput.value.trim(),
+        model: modelInput.value.trim() || "claude-3-5-sonnet-latest"
+      };
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      return settings;
+    }
+
+    async function loadAppConfig() {
+      try {
+        const res = await fetch(APP_CONFIG_PATH, { cache: "no-store" });
+        if (!res.ok) throw new Error(`config fetch failed: ${res.status}`);
+        const config = await res.json();
+        adminPassword = typeof config.adminPassword === "string" ? config.adminPassword : "";
+      } catch (_) {
+        adminPassword = "";
+      }
+    }
+
+    function setAdminMode(enabled) {
+      document.body.classList.toggle("admin-mode", enabled);
+      document.body.classList.toggle("public-mode", !enabled);
+      localStorage.setItem(ADMIN_STATE_KEY, enabled ? "1" : "0");
+      authPanel.style.display = "none";
+      authError.textContent = "";
+      adminPasswordInput.value = "";
+    }
+
+    function restoreAdminMode() {
+      const remembered = localStorage.getItem(ADMIN_STATE_KEY) === "1";
+      setAdminMode(remembered && Boolean(adminPassword));
+    }
+
+    function applyTab(mode) {
+      const isManage = mode === "manage";
+      manageTabBtn.classList.toggle("active", isManage);
+      transcriptTabBtn.classList.toggle("active", !isManage);
+      managePanel.classList.toggle("active", isManage);
+      transcriptPanel.classList.toggle("active", !isManage);
+    }
+
+    async function summarizeWithAnthropic(transcript, apiKey, model) {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01"
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 260,
+          system: "あなたは日本語ポッドキャスト編集者です。入力された文字起こしを、意味を変えずに3〜5行で簡潔に要約してください。",
+          messages: [
+            {
+              role: "user",
+              content: `次の文字起こしを3〜5行で要約してください。\n\n${transcript}`
+            }
+          ]
+        })
+      });
+
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`Anthropic API error: ${response.status} ${errText}`);
+      }
+      const json = await response.json();
+      if (!json.content || !json.content.length || !json.content[0].text) {
+        throw new Error("Anthropic API response is empty.");
+      }
+      return json.content[0].text.trim();
+    }
+
+    function selectTopic(index, title, cell) {
+      activeIndex = index;
+      renderStage(index, title);
+
+      if (activeCell) {
+        activeCell.style.borderColor = "#111b2f";
+        activeCell.style.boxShadow = "none";
+      }
+      activeCell = cell;
+      activeCell.style.borderColor = "var(--board-accent)";
+      activeCell.style.boxShadow = "inset 0 0 0 1px rgba(132, 174, 234, 0.35)";
+    }
+
+    topics.forEach((title, i) => {
+      const index = i + 1;
+      const cell = document.createElement("button");
+      cell.type = "button";
+      cell.className = "cell";
+      cell.setAttribute("aria-label", `${index}. ${title}`);
+      cell.innerHTML = `
+        <span class="cell-num">${String(index).padStart(3, "0")}<span class="status-dot"></span></span>
+        <span class="cell-title">${title}</span>
+        <span class="cell-icons">
+          <span class="cell-icon" data-icon="watched">✓</span>
+          <span class="cell-icon" data-icon="audio">🎙</span>
+          <span class="cell-icon" data-icon="summary">📝</span>
+        </span>
+      `;
+
+      cell.addEventListener("mouseenter", () => {
+        preview.classList.remove("is-idle");
+        preview.textContent = `${index}. ${title}`;
+      });
+
+      cell.addEventListener("mouseleave", () => {
+        preview.classList.add("is-idle");
+        preview.textContent = idleText;
+      });
+
+      cell.addEventListener("focus", () => {
+        preview.classList.remove("is-idle");
+        preview.textContent = `${index}. ${title}`;
+      });
+
+      cell.addEventListener("blur", () => {
+        preview.classList.add("is-idle");
+        preview.textContent = idleText;
+      });
+
+      cell.addEventListener("click", () => selectTopic(index, title, cell));
+      grid.appendChild(cell);
+      cells.push(cell);
+      renderCellStatus(index);
+    });
+
+    function requireActive() { return activeIndex !== null; }
+
+    toggleStatusBtn.addEventListener("click", () => {
+      if (!requireActive()) return;
+      const data = getTopicData(activeIndex);
+      data.recorded = !data.recorded;
+      persistState();
+      renderStage(activeIndex, topics[activeIndex - 1]);
+      renderCellStatus(activeIndex);
+    });
+
+    toggleWatchedBtn.addEventListener("click", () => {
+      if (!requireActive()) return;
+      const data = getTopicData(activeIndex);
+      data.watched = !data.watched;
+      persistState();
+      renderStage(activeIndex, topics[activeIndex - 1]);
+      renderCellStatus(activeIndex);
+    });
+
+    saveMemoBtn.addEventListener("click", () => {
+      if (!requireActive()) return;
+      const data = getTopicData(activeIndex);
+      data.memo = memoInput.value;
+      persistState();
+      stageMeta.textContent = "メモを保存しました。";
+      setTimeout(() => {
+        if (requireActive()) stageMeta.textContent = "このテーマをこのまま収録テーマとして使用できます。必要なら音声URLとメモを保存してください。";
+      }, 1000);
+    });
+
+    saveTranscriptBtn.addEventListener("click", () => {
+      if (!requireActive()) return;
+      const data = getTopicData(activeIndex);
+      data.transcript = transcriptInput.value;
+      persistState();
+      stageMeta.textContent = "文字起こしを保存しました。";
+    });
+
+    summarizeBtn.addEventListener("click", async () => {
+      if (!document.body.classList.contains("admin-mode")) { summaryBox.textContent = "要約機能は管理モードで利用できます。"; return; }
+      if (!requireActive()) return;
+      const transcript = transcriptInput.value.trim();
+      if (!transcript) { summaryBox.textContent = "先に文字起こしを入力してください。"; return; }
+      const settings = saveSettings();
+      if (!settings.apiKey) { summaryBox.textContent = "APIキーを設定してください。"; return; }
+
+      summarizeBtn.disabled = true;
+      summarizeBtn.textContent = "要約中...";
+      summaryBox.textContent = "Anthropic APIで要約しています...";
+      try {
+        const summary = await summarizeWithAnthropic(transcript, settings.apiKey, settings.model);
+        summaryBox.textContent = summary;
+        const data = getTopicData(activeIndex);
+        data.transcript = transcript;
+        data.summary = summary;
+        persistState();
+        renderCellStatus(activeIndex);
+      } catch (error) {
+        summaryBox.textContent = `要約に失敗しました: ${error.message}`;
+      } finally {
+        summarizeBtn.disabled = false;
+        summarizeBtn.textContent = "AIで要約する";
+      }
+    });
+
+    manageTabBtn.addEventListener("click", () => applyTab("manage"));
+    transcriptTabBtn.addEventListener("click", () => applyTab("transcript"));
+
+    apiKeyInput.addEventListener("change", saveSettings);
+    modelInput.addEventListener("change", saveSettings);
+
+    enterAdminBtn.addEventListener("click", () => {
+      authPanel.style.display = "grid";
+      authError.textContent = "";
+      adminPasswordInput.focus();
+    });
+
+    unlockAdminBtn.addEventListener("click", () => {
+      if (!adminPassword) {
+        authError.textContent = "設定ファイルから管理パスワードを読み込めませんでした。";
+        return;
+      }
+      const input = adminPasswordInput.value;
+      if (input === adminPassword) {
+        setAdminMode(true);
+      } else {
+        authError.textContent = "パスワードが正しくありません。";
+      }
+    });
+
+    logoutAdminBtn.addEventListener("click", () => setAdminMode(false));
+    adminPasswordInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") unlockAdminBtn.click();
+    });
+
+    const settings = loadSettings();
+    if (settings.apiKey) apiKeyInput.value = settings.apiKey;
+    modelInput.value = settings.model || "claude-3-5-sonnet-latest";
+
+    document.body.classList.add("public-mode");
+    loadAppConfig().then(restoreAdminMode);
+  </script>
+</body>
+</html>

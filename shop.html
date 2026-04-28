@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>グッズ・スタンプ | マネぼう塾</title>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky:#5BC8E8; --red:#E8354A; --gold:#F5C842; --gold-dark:#D4A017;
+  --green:#4CAF7D; --dark:#1A1A2E;
+  --white:#FFFFFF; --cream:#FFFDF5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Zen Maru Gothic',sans-serif;color:var(--dark);background:var(--cream);min-height:100vh;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,26,46,0.95);backdrop-filter:blur(16px);border-bottom:3px solid var(--gold);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+.nav-title{font-family:'Dela Gothic One',sans-serif;font-size:15px;color:var(--sky);}
+.nav-back{color:rgba(255,255,255,0.7);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+.nav-back:hover{color:var(--gold);}
+
+.hero{background:linear-gradient(135deg,var(--dark) 0%,#2a1a4e 100%);padding:100px 20px 56px;text-align:center;}
+.hero-label{display:inline-block;background:var(--gold);color:var(--dark);font-size:10px;font-weight:700;letter-spacing:4px;padding:4px 14px;border-radius:4px;margin-bottom:16px;}
+.hero-title{font-family:'Dela Gothic One',sans-serif;font-size:clamp(26px,6vw,42px);color:var(--white);line-height:1.3;margin-bottom:12px;}
+.hero-title span{color:var(--gold);}
+.hero-sub{color:rgba(255,255,255,0.65);font-size:13px;line-height:1.9;}
+
+.section{max-width:680px;margin:0 auto;padding:48px 20px;}
+
+.shop-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+
+.shop-card{background:var(--white);border:3px solid var(--dark);border-radius:20px;overflow:hidden;box-shadow:6px 6px 0 var(--dark);transition:transform 0.2s,box-shadow 0.2s;text-decoration:none;display:block;}
+.shop-card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--dark);}
+
+.shop-card-head{padding:28px 28px 20px;display:flex;align-items:center;gap:16px;}
+.shop-card-icon{font-size:42px;flex-shrink:0;}
+.shop-card-info{}
+.shop-card-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:3px;padding:3px 10px;border-radius:50px;border:2px solid var(--dark);margin-bottom:8px;}
+.card-suzuri .shop-card-tag{background:var(--sky);color:var(--white);}
+.card-line .shop-card-tag{background:#06C755;color:var(--white);}
+.shop-card-name{font-family:'Dela Gothic One',sans-serif;font-size:20px;margin-bottom:4px;}
+.shop-card-desc{font-size:12px;color:#666;line-height:1.7;}
+
+.shop-card-body{border-top:2px solid rgba(0,0,0,0.08);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;}
+.shop-card-cta{font-family:'Dela Gothic One',sans-serif;font-size:14px;color:var(--dark);}
+.card-suzuri .shop-card-cta{color:var(--sky);}
+.card-line .shop-card-cta{color:#06C755;}
+.shop-card-arrow{width:36px;height:36px;border-radius:50%;border:2px solid var(--dark);display:flex;align-items:center;justify-content:center;font-size:14px;}
+
+.note{text-align:center;font-size:12px;color:#999;line-height:1.9;margin-top:32px;}
+
+footer{text-align:center;padding:32px 20px;background:var(--dark);color:rgba(255,255,255,0.4);font-size:11px;line-height:2;}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-title">マネぼう塾</span>
+  <a href="index.html" class="nav-back">← HPに戻る</a>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">SHOP</span>
+  <h1 class="hero-title">RAINY BRAIN<br><span>グッズ・スタンプ</span></h1>
+  <p class="hero-sub">キャラクターグッズやLINEスタンプを<br>ぜひチェックしてみてください！</p>
+</div>
+
+<div class="section">
+  <div class="shop-grid">
+
+    <a href="https://suzuri.jp/RAINY_BRAIN" target="_blank" class="shop-card card-suzuri">
+      <div class="shop-card-head">
+        <span class="shop-card-icon">👕</span>
+        <div class="shop-card-info">
+          <span class="shop-card-tag">SUZURI</span>
+          <p class="shop-card-name">オリジナルグッズ</p>
+          <p class="shop-card-desc">Tシャツ・トートバッグ・ステッカーなど<br>RAINYBRAINオリジナルデザインのグッズ</p>
+        </div>
+      </div>
+      <div class="shop-card-body">
+        <span class="shop-card-cta">SUZURIで見る →</span>
+        <span class="shop-card-arrow">↗</span>
+      </div>
+    </a>
+
+    <a href="https://store.line.me/stickershop/author/5717324/ja" target="_blank" class="shop-card card-line">
+      <div class="shop-card-head">
+        <span class="shop-card-icon">💬</span>
+        <div class="shop-card-info">
+          <span class="shop-card-tag">LINE</span>
+          <p class="shop-card-name">公式LINEスタンプ</p>
+          <p class="shop-card-desc">RAINYBRAINキャラクターたちの<br>オリジナルLINEスタンプ</p>
+        </div>
+      </div>
+      <div class="shop-card-body">
+        <span class="shop-card-cta">LINEストアで見る →</span>
+        <span class="shop-card-arrow">↗</span>
+      </div>
+    </a>
+
+  </div>
+  <p class="note">各リンクをタップすると外部サービスへ移動します。<br>購入・決済は各サービスの画面で行われます。</p>
+</div>
+
+<footer>
+  <p>by <strong style="color:rgba(255,255,255,0.7);">RAINY BRAIN</strong></p>
+  <p>© 2026 RAINY BRAIN. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
