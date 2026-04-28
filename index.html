@@ -60,6 +60,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 
 /* HERO */
 .hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:100px 20px 60px;text-align:center;}
+.hero-logo{width:clamp(140px,38vw,190px);height:auto;border-radius:20px;margin-bottom:28px;animation:fadeUp 0.8s ease 0.1s both;box-shadow:0 8px 40px rgba(0,0,0,0.5);border:3px solid rgba(255,255,255,0.2);}
 .catch-tags{display:flex;flex-direction:column;gap:12px;margin-bottom:32px;animation:fadeUp 0.8s ease 0.2s both;}
 .catch-tag{background:rgba(26,26,46,0.78);backdrop-filter:blur(8px);border-radius:50px;padding:13px 26px;font-family:'Dela Gothic One',sans-serif;font-size:clamp(16px,4vw,24px);color:var(--white);display:inline-block;border:2px solid rgba(255,255,255,0.15);}
 .catch-tag .hl{color:var(--gold);}
@@ -340,7 +341,6 @@ footer strong{color:var(--gold);}
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <img src="images/logo.webp" alt="マネぼう">
     <div class="nav-logo-text">マネぼう塾<span class="nav-logo-sub">by RAINY BRAIN</span></div>
   </div>
   <div class="hamburger" id="hamburger" onclick="toggleDrawer()">
@@ -350,6 +350,7 @@ footer strong{color:var(--gold);}
 
 <!-- HERO -->
 <section class="hero">
+  <img src="images/logo.webp" alt="マネぼう" class="hero-logo">
   <div class="catch-tags">
     <div class="catch-tag">ゲームで遊んだら、<span class="hl">経済がわかった。</span></div>
     <div class="catch-tag">学校では教えない、<span class="hl2">お金の授業。</span></div>
