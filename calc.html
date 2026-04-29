@@ -1276,21 +1276,57 @@ body {
 #speechText { white-space: pre-wrap; display: block; line-height: 1.6; height: calc(1.6em * 2); overflow: hidden; }
 
 /* ─── Graph Tab ──────────────────────────────────────────── */
-#tab-graph .graph-section { margin-top: 4px; box-shadow: none; }
-#tab-graph #graphSvg      { height: 160px; }
-#portfolioSvg {
-  width: 100%; height: 200px; display: block;
-  border-radius: 6px; background: rgba(0,0,0,0.25);
+.graph-card {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 14px; overflow: hidden;
+  margin-bottom: 10px;
+}
+.graph-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.graph-card-title {
+  font-family: 'Dela Gothic One',sans-serif;
+  font-size: 12px; color: rgba(255,255,255,0.6);
+}
+.graph-card-select {
+  background: rgba(255,255,255,0.07); color: #fff;
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+  padding: 5px 8px; font-size: 11px;
+  font-family: 'Zen Maru Gothic',sans-serif;
+}
+.graph-card-select option { background: #1a1a2e; }
+.graph-stat-strip {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.gss-item {
+  flex: 1; padding: 7px 8px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+.gss-item:last-child { border-right: none; }
+.gss-label { font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: .5px; margin-bottom: 2px; }
+.gss-val   { font-family: 'Dela Gothic One',sans-serif; font-size: 12px; color: #fff; }
+.gss-val.gold { color: var(--gold); }
+.gss-val.up   { color: #2ecc71; }
+.gss-val.down { color: #e8354a; }
+.graph-svg-wrap { padding: 10px 12px 2px; }
+.portfolio-total-strip {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.pts-label { font-size: 10px; color: rgba(255,255,255,0.4); }
+.pts-val   { font-family: 'Dela Gothic One',sans-serif; font-size: 20px; color: var(--gold); }
+.graph-labels {
+  display: flex; justify-content: space-between;
+  padding: 3px 14px 10px;
+  font-size: 9px; color: rgba(255,255,255,0.25); letter-spacing: .5px;
 }
 
-/* ─── Graph Mode Tabs ────────────────────────────────────── */
-.graph-mode-tabs {
-  display: flex; gap: 6px; margin-bottom: 10px;
-}
-.graph-mode-btn {
-  flex: 1;
-  background: rgba(255,255,255,0.06);
-.portfolio-legend { padding: 6px 0; }
+.portfolio-legend { padding: 0; }
 .pl-row {
   display: flex; align-items: center; gap: 6px;
   padding: 5px 8px; border-radius: 6px; font-size: 11px;
@@ -1640,38 +1676,61 @@ body {
   <div id="tab-graph" class="tab-page">
 
     <!-- モード切替 -->
-    <div class="graph-mode-tabs">
-      <button class="graph-mode-btn active" onclick="setGraphMode('price',this)">📈 価格推移</button>
-      <button class="graph-mode-btn" onclick="setGraphMode('portfolio',this)">💰 資産推移</button>
+    <div class="calc-subtabs" style="margin-bottom:10px">
+      <button class="cst-btn active" onclick="setGraphMode('price',this)">📊<br>歴史チャート</button>
+      <button class="cst-btn" onclick="setGraphMode('portfolio',this)">💰<br>わたしの記録</button>
     </div>
 
-    <!-- 価格推移モード -->
+    <!-- 歴史チャートモード -->
     <div id="graphModePrice">
-      <div class="graph-section">
-        <div class="graph-header">
-          <span class="graph-header-label">📈 価格推移</span>
-          <select id="graphAsset" onchange="drawGraph()"></select>
+      <div class="graph-card">
+        <div class="graph-card-head">
+          <span class="graph-card-title">📊 歴史チャート</span>
+          <select class="graph-card-select" id="graphAsset" onchange="drawGraph()"></select>
         </div>
-        <svg id="graphSvg" viewBox="0 0 600 80" preserveAspectRatio="none"></svg>
+        <div class="graph-stat-strip">
+          <div class="gss-item">
+            <div class="gss-label">現在価格</div>
+            <div class="gss-val gold" id="graphCurPrice">─</div>
+          </div>
+          <div class="gss-item">
+            <div class="gss-label">1970年比</div>
+            <div class="gss-val" id="graphChangeRate">─</div>
+          </div>
+          <div class="gss-item">
+            <div class="gss-label">最高値</div>
+            <div class="gss-val" id="graphPeakPrice">─</div>
+          </div>
+        </div>
+        <div class="graph-svg-wrap">
+          <svg id="graphSvg" viewBox="0 0 600 120" preserveAspectRatio="none"
+               style="width:100%;height:130px;display:block;border-radius:8px;background:rgba(0,0,0,0.2)"></svg>
+        </div>
         <div class="graph-labels" id="graphLabels"></div>
       </div>
-      <div class="tab-section" style="margin-top:8px;">
+      <div class="tab-section">
         <div class="tab-section-title">⚖️ 資産比較</div>
         <div id="compareTable"></div>
       </div>
     </div>
 
-    <!-- 資産推移モード -->
+    <!-- わたしの記録モード -->
     <div id="graphModePortfolio" style="display:none">
-      <div class="graph-section">
-        <div class="graph-header">
-          <span class="graph-header-label">💰 資産推移</span>
-          <span id="portfolioTotal" style="font-family:'Dela Gothic One',sans-serif;color:var(--gold);font-size:12px">─</span>
+      <div class="graph-card">
+        <div class="portfolio-total-strip">
+          <span class="pts-label">💰 累計総資産</span>
+          <span class="pts-val" id="portfolioTotal">─</span>
         </div>
-        <svg id="portfolioSvg" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+        <div class="graph-svg-wrap">
+          <svg id="portfolioSvg" viewBox="0 0 600 180" preserveAspectRatio="none"
+               style="width:100%;height:180px;display:block;border-radius:8px;background:rgba(0,0,0,0.2)"></svg>
+        </div>
         <div class="graph-labels" id="portfolioLabels"></div>
       </div>
-      <div id="portfolioLegend" class="portfolio-legend"></div>
+      <div class="tab-section">
+        <div class="tab-section-title">📋 保有内訳</div>
+        <div id="portfolioLegend" class="portfolio-legend"></div>
+      </div>
     </div>
 
   </div><!-- /tab-graph -->
@@ -3060,7 +3119,7 @@ function drawPortfolioGraph() {
 
 function setGraphMode(mode, btn) {
   graphMode = mode;
-  document.querySelectorAll('.graph-mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#tab-graph .cst-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   document.getElementById('graphModePrice').style.display     = mode === 'price'     ? '' : 'none';
   document.getElementById('graphModePortfolio').style.display = mode === 'portfolio' ? '' : 'none';
@@ -3105,14 +3164,14 @@ function drawGraph() {
   const id     = document.getElementById('graphAsset').value;
   const svg    = document.getElementById('graphSvg');
   const labels = document.getElementById('graphLabels');
-  const W = 600, H = 80, PX = 8, PY = 6;
+  const W = 600, H = 120, PX = 8, PY = 8;
 
   const endIdx   = Math.max(1, currentIndex);
   const startIdx = 1;
   const count    = endIdx - startIdx + 1;
 
   if (count < 2) {
-    svg.innerHTML = `<text x="300" y="44" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="11" font-family="sans-serif">1970年以降のデータなし</text>`;
+    svg.innerHTML = `<text x="300" y="60" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="11" font-family="sans-serif">1970年以降のデータなし</text>`;
     labels.innerHTML = '';
     return;
   }
@@ -3157,6 +3216,22 @@ function drawGraph() {
   const eRow = masterData[endIdx];
   const mRow = masterData[Math.floor((startIdx + endIdx) / 2)];
   labels.innerHTML = `<span>${sRow.年}年</span><span>${mRow.年}年</span><span>${eRow.年}年</span>`;
+
+  // スタットstrip更新
+  const curP  = eRow[id] || 0;
+  const baseP = sRow[id] || 0;
+  const peakP = Math.max(...prices);
+  const fmtY  = v => v >= 1_000_000 ? (v/1_000_000).toFixed(1)+'M' : v >= 1000 ? Math.round(v/1000)+'K' : String(v);
+  const pctEl = document.getElementById('graphChangeRate');
+  const curEl = document.getElementById('graphCurPrice');
+  const pkEl  = document.getElementById('graphPeakPrice');
+  if (curEl) curEl.textContent = fmtY(curP) + '円';
+  if (pkEl)  pkEl.textContent  = fmtY(peakP) + '円';
+  if (pctEl && baseP > 0) {
+    const pct = ((curP - baseP) / baseP * 100).toFixed(0);
+    pctEl.textContent = (pct >= 0 ? '+' : '') + pct + '%';
+    pctEl.className   = 'gss-val ' + (pct >= 0 ? 'up' : 'down');
+  }
 }
 
 // ============================================================
