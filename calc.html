@@ -886,6 +886,58 @@ body {
 .tab-icon  { font-size: 19px; line-height: 1; }
 .tab-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; font-family: 'Zen Maru Gothic', sans-serif; }
 
+/* ─── Compact Game Tab ───────────────────────────────────── */
+.date-bar     { padding: 10px 12px; margin-bottom: 8px; }
+.value-panel  { padding: 10px 14px; margin-bottom: 8px; }
+.step-section { margin-bottom: 8px; }
+.step-lbl     { margin-bottom: 4px; }
+.step-row     { gap: 4px; margin-bottom: 4px; }
+.step-btn     { padding: 7px 2px; font-size: 11px; border-radius: 8px; }
+.hold-list    { min-height: 0; max-height: 64px; overflow-y: auto; margin-bottom: 6px; }
+.hold-item    { padding: 3px 8px; font-size: 11px; }
+.hold-item-val { font-size: 10px; }
+.value-divider { margin: 6px 0; }
+.value-block-lbl { font-size: 8px; margin-bottom: 2px; }
+.value-block-num { font-size: clamp(16px, 4vw, 22px); }
+.action-row   { margin-bottom: 8px; }
+.btn-reset    { padding: 8px; font-size: 12px; }
+
+.asset-grid   { grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 8px; }
+.asset-top    { padding: 6px 5px 4px; gap: 3px; }
+.a-emoji      { font-size: 15px; }
+.a-name       { font-size: 9px; line-height: 1.1; }
+.asset-body   { padding: 3px 5px 5px; }
+.a-price      { font-size: 8px; margin-bottom: 1px; }
+.a-qty        { font-size: 12px; }
+
+/* ─── Compact Char Speech ────────────────────────────────── */
+.char-speech-mini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(20, 20, 40, 0.85);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 7px 12px;
+  margin-bottom: 8px;
+  animation: fadeUp 0.5s ease both;
+}
+.char-speech-mini .speech-char-img {
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  border-width: 1.5px;
+}
+.char-speech-mini .speech-bubble {
+  background: none; border: none;
+  padding: 0; font-size: 11px; line-height: 1.4;
+}
+.char-speech-mini .speech-bubble::before { display: none; }
+.char-speech-mini .speech-char-name { font-size: 9px; margin-bottom: 1px; }
+
+/* ─── Graph Tab ──────────────────────────────────────────── */
+#tab-graph .graph-section { margin-top: 4px; box-shadow: none; }
+#tab-graph #graphSvg      { height: 200px; }
+
 </style>
 </head>
 <body>
@@ -901,32 +953,12 @@ body {
   <!-- ════ TAB: GAME ════ -->
   <div id="tab-game" class="tab-page active">
 
-    <!-- CHARACTER BANNER -->
-    <div class="char-banner">
-      <div class="char-strip">
-        <div class="char-item">
-          <img src="images/img5.webp" alt="おーる局長" id="charimg-局長">
-          <span class="char-name">おーる局長</span>
-        </div>
-        <div class="char-item">
-          <img src="images/img6.webp" alt="えんだ" id="charimg-えんだ">
-          <span class="char-name">えんだ</span>
-        </div>
-        <div class="char-item">
-          <img src="images/img7.webp" alt="ためぞう" id="charimg-ためぞう">
-          <span class="char-name">ためぞう</span>
-        </div>
-        <div class="char-item">
-          <img src="images/img8.webp" alt="カウッシー" id="charimg-カウッシー">
-          <span class="char-name">カウッシー</span>
-        </div>
-      </div>
-      <div class="speech-row">
-        <img class="speech-char-img" id="speechCharImg" src="images/img5.webp" alt="">
-        <div class="speech-bubble">
-          <span class="speech-char-name" id="speechCharName">おーる局長</span>
-          <span id="speechText">ようこそ！1970年から時代を旅しながら資産を育てよう！</span>
-        </div>
+    <!-- CHAR SPEECH (compact) -->
+    <div class="char-speech-mini">
+      <img class="speech-char-img" id="speechCharImg" src="images/img5.webp" alt="">
+      <div class="speech-bubble">
+        <span class="speech-char-name" id="speechCharName">おーる局長</span>
+        <span id="speechText">ようこそ！1970年から時代を旅しながら資産を育てよう！</span>
       </div>
     </div>
 
@@ -956,7 +988,7 @@ body {
           <span class="value-block-num"><span id="dispTotal">0</span><span class="value-block-unit">円</span></span>
         </div>
         <div class="value-block">
-          <span class="value-block-lbl">配当/ターン</span>
+          <span class="value-block-lbl">配当/T</span>
           <span class="value-block-num"><span id="dispDiv">0</span><span class="value-block-unit">円</span></span>
         </div>
         <div class="value-block">
@@ -973,13 +1005,13 @@ body {
         <button class="step-btn plus active" onclick="setStep(1,this)">＋1</button>
         <button class="step-btn plus" onclick="setStep(10,this)">＋10</button>
         <button class="step-btn plus" onclick="setStep(100,this)">＋100</button>
-        <button class="step-btn plus" onclick="setStep(1000,this)">＋1000</button>
+        <button class="step-btn plus" onclick="setStep(1000,this)">＋1K</button>
       </div>
       <div class="step-row">
         <button class="step-btn minus" onclick="setStep(-1,this)">－1</button>
         <button class="step-btn minus" onclick="setStep(-10,this)">－10</button>
         <button class="step-btn minus" onclick="setStep(-100,this)">－100</button>
-        <button class="step-btn minus" onclick="setStep(-1000,this)">－1000</button>
+        <button class="step-btn minus" onclick="setStep(-1000,this)">－1K</button>
       </div>
     </div>
 
@@ -988,18 +1020,8 @@ body {
 
     <!-- RESET / UNDO -->
     <div class="action-row">
-      <button class="btn-reset" onclick="assetReset()">保有リセット</button>
-      <button class="btn-reset" style="border-color:rgba(91,200,232,0.35);background:rgba(91,200,232,0.08);color:#7ee6f8;" onclick="undoAction()">↩ 元に戻す</button>
-    </div>
-
-    <!-- GRAPH -->
-    <div class="graph-section">
-      <div class="graph-header">
-        <span class="graph-header-label">📈 価格推移</span>
-        <select id="graphAsset" onchange="drawGraph()"></select>
-      </div>
-      <svg id="graphSvg" viewBox="0 0 600 80" preserveAspectRatio="none"></svg>
-      <div class="graph-labels" id="graphLabels"></div>
+      <button class="btn-reset" onclick="assetReset()">リセット</button>
+      <button class="btn-reset" style="border-color:rgba(91,200,232,0.35);background:rgba(91,200,232,0.08);color:#7ee6f8;" onclick="undoAction()">↩ 戻す</button>
     </div>
 
   </div><!-- /tab-game -->
@@ -1015,11 +1037,6 @@ body {
         <button class="btn-sim" onclick="doSim()">計算</button>
       </div>
       <div id="simResult">口数を入力して「計算」を押してください</div>
-    </div>
-
-    <div class="tab-section">
-      <div class="tab-section-title">⚖️ 資産比較</div>
-      <div id="compareTable"></div>
     </div>
 
   </div><!-- /tab-data -->
@@ -1055,6 +1072,22 @@ body {
 
   </div><!-- /tab-calc -->
 
+  <!-- ════ TAB: GRAPH ════ -->
+  <div id="tab-graph" class="tab-page">
+    <div class="graph-section">
+      <div class="graph-header">
+        <span class="graph-header-label">📈 価格推移</span>
+        <select id="graphAsset" onchange="drawGraph()"></select>
+      </div>
+      <svg id="graphSvg" viewBox="0 0 600 80" preserveAspectRatio="none"></svg>
+      <div class="graph-labels" id="graphLabels"></div>
+    </div>
+    <div class="tab-section" style="margin-top:8px;">
+      <div class="tab-section-title">⚖️ 資産比較</div>
+      <div id="compareTable"></div>
+    </div>
+  </div><!-- /tab-graph -->
+
   <!-- ════ TAB: TITLES ════ -->
   <div id="tab-titles" class="tab-page">
     <div class="titles-summary" id="titlesSummary">0 / 40 解除済み</div>
@@ -1068,6 +1101,10 @@ body {
   <button class="tab-btn active" onclick="showTab('game',this)">
     <span class="tab-icon">🎮</span>
     <span class="tab-label">ゲーム</span>
+  </button>
+  <button class="tab-btn" onclick="showTab('graph',this)">
+    <span class="tab-icon">📈</span>
+    <span class="tab-label">グラフ</span>
   </button>
   <button class="tab-btn" onclick="showTab('data',this)">
     <span class="tab-icon">📊</span>
@@ -1383,8 +1420,10 @@ const ERA_COMMENTS = [
   [2024,1, 2025,4, '局長',     'AI革命の時代！株式市場も新しい局面に入っている！'],
 ];
 
-function getCryptoLabel(year) {
-  return year >= 2009 ? '仮想通貨' : '？？？？？';
+function getCryptoLabel(row) {
+  if (!row) return '？？？？？';
+  if (row.年 > 2009 || (row.年 === 2009 && row.イベント >= 1)) return '仮想通貨';
+  return '？？？？？';
 }
 
 function updateCharSpeech(year, event) {
@@ -1621,20 +1660,31 @@ function undoAction() {
   updateDisplay();
 }
 
+function canBuyAsset(id, row) {
+  if (row[id] === 0) return false;
+  // 国債はE1のみ購入可
+  if (id === '国債' && step > 0 && row.イベント !== 1) return false;
+  // 仮想通貨は2014E4から購入可
+  if (id === '？？？？？' && step > 0) {
+    if (row.年 < 2014 || (row.年 === 2014 && row.イベント < 4)) return false;
+    if ((holdings['？？？？？'] || 0) >= 3) return false;
+  }
+  return true;
+}
+
 function pressAsset(id) {
   const row = masterData[currentIndex];
-  if (!row || row[id] === 0) return;
+  if (!row) return;
+  if (step > 0 && !canBuyAsset(id, row)) return;
+  if (step < 0 && row[id] === 0) return;
   pushHistory();
   if (id === '不動産' && step < 0) {
-    // 売りは1ターン遅延：注文を積むだけ（pendingSellに加算、holdings未変更）
     const available = (holdings['不動産'] || 0) - pendingSell;
     const addOrder = Math.min(Math.abs(step), available);
     if (addOrder > 0) pendingSell += addOrder;
   } else if (id === '？？？？？' && step > 0) {
-    // 仮想通貨は3口まで
     const current = holdings['？？？？？'] || 0;
-    const maxBuy = Math.max(0, 3 - current);
-    const buy = Math.min(step, maxBuy);
+    const buy = Math.min(step, 3 - current);
     if (buy > 0) holdings['？？？？？'] = current + buy;
   } else {
     holdings[id] = Math.max(0, (holdings[id] || 0) + step);
@@ -1712,7 +1762,7 @@ function updateDisplay() {
     const q = holdings[a.id] || 0;
     if (!q && !(a.id === '不動産' && pendingSell > 0)) return;
     const p = row[a.id] || 0;
-    const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row.年) : a.label;
+    const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row) : a.label;
     const orderBadge = (a.id === '不動産' && pendingSell > 0)
       ? ` <span style="color:#ff9999;font-size:10px">⏳売り注文中 ${pendingSell}口</span>` : '';
     if (q > 0) {
@@ -1735,12 +1785,26 @@ function updateDisplay() {
     const btn = document.getElementById('abtn-' + a.id);
     if (!btn) return;
     const price = row[a.id] || 0;
-    const ok = price > 0;
+    const exists = price > 0;
+    // 購入可否チェック（国債E1制限・仮想通貨2014E4制限・上限3口）
+    const buyable = exists && canBuyAsset(a.id, { ...row, イベント: row.イベント });
+    const sellable = exists && (holdings[a.id] || 0) > 0;
+    const ok = exists;
     btn.disabled = !ok;
     btn.style.boxShadow = ok ? `4px 4px 0 ${a.shadow}` : '2px 2px 0 rgba(0,0,0,0.08)';
     const orderInfo = (a.id === '不動産' && pendingSell > 0)
       ? `<span style="display:block;font-size:9px;color:#ff9999;margin-top:2px">⏳売注 ${pendingSell}口</span>` : '';
-    const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row.年) : a.label;
+    // 国債の購入不可ターンは価格表示に注記
+    const bondNote = (a.id === '国債' && row.イベント !== 1 && ok)
+      ? '<span style="display:block;font-size:8px;color:#ff9999">購入はE1のみ</span>' : '';
+    // 仮想通貨の購入不可期間・上限注記
+    const cryptoNote = a.id === '？？？？？' && ok
+      ? ((row.年 < 2014 || (row.年 === 2014 && row.イベント < 4))
+          ? '<span style="display:block;font-size:8px;color:#ff9999">2014E4から購入可</span>'
+          : (holdings['？？？？？'] || 0) >= 3
+            ? '<span style="display:block;font-size:8px;color:#ff9999">上限3口</span>' : '')
+      : '';
+    const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row) : a.label;
     const qtyInfo = a.id === '？？？？？'
       ? `${holdings[a.id] || 0}/3口${orderInfo}` : `${holdings[a.id] || 0}口${orderInfo}`;
     btn.innerHTML = `<div class="asset-top" style="background:${a.color}">
@@ -1748,7 +1812,7 @@ function updateDisplay() {
       <span class="a-name">${displayLabel}</span>
     </div>
     <div class="asset-body">
-      <span class="a-price">${ok ? fmt(price) + '円/口' : '─ 未登場 ─'}</span>
+      <span class="a-price">${ok ? fmt(price) + '円/口' : '─ 未登場 ─'}${bondNote}${cryptoNote}</span>
       <span class="a-qty">${qtyInfo}</span>
     </div>`;
   });
@@ -1841,7 +1905,7 @@ function getGrade(total) {
 // COMPARE
 // ============================================================
 function renderCompare() {
-  if (!document.getElementById('tab-data').classList.contains('active')) return;
+  if (!document.getElementById('tab-graph').classList.contains('active')) return;
   const row = masterData[currentIndex];
   if (!row) return;
 
@@ -1921,7 +1985,7 @@ function showTab(name, btn) {
   document.getElementById('tab-' + name).classList.add('active');
   if (btn) btn.classList.add('active');
   if (name === 'titles') renderTitles();
-  if (name === 'data')   renderCompare();
+  if (name === 'graph')  { drawGraph(); renderCompare(); }
 }
 
 // ============================================================
