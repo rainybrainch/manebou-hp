@@ -3058,8 +3058,8 @@ function renderTitles() {
   document.getElementById('titlesSummary').textContent =
     `${unlockedVisible} / ${visible.length} バッジ獲得`;
 
-  // 5年刻みバケット
-  const toBucket = vf => vf === 0 ? 0 : Math.floor(vf / 5) * 5;
+  // 5年刻みバケット（スタート〜1974 は同じグループ、以降1975/1980…2025の刻み）
+  const toBucket = vf => (vf === 0 || vf < 1975) ? 0 : Math.floor(vf / 5) * 5;
   const bucketLabel = b => b === 0 ? '🌱 スタート' : `${b}年〜`;
 
   // visible を bucket ごとにグループ化
