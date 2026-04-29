@@ -984,7 +984,8 @@ body {
 .date-jump .date-row { margin-bottom: 0; }
 .value-panel  { padding: 10px 14px; margin-bottom: 8px; }
 .step-section { margin-bottom: 8px; }
-.step-lbl     { margin-bottom: 4px; }
+.step-lbl     { margin-bottom: 4px; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.step-hint    { font-size: 10px; color: #aaa; font-weight: 400; }
 .step-row     { gap: 4px; margin-bottom: 4px; }
 .step-btn     { padding: 7px 2px; font-size: 11px; border-radius: 8px; }
 .hold-list    { min-height: 0; max-height: 64px; overflow-y: auto; margin-bottom: 6px; }
@@ -1131,7 +1132,7 @@ body {
 
     <!-- STEP SELECTOR -->
     <div class="step-section">
-      <div class="step-lbl">口数ステップ</div>
+      <div class="step-lbl">売買口数 <span class="step-hint">資産ボタンを押すとこの口数だけ売買します</span></div>
       <div class="step-row">
         <button class="step-btn plus active" onclick="setStep(1,this)">＋1</button>
         <button class="step-btn plus" onclick="setStep(10,this)">＋10</button>
