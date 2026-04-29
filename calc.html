@@ -599,6 +599,27 @@ body {
 
 /* ─── Titles ─────────────────────────────────────────────── */
 .titles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.era-header {
+  grid-column: 1 / -1;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 1px;
+  padding: 10px 4px 3px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 2px;
+}
+.era-teaser {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+  padding: 12px 4px;
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 8px;
+  margin-top: 4px;
+}
 .title-item { border-radius: 10px; padding: 8px 10px; border: 2px solid; border-top-width: 4px; }
 .title-item.unlocked { background: rgba(245,200,66,0.12); border-color: var(--gold); }
 .title-item.locked   { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); opacity: 0.42; }
@@ -1181,16 +1202,16 @@ body {
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <button class="tab-btn" onclick="showTab('graph',this)">
-    <span class="tab-inner">
-      <span class="tab-icon">📈</span>
-      <span class="tab-label">グラフ</span>
-    </span>
-  </button>
   <button class="tab-btn" onclick="showTab('data',this)">
     <span class="tab-inner">
       <span class="tab-icon">📊</span>
       <span class="tab-label">データ</span>
+    </span>
+  </button>
+  <button class="tab-btn" onclick="showTab('graph',this)">
+    <span class="tab-inner">
+      <span class="tab-icon">📈</span>
+      <span class="tab-label">グラフ</span>
     </span>
   </button>
   <button class="tab-btn active" onclick="showTab('game',this)">
@@ -1582,91 +1603,106 @@ function updateCharSpeech(year, event) {
 // TITLES  stars: 1=⭐(10万) 2=⭐⭐(50万) 3=⭐⭐⭐(100万)
 // ============================================================
 const PRIZE = { 1: 100_000, 2: 500_000, 3: 1_000_000 };
+// visibleFrom: その年に到達するまでバッジ一覧に表示しない
 const TITLES = [
-  // ─── ⭐ かんたん (10万円) ───────────────────────────────────
-  { id: 'first_buy',    stars: 1, name: '初投資家',             desc: '初めて資産を購入する',
+  // ─── 🌱 スタート (visibleFrom: 0 = 常時表示) ─────────────
+  { id: 'first_buy',    stars: 1, visibleFrom: 0,    name: '初投資家',             desc: '初めて資産を購入する',
     check: ()   => Object.values(holdings).some(v => v > 0) },
-  { id: 'first_move',   stars: 1, name: '最初の一手',           desc: '1970年E1（ゲーム開始直後）に資産を保有',
+  { id: 'first_move',   stars: 1, visibleFrom: 0,    name: '最初の一手',           desc: '1970年イベント1（ゲーム開始直後）に資産を保有',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 1970 && r.イベント === 1 && Object.values(holdings).some(v => v > 0); }},
-  { id: 'millionaire',  stars: 1, name: '百万長者',             desc: '総資産100万円以上',
+  { id: 'millionaire',  stars: 1, visibleFrom: 0,    name: '百万長者',             desc: '総資産100万円以上',
     check: tot  => tot >= 1_000_000 },
-  { id: 'ten_mil',      stars: 1, name: '千万長者',             desc: '総資産1,000万円以上',
-    check: tot  => tot >= 10_000_000 },
-  { id: 'safe_first',   stars: 1, name: '安全第一',             desc: '銀行預金と国債のみで総資産100万以上',
+  { id: 'safe_first',   stars: 1, visibleFrom: 0,    name: '安全第一',             desc: '銀行預金と国債のみで総資産100万以上',
     check: tot  => { const hasRisky = ['株式','金','投資信託','ドル','不動産','？？？？？'].some(k => (holdings[k]||0) > 0); return !hasRisky && tot >= 1_000_000; }},
-  { id: 'crypto',       stars: 1, name: '仮想通貨民',           desc: '？？？？？を保有する',
-    check: ()   => (holdings['？？？？？'] || 0) > 0 },
-  { id: 'diversified',  stars: 1, name: '分散投資家',           desc: '5種類以上の資産を保有',
+  { id: 'diversified',  stars: 1, visibleFrom: 0,    name: '分散投資家',           desc: '5種類以上の資産を保有',
     check: ()   => Object.values(holdings).filter(v => v > 0).length >= 5 },
-  { id: 'five_pillar',  stars: 1, name: '5大資産の柱',          desc: '銀行・株式・金・国債・不動産を各1口以上',
-    check: ()   => ['銀行預金','株式','金','国債','不動産'].every(k => (holdings[k]||0) > 0) },
-  { id: 'steady_hand',  stars: 1, name: 'コツコツ貯める',       desc: '銀行預金と国債を合計50口以上保有',
+  { id: 'steady_hand',  stars: 1, visibleFrom: 0,    name: 'コツコツ貯める',       desc: '銀行預金と国債を合計50口以上保有',
     check: ()   => (holdings['銀行預金']||0) + (holdings['国債']||0) >= 50 },
-  { id: 'tamezou_life', stars: 1, name: 'ためぞう流の生き方',   desc: '銀行預金と国債のみで総資産500万以上',
-    check: tot  => { const hasRisky = ['株式','金','投資信託','ドル','不動産','？？？？？'].some(k => (holdings[k]||0) > 0); return !hasRisky && tot >= 5_000_000; }},
-  { id: 'showa_leg',    stars: 1, name: '昭和の伝説',           desc: '1988年以前（昭和時代）に株式を保有',
-    check: ()   => masterData[currentIndex].年 <= 1988 && masterData[currentIndex].年 >= 1970 && (holdings['株式']||0) > 0 },
-  { id: 'oil_gold',     stars: 1, name: 'オイルショック乗り越え', desc: '1974年以降に金を保有',
+
+  // ─── 🛢️ 1974〜1980 ────────────────────────────────────────
+  { id: 'oil_gold',     stars: 1, visibleFrom: 1974, name: 'オイルショック乗り越え', desc: '1974年以降に金を保有',
     check: ()   => masterData[currentIndex].年 >= 1974 && (holdings['金']||0) > 0 },
-  { id: 'abenomics',    stars: 1, name: 'アベノミクス乗り',     desc: '2012年イベント4に株式を保有',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2012 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
-  { id: 'btc_dawn',     stars: 1, name: 'BTC黎明期',            desc: '2013年イベント3（BTC初登場）に即購入',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2013 && r.イベント === 3 && (holdings['？？？？？']||0) > 0; }},
-  { id: 'corona_buy',   stars: 1, name: 'コロナ禍投資家',       desc: '2020年に株式を保有',
-    check: ()   => masterData[currentIndex].年 === 2020 && (holdings['株式']||0) > 0 },
+  { id: 'ten_mil',      stars: 1, visibleFrom: 1974, name: '千万長者',             desc: '総資産1,000万円以上',
+    check: tot  => tot >= 10_000_000 },
+  { id: 'tamezou_life', stars: 1, visibleFrom: 1976, name: 'ためぞう流の生き方',   desc: '銀行預金と国債のみで総資産500万以上',
+    check: tot  => { const hasRisky = ['株式','金','投資信託','ドル','不動産','？？？？？'].some(k => (holdings[k]||0) > 0); return !hasRisky && tot >= 5_000_000; }},
+  { id: 'five_pillar',  stars: 1, visibleFrom: 1976, name: '5大資産の柱',          desc: '銀行・株式・金・国債・不動産を各1口以上',
+    check: ()   => ['銀行預金','株式','金','国債','不動産'].every(k => (holdings[k]||0) > 0) },
 
-  // ─── ⭐⭐ ふつう (50万円) ──────────────────────────────────
-  { id: 'hundred_mil',  stars: 2, name: '億り人',               desc: '総資産1億円以上',
-    check: tot  => tot >= 100_000_000 },
-  { id: 'full_port',    stars: 2, name: '全資産家',             desc: '全8資産を保有する',
-    check: ()   => ASSET_KEYS.every(a => (holdings[a.id]||0) > 0) },
-  { id: 'dividend',     stars: 2, name: '配当生活者',           desc: '配当/ターンが10万円以上',
-    check: ()   => { const r = masterData[currentIndex]; let d = 0; ASSET_KEYS.forEach(a => { if (a.divKey) d += (holdings[a.id]||0)*(r[a.divKey]||0); }); return d >= 100_000; }},
-  { id: 'triple',       stars: 2, name: 'トリプルクラウン',     desc: '株式・金・不動産を各10口以上同時保有',
-    check: ()   => (holdings['株式']||0) >= 10 && (holdings['金']||0) >= 10 && (holdings['不動産']||0) >= 10 },
-  { id: 'stock_100',    stars: 2, name: '株式王',               desc: '株式を100口以上保有',
-    check: ()   => (holdings['株式']||0) >= 100 },
-  { id: 'gold_bug',     stars: 2, name: '金の亡者',             desc: '金を30口以上保有',
-    check: ()   => (holdings['金']||0) >= 30 },
-  { id: 'gambler',      stars: 2, name: 'ギャンブラー',         desc: '銀行預金・国債なしで総資産1億以上',
-    check: tot  => { const hasSafe = (holdings['銀行預金']||0) > 0 || (holdings['国債']||0) > 0; return !hasSafe && tot >= 100_000_000; }},
-  { id: 'bubble_land',  stars: 2, name: 'バブル紳士',           desc: '1989年に不動産10口以上保有',
-    check: ()   => masterData[currentIndex].年 === 1989 && (holdings['不動産']||0) >= 10 },
-  { id: 'black_mon',    stars: 2, name: 'ブラックマンデー生存者', desc: '1987年イベント4に株式を保有',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 === 1987 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
-  { id: 'lehman',       stars: 2, name: 'リーマン生存者',       desc: '2008年イベント4に株式を保有して生き残る',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2008 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
-  { id: 'nikkei_ath',   stars: 2, name: '史上最高値の時代',     desc: '2024年以降・株式を100口以上保有',
-    check: ()   => masterData[currentIndex].年 >= 2024 && (holdings['株式']||0) >= 100 },
-  { id: 'ouru_pupil',   stars: 2, name: 'おーる局長の弟子',     desc: '5種類以上保有かつ総資産3000万以上',
-    check: tot  => Object.values(holdings).filter(v => v > 0).length >= 5 && tot >= 30_000_000 },
-  { id: 'enda_tears',   stars: 2, name: 'えんだの涙',           desc: 'バブル崩壊後（1991〜95年）に株式10口以上保有',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 >= 1991 && r.年 <= 1995 && (holdings['株式']||0) >= 10; }},
-  { id: 'tamezou_god',  stars: 2, name: 'ためぞうの神髄',       desc: '銀行預金を200口以上保有',
+  // ─── 📈 1981〜1985 ────────────────────────────────────────
+  { id: 'tamezou_god',  stars: 2, visibleFrom: 1981, name: 'ためぞうの神髄',       desc: '銀行預金を200口以上保有',
     check: ()   => (holdings['銀行預金']||0) >= 200 },
-  { id: 'kausshi_glory',stars: 2, name: 'カウッシーの栄光',     desc: '1989年・株式と不動産を各20口以上保有',
-    check: ()   => masterData[currentIndex].年 === 1989 && (holdings['株式']||0) >= 20 && (holdings['不動産']||0) >= 20 },
-
-  // ─── ⭐⭐⭐ むずかしい (100万円) ──────────────────────────
-  { id: 'bil',          stars: 3, name: '十億長者',             desc: '総資産10億円以上',
-    check: tot  => tot >= 1_000_000_000 },
-  { id: 'big_div',      stars: 3, name: '配当王',               desc: '配当/ターンが100万円以上',
-    check: ()   => { const r = masterData[currentIndex]; let d = 0; ASSET_KEYS.forEach(a => { if (a.divKey) d += (holdings[a.id]||0)*(r[a.divKey]||0); }); return d >= 1_000_000; }},
-  { id: 'crypto_moon',  stars: 3, name: 'MOON🚀',               desc: '？？？？？の時価が1億円以上（口数×価格）',
-    check: ()   => { const r = masterData[currentIndex]; return (holdings['？？？？？']||0)*(r['？？？？？']||0) >= 100_000_000; }},
-  { id: 'kausshi_all',  stars: 3, name: 'カウッシーの欲望',     desc: '全8資産を各10口以上保有',
-    check: ()   => ASSET_KEYS.every(a => (holdings[a.id]||0) >= 10) },
-  { id: 's3_bub90',     stars: 3, name: '★★★ バブル崩壊',      desc: '1990年イベント2・株式10口以上保有したまま耐える',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 === 1990 && r.イベント === 2 && (holdings['株式']||0) >= 10; }},
-  { id: 's3_lem08',     stars: 3, name: '★★★ リーマンショック', desc: '2008年イベント4・株式20口以上保有したまま生き残る',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2008 && r.イベント === 4 && (holdings['株式']||0) >= 20; }},
-  { id: 's3_cov20',     stars: 3, name: '★★★ コロナ底値',      desc: '2020年イベント2・株式10口以上保有して底値を掴む',
-    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2020 && r.イベント === 2 && (holdings['株式']||0) >= 10; }},
-  { id: 'ouru_cert',    stars: 3, name: '局長認定投資家',       desc: '全8資産保有かつ配当/ターン50万以上',
-    check: ()   => { if (!ASSET_KEYS.every(a => (holdings[a.id]||0) > 0)) return false; const r = masterData[currentIndex]; let d = 0; ASSET_KEYS.forEach(a => { if (a.divKey) d += (holdings[a.id]||0)*(r[a.divKey]||0); }); return d >= 500_000; }},
-  { id: 'ouru_foresight',stars:3, name: '局長の先見の明',       desc: 'バブル期（1985〜89年）に金を5口以上保有',
+  { id: 'showa_leg',    stars: 1, visibleFrom: 1981, name: '昭和の伝説',           desc: '1988年以前（昭和時代）に株式を保有',
+    check: ()   => masterData[currentIndex].年 <= 1988 && masterData[currentIndex].年 >= 1970 && (holdings['株式']||0) > 0 },
+  { id: 'ouru_foresight',stars:3, visibleFrom: 1985, name: '局長の先見の明',       desc: 'バブル期（1985〜89年）に金を5口以上保有',
     check: ()   => { const r = masterData[currentIndex]; return r.年 >= 1985 && r.年 <= 1989 && (holdings['金']||0) >= 5; }},
-  { id: 'manebou_finish',stars:3, name: 'マネぼうを完走した！', desc: '1970〜2025年 全55年を駆け抜けた真の完走者',
+
+  // ─── 🫧 1986〜1990 バブル ────────────────────────────────
+  { id: 'black_mon',    stars: 2, visibleFrom: 1987, name: 'ブラックマンデー生存者', desc: '1987年イベント4に株式を保有',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 === 1987 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
+  { id: 'bubble_land',  stars: 2, visibleFrom: 1989, name: 'バブル紳士',           desc: '1989年に不動産10口以上保有',
+    check: ()   => masterData[currentIndex].年 === 1989 && (holdings['不動産']||0) >= 10 },
+  { id: 'kausshi_glory',stars: 2, visibleFrom: 1989, name: 'カウッシーの栄光',     desc: '1989年・株式と不動産を各20口以上保有',
+    check: ()   => masterData[currentIndex].年 === 1989 && (holdings['株式']||0) >= 20 && (holdings['不動産']||0) >= 20 },
+  { id: 's3_bub90',     stars: 3, visibleFrom: 1990, name: '★★★ バブル崩壊',      desc: '1990年イベント2・株式10口以上保有したまま耐える',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 === 1990 && r.イベント === 2 && (holdings['株式']||0) >= 10; }},
+
+  // ─── 💸 1991〜2000 失われた時代 ──────────────────────────
+  { id: 'hundred_mil',  stars: 2, visibleFrom: 1991, name: '億り人',               desc: '総資産1億円以上',
+    check: tot  => tot >= 100_000_000 },
+  { id: 'full_port',    stars: 2, visibleFrom: 1991, name: '全資産家',             desc: '全8資産を保有する',
+    check: ()   => ASSET_KEYS.every(a => (holdings[a.id]||0) > 0) },
+  { id: 'dividend',     stars: 2, visibleFrom: 1991, name: '配当生活者',           desc: '配当/ターンが10万円以上',
+    check: ()   => { const r = masterData[currentIndex]; let d = 0; ASSET_KEYS.forEach(a => { if (a.divKey) d += (holdings[a.id]||0)*(r[a.divKey]||0); }); return d >= 100_000; }},
+  { id: 'triple',       stars: 2, visibleFrom: 1991, name: 'トリプルクラウン',     desc: '株式・金・不動産を各10口以上同時保有',
+    check: ()   => (holdings['株式']||0) >= 10 && (holdings['金']||0) >= 10 && (holdings['不動産']||0) >= 10 },
+  { id: 'enda_tears',   stars: 2, visibleFrom: 1991, name: 'えんだの涙',           desc: 'バブル崩壊後（1991〜95年）に株式10口以上保有',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 >= 1991 && r.年 <= 1995 && (holdings['株式']||0) >= 10; }},
+  { id: 'stock_100',    stars: 2, visibleFrom: 1996, name: '株式王',               desc: '株式を100口以上保有',
+    check: ()   => (holdings['株式']||0) >= 100 },
+  { id: 'gold_bug',     stars: 2, visibleFrom: 1996, name: '金の亡者',             desc: '金を30口以上保有',
+    check: ()   => (holdings['金']||0) >= 30 },
+  { id: 'ouru_pupil',   stars: 2, visibleFrom: 1996, name: 'おーる局長の弟子',     desc: '5種類以上保有かつ総資産3000万以上',
+    check: tot  => Object.values(holdings).filter(v => v > 0).length >= 5 && tot >= 30_000_000 },
+
+  // ─── 💻 2001〜2007 回復期 ────────────────────────────────
+  { id: 'gambler',      stars: 2, visibleFrom: 2001, name: 'ギャンブラー',         desc: '銀行預金・国債なしで総資産1億以上',
+    check: tot  => { const hasSafe = (holdings['銀行預金']||0) > 0 || (holdings['国債']||0) > 0; return !hasSafe && tot >= 100_000_000; }},
+  { id: 'kausshi_all',  stars: 3, visibleFrom: 2001, name: 'カウッシーの欲望',     desc: '全8資産を各10口以上保有',
+    check: ()   => ASSET_KEYS.every(a => (holdings[a.id]||0) >= 10) },
+  { id: 'bil',          stars: 3, visibleFrom: 2001, name: '十億長者',             desc: '総資産10億円以上',
+    check: tot  => tot >= 1_000_000_000 },
+
+  // ─── 💥 2008〜2012 リーマン〜アベノミクス ─────────────────
+  { id: 'lehman',       stars: 2, visibleFrom: 2008, name: 'リーマン生存者',       desc: '2008年イベント4に株式を保有して生き残る',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2008 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
+  { id: 's3_lem08',     stars: 3, visibleFrom: 2008, name: '★★★ リーマンショック', desc: '2008年イベント4・株式20口以上保有したまま生き残る',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2008 && r.イベント === 4 && (holdings['株式']||0) >= 20; }},
+  { id: 'big_div',      stars: 3, visibleFrom: 2008, name: '配当王',               desc: '配当/ターンが100万円以上',
+    check: ()   => { const r = masterData[currentIndex]; let d = 0; ASSET_KEYS.forEach(a => { if (a.divKey) d += (holdings[a.id]||0)*(r[a.divKey]||0); }); return d >= 1_000_000; }},
+  { id: 'abenomics',    stars: 1, visibleFrom: 2012, name: 'アベノミクス乗り',     desc: '2012年イベント4に株式を保有',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2012 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
+
+  // ─── 🔮 2009〜 仮想通貨解禁 (2009年前は非表示) ──────────
+  { id: 'crypto',       stars: 1, visibleFrom: 2009, name: '仮想通貨民',           desc: '？？？？？を保有する',
+    check: ()   => (holdings['？？？？？'] || 0) > 0 },
+  { id: 'btc_dawn',     stars: 1, visibleFrom: 2009, name: '？？？黎明期',         desc: '2013年イベント3（？？？初登場）に即購入',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2013 && r.イベント === 3 && (holdings['？？？？？']||0) > 0; }},
+  { id: 'crypto_moon',  stars: 3, visibleFrom: 2009, name: 'MOON🚀',               desc: '？？？？？の時価が1億円以上（口数×価格）',
+    check: ()   => { const r = masterData[currentIndex]; return (holdings['？？？？？']||0)*(r['？？？？？']||0) >= 100_000_000; }},
+
+  // ─── 🦠 2016〜2020 コロナ ────────────────────────────────
+  { id: 'corona_buy',   stars: 1, visibleFrom: 2020, name: 'コロナ禍投資家',       desc: '2020年に株式を保有',
+    check: ()   => masterData[currentIndex].年 === 2020 && (holdings['株式']||0) > 0 },
+  { id: 's3_cov20',     stars: 3, visibleFrom: 2020, name: '★★★ コロナ底値',      desc: '2020年イベント2・株式10口以上保有して底値を掴む',
+    check: ()   => { const r = masterData[currentIndex]; return r.年 === 2020 && r.イベント === 2 && (holdings['株式']||0) >= 10; }},
+
+  // ─── 🤖 2021〜2025 AI時代 ────────────────────────────────
+  { id: 'nikkei_ath',   stars: 2, visibleFrom: 2021, name: '史上最高値の時代',     desc: '2024年以降・株式を100口以上保有',
+    check: ()   => masterData[currentIndex].年 >= 2024 && (holdings['株式']||0) >= 100 },
+  { id: 'ouru_cert',    stars: 3, visibleFrom: 2021, name: '局長認定投資家',       desc: '全8資産保有かつ配当/ターン50万以上',
+    check: ()   => { if (!ASSET_KEYS.every(a => (holdings[a.id]||0) > 0)) return false; const r = masterData[currentIndex]; let d = 0; ASSET_KEYS.forEach(a => { if (a.divKey) d += (holdings[a.id]||0)*(r[a.divKey]||0); }); return d >= 500_000; }},
+  { id: 'manebou_finish',stars:3, visibleFrom: 2025, name: 'マネぼうを完走した！', desc: '1970〜2025年 全55年を駆け抜けた真の完走者',
     check: ()   => currentIndex >= masterData.length - 1 && Object.values(holdings).some(v => v > 0) },
 ];// ============================================================
 // STATE
@@ -2255,23 +2291,66 @@ function checkTitles(total) {
   });
 }
 
+const BADGE_ERAS = [
+  { label: '🌱 スタート',              from: 0    },
+  { label: '🛢️ 1974〜 オイルショック', from: 1974 },
+  { label: '📊 1976〜 安定成長期',     from: 1976 },
+  { label: '🏛️ 1981〜 改革・プラザ',   from: 1981 },
+  { label: '✍️ 1985〜 プラザ合意以降', from: 1985 },
+  { label: '📉 1987〜 ブラックマンデー',from: 1987 },
+  { label: '🫧 1989〜 バブル全盛',     from: 1989 },
+  { label: '💸 1990〜 バブル崩壊',     from: 1990 },
+  { label: '😔 1991〜 失われた時代',   from: 1991 },
+  { label: '💻 1996〜 IT黎明期',       from: 1996 },
+  { label: '🌐 2001〜 IT崩壊後',       from: 2001 },
+  { label: '💥 2008〜 リーマンショック',from: 2008 },
+  { label: '🔮 2009〜 新時代の扉',     from: 2009 },
+  { label: '🚀 2012〜 アベノミクス',   from: 2012 },
+  { label: '🦠 2020〜 コロナ時代',     from: 2020 },
+  { label: '🤖 2021〜 AI時代',         from: 2021 },
+  { label: '🏁 2025 フィナーレ',       from: 2025 },
+];
+
 function renderTitles() {
   if (!document.getElementById('tab-titles').classList.contains('active')) return;
-  const unlocked = unlockedTitles.size;
-  document.getElementById('titlesSummary').textContent = `${unlocked} / ${TITLES.length} バッジ獲得`;
-  let html = '';
+  const currentYear = masterData[currentIndex]?.年 || 0;
   const censor = s => s.replace(/？？？？？/g, '<span class="censored">？？？？？</span>');
-  TITLES.forEach(t => {
-    const cls   = unlockedTitles.has(t.id) ? 'unlocked' : 'locked';
-    const icon  = unlockedTitles.has(t.id) ? '🏆' : '🔒';
-    const stars = '⭐'.repeat(t.stars);
-    const prize = fmt(PRIZE[t.stars]);
-    html += `<div class="title-item ${cls} s${t.stars}">
-      <span class="title-stars">${stars} +${prize}円</span>
-      <span class="title-name">${icon} ${censor(t.name)}</span>
-      <span class="title-desc">${censor(t.desc)}</span>
-    </div>`;
+
+  const visible = TITLES.filter(t => (t.visibleFrom || 0) <= currentYear);
+  const hidden  = TITLES.filter(t => (t.visibleFrom || 0) > currentYear);
+  const unlockedVisible = visible.filter(t => unlockedTitles.has(t.id)).length;
+
+  document.getElementById('titlesSummary').textContent =
+    `${unlockedVisible} / ${visible.length} バッジ獲得`;
+
+  let html = '';
+  let lastEra = null;
+
+  // 時代ヘッダーごとにグループ化して表示
+  BADGE_ERAS.forEach(era => {
+    if (era.from > currentYear) return;
+    const eraBadges = visible.filter(t => (t.visibleFrom || 0) === era.from);
+    if (!eraBadges.length) return;
+
+    html += `<div class="era-header">${era.label}</div>`;
+    eraBadges.forEach(t => {
+      const cls   = unlockedTitles.has(t.id) ? 'unlocked' : 'locked';
+      const icon  = unlockedTitles.has(t.id) ? '🏆' : '🔒';
+      const stars = '⭐'.repeat(t.stars);
+      const prize = fmt(PRIZE[t.stars]);
+      html += `<div class="title-item ${cls} s${t.stars}">
+        <span class="title-stars">${stars} +${prize}円</span>
+        <span class="title-name">${icon} ${censor(t.name)}</span>
+        <span class="title-desc">${censor(t.desc)}</span>
+      </div>`;
+    });
   });
+
+  if (hidden.length > 0) {
+    const nextYear = Math.min(...hidden.map(t => t.visibleFrom || 9999));
+    html += `<div class="era-teaser">🔐 ${nextYear}年以降にさらに ${hidden.length} 個のバッジが解放されます</div>`;
+  }
+
   document.getElementById('titlesGrid').innerHTML = html;
 }
 
