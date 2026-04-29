@@ -803,6 +803,11 @@ body {
 .setting-btn { background: rgba(232,53,74,0.1); color: var(--red); border: 1.5px solid rgba(232,53,74,0.3); border-radius: 8px; padding: 6px 14px; font-size: 12px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; cursor: pointer; }
 .setting-link { color: var(--sky); font-weight: 700; font-size: 13px; text-decoration: none; }
 .setting-link:hover { text-decoration: underline; }
+.rules-board-img { width: 100%; border-radius: 12px; display: block; margin: 10px 0 8px; box-shadow: 0 3px 12px rgba(0,0,0,0.18); }
+.rules-board-legend { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
+.rbl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; line-height: 1.5; }
+.rbl-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px; }
+.rules-catch { font-size: 15px; font-weight: 800; color: var(--sky); text-align: center; margin-bottom: 8px; letter-spacing: .5px; }
 
 /* ─── Character Banner ───────────────────────────────────── */
 .char-banner {
@@ -1205,24 +1210,47 @@ body {
     <div class="tab-section">
       <div class="tab-section-title">📖 ゲームのルール</div>
       <div class="rules-block">
-        <p>1970〜2025年の日本経済史を旅しながら、8種類の資産を売買して総資産を増やすボードゲームです。</p>
-        <h4>🗂 進め方</h4>
+        <p class="rules-catch">マネぼうでお金について楽しく学ぼう！</p>
+        <p>1970〜2025年の日本経済史を舞台に、8種類の資産を売買しながら総資産を増やすボードゲームアプリです。歴史の流れを感じながら、自然とお金の知識が身につきます。</p>
+      </div>
+      <img src="images/img9.webp" alt="チュートリアル盤面" class="rules-board-img">
+      <div class="rules-board-legend">
+        <div class="rbl-item">
+          <span class="rbl-badge" style="background:#f5c842;color:#333">①</span>
+          <span><strong>イベントパネル</strong>── 各ターンの出来事と資産の価格が表示される</span>
+        </div>
+        <div class="rbl-item">
+          <span class="rbl-badge" style="background:#e8354a">②</span>
+          <span><strong>チャンスカード</strong>── めくって全プレイヤーに特別イベントが発生</span>
+        </div>
+        <div class="rbl-item">
+          <span class="rbl-badge" style="background:#4caf50">③</span>
+          <span><strong>配当</strong>── ターン終了時、保有資産に応じて収入が入る</span>
+        </div>
+        <div class="rbl-item">
+          <span class="rbl-badge" style="background:#1ebdb0">④</span>
+          <span><strong>スタート</strong>── 100万円分の資産を受け取ってゲーム開始！</span>
+        </div>
+      </div>
+      <div class="rules-block" style="margin-top:10px">
+        <h4>🗂 ゲームの進め方</h4>
         <ul>
-          <li>年・イベント（E1〜E4）を選んで時代を進む</li>
-          <li>イベントを確認 → 資産を購入・売却 → 次へ</li>
-          <li>ターン終了時に配当が加算される</li>
-          <li>2025年E4まで進めてゴール！</li>
+          <li><strong>① 年・イベントを選ぶ</strong>── 1970年から順に E1→E4 と進める</li>
+          <li><strong>② イベントを確認</strong>── 歴史の出来事が明らかになる</li>
+          <li><strong>③ 資産を売買</strong>── イベントを読んで買う・売るを判断</li>
+          <li><strong>④ 次のターンへ</strong>── 配当が自動加算されて次の時代へ</li>
+          <li><strong>2025年E4でゴール！</strong>── 総資産が多いほど高ランク</li>
         </ul>
         <h4>📦 8種類の資産</h4>
         <ul>
-          <li>🏦 銀行預金・📜 国債 ── 安全型、着実に増加</li>
-          <li>📈 株式・📊 投資信託 ── 成長型、変動大</li>
-          <li>🥇 金・🏠 不動産 ── 実物資産、インフレに強い</li>
-          <li>💵 ドル ── 為替連動、円高・円安の影響を受ける</li>
-          <li>🪙 ？？？？？ ── 2014年E4から購入可能な秘密の資産</li>
+          <li>🏦 <strong>銀行預金</strong>・📜 <strong>国債</strong> ── 安全型、着実に増加</li>
+          <li>📈 <strong>株式</strong>・📊 <strong>投資信託</strong> ── 成長型、変動大きめ</li>
+          <li>🥇 <strong>金</strong>・🏠 <strong>不動産</strong> ── 実物資産、インフレに強い</li>
+          <li>💵 <strong>ドル</strong> ── 為替連動、円高・円安の影響を受ける</li>
+          <li>🪙 <strong>？？？？？</strong> ── 2014年E4から現れる秘密の資産</li>
         </ul>
         <h4>🏅 バッジ</h4>
-        <p>達成条件を満たすと自動解除。獲得数に応じた賞金が加算されます。</p>
+        <p>特定の条件を達成すると自動解除。獲得数に応じた賞金が総資産に加算されます。バッジは「バッジ」タブで確認できます。</p>
       </div>
     </div>
 
