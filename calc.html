@@ -2255,8 +2255,8 @@ function undoAction() {
 
 function canBuyAsset(id, row) {
   if (row[id] === 0) return false;
-  // 国債はE1のみ購入可
-  if (id === '国債' && step > 0 && row.イベント !== 1) return false;
+  // 国債はE1のみ購入可（チュートリアルは除外）
+  if (id === '国債' && step > 0 && row.イベント !== 1 && row.年 !== 0) return false;
   // 仮想通貨は2014E4から購入可
   if (id === '？？？？？' && step > 0) {
     if (row.年 < 2014 || (row.年 === 2014 && row.イベント < 4)) return false;
@@ -2425,7 +2425,7 @@ function updateDisplay() {
     const buyable = exists && canBuyAsset(a.id, { ...row, イベント: row.イベント });
     const sellable = exists && (holdings[a.id] || 0) > 0;
     const ok = exists;
-    const bondLocked = a.id === '国債' && row.イベント !== 1 && ok;
+    const bondLocked = a.id === '国債' && row.イベント !== 1 && row.年 !== 0 && ok;
     btn.disabled = !ok;
     btn.style.boxShadow = (ok && !bondLocked) ? `4px 4px 0 ${a.shadow}` : '2px 2px 0 rgba(0,0,0,0.08)';
     btn.classList.toggle('btn-bond-locked', bondLocked);
