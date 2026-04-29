@@ -2327,7 +2327,8 @@ function updateDisplay() {
       : '';
     const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row) : a.label;
     const qtyInfo = a.id === '？？？？？'
-      ? `${holdings[a.id] || 0}/3口${orderInfo}` : `${holdings[a.id] || 0}口${orderInfo}`;
+      ? ((holdings[a.id] || 0) > 0 ? `${holdings[a.id]}/3口${orderInfo}` : '')
+      : `${holdings[a.id] || 0}口${orderInfo}`;
     const spark = ok ? makeSparkline(a.id, a.color) : '';
     btn.innerHTML = `<div class="asset-top" style="background:${a.color}">
       <span class="a-emoji">${a.emoji}</span>
