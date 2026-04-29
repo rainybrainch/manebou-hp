@@ -42,6 +42,16 @@ body {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes stepFadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes stepFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.step-exit  { animation: stepFadeOut 0.13s ease forwards; pointer-events: none; }
+.step-enter { animation: stepFadeIn  0.22s ease forwards; }
 
 /* ─── Nav ────────────────────────────────────────────────── */
 .top-nav {
@@ -2295,24 +2305,38 @@ function assetReset() {
   updateDisplay();
 }
 
+function animateStep(callback) {
+  const ids = ['timeLabel', 'holdList', 'btnWrap', 'speechText', 'speechCharImg', 'speechCharName'];
+  const els = ids.map(id => document.getElementById(id)).filter(Boolean);
+  const vn = document.querySelector('.value-nums');
+  if (vn) els.push(vn);
+  els.forEach(el => { el.classList.remove('step-enter'); el.classList.add('step-exit'); });
+  setTimeout(() => {
+    callback();
+    els.forEach(el => { el.classList.remove('step-exit'); el.classList.add('step-enter'); });
+  }, 130);
+}
+
 function stepTime(dir) {
   const ni = currentIndex + dir;
   if (ni < 0 || ni >= masterData.length) return;
-  pushHistory();
-  // NEXT時に不動産の売り注文を実行
-  if (dir === 1 && pendingSell > 0) {
-    const prevQty = holdings['不動産'] || 0;
-    const newQty  = Math.max(0, prevQty - pendingSell);
-    if (prevQty > 0) costBasis['不動産'] = (costBasis['不動産'] || 0) * (newQty / prevQty);
-    holdings['不動産'] = newQty;
-    pendingSell = 0;
-  }
-  currentIndex = ni;
-  const row = masterData[currentIndex];
-  document.getElementById('selY').value = row.年;
-  updateEventOptions();
-  if (row.イベント > 0) document.getElementById('selE').value = row.イベント;
-  updateDisplay();
+  animateStep(() => {
+    pushHistory();
+    // NEXT時に不動産の売り注文を実行
+    if (dir === 1 && pendingSell > 0) {
+      const prevQty = holdings['不動産'] || 0;
+      const newQty  = Math.max(0, prevQty - pendingSell);
+      if (prevQty > 0) costBasis['不動産'] = (costBasis['不動産'] || 0) * (newQty / prevQty);
+      holdings['不動産'] = newQty;
+      pendingSell = 0;
+    }
+    currentIndex = ni;
+    const row = masterData[currentIndex];
+    document.getElementById('selY').value = row.年;
+    updateEventOptions();
+    if (row.イベント > 0) document.getElementById('selE').value = row.イベント;
+    updateDisplay();
+  });
 }
 
 function dateJump() {
