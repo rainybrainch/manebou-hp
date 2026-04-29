@@ -919,6 +919,19 @@ body {
 .rules-board-legend { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
 .rbl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; line-height: 1.5; }
 .rbl-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px; }
+/* ─── Board Annotate ─────────────────────────────────────── */
+.board-annotate { position: relative; display: block; margin: 10px 0 8px; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,0.18); }
+.board-annotate img { width: 100%; display: block; }
+.ba-badge { position: absolute; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; font-family: 'Dela Gothic One',sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.7); border: 2px solid rgba(255,255,255,0.92); transform: translate(-50%,-50%); pointer-events: none; }
+.ba-event  { background: #f5c842; color: #222; }
+.ba-chance { background: #e8354a; color: #fff; }
+.ba-div    { background: #4caf50; color: #fff; }
+.ba-start  { background: #1ebdb0; color: #fff; }
+.ba-cw { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.ba-cw-icon { font-size: 48px; color: #fff; line-height: 1; text-shadow: 0 0 12px rgba(0,0,0,1), 0 0 6px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1); }
+.ba-cw-label { color: #fff; font-size: 10px; font-family: 'Dela Gothic One',sans-serif; white-space: nowrap; text-shadow: 0 0 8px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,1); letter-spacing: .3px; }
+/* clockwise path arrow */
+.ba-cw-arrow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
 .rules-catch { font-size: 15px; font-weight: 800; color: var(--sky); text-align: center; margin-bottom: 8px; letter-spacing: .5px; }
 
 /* ─── Character Banner ───────────────────────────────────── */
@@ -1157,19 +1170,26 @@ body {
 .graph-mode-btn {
   flex: 1;
   background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.45);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: 10px; padding: 8px 4px;
-  font-size: 12px; font-weight: 700; cursor: pointer;
-  font-family: 'Zen Maru Gothic', sans-serif;
-  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+.portfolio-legend { padding: 6px 0; }
+.pl-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 8px; border-radius: 6px; font-size: 11px;
 }
-.graph-mode-btn.active {
-  background: rgba(245,200,66,0.14);
-  color: var(--gold); border-color: var(--gold);
+.pl-row:nth-child(odd) { background: rgba(255,255,255,0.04); }
+.pl-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.pl-name { flex: 1; color: rgba(255,255,255,0.85); font-weight: 700; }
+.pl-qty  { color: rgba(255,255,255,0.5); min-width: 36px; text-align: right; font-size: 10px; }
+.pl-val  { color: var(--gold); min-width: 76px; text-align: right; font-family: 'Dela Gothic One',sans-serif; font-size: 10px; }
+.pl-pct  { color: rgba(255,255,255,0.45); min-width: 34px; text-align: right; font-size: 10px; }
+.pl-bar-wrap { min-width: 50px; }
+.pl-bar-bg   { background: rgba(255,255,255,0.1); border-radius: 4px; height: 5px; overflow: hidden; }
+.pl-bar-fill { height: 5px; border-radius: 4px; }
+.pl-total-row {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  padding: 6px 8px 2px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4px;
 }
-
-/* ─── Portfolio Legend ───────────────────────────────────── */
+.pl-total-label { font-size: 11px; color: rgba(255,255,255,0.5); }
+.pl-total-val   { color: var(--gold); font-family: 'Dela Gothic One',sans-serif; font-size: 14px; }
 .portfolio-legend {
   display: grid; grid-template-columns: repeat(4, 1fr);
   gap: 4px; padding: 8px 4px;
@@ -1358,11 +1378,36 @@ body {
         <p class="rules-catch">マネぼうでお金について楽しく学ぼう！</p>
         <p>1970〜2025年の日本経済史を舞台に、8種類の資産を売買しながら総資産を増やすボードゲームアプリです。歴史の流れを感じながら、自然とお金の知識が身につきます。</p>
       </div>
-      <img src="images/img9.webp" alt="チュートリアル盤面" class="rules-board-img">
+      <!-- 盤面：注釈付きオーバーレイ -->
+      <div class="board-annotate">
+        <img src="images/img9.webp" alt="チュートリアル盤面">
+        <!-- ① イベントパネル（左上・右上・左下・右下） -->
+        <span class="ba-badge ba-event"  style="top:16%;left:17%">①</span>
+        <span class="ba-badge ba-event"  style="top:16%;left:83%">①</span>
+        <span class="ba-badge ba-event"  style="top:86%;left:14%">①</span>
+        <span class="ba-badge ba-event"  style="top:83%;left:83%">①</span>
+        <!-- ② チャンスカード（上中・右上中・左下） -->
+        <span class="ba-badge ba-chance" style="top:9%;left:50%">②</span>
+        <span class="ba-badge ba-chance" style="top:40%;left:87%">②</span>
+        <span class="ba-badge ba-chance" style="top:72%;left:12%">②</span>
+        <!-- ③ 配当マス（左中・右中下） -->
+        <span class="ba-badge ba-div"    style="top:49%;left:11%">③</span>
+        <span class="ba-badge ba-div"    style="top:62%;left:87%">③</span>
+        <!-- ④ スタート（下中） -->
+        <span class="ba-badge ba-start"  style="top:84%;left:50%">④</span>
+        <!-- 時計回りインジケーター（中央） -->
+        <div class="ba-cw">
+          <svg viewBox="0 0 60 60" width="52" height="52" fill="none" style="filter:drop-shadow(0 0 5px rgba(0,0,0,0.9))">
+            <path d="M30 6 A24 24 0 1 1 8 42" stroke="white" stroke-width="5" stroke-linecap="round"/>
+            <polygon points="4,47 10,34 17,44" fill="white"/>
+          </svg>
+          <span class="ba-cw-label">時計回りに進む</span>
+        </div>
+      </div>
       <div class="rules-board-legend">
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#f5c842;color:#333">①</span>
-          <span><strong>イベントパネル</strong>── 各ターンの出来事と資産の価格が表示される</span>
+          <span><strong>イベントパネル</strong>── 各ターンの出来事と8資産の価格が表示される</span>
         </div>
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#e8354a">②</span>
@@ -1370,7 +1415,7 @@ body {
         </div>
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#4caf50">③</span>
-          <span><strong>配当</strong>── ターン終了時、保有資産に応じて収入が入る</span>
+          <span><strong>配当マス</strong>── 止まるとターン終了時に保有資産の配当が入る</span>
         </div>
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#1ebdb0">④</span>
@@ -2746,12 +2791,27 @@ function drawPortfolioGraph() {
   const toX = i => PX + (i / (n - 1)) * (W - 2 * PX);
   const toY = v => PY + (1 - v / maxTot) * (H - 2 * PY);
 
-  const assetsWithValue = ASSET_KEYS.filter(a => hist.some(h => h.values[a.id] > 0));
-  let svgContent = '';
-
-  for (let ai = assetsWithValue.length - 1; ai >= 0; ai--) {
-    const pts = [];
-    for (let i = 0; i < n; i++) {
+  const curRow = masterData[currentIndex];
+  const legendAssets = ASSET_KEYS.filter(a => (holdings[a.id]||0) > 0);
+  const curTotal = legendAssets.reduce((s, a) => s + (holdings[a.id]||0) * (curRow ? curRow[a.id]||0 : 0), 0);
+  if (legendAssets.length === 0) {
+    legend.innerHTML = '<div style="font-size:11px;color:rgba(255,255,255,0.35);padding:8px 6px">現在保有している資産はありません</div>';
+  } else {
+    legend.innerHTML = legendAssets.map(a => {
+      const qty = holdings[a.id] || 0;
+      const val = qty * (curRow ? curRow[a.id]||0 : 0);
+      const pct = curTotal > 0 ? ((val / curTotal) * 100) : 0;
+      return `<div class="pl-row">
+        <div class="pl-dot" style="background:${a.color}"></div>
+        <div class="pl-name">${a.emoji} ${a.label}</div>
+        <div class="pl-qty">${qty}口</div>
+        <div class="pl-val">¥${fmt(val)}</div>
+        <div class="pl-pct">${pct.toFixed(1)}%</div>
+        <div class="pl-bar-wrap"><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:${Math.round(pct)}%;background:${a.color}"></div></div></div>
+      </div>`;
+    }).join('') +
+    `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(curTotal)}</span></div>`;
+  }
       let cum = 0;
       for (let j = 0; j <= ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
       pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
