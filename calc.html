@@ -733,6 +733,118 @@ body {
   border-left: 3px solid var(--sky);
 }
 
+/* ─── Sim qty presets ──────────────────────────────────── */
+.sim-qty-presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.sqp-label { font-size: 11px; color: #888; }
+.sqp {
+  background: rgba(91,200,232,0.12);
+  color: var(--sky);
+  border: 1.5px solid var(--sky);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  transition: all 0.12s;
+}
+.sqp:hover, .sqp.active { background: var(--sky); color: #fff; }
+.sqp:active { transform: scale(0.94); }
+
+/* ─── Cash memo ────────────────────────────────────────── */
+.cash-balance {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: 26px;
+  color: var(--gold);
+  background: var(--dark);
+  border-radius: 10px;
+  padding: 12px 16px;
+  text-align: right;
+  margin-bottom: 10px;
+}
+.cash-set-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.cash-set-row input {
+  flex: 1;
+  background: #fff;
+  color: var(--dark);
+  border: 2px solid rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+}
+.cash-quick-label { font-size: 11px; color: #888; margin-bottom: 6px; }
+.cash-btns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.cbtn {
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 9px 4px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  transition: all 0.1s;
+}
+.cbtn.plus  { background: rgba(46,204,113,0.1); color: #27ae60; border-color: #27ae60; }
+.cbtn.minus { background: rgba(232,53,74,0.1);  color: var(--red); border-color: var(--red); }
+.cbtn:active { transform: scale(0.94); }
+.cash-log {
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: #666;
+  line-height: 1.9;
+  min-height: 36px;
+  white-space: pre-line;
+  margin-bottom: 8px;
+}
+.cash-reset-btn {
+  background: rgba(232,53,74,0.08);
+  color: var(--red);
+  border: 1.5px solid var(--red);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  width: 100%;
+}
+
+/* ─── Calc action buttons ──────────────────────────────── */
+.calc-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.calc-to-sim, .calc-to-cash {
+  width: 100%;
+  background: rgba(91,200,232,0.1);
+  color: var(--sky);
+  border: 1.5px solid var(--sky);
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  text-align: center;
+  transition: all 0.1s;
+}
+.calc-to-cash { background: rgba(46,204,113,0.1); color: #27ae60; border-color: #27ae60; }
+.calc-to-sim:active, .calc-to-cash:active { transform: scale(0.97); }
+
 /* ─── Calculator ─────────────────────────────────────────── */
 .calc-disp {
   background: var(--dark);
@@ -2535,6 +2647,68 @@ function doSim() {
   document.getElementById('simResult').textContent =
     `購入コスト  : ${fmt(cost)} 円\n配当(1ターン): ${fmt(divAmt)} 円\n配当(年間)  : ${fmt(divAmt * 4)} 円\n利回り目安  : ${yPct} %`;
 }
+// ============================================================
+// SIMULATOR HELPERS + CASH MEMO
+// ============================================================
+function setSimQty(n) {
+  document.getElementById('simQty').value = n;
+  doSim();
+}
+
+function calcToSim() {
+  const raw = document.getElementById('calcDisp').textContent.replace(/,/g, '');
+  const qty = Math.floor(Math.abs(parseFloat(raw) || 0));
+  if (qty > 0) {
+    document.getElementById('simQty').value = qty;
+    doSim();
+    showToast('口数を ' + qty + ' に設定しました');
+  }
+}
+
+let cashBalance = 0;
+const cashHistLog = [];
+
+function updateCashDisplay() {
+  document.getElementById('cashDisplay').textContent = '¥ ' + fmt(cashBalance);
+}
+
+function addCash(amount) {
+  cashBalance += amount;
+  const sign = amount >= 0 ? '+' : '';
+  cashHistLog.unshift(sign + fmt(amount) + '円 → 残 ' + fmt(cashBalance) + '円');
+  if (cashHistLog.length > 5) cashHistLog.pop();
+  document.getElementById('cashLog').textContent = cashHistLog.join('\n');
+  updateCashDisplay();
+}
+
+function setCashDirect() {
+  const v = parseInt(document.getElementById('cashInput').value) || 0;
+  const delta = v - cashBalance;
+  cashBalance = v;
+  cashHistLog.unshift('設定: ' + fmt(v) + '円');
+  if (cashHistLog.length > 5) cashHistLog.pop();
+  document.getElementById('cashLog').textContent = cashHistLog.join('\n');
+  updateCashDisplay();
+}
+
+function resetCash() {
+  if (!confirm('現金メモをリセットしますか？')) return;
+  cashBalance = 0;
+  cashHistLog.length = 0;
+  document.getElementById('cashLog').textContent = '';
+  document.getElementById('cashInput').value = '';
+  updateCashDisplay();
+}
+
+function calcToCash() {
+  const raw = document.getElementById('calcDisp').textContent.replace(/,/g, '');
+  const v = Math.round(parseFloat(raw) || 0);
+  if (v !== 0) {
+    addCash(v);
+    showToast((v >= 0 ? '+' : '') + fmt(v) + '円を現金に加算しました');
+  }
+}
+
 
 // ============================================================
 // PORTFOLIO GRAPH
