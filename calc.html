@@ -3397,7 +3397,15 @@ function showTab(name, btn) {
 // ============================================================
 let cBuf = '0', cOpr = null, cPrev = null, cNew = false;
 
-function cDisp() { document.getElementById('calcDisp').textContent = cBuf; }
+function cDisp() {
+  const neg = cBuf.startsWith('-');
+  const abs = neg ? cBuf.slice(1) : cBuf;
+  const hasDot = abs.includes('.');
+  const parts = abs.split('.');
+  const intFmt = Number(parts[0] || '0').toLocaleString('ja-JP');
+  const decPart = hasDot ? ('.' + (parts[1] || '')) : '';
+  document.getElementById('calcDisp').textContent = (neg ? '-' : '') + intFmt + decPart;
+}
 
 function cIn(v) {
   if (cNew) { cBuf = String(v); cNew = false; }
