@@ -1154,7 +1154,7 @@ body {
 
   </div><!-- /tab-game -->
 
-  <!-- ════ TAB: DATA ════ -->
+  <!-- ════ TAB: CALC (購入シミュレーター + 補助計算機) ════ -->
   <div id="tab-data" class="tab-page">
 
     <div class="tab-section">
@@ -1167,9 +1167,35 @@ body {
       <div id="simResult">口数を入力して「計算」を押してください</div>
     </div>
 
-  </div><!-- /tab-data -->
+    <div class="tab-section">
+      <div class="tab-section-title">🧮 補助計算機</div>
+      <div class="calc-disp" id="calcDisp">0</div>
+      <div class="calc-keys">
+        <button class="ckey cl"        onclick="cClear()">C</button>
+        <button class="ckey bk"        onclick="cBack()">⌫</button>
+        <button class="ckey op"        onclick="cOp('%')">%</button>
+        <button class="ckey op"        onclick="cOp('÷')">÷</button>
+        <button class="ckey"           onclick="cIn(7)">7</button>
+        <button class="ckey"           onclick="cIn(8)">8</button>
+        <button class="ckey"           onclick="cIn(9)">9</button>
+        <button class="ckey op"        onclick="cOp('×')">×</button>
+        <button class="ckey"           onclick="cIn(4)">4</button>
+        <button class="ckey"           onclick="cIn(5)">5</button>
+        <button class="ckey"           onclick="cIn(6)">6</button>
+        <button class="ckey op"        onclick="cOp('-')">−</button>
+        <button class="ckey"           onclick="cIn(1)">1</button>
+        <button class="ckey"           onclick="cIn(2)">2</button>
+        <button class="ckey"           onclick="cIn(3)">3</button>
+        <button class="ckey op"        onclick="cOp('+')">＋</button>
+        <button class="ckey ckey-wide" onclick="cIn(0)">0</button>
+        <button class="ckey"           onclick="cDot()">．</button>
+        <button class="ckey eq"        onclick="cSolve()">=</button>
+      </div>
+    </div>
 
-  <!-- ════ TAB: RULES ════ -->
+  </div><!-- /tab-data (計算機) -->
+
+  <!-- ════ TAB: SETTINGS ════ -->
   <div id="tab-calc" class="tab-page">
 
     <div class="tab-section">
@@ -1200,18 +1226,18 @@ body {
       <div class="tab-section-title">📱 アプリの使い方</div>
       <div class="rules-block">
         <ul>
-          <li><strong>📊 データ</strong> ── 全資産の価格テーブルを確認</li>
+          <li><strong>🧮 計算機</strong> ── 購入シミュレーター・補助計算機</li>
           <li><strong>📈 グラフ</strong> ── 価格推移・ポートフォリオをグラフで確認</li>
           <li><strong>🎮 ゲーム</strong> ── 資産の購入・売却・ターン移動</li>
-          <li><strong>📖 ルール</strong> ── このページ（ルール・設定）</li>
           <li><strong>🏅 バッジ</strong> ── 獲得バッジ・解放条件の確認</li>
+          <li><strong>⚙️ 設定</strong> ── ルール・アプリ設定（このページ）</li>
         </ul>
         <p style="font-size:11px;color:#aaa;margin-top:8px">※ データはマネぼうボードゲームに準拠しています。</p>
       </div>
     </div>
 
     <div class="tab-section">
-      <div class="tab-section-title">⚙️ 設定</div>
+      <div class="tab-section-title">⚙️ アプリ設定</div>
       <div class="rules-block">
         <div class="setting-row">
           <span>自動セーブ</span>
@@ -1228,33 +1254,7 @@ body {
       </div>
     </div>
 
-    <div class="tab-section">
-      <div class="tab-section-title">🧮 補助計算機</div>
-      <div class="calc-disp" id="calcDisp">0</div>
-      <div class="calc-keys">
-        <button class="ckey cl"        onclick="cClear()">C</button>
-        <button class="ckey bk"        onclick="cBack()">⌫</button>
-        <button class="ckey op"        onclick="cOp('%')">%</button>
-        <button class="ckey op"        onclick="cOp('÷')">÷</button>
-        <button class="ckey"           onclick="cIn(7)">7</button>
-        <button class="ckey"           onclick="cIn(8)">8</button>
-        <button class="ckey"           onclick="cIn(9)">9</button>
-        <button class="ckey op"        onclick="cOp('×')">×</button>
-        <button class="ckey"           onclick="cIn(4)">4</button>
-        <button class="ckey"           onclick="cIn(5)">5</button>
-        <button class="ckey"           onclick="cIn(6)">6</button>
-        <button class="ckey op"        onclick="cOp('-')">−</button>
-        <button class="ckey"           onclick="cIn(1)">1</button>
-        <button class="ckey"           onclick="cIn(2)">2</button>
-        <button class="ckey"           onclick="cIn(3)">3</button>
-        <button class="ckey op"        onclick="cOp('+')">＋</button>
-        <button class="ckey ckey-wide" onclick="cIn(0)">0</button>
-        <button class="ckey"           onclick="cDot()">．</button>
-        <button class="ckey eq"        onclick="cSolve()">=</button>
-      </div>
-    </div>
-
-  </div><!-- /tab-rules -->
+  </div><!-- /tab-settings -->
 
   <!-- ════ TAB: GRAPH ════ -->
   <div id="tab-graph" class="tab-page">
@@ -1308,8 +1308,8 @@ body {
 <nav class="bottom-nav">
   <button class="tab-btn" onclick="showTab('data',this)">
     <span class="tab-inner">
-      <span class="tab-icon">📊</span>
-      <span class="tab-label">データ</span>
+      <span class="tab-icon">🧮</span>
+      <span class="tab-label">計算機</span>
     </span>
   </button>
   <button class="tab-btn" onclick="showTab('graph',this)">
@@ -1324,16 +1324,16 @@ body {
       <span class="tab-label">ゲーム</span>
     </span>
   </button>
-  <button class="tab-btn" onclick="showTab('calc',this)">
-    <span class="tab-inner">
-      <span class="tab-icon">📖</span>
-      <span class="tab-label">ルール</span>
-    </span>
-  </button>
   <button class="tab-btn" onclick="showTab('titles',this)">
     <span class="tab-inner">
       <span class="tab-icon">🏅</span>
       <span class="tab-label">バッジ</span>
+    </span>
+  </button>
+  <button class="tab-btn" onclick="showTab('calc',this)">
+    <span class="tab-inner">
+      <span class="tab-icon">⚙️</span>
+      <span class="tab-label">設定</span>
     </span>
   </button>
 </nav>
@@ -1748,7 +1748,7 @@ function autoBreak(text) {
     }
   }
   if (best > 0) return text.slice(0, best) + '\n' + text.slice(best);
-  return text.slice(0, mid) + '\n' + text.slice(mid);
+  return text;
 }
 
 function updateCharSpeech(year, event) {
