@@ -381,6 +381,18 @@ body {
 
 .asset-body { padding: 7px 12px 10px; background: var(--cream); }
 
+.badge-no-buy {
+  display: block;
+  font-size: 8px;
+  color: #ff6b6b;
+  background: rgba(232, 53, 74, 0.12);
+  border: 1px solid rgba(232, 53, 74, 0.4);
+  border-radius: 3px;
+  text-align: center;
+  padding: 1px 4px;
+  margin-top: 2px;
+}
+
 .a-price {
   font-size: 11px;
   color: #666;
@@ -2230,9 +2242,9 @@ function updateDisplay() {
     btn.style.boxShadow = ok ? `4px 4px 0 ${a.shadow}` : '2px 2px 0 rgba(0,0,0,0.08)';
     const orderInfo = (a.id === '不動産' && pendingSell > 0)
       ? `<span style="display:block;font-size:9px;color:#ff9999;margin-top:2px">⏳売注 ${pendingSell}口</span>` : '';
-    // 国債の購入不可ターンは価格表示に注記
+    // 国債の購入不可ターン（E1以外）
     const bondNote = (a.id === '国債' && row.イベント !== 1 && ok)
-      ? '<span style="display:block;font-size:8px;color:#ff9999">購入はE1のみ</span>' : '';
+      ? '<span class="badge-no-buy">現在購入不可</span>' : '';
     // 仮想通貨の購入不可期間・上限注記
     const cryptoNote = a.id === '？？？？？' && ok
       ? ((row.年 < 2014 || (row.年 === 2014 && row.イベント < 4))
