@@ -1677,12 +1677,12 @@ body {
 
     <!-- モード切替 -->
     <div class="calc-subtabs" style="margin-bottom:10px">
-      <button class="cst-btn active" onclick="setGraphMode('price',this)">📊<br>歴史チャート</button>
-      <button class="cst-btn" onclick="setGraphMode('portfolio',this)">💰<br>わたしの記録</button>
+      <button class="cst-btn active" onclick="setGraphMode('portfolio',this)">💰<br>わたしの記録</button>
+      <button class="cst-btn" onclick="setGraphMode('price',this)">📊<br>歴史チャート</button>
     </div>
 
     <!-- 歴史チャートモード -->
-    <div id="graphModePrice">
+    <div id="graphModePrice" style="display:none">
       <div class="graph-card">
         <div class="graph-card-head">
           <span class="graph-card-title">📊 歴史チャート</span>
@@ -1715,7 +1715,7 @@ body {
     </div>
 
     <!-- わたしの記録モード -->
-    <div id="graphModePortfolio" style="display:none">
+    <div id="graphModePortfolio">
       <div class="graph-card">
         <div class="portfolio-total-strip">
           <span class="pts-label">💰 累計総資産</span>
@@ -2337,7 +2337,7 @@ let pendingSell = 0;        // 不動産売り注文中の口数
 let history = [];           // Undoスタック (最大30件)
 let unlockedTitles   = new Set();
 let portfolioHistory = [];
-let graphMode        = 'price';
+let graphMode        = 'portfolio';
 
 const EVENT_NAMES = {
   '1970-1':{date:'3/14', name:'大阪万博の開幕'},
