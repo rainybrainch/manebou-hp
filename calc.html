@@ -791,6 +791,19 @@ body {
 
 .ckey-wide { grid-column: span 2; }
 
+/* ─── Rules / Settings page ─────────────────────────────── */
+.rules-block { font-size: 13px; line-height: 1.7; color: var(--dark); }
+.rules-block h4 { font-size: 12px; color: #888; margin: 10px 0 4px; text-transform: uppercase; letter-spacing: .5px; }
+.rules-block ul { padding-left: 16px; margin: 0; }
+.rules-block li { margin-bottom: 3px; }
+.rules-block p  { margin: 6px 0; }
+.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 13px; }
+.setting-row:last-child { border-bottom: none; }
+.setting-badge { font-size: 11px; color: var(--green); font-weight: 700; }
+.setting-btn { background: rgba(232,53,74,0.1); color: var(--red); border: 1.5px solid rgba(232,53,74,0.3); border-radius: 8px; padding: 6px 14px; font-size: 12px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; cursor: pointer; }
+.setting-link { color: var(--sky); font-weight: 700; font-size: 13px; text-decoration: none; }
+.setting-link:hover { text-decoration: underline; }
+
 /* ─── Character Banner ───────────────────────────────────── */
 .char-banner {
   background: rgba(20,20,40,0.85);
@@ -1005,6 +1018,7 @@ body {
 }
 .char-speech-mini .speech-bubble::before { display: none; }
 .char-speech-mini .speech-char-name { font-size: 9px; margin-bottom: 1px; }
+#speechText { white-space: pre-wrap; }
 
 /* ─── Graph Tab ──────────────────────────────────────────── */
 #tab-graph .graph-section { margin-top: 4px; box-shadow: none; }
@@ -1155,8 +1169,64 @@ body {
 
   </div><!-- /tab-data -->
 
-  <!-- ════ TAB: CALC ════ -->
+  <!-- ════ TAB: RULES ════ -->
   <div id="tab-calc" class="tab-page">
+
+    <div class="tab-section">
+      <div class="tab-section-title">📖 ゲームのルール</div>
+      <div class="rules-block">
+        <p>1970〜2025年の日本経済史を旅しながら、8種類の資産を売買して総資産を増やすボードゲームです。</p>
+        <h4>🗂 進め方</h4>
+        <ul>
+          <li>年・イベント（E1〜E4）を選んで時代を進む</li>
+          <li>イベントを確認 → 資産を購入・売却 → 次へ</li>
+          <li>ターン終了時に配当が加算される</li>
+          <li>2025年E4まで進めてゴール！</li>
+        </ul>
+        <h4>📦 8種類の資産</h4>
+        <ul>
+          <li>🏦 銀行預金・📜 国債 ── 安全型、着実に増加</li>
+          <li>📈 株式・📊 投資信託 ── 成長型、変動大</li>
+          <li>🥇 金・🏠 不動産 ── 実物資産、インフレに強い</li>
+          <li>💵 ドル ── 為替連動、円高・円安の影響を受ける</li>
+          <li>🪙 ？？？？？ ── 2014年E4から購入可能な秘密の資産</li>
+        </ul>
+        <h4>🏅 バッジ</h4>
+        <p>達成条件を満たすと自動解除。獲得数に応じた賞金が加算されます。</p>
+      </div>
+    </div>
+
+    <div class="tab-section">
+      <div class="tab-section-title">📱 アプリの使い方</div>
+      <div class="rules-block">
+        <ul>
+          <li><strong>📊 データ</strong> ── 全資産の価格テーブルを確認</li>
+          <li><strong>📈 グラフ</strong> ── 価格推移・ポートフォリオをグラフで確認</li>
+          <li><strong>🎮 ゲーム</strong> ── 資産の購入・売却・ターン移動</li>
+          <li><strong>📖 ルール</strong> ── このページ（ルール・設定）</li>
+          <li><strong>🏅 バッジ</strong> ── 獲得バッジ・解放条件の確認</li>
+        </ul>
+        <p style="font-size:11px;color:#aaa;margin-top:8px">※ データはマネぼうボードゲームに準拠しています。</p>
+      </div>
+    </div>
+
+    <div class="tab-section">
+      <div class="tab-section-title">⚙️ 設定</div>
+      <div class="rules-block">
+        <div class="setting-row">
+          <span>自動セーブ</span>
+          <span class="setting-badge">✅ 有効</span>
+        </div>
+        <div class="setting-row">
+          <span>セーブデータを削除</span>
+          <button class="setting-btn" onclick="clearSave()">削除</button>
+        </div>
+        <div class="setting-row">
+          <span>マネぼう公式サイト</span>
+          <a class="setting-link" href="https://fukuisho0603.github.io/manebo/" target="_blank">🌐 こちら</a>
+        </div>
+      </div>
+    </div>
 
     <div class="tab-section">
       <div class="tab-section-title">🧮 補助計算機</div>
@@ -1184,7 +1254,7 @@ body {
       </div>
     </div>
 
-  </div><!-- /tab-calc -->
+  </div><!-- /tab-rules -->
 
   <!-- ════ TAB: GRAPH ════ -->
   <div id="tab-graph" class="tab-page">
@@ -1256,8 +1326,8 @@ body {
   </button>
   <button class="tab-btn" onclick="showTab('calc',this)">
     <span class="tab-inner">
-      <span class="tab-icon">🧮</span>
-      <span class="tab-label">計算機</span>
+      <span class="tab-icon">📖</span>
+      <span class="tab-label">ルール</span>
     </span>
   </button>
   <button class="tab-btn" onclick="showTab('titles',this)">
@@ -1661,6 +1731,26 @@ function getCryptoLabel(row) {
   return '？？？？？';
 }
 
+function autoBreak(text) {
+  const len = text.length;
+  if (len <= 20) return text;
+  const lo = Math.floor(len * 0.3), hi = Math.ceil(len * 0.7), mid = Math.floor(len / 2);
+  let best = -1, bestDist = Infinity;
+  for (const p of ['！', '。', '、', '…']) {
+    let i = 0;
+    while ((i = text.indexOf(p, i)) !== -1) {
+      const pos = i + 1;
+      if (pos >= lo && pos <= hi) {
+        const d = Math.abs(pos - mid);
+        if (d < bestDist) { bestDist = d; best = pos; }
+      }
+      i++;
+    }
+  }
+  if (best > 0) return text.slice(0, best) + '\n' + text.slice(best);
+  return text.slice(0, mid) + '\n' + text.slice(mid);
+}
+
 function updateCharSpeech(year, event) {
   let matchChar = '局長', matchText = '';
   if (year === 0) {
@@ -1680,7 +1770,7 @@ function updateCharSpeech(year, event) {
   const ch = CHARS[matchChar];
   document.getElementById('speechCharImg').src          = ch.img;
   document.getElementById('speechCharName').textContent = ch.name;
-  document.getElementById('speechText').textContent     = matchText;
+  document.getElementById('speechText').textContent     = autoBreak(matchText);
   Object.values(CHARS).forEach(c => {
     const el = document.getElementById(c.id);
     if (el) el.classList.remove('active-speaker');
@@ -2044,6 +2134,11 @@ function init() {
   buildAssetButtons();
   buildSimSelect();
   buildGraphSelect();
+  const loaded = loadGame();
+  if (loaded) {
+    updateEventOptions();
+    showToast('セーブデータを読み込みました');
+  }
   updateDisplay();
 }
 
@@ -2354,6 +2449,7 @@ function updateDisplay() {
   renderCompare();
   renderTitles();
   updateCharSpeech(row.年, row.イベント);
+  saveGame();
 }
 
 // ============================================================
@@ -2755,6 +2851,54 @@ function cSolve(reset = true) {
 
 function cClear() { cBuf = '0'; cOpr = null; cPrev = null; cNew = false; cDisp(); }
 function cBack()  { cBuf = cBuf.length > 1 ? cBuf.slice(0, -1) : '0'; cDisp(); }
+
+// ============================================================
+// AUTO-SAVE
+// ============================================================
+const SAVE_KEY = 'manebo_save_v1';
+
+function saveGame() {
+  const data = {
+    currentIndex,
+    holdings: { ...holdings },
+    costBasis: { ...costBasis },
+    pendingSell,
+    unlockedTitles: [...unlockedTitles],
+    portfolioHistory: portfolioHistory.slice(-220),
+  };
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadGame() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    currentIndex = d.currentIndex || 0;
+    ASSET_KEYS.forEach(a => {
+      holdings[a.id]  = (d.holdings  || {})[a.id] || 0;
+      costBasis[a.id] = (d.costBasis || {})[a.id] || 0;
+    });
+    pendingSell      = d.pendingSell || 0;
+    unlockedTitles   = new Set(d.unlockedTitles || []);
+    portfolioHistory = d.portfolioHistory || [];
+    return true;
+  } catch(e) { return false; }
+}
+
+function clearSave() {
+  if (!confirm('セーブデータを削除して最初からやり直しますか？')) return;
+  localStorage.removeItem(SAVE_KEY);
+  currentIndex = 0;
+  ASSET_KEYS.forEach(a => { holdings[a.id] = 0; costBasis[a.id] = 0; });
+  pendingSell = 0;
+  unlockedTitles = new Set();
+  portfolioHistory = [];
+  history = [];
+  updateEventOptions();
+  updateDisplay();
+  showToast('セーブデータを削除しました');
+}
 
 // ============================================================
 // CARD TOGGLE
