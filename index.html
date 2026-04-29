@@ -440,7 +440,7 @@ footer strong{color:var(--gold);}
     <span class="slabel">THE GAME</span>
     <h2 class="stitle">現代から1970年へ、<br><span class="ac">タイムスリップ！</span></h2>
     <p class="board-intro">あなたは今から55年前の日本にタイムスリップします。オイルショック・バブル・リーマンショック……実際の日本経済史を投資家として追体験するシミュレーションゲームが、マネぼうです。</p>
-    <p class="board-hint">👆 各エリアにカーソルを合わせてみてください</p>
+    <p class="board-hint">👆 カーソルを合わせる / スマホはタップ</p>
     <div class="board-grid">
       <!-- 左上 -->
       <div class="bq bq-tl">
@@ -556,11 +556,12 @@ footer strong{color:var(--gold);}
     <span class="slabel">CHARACTERS</span>
     <h2 class="stitle">4人のキャラクター</h2>
     <div class="chgrid">
-      <div class="chc"><img class="chimg" src="images/img5.webp" alt="おーる局長" data-images='["images/img5.webp","images/img5-2.webp","images/img5-3.webp"]'><p class="chname">おーる局長</p><span class="chrole">知恵の案内役</span><p class="chdesc">冷静に未来を見据え「ネクストヒント」を出す知恵者。</p></div>
-      <div class="chc"><img class="chimg" src="images/img8.webp" alt="カウッシー" data-images='["images/img8.webp","images/img8-2.webp","images/img8-3.webp"]'><p class="chname">カウッシー</p><span class="chrole">浪費と欲望の象徴</span><p class="chdesc">好景気には散財し、インフレには物価高を嘆く。</p></div>
-      <div class="chc"><img class="chimg" src="images/img6.webp" alt="えんだ" data-images='["images/img6.webp","images/img6-2.webp","images/img6-3.webp"]'><p class="chname">えんだ</p><span class="chrole">挑戦者</span><p class="chdesc">投資の世界に飛び込む挑戦者。歴史の波に一喜一憂。</p></div>
-      <div class="chc"><img class="chimg" src="images/img7.webp" alt="ためぞう" data-images='["images/img7.webp","images/img7-2.webp","images/img7-3.webp"]'><p class="chname">ためぞう</p><span class="chrole">貯金至上主義</span><p class="chdesc">投資を怖がりひたすら銀行預金を盲信する象徴。</p></div>
+      <div class="chc"><img class="chimg" loading="lazy" src="images/img5.webp" alt="おーる局長" data-images='["images/img5.webp","images/img5-2.webp","images/img5-3.webp"]'><p class="chname">おーる局長</p><span class="chrole">知恵の案内役</span><p class="chdesc">冷静に未来を見据え「ネクストヒント」を出す知恵者。</p></div>
+      <div class="chc"><img class="chimg" loading="lazy" src="images/img8.webp" alt="カウッシー" data-images='["images/img8.webp","images/img8-2.webp","images/img8-3.webp"]'><p class="chname">カウッシー</p><span class="chrole">浪費と欲望の象徴</span><p class="chdesc">好景気には散財し、インフレには物価高を嘆く。</p></div>
+      <div class="chc"><img class="chimg" loading="lazy" src="images/img6.webp" alt="えんだ" data-images='["images/img6.webp","images/img6-2.webp","images/img6-3.webp"]'><p class="chname">えんだ</p><span class="chrole">挑戦者</span><p class="chdesc">投資の世界に飛び込む挑戦者。歴史の波に一喜一憂。</p></div>
+      <div class="chc"><img class="chimg" loading="lazy" src="images/img7.webp" alt="ためぞう" data-images='["images/img7.webp","images/img7-2.webp","images/img7-3.webp"]'><p class="chname">ためぞう</p><span class="chrole">貯金至上主義</span><p class="chdesc">投資を怖がりひたすら銀行預金を盲信する象徴。</p></div>
     </div>
+    <p class="char-hint">👆 タップで表情が変わる！</p>
   </div>
 </div>
 
@@ -711,8 +712,8 @@ footer strong{color:var(--gold);}
     </div>
     <div class="line-block">
       <p>📱 QRコードからもLINE追加できます</p>
-      <div class="qr-wrap"><img src="https://qr-official.line.me/gs/M_264dvbmw_GW.png?oat_content=qr" alt="LINE QR"></div>
-      <a href="https://lin.ee/niSW56N" target="_blank"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="40"></a>
+      <div class="qr-wrap"><img src="https://qr-official.line.me/gs/M_264dvbmw_GW.png?oat_content=qr" alt="LINE QR" loading="lazy"></div>
+      <a href="https://lin.ee/niSW56N" target="_blank"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png" alt="友だち追加" height="40" loading="lazy"></a>
     </div>
     <p class="cnote">※お申し込み後に詳細な場所をお知らせします<br>📍 東京都文京区千石（巣鴨駅近く）</p>
   </div>
@@ -836,6 +837,9 @@ const fadeObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.section, .cta-section, .strip').forEach(el => {
   el.classList.add('fade-in-ready');
   fadeObserver.observe(el);
+});
+document.querySelectorAll('a[target="_blank"]').forEach(a => {
+  if (!a.rel.includes('noopener')) a.setAttribute('rel', 'noopener noreferrer');
 });
 </script>
 </body>
