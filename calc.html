@@ -1020,6 +1020,16 @@ body {
 .acard-real   { background: rgba(245,200,66,0.12); border-color: rgba(245,200,66,0.5);  color: #9a7000; }
 .acard-fx     { background: rgba(46,204,113,0.12); border-color: rgba(46,204,113,0.4);  color: #1e8449; }
 .acard-secret { background: rgba(156,39,176,0.1);  border-color: rgba(156,39,176,0.35); color: #7b1fa2; }
+/* ─── Asset description text ────────────────────────────── */
+.asset-desc { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.ad-row  { display: flex; align-items: flex-start; gap: 7px; font-size: 11px; line-height: 1.55; }
+.ad-tag  { font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 8px; flex-shrink: 0; margin-top: 2px; letter-spacing: 0.2px; border: 1px solid; }
+.ad-tag.safe   { background: rgba(91,200,232,0.2);  border-color: rgba(91,200,232,0.5);  color: #1693b3; }
+.ad-tag.growth { background: rgba(232,53,74,0.15);  border-color: rgba(232,53,74,0.4);   color: var(--red); }
+.ad-tag.real   { background: rgba(245,200,66,0.18); border-color: rgba(245,200,66,0.55); color: #9a7000; }
+.ad-tag.fx     { background: rgba(46,204,113,0.15); border-color: rgba(46,204,113,0.4);  color: #1e8449; }
+.ad-tag.secret { background: rgba(156,39,176,0.12); border-color: rgba(156,39,176,0.4);  color: #7b1fa2; }
+.ad-text { color: rgba(255,255,255,0.78); }
 .rbl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; line-height: 1.5; background: rgba(0,0,0,0.05); border-radius: 8px; padding: 7px 9px; }
 .rbl-item-title { font-weight: 800; font-size: 12px; }
 .rbl-item-desc  { font-size: 10px; color: #888; margin-top: 1px; }
@@ -1578,14 +1588,6 @@ body {
           <li><strong>2025年E4でゴール！</strong>── 総資産が多いほど高ランク</li>
         </ul>
         <h4>📦 8種類の資産</h4>
-        <ul>
-          <li>🏦 <strong>銀行預金</strong>・📜 <strong>国債</strong> ── 安全型、着実に増加</li>
-          <li>📈 <strong>株式</strong>・📊 <strong>投資信託</strong> ── 成長型、変動大きめ</li>
-          <li>🥇 <strong>金</strong>・🏠 <strong>不動産</strong> ── 実物資産、インフレに強い</li>
-          <li>💵 <strong>ドル</strong> ── 為替連動、円高・円安の影響を受ける</li>
-          <li>🪙 <strong>？？？？？</strong> ── 2014年E4から現れる秘密の資産</li>
-        </ul>
-        <h4>📦 8種類の資産</h4>
         <div class="asset-cards">
           <div class="acard acard-safe">  <span class="acard-icon">🏦</span><span class="acard-name">銀行預金</span><span class="acard-type">安全型</span></div>
           <div class="acard acard-safe">  <span class="acard-icon">📜</span><span class="acard-name">国債</span>    <span class="acard-type">安全型</span></div>
@@ -1595,6 +1597,13 @@ body {
           <div class="acard acard-real">  <span class="acard-icon">🏠</span><span class="acard-name">不動産</span>  <span class="acard-type">実物資産</span></div>
           <div class="acard acard-fx">    <span class="acard-icon">💵</span><span class="acard-name">ドル</span>    <span class="acard-type">外貨</span></div>
           <div class="acard acard-secret"><span class="acard-icon">🪙</span><span class="acard-name">？？？？？</span><span class="acard-type">秘密</span></div>
+        </div>
+        <div class="asset-desc">
+          <div class="ad-row"><span class="ad-tag safe">安全型</span><span class="ad-text">🏦 銀行預金・📜 国債 ── 価格変動が少なく、コツコツ着実に増やせる。リスクが低いのでまずここから始めよう。</span></div>
+          <div class="ad-row"><span class="ad-tag growth">成長型</span><span class="ad-text">📈 株式・📊 投資信託 ── 好景気では大きく伸びるが、不況では急落することも。タイミングが勝負。</span></div>
+          <div class="ad-row"><span class="ad-tag real">実物資産</span><span class="ad-text">🥇 金・🏠 不動産 ── インフレや円安に強い。長期保有で安定した価値を守れる。</span></div>
+          <div class="ad-row"><span class="ad-tag fx">外貨</span><span class="ad-text">💵 ドル ── 円高・円安の動きに連動。為替の流れを読んだ売買が鍵になる。</span></div>
+          <div class="ad-row"><span class="ad-tag secret">秘密</span><span class="ad-text">🪙 ？？？？？ ── 2014年E4から登場する謎の資産。超高リスク・超高リターン！正体はゲームで確かめよう。</span></div>
         </div>
         <ul>
           <li><strong>🧮 計算機</strong> ── 購入シミュレーター・補助計算機</li>
