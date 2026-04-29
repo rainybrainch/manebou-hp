@@ -757,94 +757,119 @@ body {
 .sqp:hover, .sqp.active { background: var(--sky); color: #fff; }
 .sqp:active { transform: scale(0.94); }
 
-/* ─── Cash memo ────────────────────────────────────────── */
-.cash-balance {
-  font-family: 'Dela Gothic One', sans-serif;
-  font-size: 30px;
-  color: var(--gold);
-  text-align: center;
-  padding: 10px 0 6px;
-  margin-bottom: 8px;
-  letter-spacing: 1px;
+/* ─── Wallet header (常時表示バナー) ─────────────────── */
+.wallet-header {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-top: 3px solid var(--gold);
+  border-radius: 12px;
+  padding: 11px 13px 10px;
+  margin-bottom: 10px;
 }
-.cash-input-row { margin-bottom: 8px; }
-.cash-input-row input {
-  width: 100%; box-sizing: border-box;
-  background: rgba(255,255,255,0.07);
-  color: #fff;
-  border: 1.5px solid rgba(255,255,255,0.18);
-  border-radius: 10px;
-  padding: 12px 14px;
-  font-size: 22px;
-  font-family: 'Dela Gothic One', sans-serif;
-  text-align: right;
+.wh-top {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 6px;
 }
-.cash-input-row input::placeholder { color: rgba(255,255,255,0.22); font-size: 13px; font-family: 'Zen Maru Gothic',sans-serif; }
-.cash-input-row input:focus { outline: none; border-color: var(--gold); }
-.cash-apply-row {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 8px; margin-bottom: 10px;
+.wh-label {
+  font-size: 10px; font-family: 'Dela Gothic One',sans-serif;
+  color: rgba(255,255,255,0.35); letter-spacing: 1px; text-transform: uppercase;
 }
-.cash-apply-btn {
-  padding: 13px; border-radius: 10px; border: 1.5px solid;
-  font-size: 16px; font-weight: 900;
+.wh-balance {
   font-family: 'Dela Gothic One', sans-serif;
+  font-size: 26px; color: var(--gold); letter-spacing: 1px;
+}
+.wh-reset-btn {
+  background: transparent; color: rgba(232,53,74,0.55);
+  border: none; font-size: 10px; cursor: pointer;
+  font-family: 'Zen Maru Gothic',sans-serif; padding: 0;
+}
+.wh-input-row {
+  display: flex; gap: 6px; align-items: center; margin-bottom: 7px;
+}
+.wh-input-row input {
+  flex: 1; min-width: 0;
+  background: rgba(255,255,255,0.07); color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.15); border-radius: 8px;
+  padding: 7px 10px; font-size: 16px;
+  font-family: 'Dela Gothic One',sans-serif; text-align: right;
+}
+.wh-input-row input::placeholder { color: rgba(255,255,255,0.2); font-size: 12px; font-family: 'Zen Maru Gothic',sans-serif; }
+.wh-input-row input:focus { outline: none; border-color: var(--gold); }
+.wh-op-btn {
+  width: 38px; height: 38px; border-radius: 8px; border: 1.5px solid;
+  font-size: 18px; font-weight: 900; cursor: pointer;
+  transition: all 0.12s; flex-shrink: 0;
+}
+.wh-op-btn.plus  { background: rgba(46,204,113,0.14); color: #2ecc71; border-color: rgba(46,204,113,0.45); }
+.wh-op-btn.minus { background: rgba(232,53,74,0.12);  color: #e8354a; border-color: rgba(232,53,74,0.40); }
+.wh-op-btn:active { transform: scale(0.88); }
+.wh-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.cash-log {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  line-height: 1.8; white-space: pre-line;
+}
+
+/* ─── Wallet calculator (メインカード) ──────────────── */
+.wallet-calc-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.wc-to-cash-btn {
+  width: 100%; margin-top: 10px;
+  background: rgba(46,204,113,0.15); color: #2ecc71;
+  border: 1.5px solid rgba(46,204,113,0.5);
+  border-radius: 10px; padding: 13px;
+  font-size: 15px; font-weight: 900;
+  font-family: 'Dela Gothic One',sans-serif;
   cursor: pointer; transition: all 0.12s;
 }
-.cash-apply-btn.plus  { background: rgba(46,204,113,0.14); color: #2ecc71; border-color: rgba(46,204,113,0.45); }
-.cash-apply-btn.minus { background: rgba(232,53,74,0.12);  color: #e8354a; border-color: rgba(232,53,74,0.40); }
-.cash-apply-btn:active { transform: scale(0.96); }
-.cash-quick-label { font-size: 10px; color: rgba(255,255,255,0.3); margin-bottom: 5px; letter-spacing: .4px; }
-.cash-presets { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 4px; }
-.cash-divider {
-  border: none; border-top: 1px solid rgba(255,255,255,0.08);
-  margin: 8px 0 6px;
+.wc-to-cash-btn:active { transform: scale(0.97); background: rgba(46,204,113,0.25); }
+.calc-to-sim {
+  width: 100%; margin-top: 6px;
+  background: rgba(91,200,232,0.08); color: var(--sky);
+  border: 1px solid rgba(91,200,232,0.3);
+  border-radius: 8px; padding: 8px;
+  font-size: 11px; font-weight: 700;
+  cursor: pointer; font-family: 'Zen Maru Gothic',sans-serif;
+  text-align: center; transition: all 0.1s;
 }
-.cash-log {
-  background: rgba(255,255,255,0.04);
-  border-radius: 8px;
-  padding: 7px 10px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.45);
-  line-height: 1.9;
-  min-height: 32px;
-  white-space: pre-line;
-  margin-bottom: 8px;
-  max-height: 72px;
-  overflow-y: auto;
-}
-.cash-reset-btn {
-  background: transparent;
-  color: rgba(232,53,74,0.7);
-  border: 1px solid rgba(232,53,74,0.35);
-  border-radius: 8px;
-  padding: 6px 14px;
-  font-size: 11px;
-  cursor: pointer;
-  font-family: 'Zen Maru Gothic', sans-serif;
-  width: 100%;
-  transition: all 0.12s;
-}
-.cash-reset-btn:active { background: rgba(232,53,74,0.12); }
+.calc-to-sim:active { transform: scale(0.97); }
 
-/* ─── Calc action buttons ──────────────────────────────── */
-.calc-actions { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
-.calc-to-sim, .calc-to-cash {
-  width: 100%;
-  background: rgba(91,200,232,0.1);
-  color: var(--sky);
-  border: 1.5px solid var(--sky);
-  border-radius: 8px;
-  padding: 9px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Zen Maru Gothic', sans-serif;
-  text-align: center;
-  transition: all 0.1s;
+/* ─── History panel ──────────────────────────────────── */
+.hist-list {
+  max-height: 180px; overflow-y: auto;
+  font-size: 11px;
 }
-.calc-to-cash { background: rgba(46,204,113,0.1); color: #27ae60; border-color: #27ae60; }
-.calc-to-sim:active, .calc-to-cash:active { transform: scale(0.97); }
+.hist-tx-row {
+  display: flex; align-items: center;
+  padding: 5px 2px; gap: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.hist-tx-row:last-child { border-bottom: none; }
+.hist-tx-icon { font-size: 13px; flex-shrink: 0; }
+.hist-tx-label { flex: 1; color: rgba(255,255,255,0.65); }
+.hist-tx-buy   { color: #2ecc71; font-weight: 700; font-size: 12px; }
+.hist-tx-sell  { color: #e8354a; font-weight: 700; font-size: 12px; }
+.hist-tx-cash-in  { color: #2ecc71; font-weight: 700; font-size: 12px; }
+.hist-tx-cash-out { color: #e8354a; font-weight: 700; font-size: 12px; }
+.hist-tx-time  { color: rgba(255,255,255,0.28); font-size: 10px; white-space: nowrap; }
+.hist-empty    { color: rgba(255,255,255,0.2); font-size: 11px; text-align: center; padding: 14px 0; }
+.hist-mini-tabs {
+  display: flex; gap: 4px; margin-bottom: 8px;
+}
+.hmt-btn {
+  flex: 1; padding: 7px 4px;
+  background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+  font-family: 'Zen Maru Gothic',sans-serif; transition: all 0.12s;
+}
+.hmt-btn.active { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.18); }
+.hmt-panel { display: none; }
+.hmt-panel.active { display: block; }
 
 /* ─── Calculator ─────────────────────────────────────────── */
 .calc-disp {
@@ -904,20 +929,7 @@ body {
 
 .ckey-wide { grid-column: span 2; }
 
-/* ─── Wallet Section (常時表示エリア) ───────────────────── */
-.wallet-section {
-  background: rgba(255,255,255,0.04);
-  border: 1.5px solid rgba(255,255,255,0.1);
-  border-top: 3px solid var(--gold);
-  border-radius: 12px;
-  padding: 14px 14px 12px;
-  margin-bottom: 10px;
-}
-.wallet-title {
-  font-size: 10px; font-family: 'Dela Gothic One',sans-serif;
-  color: rgba(255,255,255,0.4); letter-spacing: .8px; margin-bottom: 2px;
-  text-transform: uppercase;
-}
+/* ─── Wallet Section (旧・未使用) ──────────────────────── */
 .wallet-tools-sep {
   display: flex; align-items: center; gap: 8px;
   margin: 12px 0 8px;
@@ -1380,25 +1392,19 @@ body {
   <!-- ════ TAB: お財布 ════ -->
   <div id="tab-data" class="tab-page">
 
-    <!-- ── 常時表示: 現金残高 ── -->
-    <div class="wallet-section">
-      <div class="wallet-title">CASH MEMO</div>
-      <div class="cash-balance" id="cashDisplay">¥ 0</div>
-
-      <!-- 金額入力 -->
-      <div class="cash-input-row">
-        <input type="number" id="cashInput" inputmode="numeric" placeholder="金額を入力（例: 1000）">
+    <!-- ── 現金バナー（常時表示・コンパクト） ── -->
+    <div class="wallet-header">
+      <div class="wh-top">
+        <span class="wh-label">💴 CASH</span>
+        <span class="wh-balance" id="cashDisplay">¥ 0</span>
+        <button class="wh-reset-btn" onclick="resetCash()">リセット</button>
       </div>
-
-      <!-- 加算・減算ボタン -->
-      <div class="cash-apply-row">
-        <button class="cash-apply-btn plus"  onclick="applyFromInput(1)">＋ 加算</button>
-        <button class="cash-apply-btn minus" onclick="applyFromInput(-1)">－ 減算</button>
+      <div class="wh-input-row">
+        <input type="number" id="cashInput" inputmode="numeric" placeholder="金額（例: 1000）">
+        <button class="wh-op-btn plus"  onclick="applyFromInput(1)">＋</button>
+        <button class="wh-op-btn minus" onclick="applyFromInput(-1)">－</button>
       </div>
-
-      <!-- プリセット -->
-      <div class="cash-quick-label">プリセット（タップで入力欄にセット）</div>
-      <div class="cash-presets">
+      <div class="wh-chips">
         <button class="sqp" onclick="setCashInput(1000)">1千</button>
         <button class="sqp" onclick="setCashInput(5000)">5千</button>
         <button class="sqp" onclick="setCashInput(10000)">1万</button>
@@ -1406,17 +1412,42 @@ body {
         <button class="sqp" onclick="setCashInput(100000)">10万</button>
         <button class="sqp" onclick="setCashInput(300000)">30万</button>
       </div>
-
-      <hr class="cash-divider">
-      <div class="cash-log" id="cashLog"></div>
-      <button class="cash-reset-btn" onclick="resetCash()">現金をリセット</button>
     </div>
 
-    <!-- ── ツール選択 ── -->
-    <div class="wallet-tools-sep">ツール</div>
+    <!-- ── 電卓（メイン） ── -->
+    <div class="wallet-calc-card">
+      <div class="calc-disp" id="calcDisp">0</div>
+      <div class="calc-keys">
+        <button class="ckey cl"        onclick="cClear()">C</button>
+        <button class="ckey bk"        onclick="cBack()">⌫</button>
+        <button class="ckey op"        onclick="cOp('%')">%</button>
+        <button class="ckey op"        onclick="cOp('÷')">÷</button>
+        <button class="ckey"           onclick="cIn(7)">7</button>
+        <button class="ckey"           onclick="cIn(8)">8</button>
+        <button class="ckey"           onclick="cIn(9)">9</button>
+        <button class="ckey op"        onclick="cOp('×')">×</button>
+        <button class="ckey"           onclick="cIn(4)">4</button>
+        <button class="ckey"           onclick="cIn(5)">5</button>
+        <button class="ckey"           onclick="cIn(6)">6</button>
+        <button class="ckey op"        onclick="cOp('-')">−</button>
+        <button class="ckey"           onclick="cIn(1)">1</button>
+        <button class="ckey"           onclick="cIn(2)">2</button>
+        <button class="ckey"           onclick="cIn(3)">3</button>
+        <button class="ckey op"        onclick="cOp('+')" >＋</button>
+        <button class="ckey ckey-wide" onclick="cIn(0)">0</button>
+        <button class="ckey"           onclick="cDot()">．</button>
+        <button class="ckey eq"        onclick="cSolve()">=</button>
+      </div>
+      <!-- 現金に加算ボタン：残高バナーのすぐ下に配置 -->
+      <button class="wc-to-cash-btn" onclick="calcToCash()">💴 計算結果を現金に加算</button>
+      <button class="calc-to-sim"    onclick="calcToSim()">→ この値をシミュの口数に反映</button>
+    </div>
+
+    <!-- ── サブツール ── -->
+    <div class="wallet-tools-sep">サブツール</div>
     <div class="calc-subtabs">
       <button class="cst-btn active" onclick="showCalcTab('sim',this)">📊<br>シミュ</button>
-      <button class="cst-btn"        onclick="showCalcTab('calc',this)">🧮<br>計算機</button>
+      <button class="cst-btn"        onclick="showCalcTab('hist',this)">📋<br>履歴</button>
     </div>
 
     <!-- ── パネル①: 購入シミュレーター ── -->
@@ -1439,35 +1470,18 @@ body {
       </div>
     </div>
 
-    <!-- ── パネル②: 補助計算機 ── -->
-    <div id="csp-calc" class="calc-subpanel">
+    <!-- ── パネル②: 履歴 ── -->
+    <div id="csp-hist" class="calc-subpanel">
       <div class="tab-section">
-        <div class="tab-section-title">🧮 補助計算機</div>
-        <div class="calc-disp" id="calcDisp">0</div>
-        <div class="calc-keys">
-          <button class="ckey cl"        onclick="cClear()">C</button>
-          <button class="ckey bk"        onclick="cBack()">⌫</button>
-          <button class="ckey op"        onclick="cOp('%')">%</button>
-          <button class="ckey op"        onclick="cOp('÷')">÷</button>
-          <button class="ckey"           onclick="cIn(7)">7</button>
-          <button class="ckey"           onclick="cIn(8)">8</button>
-          <button class="ckey"           onclick="cIn(9)">9</button>
-          <button class="ckey op"        onclick="cOp('×')">×</button>
-          <button class="ckey"           onclick="cIn(4)">4</button>
-          <button class="ckey"           onclick="cIn(5)">5</button>
-          <button class="ckey"           onclick="cIn(6)">6</button>
-          <button class="ckey op"        onclick="cOp('-')">−</button>
-          <button class="ckey"           onclick="cIn(1)">1</button>
-          <button class="ckey"           onclick="cIn(2)">2</button>
-          <button class="ckey"           onclick="cIn(3)">3</button>
-          <button class="ckey op"        onclick="cOp('+')" >＋</button>
-          <button class="ckey ckey-wide" onclick="cIn(0)">0</button>
-          <button class="ckey"           onclick="cDot()">．</button>
-          <button class="ckey eq"        onclick="cSolve()">=</button>
+        <div class="hist-mini-tabs">
+          <button class="hmt-btn active" onclick="showHistTab('cash',this)">💴 現金ログ</button>
+          <button class="hmt-btn"        onclick="showHistTab('tx',this)">📋 売買履歴</button>
         </div>
-        <div class="calc-actions">
-          <button class="calc-to-sim"  onclick="calcToSim()">→ この値を口数に反映</button>
-          <button class="calc-to-cash" onclick="calcToCash()">→ この値を現金に加算</button>
+        <div id="hmt-cash" class="hmt-panel active">
+          <div class="hist-list" id="cashLog"></div>
+        </div>
+        <div id="hmt-tx" class="hmt-panel">
+          <div class="hist-list" id="txLog"></div>
         </div>
       </div>
     </div>
@@ -2606,22 +2620,25 @@ function pressAsset(id) {
   if (id === '不動産' && step < 0) {
     const available = (holdings['不動産'] || 0) - pendingSell;
     const addOrder = Math.min(Math.abs(step), available);
-    if (addOrder > 0) pendingSell += addOrder;
+    if (addOrder > 0) { pendingSell += addOrder; logTx('sell', id, addOrder); }
   } else if (id === '？？？？？' && step > 0) {
     const current = holdings['？？？？？'] || 0;
     const buy = Math.min(step, 3 - current);
     if (buy > 0) {
       holdings['？？？？？'] = current + buy;
       costBasis['？？？？？'] = (costBasis['？？？？？'] || 0) + buy * price;
+      logTx('buy', id, buy);
     }
   } else {
     const prevQty = holdings[id] || 0;
     const newQty  = Math.max(0, prevQty + step);
     if (step > 0) {
       costBasis[id] = (costBasis[id] || 0) + step * price;
+      logTx('buy', id, step);
     } else if (step < 0 && prevQty > 0) {
       const sold = prevQty - newQty;
       costBasis[id] = (costBasis[id] || 0) * (newQty / prevQty);
+      if (sold > 0) logTx('sell', id, sold);
     }
     holdings[id] = newQty;
   }
@@ -2838,17 +2855,57 @@ function calcToSim() {
 
 let cashBalance = 0;
 const cashHistLog = [];
+const txHistory   = [];
 
 function updateCashDisplay() {
   document.getElementById('cashDisplay').textContent = '¥ ' + fmt(cashBalance);
 }
 
+function renderCashLog() {
+  const el = document.getElementById('cashLog');
+  if (!el) return;
+  if (!cashHistLog.length) { el.innerHTML = '<div class="hist-empty">履歴なし</div>'; return; }
+  el.innerHTML = cashHistLog.map(e => {
+    const cls  = e.amount >= 0 ? 'hist-tx-cash-in' : 'hist-tx-cash-out';
+    const sign = e.amount >= 0 ? '+' : '';
+    return `<div class="hist-tx-row">
+      <span class="hist-tx-label">残 ¥${fmt(e.balance)}</span>
+      <span class="${cls}">${sign}${fmt(e.amount)}円</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTxLog() {
+  const el = document.getElementById('txLog');
+  if (!el) return;
+  if (!txHistory.length) { el.innerHTML = '<div class="hist-empty">売買履歴なし</div>'; return; }
+  el.innerHTML = txHistory.map(e => {
+    const isBuy = e.type === 'buy';
+    const cls   = isBuy ? 'hist-tx-buy' : 'hist-tx-sell';
+    const sign  = isBuy ? '＋' : '－';
+    const icon  = isBuy ? '📈' : '📉';
+    const time  = e.year === 0 ? 'チュートリアル' : `${e.year}年 E${e.event}`;
+    return `<div class="hist-tx-row">
+      <span class="hist-tx-icon">${icon}</span>
+      <span class="hist-tx-label">${e.id}</span>
+      <span class="${cls}">${sign}${e.qty}口</span>
+      <span class="hist-tx-time">${time}</span>
+    </div>`;
+  }).join('');
+}
+
+function logTx(type, id, qty) {
+  const row = masterData[currentIndex];
+  txHistory.unshift({ type, id, qty, year: row ? row.年 : 0, event: row ? row.イベント : 0 });
+  if (txHistory.length > 50) txHistory.pop();
+  renderTxLog();
+}
+
 function addCash(amount) {
   cashBalance += amount;
-  const sign = amount >= 0 ? '+' : '';
-  cashHistLog.unshift(sign + fmt(amount) + '円 → 残 ' + fmt(cashBalance) + '円');
-  if (cashHistLog.length > 5) cashHistLog.pop();
-  document.getElementById('cashLog').textContent = cashHistLog.join('\n');
+  cashHistLog.unshift({ amount, balance: cashBalance });
+  if (cashHistLog.length > 30) cashHistLog.pop();
+  renderCashLog();
   updateCashDisplay();
 }
 
@@ -2864,20 +2921,11 @@ function setCashInput(v) {
   document.getElementById('cashInput').focus();
 }
 
-function setCashDirect() {
-  const v = parseInt(document.getElementById('cashInput').value) || 0;
-  cashBalance = v;
-  cashHistLog.unshift('設定: ' + fmt(v) + '円');
-  if (cashHistLog.length > 5) cashHistLog.pop();
-  document.getElementById('cashLog').textContent = cashHistLog.join('\n');
-  updateCashDisplay();
-}
-
 function resetCash() {
   if (!confirm('現金メモをリセットしますか？')) return;
   cashBalance = 0;
   cashHistLog.length = 0;
-  document.getElementById('cashLog').textContent = '';
+  renderCashLog();
   document.getElementById('cashInput').value = '';
   updateCashDisplay();
 }
@@ -2889,6 +2937,13 @@ function calcToCash() {
     addCash(v);
     showToast((v >= 0 ? '+' : '') + fmt(v) + '円を現金に加算しました');
   }
+}
+
+function showHistTab(name, btn) {
+  document.querySelectorAll('.hmt-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.hmt-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('hmt-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 
