@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>計算機ツール | マネぼう塾</title>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky:#5BC8E8; --red:#E8354A; --gold:#F5C842; --gold-dark:#D4A017;
+  --green:#4CAF7D; --purple:#9B6DD6; --dark:#1A1A2E;
+  --white:#FFFFFF; --cream:#FFFDF5;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--white);min-height:100vh;padding-bottom:60px;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.96);backdrop-filter:blur(16px);border-bottom:3px solid var(--gold);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;}
+.nav-back{color:rgba(255,255,255,0.7);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
+.nav-back:hover{color:var(--gold);}
+.nav-title{font-family:'Dela Gothic One',sans-serif;font-size:14px;color:var(--sky);}
+
+/* WRAP */
+.wrap{max-width:680px;margin:0 auto;padding:72px 16px 40px;}
+
+/* PAGE HEADER */
+.page-header{text-align:center;margin:22px 0 22px;animation:fadeUp 0.7s ease both;}
+.slabel{display:inline-block;background:var(--dark);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:4px;padding:4px 14px;border-radius:4px;margin-bottom:12px;border:2px solid var(--gold);}
+.page-title{font-family:'Dela Gothic One',sans-serif;font-size:clamp(22px,6vw,34px);line-height:1.2;margin-bottom:6px;}
+.page-title .ac{color:var(--sky);}
+.page-title .ag{color:var(--gold);}
+.page-sub{color:rgba(255,255,255,0.45);font-size:12px;letter-spacing:1px;}
+
+/* DATE BAR */
+.date-bar{background:rgba(20,20,40,0.92);border:3px solid var(--dark);box-shadow:4px 4px 0 var(--sky);border-radius:16px;padding:16px;margin-bottom:16px;animation:fadeUp 0.7s ease 0.1s both;}
+.date-row{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.date-bar select{flex:1;min-width:0;background:rgba(255,255,255,0.08);color:var(--white);border:2px solid rgba(255,255,255,0.2);border-radius:8px;padding:8px 10px;font-family:'Zen Maru Gothic',sans-serif;font-size:14px;font-weight:700;}
+.date-bar select option{background:#1a1a2e;color:#fff;}
+.btn-jump{background:var(--gold);color:var(--dark);border:none;border-radius:8px;padding:8px 18px;font-family:'Dela Gothic One',sans-serif;font-size:13px;cursor:pointer;flex-shrink:0;transition:opacity 0.2s;}
+.btn-jump:hover{opacity:0.85;}
+#timeLabel{font-family:'Dela Gothic One',sans-serif;font-size:18px;color:var(--gold);text-align:center;letter-spacing:1px;}
+
+/* VALUE PANEL */
+.value-panel{background:rgba(20,20,40,0.92);border:3px solid var(--dark);box-shadow:4px 4px 0 var(--sky);border-radius:16px;padding:18px;margin-bottom:14px;animation:fadeUp 0.7s ease 0.15s both;}
+.hold-list{min-height:34px;margin-bottom:12px;}
+.hold-item{display:flex;justify-content:space-between;align-items:center;padding:5px 10px;border-left:3px solid;border-radius:0 8px 8px 0;margin-bottom:4px;background:rgba(255,255,255,0.05);font-size:12px;}
+.hold-item-name{font-weight:700;}
+.hold-item-val{font-family:'Dela Gothic One',sans-serif;font-size:11px;color:rgba(255,255,255,0.8);text-align:right;}
+.hold-empty{color:rgba(255,255,255,0.3);font-size:12px;padding:6px 0;letter-spacing:1px;}
+.value-divider{border:none;border-top:1px solid rgba(255,255,255,0.1);margin:10px 0;}
+.value-nums{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.value-block{text-align:center;}
+.value-block-lbl{font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.4);display:block;margin-bottom:4px;}
+.value-block-num{font-family:'Dela Gothic One',sans-serif;font-size:clamp(20px,5vw,28px);display:block;line-height:1;}
+.value-block-unit{font-size:10px;color:rgba(255,255,255,0.4);margin-left:2px;}
+#dispTotal{color:var(--sky);}
+#dispDiv{color:var(--green);}
+
+/* STEP SELECTOR */
+.step-section{margin-bottom:14px;animation:fadeUp 0.7s ease 0.2s both;}
+.step-lbl{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,0.35);margin-bottom:7px;}
+.step-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px;}
+.step-btn{border:2px solid;border-radius:10px;padding:10px 4px;font-family:'Dela Gothic One',sans-serif;font-size:13px;cursor:pointer;text-align:center;transition:all 0.15s;background:transparent;-webkit-tap-highlight-color:transparent;}
+.step-btn.plus{color:var(--gold);border-color:rgba(245,200,66,0.3);}
+.step-btn.plus:hover{background:rgba(245,200,66,0.1);}
+.step-btn.plus.active{background:var(--gold);color:var(--dark);border-color:var(--gold);box-shadow:3px 3px 0 var(--gold-dark);}
+.step-btn.minus{color:#ff9999;border-color:rgba(232,53,74,0.3);}
+.step-btn.minus:hover{background:rgba(232,53,74,0.1);}
+.step-btn.minus.active{background:var(--red);color:#fff;border-color:var(--red);box-shadow:3px 3px 0 #900;}
+
+/* ASSET BUTTONS */
+.asset-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;animation:fadeUp 0.7s ease 0.25s both;}
+.asset-btn{background:var(--cream);border:3px solid var(--dark);border-radius:14px;padding:0;cursor:pointer;overflow:hidden;transition:transform 0.15s,box-shadow 0.15s;text-align:left;-webkit-tap-highlight-color:transparent;}
+.asset-btn:hover{transform:translate(-2px,-2px);}
+.asset-btn:active{transform:scale(0.97);}
+.asset-btn:disabled{opacity:0.42;cursor:not-allowed;filter:grayscale(0.5);}
+.asset-btn:disabled:hover{transform:none;}
+.asset-top{padding:10px 12px 8px;display:flex;align-items:center;gap:8px;color:#fff;}
+.a-emoji{font-size:22px;line-height:1;flex-shrink:0;}
+.a-name{font-family:'Dela Gothic One',sans-serif;font-size:12px;line-height:1.2;}
+.asset-body{padding:7px 12px 10px;background:var(--cream);}
+.a-price{font-size:11px;color:#666;display:block;margin-bottom:3px;}
+.a-qty{font-family:'Dela Gothic One',sans-serif;font-size:17px;color:var(--dark);display:block;}
+
+/* ACTION + NAV */
+.action-row{display:flex;gap:8px;margin-bottom:12px;animation:fadeUp 0.7s ease 0.28s both;}
+.btn-reset{flex:1;border:2px solid rgba(232,53,74,0.35);border-radius:10px;background:rgba(232,53,74,0.08);color:#ff9999;font-family:'Zen Maru Gothic',sans-serif;font-size:13px;font-weight:700;padding:10px;cursor:pointer;transition:background 0.2s;}
+.btn-reset:hover{background:rgba(232,53,74,0.2);}
+
+.nav-btns{display:flex;gap:10px;margin-bottom:20px;animation:fadeUp 0.7s ease 0.3s both;}
+.btn-prev{flex:1;border:3px solid var(--sky);border-radius:12px;background:transparent;color:var(--sky);font-family:'Dela Gothic One',sans-serif;font-size:14px;padding:13px;cursor:pointer;transition:all 0.15s;}
+.btn-prev:not(:disabled):hover{background:rgba(91,200,232,0.1);transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--sky);}
+.btn-next{flex:1.4;border:3px solid var(--dark);border-radius:12px;background:var(--gold);color:var(--dark);font-family:'Dela Gothic One',sans-serif;font-size:14px;padding:13px;cursor:pointer;box-shadow:4px 4px 0 var(--gold-dark);transition:all 0.15s;}
+.btn-next:not(:disabled):hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--gold-dark);}
+.btn-prev:disabled,.btn-next:disabled{opacity:0.28;cursor:not-allowed;}
+
+/* CARDS */
+.card{border:3px solid var(--dark);border-radius:16px;margin-bottom:14px;overflow:hidden;background:var(--cream);box-shadow:4px 4px 0 var(--dark);animation:fadeUp 0.7s ease 0.35s both;}
+.card-sim{border-top:6px solid var(--sky);}
+.card-calc{border-top:6px solid var(--gold);}
+.card-header{padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Dela Gothic One',sans-serif;font-size:15px;color:var(--dark);transition:background 0.2s;user-select:none;}
+.card-header:hover{background:rgba(0,0,0,0.04);}
+.card-body{padding:16px 18px;display:none;border-top:2px solid rgba(0,0,0,0.08);}
+.card-body.open{display:block;}
+.card-arrow{font-size:11px;color:#aaa;transition:transform 0.2s;}
+.card-arrow.open{transform:rotate(180deg);}
+
+/* SIMULATOR */
+.sim-fields{display:flex;gap:8px;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap;}
+.sim-fields label{font-size:11px;color:#888;display:block;margin-bottom:4px;}
+.sim-fields .f-asset{flex:1.6;min-width:120px;}
+.sim-fields .f-qty{flex:1;min-width:80px;}
+.sim-fields select,.sim-fields input{background:#fff;color:var(--dark);border:2px solid rgba(0,0,0,0.15);border-radius:8px;padding:8px 10px;font-size:14px;width:100%;font-family:'Zen Maru Gothic',sans-serif;}
+.sim-fields select option{background:#fff;color:var(--dark);}
+.btn-sim{background:var(--green);color:#fff;border:2px solid var(--dark);border-radius:8px;padding:9px 18px;font-family:'Dela Gothic One',sans-serif;font-size:13px;cursor:pointer;box-shadow:2px 2px 0 var(--dark);transition:all 0.15s;flex-shrink:0;}
+.btn-sim:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--dark);}
+#simResult{background:rgba(91,200,232,0.08);border-radius:8px;padding:12px 14px;font-size:13px;color:#333;line-height:2;white-space:pre-line;min-height:44px;border-left:3px solid var(--sky);}
+
+/* CALCULATOR */
+.calc-disp{background:var(--dark);border-radius:10px;padding:12px 16px;font-family:'Dela Gothic One',sans-serif;font-size:24px;color:var(--gold);text-align:right;margin-bottom:10px;overflow-x:auto;min-height:50px;word-break:break-all;}
+.calc-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.ckey{background:#fff;color:var(--dark);border:2px solid rgba(0,0,0,0.1);border-radius:10px;padding:14px 4px;font-size:16px;cursor:pointer;text-align:center;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;transition:all 0.1s;box-shadow:2px 2px 0 rgba(0,0,0,0.07);-webkit-tap-highlight-color:transparent;}
+.ckey:hover{background:#f0f0f0;}
+.ckey:active{transform:scale(0.95);}
+.ckey.op{background:rgba(245,200,66,0.18);color:var(--dark);}
+.ckey.op:hover{background:rgba(245,200,66,0.32);}
+.ckey.eq{background:var(--gold);color:var(--dark);border-color:var(--gold-dark);box-shadow:2px 2px 0 var(--gold-dark);}
+.ckey.eq:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--gold-dark);}
+.ckey.cl{background:rgba(232,53,74,0.1);color:var(--red);}
+.ckey.bk{background:rgba(91,200,232,0.1);color:var(--sky);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-back" href="index.html">← トップへ</a>
+  <span class="nav-title">計算機ツール</span>
+  <span style="width:60px"></span>
+</nav>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="slabel">TOOL</div>
+    <h1 class="page-title"><span class="ag">マネぼう</span><span class="ac"> 計算機</span></h1>
+    <p class="page-sub">1970〜2025年 資産価格シミュレーター</p>
+  </div>
+
+  <!-- DATE BAR -->
+  <div class="date-bar">
+    <div class="date-row">
+      <select id="selY" onchange="updateEventOptions()"></select>
+      <select id="selE"></select>
+      <button class="btn-jump" onclick="dateJump()">移動</button>
+    </div>
+    <div id="timeLabel">チュートリアル</div>
+  </div>
+
+  <!-- VALUE PANEL -->
+  <div class="value-panel">
+    <div class="hold-list" id="holdList">
+      <div class="hold-empty">保有なし</div>
+    </div>
+    <hr class="value-divider">
+    <div class="value-nums">
+      <div class="value-block">
+        <span class="value-block-lbl">総資産</span>
+        <span class="value-block-num"><span id="dispTotal">0</span><span class="value-block-unit">円</span></span>
+      </div>
+      <div class="value-block">
+        <span class="value-block-lbl">配当/ターン</span>
+        <span class="value-block-num"><span id="dispDiv">0</span><span class="value-block-unit">円</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP SELECTOR -->
+  <div class="step-section">
+    <div class="step-lbl">口数ステップ</div>
+    <div class="step-row">
+      <button class="step-btn plus active" onclick="setStep(1,this)">＋1</button>
+      <button class="step-btn plus" onclick="setStep(10,this)">＋10</button>
+      <button class="step-btn plus" onclick="setStep(100,this)">＋100</button>
+      <button class="step-btn plus" onclick="setStep(1000,this)">＋1000</button>
+    </div>
+    <div class="step-row">
+      <button class="step-btn minus" onclick="setStep(-1,this)">－1</button>
+      <button class="step-btn minus" onclick="setStep(-10,this)">－10</button>
+      <button class="step-btn minus" onclick="setStep(-100,this)">－100</button>
+      <button class="step-btn minus" onclick="setStep(-1000,this)">－1000</button>
+    </div>
+  </div>
+
+  <!-- ASSET BUTTONS -->
+  <div class="asset-grid" id="btnWrap"></div>
+
+  <!-- RESET -->
+  <div class="action-row">
+    <button class="btn-reset" onclick="assetReset()">保有リセット</button>
+  </div>
+
+  <!-- PREV / NEXT -->
+  <div class="nav-btns">
+    <button class="btn-prev" id="btnPrev" onclick="stepTime(-1)">◀ PREV</button>
+    <button class="btn-next" id="btnNext" onclick="stepTime(1)">NEXT ▶</button>
+  </div>
+
+  <!-- SIMULATOR -->
+  <div class="card card-sim">
+    <div class="card-header" onclick="toggleCard('simCard')">
+      📊 購入シミュレーター
+      <span class="card-arrow" id="simCard-arrow">▼</span>
+    </div>
+    <div class="card-body" id="simCard">
+      <div class="sim-fields">
+        <div class="f-asset"><label>資産</label><select id="simAsset"></select></div>
+        <div class="f-qty"><label>口数</label><input type="number" id="simQty" value="1" min="1"></div>
+        <button class="btn-sim" onclick="doSim()">計算</button>
+      </div>
+      <div id="simResult">口数を入力して「計算」を押してください</div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div class="card card-calc">
+    <div class="card-header" onclick="toggleCard('calcCard')">
+      🧮 補助計算機
+      <span class="card-arrow" id="calcCard-arrow">▼</span>
+    </div>
+    <div class="card-body" id="calcCard">
+      <div class="calc-disp" id="calcDisp">0</div>
+      <div class="calc-keys">
+        <button class="ckey cl" onclick="cClear()">C</button>
+        <button class="ckey bk" onclick="cBack()">⌫</button>
+        <button class="ckey op" onclick="cOp('%')">%</button>
+        <button class="ckey op" onclick="cOp('÷')">÷</button>
+        <button class="ckey" onclick="cIn(7)">7</button>
+        <button class="ckey" onclick="cIn(8)">8</button>
+        <button class="ckey" onclick="cIn(9)">9</button>
+        <button class="ckey op" onclick="cOp('×')">×</button>
+        <button class="ckey" onclick="cIn(4)">4</button>
+        <button class="ckey" onclick="cIn(5)">5</button>
+        <button class="ckey" onclick="cIn(6)">6</button>
+        <button class="ckey op" onclick="cOp('-')">−</button>
+        <button class="ckey" onclick="cIn(1)">1</button>
+        <button class="ckey" onclick="cIn(2)">2</button>
+        <button class="ckey" onclick="cIn(3)">3</button>
+        <button class="ckey op" onclick="cOp('+')">＋</button>
+        <button class="ckey" onclick="cIn(0)" style="grid-column:span 2">0</button>
+        <button class="ckey" onclick="cDot()">．</button>
+        <button class="ckey eq" onclick="cSolve()">=</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ============================================================
+// INTERPOLATION  [year, event(1-4), price] → linear
+// ============================================================
+function lerp(anchors, year, ev) {
+  const t = year + (ev - 1) / 4;
+  const t0 = anchors[0][0] + (anchors[0][1] - 1) / 4;
+  const tN = anchors[anchors.length-1][0] + (anchors[anchors.length-1][1] - 1) / 4;
+  if (t <= t0) return anchors[0][2];
+  if (t >= tN) return anchors[anchors.length-1][2];
+  for (let i = 0; i < anchors.length - 1; i++) {
+    const t1 = anchors[i][0]   + (anchors[i][1]   - 1) / 4;
+    const t2 = anchors[i+1][0] + (anchors[i+1][1] - 1) / 4;
+    if (t >= t1 && t <= t2) {
+      const r = (t - t1) / (t2 - t1);
+      return Math.round(anchors[i][2] + r * (anchors[i+1][2] - anchors[i][2]));
+    }
+  }
+  return anchors[anchors.length-1][2];
+}
+
+// ============================================================
+// PRICE ANCHORS — 主要経済イベントを基準に補間
+// 単位: 円  (基準: 1970年E1 = 100,000)
+// ============================================================
+
+// 銀行預金 — 金利反映。1970s高→ゼロ金利時代へ
+const A_BANK = [
+  [1970,1,100000],[1975,1,128000],[1980,1,164000],[1985,1,209000],
+  [1990,1,253000],[1993,1,260000],[1995,1,263000],[2000,1,264800],
+  [2005,1,265500],[2010,1,266000],[2016,1,266200],[2020,1,266400],
+  [2025,4,267000]
+];
+
+// 株式 — 日経平均プロキシ (1970=2500円 → 100,000に正規化)
+const A_STOCK = [
+  [1970,1,100000],[1971,4,126000],[1972,4,258000],
+  [1973,2,235000],[1973,3,185000],[1974,2,128000],
+  [1975,1,140000],[1975,4,162000],[1977,4,158000],
+  [1979,4,202000],[1980,4,203000],[1982,4,196000],
+  [1983,4,254000],[1984,4,276000],[1985,3,233000],
+  [1985,4,224000],[1987,3,312000],[1987,4,279000],
+  [1989,4,382000],[1990,2,312000],[1990,4,239000],
+  [1992,4,174000],[1993,4,179000],[1995,4,184000],
+  [1997,4,169000],[1998,4,144000],[1999,4,203000],
+  [2000,2,232000],[2000,4,193000],[2001,3,121000],
+  [2001,4,119000],[2002,4,95000],[2003,2,79000],
+  [2003,4,106000],[2004,4,132000],[2005,4,177000],
+  [2006,4,171000],[2007,2,182000],[2007,4,156000],
+  [2008,3,101000],[2008,4,79000],[2009,4,96000],
+  [2010,4,109000],[2011,1,106000],[2011,2,89000],
+  [2011,4,96000],[2012,3,91000],[2012,4,103000],
+  [2013,1,119000],[2013,4,156000],[2014,4,166000],
+  [2015,2,201000],[2015,4,176000],[2016,1,166000],
+  [2016,4,186000],[2017,4,216000],[2018,4,196000],
+  [2019,4,221000],[2020,1,221000],[2020,2,164000],
+  [2020,4,216000],[2021,4,291000],[2022,1,269000],
+  [2022,4,246000],[2023,2,281000],[2023,4,316000],
+  [2024,2,392000],[2024,3,376000],[2024,4,396000],
+  [2025,1,379000],[2025,2,322000],[2025,3,344000],[2025,4,357000]
+];
+
+// 金 — オイルショック急騰→2000年代〜円安で再上昇
+const A_GOLD = [
+  [1970,1,100000],[1971,3,110000],[1972,4,175000],
+  [1973,3,222000],[1974,2,402000],[1975,3,332000],
+  [1976,4,271000],[1977,4,342000],[1978,4,524000],
+  [1979,4,722000],[1980,1,825000],[1980,4,622000],
+  [1982,4,362000],[1984,4,297000],[1985,4,246000],
+  [1987,4,281000],[1989,4,257000],[1990,4,234000],
+  [1993,4,186000],[1996,4,176000],[1999,4,146000],
+  [2001,4,173000],[2003,4,212000],[2004,4,257000],
+  [2006,4,307000],[2007,4,382000],[2008,2,424000],
+  [2008,4,372000],[2010,4,464000],[2011,3,522000],
+  [2011,4,492000],[2013,2,384000],[2014,4,352000],
+  [2015,4,305000],[2017,4,337000],[2018,4,317000],
+  [2019,4,382000],[2020,3,467000],[2020,4,447000],
+  [2021,4,434000],[2022,4,440000],[2023,4,500000],
+  [2024,1,537000],[2024,3,613000],[2024,4,648000],
+  [2025,1,685000],[2025,2,724000],[2025,3,751000],[2025,4,765000]
+];
+
+// 投資信託 — 株式連動・変動やや小さめ
+const A_FUND = [
+  [1970,1,100000],[1972,4,213000],[1973,3,164000],
+  [1974,2,131000],[1975,4,156000],[1979,4,189000],
+  [1985,3,219000],[1985,4,209000],[1987,4,266000],
+  [1989,4,324000],[1990,4,229000],[1992,4,181000],
+  [1995,4,183000],[1998,4,146000],[1999,4,199000],
+  [2000,2,221000],[2001,4,121000],[2003,2,91000],
+  [2003,4,106000],[2007,2,173000],[2008,4,89000],
+  [2009,4,97000],[2012,4,107000],[2013,4,153000],
+  [2015,2,193000],[2016,1,163000],[2018,4,191000],
+  [2020,2,163000],[2020,4,213000],[2021,4,276000],
+  [2022,4,249000],[2023,4,312000],[2024,2,362000],
+  [2024,4,380000],[2025,1,364000],[2025,2,312000],[2025,4,342000]
+];
+
+// 国債 — 価格安定。デフレ・低金利期は上昇、近年BOJ利上げで微下落
+const A_BOND = [
+  [1970,1,100000],[1975,1,96000],[1980,1,91000],
+  [1985,1,99000],[1990,1,102000],[1995,1,112000],
+  [1998,1,117000],[2000,1,118000],[2005,1,121000],
+  [2010,1,124000],[2013,1,127000],[2016,1,129000],
+  [2020,1,129500],[2022,1,127000],[2023,4,121000],
+  [2024,4,119000],[2025,4,118000]
+];
+
+// ドル — 円/ドルレート反映 (1970=360円→100,000)
+const A_DOLLAR = [
+  [1970,1,100000],[1971,3,86000],[1972,4,81000],
+  [1973,4,76000],[1974,4,84000],[1975,4,82000],
+  [1977,4,74000],[1978,4,59000],[1979,4,61000],
+  [1980,4,63000],[1982,4,69000],[1984,4,70000],
+  [1985,3,66000],[1985,4,58000],[1986,4,47000],
+  [1987,4,40000],[1988,4,36000],[1989,4,39000],
+  [1990,4,40000],[1991,4,37000],[1992,4,35000],
+  [1993,4,31000],[1994,4,29000],[1995,2,22000],
+  [1995,4,26000],[1996,4,30000],[1997,4,34000],
+  [1998,4,36000],[1999,4,31000],[2000,4,30000],
+  [2001,4,34000],[2002,4,35000],[2003,4,32000],
+  [2004,4,30000],[2005,4,32000],[2007,2,32000],
+  [2007,4,31000],[2008,4,28000],[2009,4,26000],
+  [2010,4,24000],[2011,3,22000],[2011,4,23000],
+  [2012,4,22000],[2013,1,25000],[2013,4,29000],
+  [2014,4,32000],[2015,2,34000],[2016,1,30000],
+  [2016,4,32000],[2018,4,31000],[2020,4,30000],
+  [2021,4,31000],[2022,2,33000],[2022,4,38000],
+  [2023,4,40000],[2024,1,43000],[2024,3,43500],
+  [2024,4,43000],[2025,1,43000],[2025,2,40000],
+  [2025,3,41000],[2025,4,42000]
+];
+
+// 不動産 — バブル→崩壊→緩やかな回復→近年上昇
+const A_REALESTATE = [
+  [1970,1,100000],[1973,4,141000],[1975,4,139000],
+  [1978,4,159000],[1980,4,179000],[1983,4,199000],
+  [1985,4,223000],[1987,4,296000],[1989,4,494000],
+  [1991,4,422000],[1993,4,314000],[1995,1,274000],
+  [1997,4,240000],[2000,4,206000],[2001,4,201000],
+  [2004,4,196000],[2007,2,219000],[2007,4,211000],
+  [2008,4,196000],[2010,4,183000],[2012,4,176000],
+  [2013,4,191000],[2015,4,211000],[2017,4,229000],
+  [2019,4,241000],[2020,2,219000],[2020,4,236000],
+  [2021,4,253000],[2022,4,266000],[2023,4,279000],
+  [2024,4,296000],[2025,4,309000]
+];
+
+// ？？？？？ (BTC/仮想通貨) — 2013年Q3から登場・超高ボラ
+const A_CRYPTO = [
+  [1970,1,0],[2013,2,0],[2013,3,100000],[2013,4,1100000],
+  [2014,2,350000],[2014,4,200000],[2015,4,165000],
+  [2016,4,230000],[2017,2,522000],[2017,4,2200000],
+  [2018,2,852000],[2018,4,381000],[2019,4,862000],
+  [2020,2,547000],[2020,4,2910000],[2021,2,8520000],
+  [2021,4,7220000],[2022,2,5120000],[2022,3,3810000],
+  [2022,4,2060000],[2023,2,3820000],[2023,4,5220000],
+  [2024,1,8530000],[2024,2,10520000],[2024,4,14520000],
+  [2025,1,15230000],[2025,2,13020000],[2025,3,14020000],[2025,4,14830000]
+];
+
+// ============================================================
+// DIVIDEND ANCHORS [year, event, yen/unit/turn]
+// ============================================================
+const D_STOCK = [
+  [1970,1,500],[1980,1,580],[1985,1,622],[1990,1,822],
+  [1993,1,422],[2000,1,382],[2008,1,452],[2011,1,402],
+  [2013,1,522],[2019,1,652],[2020,1,422],[2022,1,682],[2025,4,762]
+];
+const D_REALESTATE = [
+  [1970,1,1200],[1985,1,1352],[1990,1,802],[1995,1,902],
+  [2000,1,1002],[2010,1,982],[2015,1,952],[2025,4,902]
+];
+const D_BANK = [
+  [1970,1,1500],[1975,1,1752],[1980,1,2002],[1985,1,1802],
+  [1990,1,2052],[1993,1,1202],[1995,1,752],[1998,1,502],
+  [2000,1,252],[2002,1,152],[2005,1,102],[2008,1,77],
+  [2013,1,27],[2016,1,10],[2020,1,7],[2022,1,9],[2025,4,17]
+];
+const D_BOND = [
+  [1970,1,1750],[1975,1,2002],[1980,1,2252],[1985,1,1902],
+  [1990,1,1902],[1993,1,1602],[1995,1,1252],[2000,1,752],
+  [2005,1,377],[2010,1,302],[2012,1,252],[2015,1,52],
+  [2016,1,17],[2019,1,17],[2022,1,77],[2024,1,102],[2025,4,117]
+];
+
+// ============================================================
+// BUILD masterData
+// ============================================================
+function buildMasterData() {
+  const rows = [];
+  rows.push({
+    年:0, イベント:0,
+    銀行預金:100000, 株式:100000, 金:100000, 投資信託:100000,
+    国債:100000, ドル:100000, 不動産:100000, '？？？？？':0,
+    株式配当:0, 配当不動産収入:0, 配当銀行預金:0, 配当国債:0
+  });
+  for (let y = 1970; y <= 2025; y++) {
+    for (let e = 1; e <= 4; e++) {
+      const isCrypto = !(y < 2013 || (y === 2013 && e < 3));
+      rows.push({
+        年: y, イベント: e,
+        銀行預金:       lerp(A_BANK, y, e),
+        株式:           lerp(A_STOCK, y, e),
+        金:             lerp(A_GOLD, y, e),
+        投資信託:       lerp(A_FUND, y, e),
+        国債:           lerp(A_BOND, y, e),
+        ドル:           lerp(A_DOLLAR, y, e),
+        不動産:         lerp(A_REALESTATE, y, e),
+        '？？？？？':   isCrypto ? lerp(A_CRYPTO, y, e) : 0,
+        株式配当:         lerp(D_STOCK, y, e),
+        配当不動産収入:   lerp(D_REALESTATE, y, e),
+        配当銀行預金:     lerp(D_BANK, y, e),
+        配当国債:         lerp(D_BOND, y, e)
+      });
+    }
+  }
+  return rows;
+}
+const masterData = buildMasterData();
+
+// ============================================================
+// ASSET DEFINITIONS
+// ============================================================
+const ASSET_KEYS = [
+  {id:'銀行預金',   label:'銀行預金',   emoji:'🏦', color:'#27ae60', shadow:'var(--green)',  divKey:'配当銀行預金'},
+  {id:'株式',       label:'株式',       emoji:'📈', color:'#c0392b', shadow:'var(--red)',    divKey:'株式配当'},
+  {id:'金',         label:'金',         emoji:'✨', color:'#b8860b', shadow:'var(--gold)',   divKey:null},
+  {id:'投資信託',   label:'投資信託',   emoji:'📊', color:'#7d3c98', shadow:'var(--purple)', divKey:null},
+  {id:'国債',       label:'国債',       emoji:'🏛️', color:'#1a6fa8', shadow:'var(--sky)',    divKey:'配当国債'},
+  {id:'ドル',       label:'ドル(USD)', emoji:'💵', color:'#117a65', shadow:'#16a085',       divKey:null},
+  {id:'不動産',     label:'不動産',     emoji:'🏠', color:'#a04000', shadow:'#d35400',       divKey:'配当不動産収入'},
+  {id:'？？？？？', label:'？？？？？', emoji:'❓', color:'#6c0000', shadow:'#c0392b',       divKey:null},
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let holdings = {};
+ASSET_KEYS.forEach(a => { holdings[a.id] = 0; });
+let step = 1;
+let currentIndex = 0;
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  buildSelectors();
+  buildAssetButtons();
+  buildSimSelect();
+  updateDisplay();
+}
+
+function buildSelectors() {
+  const selY = document.getElementById('selY');
+  selY.innerHTML = '<option value="0">チュートリアル</option>';
+  for (let y = 1970; y <= 2025; y++) {
+    const o = document.createElement('option');
+    o.value = y; o.textContent = y + '年';
+    selY.appendChild(o);
+  }
+  updateEventOptions();
+}
+
+function updateEventOptions() {
+  const year = parseInt(document.getElementById('selY').value);
+  const selE = document.getElementById('selE');
+  selE.innerHTML = '';
+  if (year === 0) {
+    selE.innerHTML = '<option value="0">チュートリアル</option>';
+    return;
+  }
+  const labels = ['','春(Q1)','夏(Q2)','秋(Q3)','冬(Q4)'];
+  for (let e = 1; e <= 4; e++) {
+    const o = document.createElement('option');
+    o.value = e; o.textContent = `E${e} ${labels[e]}`;
+    selE.appendChild(o);
+  }
+}
+
+function buildSimSelect() {
+  const sel = document.getElementById('simAsset');
+  sel.innerHTML = '';
+  ASSET_KEYS.forEach(a => {
+    const o = document.createElement('option');
+    o.value = a.id; o.textContent = a.emoji + ' ' + a.label;
+    sel.appendChild(o);
+  });
+}
+
+function buildAssetButtons() {
+  const wrap = document.getElementById('btnWrap');
+  wrap.innerHTML = '';
+  ASSET_KEYS.forEach(a => {
+    const btn = document.createElement('button');
+    btn.className = 'asset-btn';
+    btn.id = 'abtn-' + a.id;
+    btn.onclick = () => pressAsset(a.id);
+    wrap.appendChild(btn);
+  });
+}
+
+// ============================================================
+// CONTROLS
+// ============================================================
+function setStep(n, btn) {
+  step = n;
+  document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function pressAsset(id) {
+  const row = masterData[currentIndex];
+  if (!row || row[id] === 0) return;
+  holdings[id] = Math.max(0, (holdings[id] || 0) + step);
+  updateDisplay();
+}
+
+function assetReset() {
+  ASSET_KEYS.forEach(a => { holdings[a.id] = 0; });
+  updateDisplay();
+}
+
+function stepTime(dir) {
+  const ni = currentIndex + dir;
+  if (ni < 0 || ni >= masterData.length) return;
+  currentIndex = ni;
+  const row = masterData[currentIndex];
+  document.getElementById('selY').value = row.年;
+  updateEventOptions();
+  if (row.イベント > 0) document.getElementById('selE').value = row.イベント;
+  updateDisplay();
+}
+
+function dateJump() {
+  const y = parseInt(document.getElementById('selY').value);
+  const e = parseInt(document.getElementById('selE').value || 0);
+  const idx = masterData.findIndex(r => r.年 === y && r.イベント === e);
+  if (idx >= 0) currentIndex = idx;
+  updateDisplay();
+}
+
+// ============================================================
+// DISPLAY
+// ============================================================
+function fmt(n) { return Math.round(n).toLocaleString('ja-JP'); }
+
+function updateDisplay() {
+  const row = masterData[currentIndex];
+  if (!row) return;
+
+  const evL = ['','春(Q1)','夏(Q2)','秋(Q3)','冬(Q4)'];
+  document.getElementById('timeLabel').textContent =
+    row.年 === 0 ? 'チュートリアル' : `${row.年}年 イベント${row.イベント} ${evL[row.イベント]}`;
+
+  let total = 0, divT = 0;
+  ASSET_KEYS.forEach(a => {
+    const q = holdings[a.id] || 0;
+    total += q * (row[a.id] || 0);
+    if (a.divKey) divT += q * (row[a.divKey] || 0);
+  });
+  document.getElementById('dispTotal').textContent = fmt(total);
+  document.getElementById('dispDiv').textContent   = fmt(divT);
+
+  let html = '';
+  ASSET_KEYS.forEach(a => {
+    const q = holdings[a.id] || 0;
+    if (!q) return;
+    const p = row[a.id] || 0;
+    html += `<div class="hold-item" style="border-left-color:${a.color}">
+      <span class="hold-item-name" style="color:${a.color}">${a.emoji} ${a.label}</span>
+      <span class="hold-item-val">${q}口 × ${fmt(p)} = ${fmt(q*p)}円</span>
+    </div>`;
+  });
+  document.getElementById('holdList').innerHTML =
+    html || '<div class="hold-empty">保有なし</div>';
+
+  ASSET_KEYS.forEach(a => {
+    const btn = document.getElementById('abtn-' + a.id);
+    if (!btn) return;
+    const price = row[a.id] || 0;
+    const ok = price > 0;
+    btn.disabled = !ok;
+    btn.style.boxShadow = ok ? `4px 4px 0 ${a.shadow}` : '2px 2px 0 rgba(0,0,0,0.08)';
+    btn.innerHTML = `<div class="asset-top" style="background:${a.color}">
+      <span class="a-emoji">${a.emoji}</span>
+      <span class="a-name">${a.label}</span>
+    </div>
+    <div class="asset-body">
+      <span class="a-price">${ok ? fmt(price)+'円/口' : '─ 未登場 ─'}</span>
+      <span class="a-qty">${holdings[a.id] || 0}口</span>
+    </div>`;
+  });
+
+  document.getElementById('btnPrev').disabled = currentIndex <= 0;
+  document.getElementById('btnNext').disabled = currentIndex >= masterData.length - 1;
+}
+
+// ============================================================
+// SIMULATOR
+// ============================================================
+function doSim() {
+  const row = masterData[currentIndex];
+  if (!row) return;
+  const id  = document.getElementById('simAsset').value;
+  const qty = Math.max(0, parseInt(document.getElementById('simQty').value) || 0);
+  const price = row[id] || 0;
+  const a = ASSET_KEYS.find(x => x.id === id);
+  const divPer = (a && a.divKey) ? (row[a.divKey] || 0) : 0;
+  const cost   = qty * price;
+  const divAmt = qty * divPer;
+  const yPct   = (price > 0 && divPer > 0) ? ((divPer * 4 / price) * 100).toFixed(2) : '—';
+  document.getElementById('simResult').textContent =
+    `購入コスト  : ${fmt(cost)} 円\n配当(1ターン): ${fmt(divAmt)} 円\n配当(年間)  : ${fmt(divAmt*4)} 円\n利回り目安  : ${yPct} %`;
+}
+
+// ============================================================
+// CALCULATOR
+// ============================================================
+let cBuf = '0', cOpr = null, cPrev = null, cNew = false;
+function cDisp() { document.getElementById('calcDisp').textContent = cBuf; }
+function cIn(v) {
+  if (cNew) { cBuf = String(v); cNew = false; }
+  else cBuf = cBuf === '0' ? String(v) : cBuf + v;
+  cDisp();
+}
+function cDot() {
+  if (cNew) { cBuf = '0.'; cNew = false; }
+  else if (!cBuf.includes('.')) cBuf += '.';
+  cDisp();
+}
+function cOp(op) {
+  if (cOpr && !cNew) cSolve(false);
+  cPrev = parseFloat(cBuf); cOpr = op; cNew = true;
+}
+function cSolve(reset = true) {
+  if (!cOpr || cPrev === null) return;
+  const cur = parseFloat(cBuf), p = cPrev;
+  let res;
+  if (cOpr==='+') res = p + cur;
+  else if (cOpr==='-') res = p - cur;
+  else if (cOpr==='×') res = p * cur;
+  else if (cOpr==='÷') res = cur !== 0 ? p / cur : 0;
+  else if (cOpr==='%') res = p * cur / 100;
+  cBuf = String(parseFloat(res.toFixed(8)));
+  if (reset) { cOpr = null; cPrev = null; cNew = true; }
+  cDisp();
+}
+function cClear() { cBuf='0'; cOpr=null; cPrev=null; cNew=false; cDisp(); }
+function cBack()  { cBuf = cBuf.length > 1 ? cBuf.slice(0,-1) : '0'; cDisp(); }
+
+// ============================================================
+// CARD TOGGLE
+// ============================================================
+function toggleCard(id) {
+  const body  = document.getElementById(id);
+  const arrow = document.getElementById(id + '-arrow');
+  const open  = body.classList.toggle('open');
+  arrow.classList.toggle('open', open);
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
