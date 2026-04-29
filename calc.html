@@ -169,10 +169,40 @@ body {
 
 #timeLabel {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 18px;
+  font-size: 15px;
   color: var(--gold);
   text-align: center;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ─── Date Nav (Prev / Next inline) ─────────────────────── */
+.date-nav {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.date-nav .btn-prev,
+.date-nav .btn-next {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  font-size: 12px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+.date-nav .btn-next {
+  box-shadow: 2px 2px 0 var(--gold-dark);
+}
+
+/* ─── Censored text (？？？？？) ─────────────────────────── */
+.censored {
+  display: inline-block;
+  filter: blur(3px);
+  letter-spacing: 2px;
+  user-select: none;
+  cursor: default;
 }
 
 /* ─── Value Panel ────────────────────────────────────────── */
@@ -907,7 +937,11 @@ body {
         <select id="selE"></select>
         <button class="btn-jump" onclick="dateJump()">移動</button>
       </div>
-      <div id="timeLabel">チュートリアル</div>
+      <div class="date-nav">
+        <button class="btn-prev" id="btnPrev" onclick="stepTime(-1)">◀ 前へ</button>
+        <div id="timeLabel">チュートリアル</div>
+        <button class="btn-next" id="btnNext" onclick="stepTime(1)">次へ ▶</button>
+      </div>
     </div>
 
     <!-- VALUE PANEL -->
@@ -956,12 +990,6 @@ body {
     <div class="action-row">
       <button class="btn-reset" onclick="assetReset()">保有リセット</button>
       <button class="btn-reset" style="border-color:rgba(91,200,232,0.35);background:rgba(91,200,232,0.08);color:#7ee6f8;" onclick="undoAction()">↩ 元に戻す</button>
-    </div>
-
-    <!-- PREV / NEXT -->
-    <div class="nav-btns">
-      <button class="btn-prev" id="btnPrev" onclick="stepTime(-1)">◀ PREV</button>
-      <button class="btn-next" id="btnNext" onclick="stepTime(1)">NEXT ▶</button>
     </div>
 
     <!-- GRAPH -->
@@ -1488,7 +1516,7 @@ let pendingSell = 0;        // 不動産売り注文中の口数
 let history = [];           // Undoスタック (最大30件)
 let unlockedTitles = new Set();
 
-const EVENT_LABELS = ['', '春(Q1)', '夏(Q2)', '秋(Q3)', '冬(Q4)'];
+const EVENT_LABELS = ['', 'Q1', 'Q2', 'Q3', 'Q4'];
 
 // ============================================================
 // INIT
@@ -1872,6 +1900,7 @@ function renderTitles() {
   const unlocked = unlockedTitles.size;
   document.getElementById('titlesSummary').textContent = `${unlocked} / ${TITLES.length} 解除済み`;
   let html = '';
+  const censor = s => s.replace(/？？？？？/g, '<span class="censored">？？？？？</span>');
   TITLES.forEach(t => {
     const cls   = unlockedTitles.has(t.id) ? 'unlocked' : 'locked';
     const icon  = unlockedTitles.has(t.id) ? '🏆' : '🔒';
@@ -1879,8 +1908,8 @@ function renderTitles() {
     const prize = fmt(PRIZE[t.stars]);
     html += `<div class="title-item ${cls} s${t.stars}">
       <span class="title-stars">${stars} +${prize}円</span>
-      <span class="title-name">${icon} ${t.name}</span>
-      <span class="title-desc">${t.desc}</span>
+      <span class="title-name">${icon} ${censor(t.name)}</span>
+      <span class="title-desc">${censor(t.desc)}</span>
     </div>`;
   });
   document.getElementById('titlesGrid').innerHTML = html;
