@@ -3049,26 +3049,6 @@ function checkTitles(total) {
   });
 }
 
-const BADGE_ERAS = [
-  { label: '🌱 スタート',              from: 0    },
-  { label: '🛢️ 1974〜 オイルショック', from: 1974 },
-  { label: '📊 1976〜 安定成長期',     from: 1976 },
-  { label: '🏛️ 1981〜 改革・プラザ',   from: 1981 },
-  { label: '✍️ 1985〜 プラザ合意以降', from: 1985 },
-  { label: '📉 1987〜 ブラックマンデー',from: 1987 },
-  { label: '🫧 1989〜 バブル全盛',     from: 1989 },
-  { label: '💸 1990〜 バブル崩壊',     from: 1990 },
-  { label: '😔 1991〜 失われた時代',   from: 1991 },
-  { label: '💻 1996〜 IT黎明期',       from: 1996 },
-  { label: '🌐 2001〜 IT崩壊後',       from: 2001 },
-  { label: '💥 2008〜 リーマンショック',from: 2008 },
-  { label: '🔮 2009〜 新時代の扉',     from: 2009 },
-  { label: '🚀 2012〜 アベノミクス',   from: 2012 },
-  { label: '🦠 2020〜 コロナ時代',     from: 2020 },
-  { label: '🤖 2021〜 AI時代',         from: 2021 },
-  { label: '🏁 2025 フィナーレ',       from: 2025 },
-];
-
 function renderTitles() {
   if (!document.getElementById('tab-titles').classList.contains('active')) return;
   const currentYear = masterData[currentIndex]?.年 || 0;
@@ -3081,17 +3061,22 @@ function renderTitles() {
   document.getElementById('titlesSummary').textContent =
     `${unlockedVisible} / ${visible.length} バッジ獲得`;
 
+  // 5年刻みバケット
+  const toBucket = vf => vf === 0 ? 0 : Math.floor(vf / 5) * 5;
+  const bucketLabel = b => b === 0 ? '🌱 スタート' : `${b}年〜`;
+
+  // visible を bucket ごとにグループ化
+  const groups = {};
+  visible.forEach(t => {
+    const b = toBucket(t.visibleFrom || 0);
+    if (!groups[b]) groups[b] = [];
+    groups[b].push(t);
+  });
+
   let html = '';
-  let lastEra = null;
-
-  // 時代ヘッダーごとにグループ化して表示
-  BADGE_ERAS.forEach(era => {
-    if (era.from > currentYear) return;
-    const eraBadges = visible.filter(t => (t.visibleFrom || 0) === era.from);
-    if (!eraBadges.length) return;
-
-    html += `<div class="era-header">${era.label}</div>`;
-    eraBadges.forEach(t => {
+  Object.keys(groups).sort((a, b) => a - b).forEach(b => {
+    html += `<div class="era-header">${bucketLabel(Number(b))}</div>`;
+    groups[b].forEach(t => {
       const cls   = unlockedTitles.has(t.id) ? 'unlocked' : 'locked';
       const icon  = unlockedTitles.has(t.id) ? '🏆' : '🔒';
       const stars = '⭐'.repeat(t.stars);
@@ -3104,18 +3089,16 @@ function renderTitles() {
     });
   });
 
+  // hidden バッジのティーザー（同じく5年刻み）
   if (hidden.length > 0) {
-    const TIERS = [1975,1980,1985,1990,1995,2000,2005,2010,2015,2020,2025,9999];
-    const buckets = {};
+    const hGroups = {};
     hidden.forEach(t => {
-      const yr = t.visibleFrom || 9999;
-      const b = TIERS.find(x => x >= yr) || 9999;
-      buckets[b] = (buckets[b] || 0) + 1;
+      const b = toBucket(t.visibleFrom || 9999);
+      hGroups[b] = (hGroups[b] || 0) + 1;
     });
-    TIERS.forEach(tier => {
-      if (!buckets[tier]) return;
-      const label = tier >= 9999 ? '将来' : `${tier}年〜`;
-      html += `<div class="era-teaser">🔐 ${label}：さらに ${buckets[tier]} 個のバッジが解放されます</div>`;
+    Object.keys(hGroups).sort((a, b) => a - b).forEach(b => {
+      const label = Number(b) >= 9995 ? '将来' : bucketLabel(Number(b));
+      html += `<div class="era-teaser">🔐 ${label}：さらに ${hGroups[b]} 個のバッジが解放されます</div>`;
     });
   }
 
