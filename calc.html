@@ -941,7 +941,9 @@ body {
 .tab-label { font-size: 9px; font-weight: 800; letter-spacing: 0.5px; font-family: 'Zen Maru Gothic', sans-serif; }
 
 /* ─── Compact Game Tab ───────────────────────────────────── */
-.date-bar     { padding: 10px 12px; margin-bottom: 8px; }
+.date-bar     { padding: 8px 12px; margin-bottom: 8px; }
+.date-jump    { margin-top: 8px; margin-bottom: 0; box-shadow: none !important; border-color: rgba(255,255,255,0.1) !important; }
+.date-jump .date-row { margin-bottom: 0; }
 .value-panel  { padding: 10px 14px; margin-bottom: 8px; }
 .step-section { margin-bottom: 8px; }
 .step-lbl     { margin-bottom: 4px; }
@@ -1054,13 +1056,8 @@ body {
       </div>
     </div>
 
-    <!-- DATE BAR -->
+    <!-- DATE NAV -->
     <div class="date-bar">
-      <div class="date-row">
-        <select id="selY" onchange="updateEventOptions()"></select>
-        <select id="selE"></select>
-        <button class="btn-jump" onclick="dateJump()">移動</button>
-      </div>
       <div class="date-nav">
         <button class="btn-prev" id="btnPrev" onclick="stepTime(-1)">◀ 前へ</button>
         <div id="timeLabel">チュートリアル</div>
@@ -1114,6 +1111,15 @@ body {
     <div class="action-row">
       <button class="btn-reset" onclick="assetReset()">リセット</button>
       <button class="btn-reset" style="border-color:rgba(91,200,232,0.35);background:rgba(91,200,232,0.08);color:#7ee6f8;" onclick="undoAction()">↩ 戻す</button>
+    </div>
+
+    <!-- JUMP TO YEAR (moved to bottom) -->
+    <div class="date-bar date-jump">
+      <div class="date-row">
+        <select id="selY" onchange="updateEventOptions()"></select>
+        <select id="selE"></select>
+        <button class="btn-jump" onclick="dateJump()">移動</button>
+      </div>
     </div>
 
   </div><!-- /tab-game -->
