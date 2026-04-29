@@ -903,6 +903,23 @@ body {
 
 .ckey-wide { grid-column: span 2; }
 
+/* ─── Wallet Section (常時表示エリア) ───────────────────── */
+.wallet-section {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-top: 4px solid var(--green);
+  border-radius: 12px;
+  padding: 12px 14px 10px;
+  margin-bottom: 12px;
+}
+.wallet-title {
+  font-size: 10px; font-family: 'Dela Gothic One',sans-serif;
+  color: var(--green); letter-spacing: .8px; margin-bottom: 6px;
+}
+.wallet-tools-label {
+  font-size: 10px; color: rgba(255,255,255,0.35);
+  text-align: center; margin-bottom: 6px; letter-spacing: .4px;
+}
 /* ─── Calc Sub-Tabs ──────────────────────────────────────── */
 .calc-subtabs {
   display: flex; gap: 3px;
@@ -1328,13 +1345,35 @@ body {
 
   </div><!-- /tab-game -->
 
-  <!-- ════ TAB: CALC ════ -->
+  <!-- ════ TAB: お財布 ════ -->
   <div id="tab-data" class="tab-page">
 
-    <!-- サブタブ切り替え -->
+    <!-- ── 常時表示: 現金残高 ── -->
+    <div class="wallet-section">
+      <div class="wallet-title">👛 お財布（現金メモ）</div>
+      <div class="cash-balance" id="cashDisplay">¥ 0</div>
+      <div class="cash-set-row">
+        <input type="number" id="cashInput" placeholder="金額を直接入力（円）" oninput="setCashDirect()">
+      </div>
+      <div class="cash-quick-label">クイック加減算</div>
+      <div class="cash-btns">
+        <button class="cbtn plus"  onclick="addCash(10000)">+1万</button>
+        <button class="cbtn plus"  onclick="addCash(50000)">+5万</button>
+        <button class="cbtn plus"  onclick="addCash(100000)">+10万</button>
+        <button class="cbtn plus"  onclick="addCash(300000)">+30万</button>
+        <button class="cbtn minus" onclick="addCash(-10000)">−1万</button>
+        <button class="cbtn minus" onclick="addCash(-50000)">−5万</button>
+        <button class="cbtn minus" onclick="addCash(-100000)">−10万</button>
+        <button class="cbtn minus" onclick="addCash(-300000)">−30万</button>
+      </div>
+      <div class="cash-log" id="cashLog"></div>
+      <button class="cash-reset-btn" onclick="resetCash()">現金をリセット</button>
+    </div>
+
+    <!-- ── ツール選択 ── -->
+    <div class="wallet-tools-label">▼ ツール</div>
     <div class="calc-subtabs">
       <button class="cst-btn active" onclick="showCalcTab('sim',this)">📊<br>シミュ</button>
-      <button class="cst-btn"        onclick="showCalcTab('cash',this)">💴<br>現金メモ</button>
       <button class="cst-btn"        onclick="showCalcTab('calc',this)">🧮<br>計算機</button>
     </div>
 
@@ -1358,31 +1397,7 @@ body {
       </div>
     </div>
 
-    <!-- ── パネル②: 現金メモ ── -->
-    <div id="csp-cash" class="calc-subpanel">
-      <div class="tab-section">
-        <div class="tab-section-title">💴 現金メモ</div>
-        <div class="cash-balance" id="cashDisplay">¥ 0</div>
-        <div class="cash-set-row">
-          <input type="number" id="cashInput" placeholder="金額を直接入力（円）" oninput="setCashDirect()">
-        </div>
-        <div class="cash-quick-label">クイック加減算</div>
-        <div class="cash-btns">
-          <button class="cbtn plus"  onclick="addCash(10000)">+1万</button>
-          <button class="cbtn plus"  onclick="addCash(50000)">+5万</button>
-          <button class="cbtn plus"  onclick="addCash(100000)">+10万</button>
-          <button class="cbtn plus"  onclick="addCash(300000)">+30万</button>
-          <button class="cbtn minus" onclick="addCash(-10000)">−1万</button>
-          <button class="cbtn minus" onclick="addCash(-50000)">−5万</button>
-          <button class="cbtn minus" onclick="addCash(-100000)">−10万</button>
-          <button class="cbtn minus" onclick="addCash(-300000)">−30万</button>
-        </div>
-        <div class="cash-log" id="cashLog"></div>
-        <button class="cash-reset-btn" onclick="resetCash()">現金をリセット</button>
-      </div>
-    </div>
-
-    <!-- ── パネル③: 補助計算機 ── -->
+    <!-- ── パネル②: 補助計算機 ── -->
     <div id="csp-calc" class="calc-subpanel">
       <div class="tab-section">
         <div class="tab-section-title">🧮 補助計算機</div>
@@ -1593,8 +1608,8 @@ body {
   </button>
   <button class="tab-btn" onclick="showTab('data',this)">
     <span class="tab-inner">
-      <span class="tab-icon">🧮</span>
-      <span class="tab-label">計算機</span>
+      <span class="tab-icon">👛</span>
+      <span class="tab-label">お財布</span>
     </span>
   </button>
   <button class="tab-btn" onclick="showTab('calc',this)">
