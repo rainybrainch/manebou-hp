@@ -611,7 +611,7 @@ body {
 
 /* ─── Rank (value-panel 3列目) ───────────────────────────── */
 .value-nums-3 { grid-template-columns: 1fr 1fr 72px !important; }
-#rankVal { font-family: 'Dela Gothic One', sans-serif; font-size: clamp(20px,5vw,28px); display: block; line-height: 1; }
+#rankVal { font-family: 'Zen Maru Gothic', sans-serif; font-size: clamp(11px,3vw,14px); display: block; line-height: 1.2; font-weight: 700; white-space: nowrap; }
 
 /* ─── Simulator ──────────────────────────────────────────── */
 .sim-fields {
@@ -1042,7 +1042,7 @@ body {
           <span class="value-block-num"><span id="dispDiv">0</span><span class="value-block-unit">円</span></span>
         </div>
         <div class="value-block">
-          <span class="value-block-lbl">ランク</span>
+          <span class="value-block-lbl">投資家</span>
           <span class="value-block-num"><span id="rankVal" style="color:#555">─</span></span>
         </div>
       </div>
@@ -2094,10 +2094,12 @@ function drawGraph() {
 // GRADE
 // ============================================================
 function getGrade(total) {
-  if (total >= 100000000) return { grade: 'S', color: 'var(--gold)' };
-  if (total >= 10000000)  return { grade: 'A', color: 'var(--sky)' };
-  if (total >= 1000000)   return { grade: 'B', color: 'var(--green)' };
-  if (total > 0)          return { grade: 'C', color: '#aaa' };
+  if (total >= 1_000_000_000_000) return { grade: '👑伝説', color: '#e040fb' };
+  if (total >= 1_000_000_000)     return { grade: '💎資産家', color: 'var(--gold)' };
+  if (total >= 100_000_000)       return { grade: '🏆億り人', color: 'var(--gold)' };
+  if (total >= 10_000_000)        return { grade: '🏦ベテラン', color: 'var(--sky)' };
+  if (total >= 1_000_000)         return { grade: '💼中堅', color: 'var(--green)' };
+  if (total > 0)                  return { grade: '🌱初心者', color: '#aaa' };
   return { grade: '─', color: '#555' };
 }
 
