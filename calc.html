@@ -2797,22 +2797,6 @@ function calcToCash() {
 
 
 // ============================================================
-// PORTFOLIO GRAPH
-// ============================================================
-function recordPortfolio() {
-  const row = masterData[currentIndex];
-  if (!row || row.年 === 0) return;
-  const snap = { idx: currentIndex, 年: row.年, イベント: row.イベント, values: {}, total: 0 };
-  ASSET_KEYS.forEach(a => {
-    const val = (holdings[a.id] || 0) * (row[a.id] || 0);
-    snap.values[a.id] = val;
-    snap.total += val;
-  });
-  const ei = portfolioHistory.findIndex(h => h.idx === currentIndex);
-  if (ei >= 0) portfolioHistory[ei] = snap;
-  else { portfolioHistory.push(snap); portfolioHistory.sort((a, b) => a.idx - b.idx); }
-}
-
 function drawPortfolioGraph() {
   const svg    = document.getElementById('portfolioSvg');
   const legend = document.getElementById('portfolioLegend');
@@ -2831,6 +2815,32 @@ function drawPortfolioGraph() {
   const n = hist.length;
   const toX = i => PX + (i / (n - 1)) * (W - 2 * PX);
   const toY = v => PY + (1 - v / maxTot) * (H - 2 * PY);
+
+  const assetsWithValue = ASSET_KEYS.filter(a => hist.some(h => h.values[a.id] > 0));
+  let svgContent = '';
+
+  for (let ai = assetsWithValue.length - 1; ai >= 0; ai--) {
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      let cum = 0;
+      for (let j = 0; j <= ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
+      pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
+    }
+    for (let i = n - 1; i >= 0; i--) {
+      let cum = 0;
+      for (let j = 0; j < ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
+      pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
+    }
+    svgContent += `<polygon points="${pts.join(' ')}" fill="${assetsWithValue[ai].color}" opacity="0.75"/>`;
+  }
+
+  const topPts = hist.map((h, i) => `${toX(i).toFixed(1)},${toY(h.total).toFixed(1)}`).join(' ');
+  svgContent += `<polyline points="${topPts}" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linejoin="round"/>`;
+  svg.innerHTML = svgContent;
+
+  const sH = hist[0], eH = hist[n - 1], mH = hist[Math.floor(n / 2)];
+  labels.innerHTML = `<span>${sH.年}年</span><span>${mH.年}年</span><span>${eH.年}年</span>`;
+  document.getElementById('portfolioTotal').textContent = fmt(eH.total) + '円';
 
   const curRow = masterData[currentIndex];
   const legendAssets = ASSET_KEYS.filter(a => (holdings[a.id]||0) > 0);
@@ -2853,31 +2863,6 @@ function drawPortfolioGraph() {
     }).join('') +
     `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(curTotal)}</span></div>`;
   }
-      let cum = 0;
-      for (let j = 0; j <= ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
-      pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
-    }
-    for (let i = n - 1; i >= 0; i--) {
-      let cum = 0;
-      for (let j = 0; j < ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
-      pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
-    }
-    svgContent += `<polygon points="${pts.join(' ')}" fill="${assetsWithValue[ai].color}" opacity="0.75"/>`;
-  }
-
-  const topPts = hist.map((h, i) => `${toX(i).toFixed(1)},${toY(h.total).toFixed(1)}`).join(' ');
-  svgContent += `<polyline points="${topPts}" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linejoin="round"/>`;
-  svg.innerHTML = svgContent;
-
-  const sH = hist[0], eH = hist[n - 1], mH = hist[Math.floor(n / 2)];
-  labels.innerHTML = `<span>${sH.年}年</span><span>${mH.年}年</span><span>${eH.年}年</span>`;
-  document.getElementById('portfolioTotal').textContent = fmt(eH.total) + '円';
-  legend.innerHTML = assetsWithValue.map(a =>
-    `<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:rgba(255,255,255,0.75)">
-      <div style="width:8px;height:8px;border-radius:50%;background:${a.color};flex-shrink:0"></div>
-      <span>${a.emoji}</span>
-    </div>`
-  ).join('');
 }
 
 function setGraphMode(mode, btn) {
