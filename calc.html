@@ -941,17 +941,23 @@ body {
 .setting-link { color: var(--sky); font-weight: 700; font-size: 13px; text-decoration: none; }
 .setting-link:hover { text-decoration: underline; }
 .rules-board-img { width: 100%; border-radius: 12px; display: block; margin: 10px 0 8px; box-shadow: 0 3px 12px rgba(0,0,0,0.18); }
-.rules-board-legend { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
-.rbl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; line-height: 1.5; }
+.rules-board-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 10px; }
+.rbl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; line-height: 1.5; background: rgba(0,0,0,0.05); border-radius: 8px; padding: 7px 9px; }
+.rbl-item-title { font-weight: 800; font-size: 12px; }
+.rbl-item-desc  { font-size: 10px; color: #888; margin-top: 1px; }
 .rbl-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px; }
 /* ─── Board Annotate ─────────────────────────────────────── */
 .board-annotate { position: relative; display: block; margin: 10px 0 8px; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,0.18); }
 .board-annotate img { width: 100%; display: block; }
-.ba-badge { position: absolute; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; font-family: 'Dela Gothic One',sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.7); border: 2px solid rgba(255,255,255,0.92); transform: translate(-50%,-50%); pointer-events: none; }
-.ba-event  { background: #f5c842; color: #222; }
-.ba-chance { background: #e8354a; color: #fff; }
-.ba-div    { background: #4caf50; color: #fff; }
-.ba-start  { background: #1ebdb0; color: #fff; }
+@keyframes ba-pulse {
+  0%, 100% { transform: translate(-50%,-50%) scale(1);    box-shadow: 0 2px 8px rgba(0,0,0,0.75), 0 0 0 0   var(--pc); }
+  60%      { transform: translate(-50%,-50%) scale(1.12); box-shadow: 0 2px 8px rgba(0,0,0,0.75), 0 0 0 8px transparent; }
+}
+.ba-badge { position: absolute; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; font-family: 'Dela Gothic One',sans-serif; border: 2.5px solid rgba(255,255,255,0.95); transform: translate(-50%,-50%); pointer-events: none; animation: ba-pulse 2.8s ease-in-out infinite; }
+.ba-event  { background: #f5c842; color: #222; --pc: rgba(245,200,66,0.65); }
+.ba-chance { background: #e8354a; color: #fff; --pc: rgba(232,53,74,0.65); }
+.ba-div    { background: #4caf50; color: #fff; --pc: rgba(76,175,80,0.65); }
+.ba-start  { background: #1ebdb0; color: #fff; --pc: rgba(30,189,176,0.65); }
 .ba-cw { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .ba-cw-icon { font-size: 48px; color: #fff; line-height: 1; text-shadow: 0 0 12px rgba(0,0,0,1), 0 0 6px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1); }
 .ba-cw-label { color: #fff; font-size: 10px; font-family: 'Dela Gothic One',sans-serif; white-space: nowrap; text-shadow: 0 0 8px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,1); letter-spacing: .3px; }
@@ -1423,20 +1429,21 @@ body {
       <!-- 盤面：注釈付きオーバーレイ -->
       <div class="board-annotate">
         <img src="images/img9.webp" alt="チュートリアル盤面">
-        <!-- ① イベントパネル（左上・右上・左下・右下） -->
-        <span class="ba-badge ba-event"  style="top:16%;left:17%">①</span>
-        <span class="ba-badge ba-event"  style="top:16%;left:83%">①</span>
-        <span class="ba-badge ba-event"  style="top:86%;left:14%">①</span>
-        <span class="ba-badge ba-event"  style="top:83%;left:83%">①</span>
-        <!-- ② チャンスカード（上中・右上中・左下） -->
-        <span class="ba-badge ba-chance" style="top:9%;left:50%">②</span>
-        <span class="ba-badge ba-chance" style="top:40%;left:87%">②</span>
-        <span class="ba-badge ba-chance" style="top:72%;left:12%">②</span>
-        <!-- ③ 配当マス（左中・右中下） -->
-        <span class="ba-badge ba-div"    style="top:49%;left:11%">③</span>
-        <span class="ba-badge ba-div"    style="top:62%;left:87%">③</span>
-        <!-- ④ スタート（下中） -->
-        <span class="ba-badge ba-start"  style="top:84%;left:50%">④</span>
+        <!-- ① イベントパネル：4隅 -->
+        <span class="ba-badge ba-event"  style="top:20%;left:17%">①</span>
+        <span class="ba-badge ba-event"  style="top:20%;left:83%">①</span>
+        <span class="ba-badge ba-event"  style="top:80%;left:17%">①</span>
+        <span class="ba-badge ba-event"  style="top:80%;left:83%">①</span>
+        <!-- ② チャンスカード：上辺・右辺・左辺 -->
+        <span class="ba-badge ba-chance" style="top:6%;left:37%">②</span>
+        <span class="ba-badge ba-chance" style="top:37%;left:92%">②</span>
+        <span class="ba-badge ba-chance" style="top:70%;left:8%">②</span>
+        <!-- ③ 配当マス：上辺・左辺・右辺 -->
+        <span class="ba-badge ba-div"    style="top:6%;left:63%">③</span>
+        <span class="ba-badge ba-div"    style="top:50%;left:8%">③</span>
+        <span class="ba-badge ba-div"    style="top:62%;left:92%">③</span>
+        <!-- ④ スタート：下辺中央 -->
+        <span class="ba-badge ba-start"  style="top:83%;left:50%">④</span>
       </div>
       <div class="board-cw-note">
         <svg viewBox="0 0 60 60" width="16" height="16" fill="none"><path d="M30 6 A24 24 0 1 1 8 42" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><polygon points="4,47 10,34 17,44" fill="currentColor"/></svg>
@@ -1444,20 +1451,20 @@ body {
       </div>
       <div class="rules-board-legend">
         <div class="rbl-item">
-          <span class="rbl-badge" style="background:#f5c842;color:#333">①</span>
-          <span><strong>イベントパネル</strong>── 各ターンの出来事と8資産の価格が表示される</span>
+          <span class="rbl-badge" style="background:#f5c842;color:#333;flex-shrink:0">①</span>
+          <div><div class="rbl-item-title">イベントパネル</div><div class="rbl-item-desc">4隅のマス。出来事と資産価格が表示される</div></div>
         </div>
         <div class="rbl-item">
-          <span class="rbl-badge" style="background:#e8354a">②</span>
-          <span><strong>チャンスカード</strong>── めくって全プレイヤーに特別イベントが発生</span>
+          <span class="rbl-badge" style="background:#e8354a;flex-shrink:0">②</span>
+          <div><div class="rbl-item-title">チャンスカード</div><div class="rbl-item-desc">めくると全員に特別イベントが発生！</div></div>
         </div>
         <div class="rbl-item">
-          <span class="rbl-badge" style="background:#4caf50">③</span>
-          <span><strong>配当マス</strong>── 止まるとターン終了時に保有資産の配当が入る</span>
+          <span class="rbl-badge" style="background:#4caf50;flex-shrink:0">③</span>
+          <div><div class="rbl-item-title">配当マス</div><div class="rbl-item-desc">止まると保有資産から配当収入が入る</div></div>
         </div>
         <div class="rbl-item">
-          <span class="rbl-badge" style="background:#1ebdb0">④</span>
-          <span><strong>スタート</strong>── 100万円分の資産を受け取ってゲーム開始！</span>
+          <span class="rbl-badge" style="background:#1ebdb0;flex-shrink:0">④</span>
+          <div><div class="rbl-item-title">スタート</div><div class="rbl-item-desc">100万円分の資産を配られてゲーム開始！</div></div>
         </div>
       </div>
       <div class="rules-block" style="margin-top:10px">
