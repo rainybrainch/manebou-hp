@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>計算機ツール | マネぼう塾</title>
+<title>マネぼうアプリ | マネぼう塾</title>
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 
@@ -82,7 +82,7 @@ body {
 .wrap {
   max-width: 680px;
   margin: 0 auto;
-  padding: 72px 16px 40px;
+  padding: 72px 16px 85px;
 }
 
 /* ─── Page Header ────────────────────────────────────────── */
@@ -169,12 +169,15 @@ body {
 
 #timeLabel {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 15px;
+  font-size: clamp(10px, 3vw, 13px);
   color: var(--gold);
   text-align: center;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ─── Date Nav (Prev / Next inline) ─────────────────────── */
@@ -850,13 +853,12 @@ body {
   left: 0;
   right: 0;
   z-index: 300;
-  background: rgba(20, 20, 40, 0.98);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 2px solid var(--gold);
+  background: linear-gradient(180deg, #c8922a 0%, #b07820 100%);
   display: flex;
-  height: 60px;
+  height: 62px;
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -3px 12px rgba(0,0,0,0.45);
+  align-items: flex-end;
 }
 
 .tab-btn {
@@ -865,26 +867,36 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
+  justify-content: flex-end;
+  padding: 0 2px 7px;
   background: transparent;
   border: none;
-  color: rgba(255,255,255,0.32);
   cursor: pointer;
-  transition: color 0.18s;
   -webkit-tap-highlight-color: transparent;
+  transition: filter 0.15s;
 }
-.tab-btn.active { color: var(--gold); }
-.tab-btn.active::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 25%; right: 25%;
-  height: 2px;
-  background: var(--gold);
-  border-radius: 0 0 3px 3px;
+.tab-btn::before { display: none; }
+
+.tab-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: rgba(60,28,0,0.55);
+  transition: transform 0.18s, color 0.18s;
 }
-.tab-icon  { font-size: 19px; line-height: 1; }
-.tab-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; font-family: 'Zen Maru Gothic', sans-serif; }
+.tab-btn.active .tab-inner {
+  background: #1ebdb0;
+  border-radius: 14px;
+  padding: 6px 10px 5px;
+  transform: translateY(-13px);
+  box-shadow: 0 4px 14px rgba(30,189,176,0.45);
+  color: #fff;
+}
+
+.tab-icon  { font-size: 20px; line-height: 1; }
+.tab-btn.active .tab-icon { font-size: 24px; }
+.tab-label { font-size: 9px; font-weight: 800; letter-spacing: 0.5px; font-family: 'Zen Maru Gothic', sans-serif; }
 
 /* ─── Compact Game Tab ───────────────────────────────────── */
 .date-bar     { padding: 10px 12px; margin-bottom: 8px; }
@@ -936,7 +948,45 @@ body {
 
 /* ─── Graph Tab ──────────────────────────────────────────── */
 #tab-graph .graph-section { margin-top: 4px; box-shadow: none; }
-#tab-graph #graphSvg      { height: 200px; }
+#tab-graph #graphSvg      { height: 160px; }
+#portfolioSvg {
+  width: 100%; height: 200px; display: block;
+  border-radius: 6px; background: rgba(0,0,0,0.25);
+}
+
+/* ─── Graph Mode Tabs ────────────────────────────────────── */
+.graph-mode-tabs {
+  display: flex; gap: 6px; margin-bottom: 10px;
+}
+.graph-mode-btn {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.45);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 10px; padding: 8px 4px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+}
+.graph-mode-btn.active {
+  background: rgba(245,200,66,0.14);
+  color: var(--gold); border-color: var(--gold);
+}
+
+/* ─── Portfolio Legend ───────────────────────────────────── */
+.portfolio-legend {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 4px; padding: 8px 4px;
+}
+.legend-item {
+  display: flex; align-items: center;
+  gap: 4px; font-size: 9px;
+  color: rgba(255,255,255,0.65);
+}
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%; flex-shrink: 0;
+}
 
 </style>
 </head>
@@ -944,7 +994,7 @@ body {
 
 <nav class="top-nav">
   <span class="nav-spacer"></span>
-  <span class="nav-title">計算機ツール</span>
+  <span class="nav-title">マネぼうアプリ</span>
   <span class="nav-spacer"></span>
 </nav>
 
@@ -1074,23 +1124,47 @@ body {
 
   <!-- ════ TAB: GRAPH ════ -->
   <div id="tab-graph" class="tab-page">
-    <div class="graph-section">
-      <div class="graph-header">
-        <span class="graph-header-label">📈 価格推移</span>
-        <select id="graphAsset" onchange="drawGraph()"></select>
+
+    <!-- モード切替 -->
+    <div class="graph-mode-tabs">
+      <button class="graph-mode-btn active" onclick="setGraphMode('price',this)">📈 価格推移</button>
+      <button class="graph-mode-btn" onclick="setGraphMode('portfolio',this)">💰 資産推移</button>
+    </div>
+
+    <!-- 価格推移モード -->
+    <div id="graphModePrice">
+      <div class="graph-section">
+        <div class="graph-header">
+          <span class="graph-header-label">📈 価格推移</span>
+          <select id="graphAsset" onchange="drawGraph()"></select>
+        </div>
+        <svg id="graphSvg" viewBox="0 0 600 80" preserveAspectRatio="none"></svg>
+        <div class="graph-labels" id="graphLabels"></div>
       </div>
-      <svg id="graphSvg" viewBox="0 0 600 80" preserveAspectRatio="none"></svg>
-      <div class="graph-labels" id="graphLabels"></div>
+      <div class="tab-section" style="margin-top:8px;">
+        <div class="tab-section-title">⚖️ 資産比較</div>
+        <div id="compareTable"></div>
+      </div>
     </div>
-    <div class="tab-section" style="margin-top:8px;">
-      <div class="tab-section-title">⚖️ 資産比較</div>
-      <div id="compareTable"></div>
+
+    <!-- 資産推移モード -->
+    <div id="graphModePortfolio" style="display:none">
+      <div class="graph-section">
+        <div class="graph-header">
+          <span class="graph-header-label">💰 資産推移</span>
+          <span id="portfolioTotal" style="font-family:'Dela Gothic One',sans-serif;color:var(--gold);font-size:12px">─</span>
+        </div>
+        <svg id="portfolioSvg" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+        <div class="graph-labels" id="portfolioLabels"></div>
+      </div>
+      <div id="portfolioLegend" class="portfolio-legend"></div>
     </div>
+
   </div><!-- /tab-graph -->
 
   <!-- ════ TAB: TITLES ════ -->
   <div id="tab-titles" class="tab-page">
-    <div class="titles-summary" id="titlesSummary">0 / 40 解除済み</div>
+    <div class="titles-summary" id="titlesSummary">0 / 40 バッジ獲得</div>
     <div id="titlesGrid" class="titles-grid"></div>
   </div><!-- /tab-titles -->
 
@@ -1098,25 +1172,35 @@ body {
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <button class="tab-btn active" onclick="showTab('game',this)">
-    <span class="tab-icon">🎮</span>
-    <span class="tab-label">ゲーム</span>
-  </button>
   <button class="tab-btn" onclick="showTab('graph',this)">
-    <span class="tab-icon">📈</span>
-    <span class="tab-label">グラフ</span>
+    <span class="tab-inner">
+      <span class="tab-icon">📈</span>
+      <span class="tab-label">グラフ</span>
+    </span>
   </button>
   <button class="tab-btn" onclick="showTab('data',this)">
-    <span class="tab-icon">📊</span>
-    <span class="tab-label">データ</span>
+    <span class="tab-inner">
+      <span class="tab-icon">📊</span>
+      <span class="tab-label">データ</span>
+    </span>
+  </button>
+  <button class="tab-btn active" onclick="showTab('game',this)">
+    <span class="tab-inner">
+      <span class="tab-icon">🎮</span>
+      <span class="tab-label">ゲーム</span>
+    </span>
   </button>
   <button class="tab-btn" onclick="showTab('calc',this)">
-    <span class="tab-icon">🧮</span>
-    <span class="tab-label">計算機</span>
+    <span class="tab-inner">
+      <span class="tab-icon">🧮</span>
+      <span class="tab-label">計算機</span>
+    </span>
   </button>
   <button class="tab-btn" onclick="showTab('titles',this)">
-    <span class="tab-icon">🏆</span>
-    <span class="tab-label">称号</span>
+    <span class="tab-inner">
+      <span class="tab-icon">🏅</span>
+      <span class="tab-label">バッジ</span>
+    </span>
   </button>
 </nav>
 
@@ -1393,31 +1477,62 @@ const CHARS = {
 // [fromYear, fromEvent, toYear, toEvent, charKey, text]
 const ERA_COMMENTS = [
   [0,0,   0,0,   '局長',       'ようこそ！1970年から時代を旅しながら資産を育てよう！'],
-  [1970,1, 1972,4, 'えんだ',   '高度経済成長の末期！日本経済は絶好調だ！'],
-  [1973,1, 1974,4, 'カウッシー','オイルショック！石油が来ない…物価が急上昇中だ！'],
-  [1975,1, 1978,4, 'えんだ',   'ようやく落ち着いてきたね。地道に積み立てる時代だ！'],
-  [1979,1, 1980,4, 'カウッシー','第二次オイルショック！またまた石油が危ない！'],
-  [1981,1, 1984,4, 'ためぞう', '安定成長の時代。銀行預金でも着実に増えるよ。'],
-  [1985,1, 1985,4, '局長',     'プラザ合意！円高が一気に進む歴史的な転換点だ！'],
-  [1986,1, 1989,4, 'えんだ',   'バブル景気！株も不動産もどんどん上がってるよ！'],
-  [1990,1, 1991,4, 'カウッシー','バブル崩壊…。高値で買った人は大変なことになった。'],
-  [1992,1, 1997,4, 'ためぞう', '失われた時代の始まり。地道に分散投資が大切だね。'],
-  [1997,1, 1998,4, 'カウッシー','アジア通貨危機＆金融危機。銀行も危ない時代だ！'],
-  [1999,1, 2000,4, '局長',     'ITバブル！新技術への期待で株価が急騰している！'],
-  [2001,1, 2002,4, 'えんだ',   'ITバブル崩壊＆同時多発テロ。世界が揺れている。'],
-  [2003,1, 2007,4, 'ためぞう', '回復の時代。小泉改革で日本経済も底打ち感が出てきた。'],
-  [2008,1, 2009,2, 'カウッシー','リーマンショック！100年に一度の金融危機だ！'],
-  [2009,3, 2012,4, 'えんだ',   '復興の時代。あの時買った人は大きく報われたね。'],
-  [2009,3, 2009,4, '局長',     'ビットコインが誕生した年だ。仮想通貨の夜明けだよ！'],
-  [2011,1, 2011,2, 'カウッシー','東日本大震災…。日本中が支え合った時期だ。'],
-  [2013,1, 2014,4, '局長',     'アベノミクス！円安・株高が進んでいるよ！'],
-  [2015,1, 2016,4, 'ためぞう', '原油安で揺れる世界経済。ドル建て資産が面白い時代。'],
-  [2017,1, 2018,4, 'えんだ',   '仮想通貨バブル！？世界中で盛り上がっているね。'],
-  [2019,1, 2019,4, '局長',     '米中貿易摩擦。不確実な時代こそ分散が重要だ！'],
-  [2020,1, 2020,4, 'カウッシー','コロナショック！でも株は意外と早く回復したね。'],
-  [2021,1, 2022,2, 'えんだ',   'コロナ緩和相場！低金利で資産価格が大きく上昇！'],
-  [2022,3, 2023,4, 'ためぞう', 'インフレと利上げ。現金の価値が下がる時代だ。'],
-  [2024,1, 2025,4, '局長',     'AI革命の時代！株式市場も新しい局面に入っている！'],
+  [1970,1, 1970,4, 'えんだ',   '大阪万博の年！高度経済成長まっただ中。日本経済は絶好調だ！'],
+  [1971,1, 1971,4, 'カウッシー','ニクソンショック！米国が金とドルの交換を停止したよ。円高の圧力が高まっている。'],
+  [1972,1, 1972,4, 'えんだ',   '日中国交正常化！沖縄が本土に復帰した年。新しい時代の幕開けだね。'],
+  [1973,1, 1973,4, 'カウッシー','第一次オイルショック勃発！石油が突然値上がりして物価が急騰中だ。'],
+  [1974,1, 1974,4, 'カウッシー','インフレが最悪期。物価が23%も上がった！現金の価値がどんどん目減りしてるよ。'],
+  [1975,1, 1975,4, 'えんだ',   'オイルショックの傷跡が残るけど、少しずつ落ち着いてきた。地道に貯める時代だ。'],
+  [1976,1, 1976,4, 'ためぞう', 'ロッキード事件で政界が揺れている。経済は徐々に安定しつつある。'],
+  [1977,1, 1977,4, 'ためぞう', '為替は円高傾向。輸出企業は大変だけど輸入品は安くなるね。着実に積み立てよう。'],
+  [1978,1, 1978,4, 'えんだ',   '日中平和友好条約締結！アジアに新しいビジネスチャンスが生まれそう。'],
+  [1979,1, 1979,4, 'カウッシー','第二次オイルショック！イラン革命で石油価格が急騰している。'],
+  [1980,1, 1980,4, 'ためぞう', '高金利時代。銀行預金の利息が高くてお得な時期だよ！着実に預けよう。'],
+  [1981,1, 1981,4, 'ためぞう', '安定成長の入り口。財政再建が始まり、経済は落ち着いてきた。'],
+  [1982,1, 1982,4, '局長',     '中曽根内閣スタート！国鉄・電電公社の民営化が始まるぞ。改革の時代だ。'],
+  [1983,1, 1983,4, 'えんだ',   'ファミコン発売！テクノロジーが日常に入ってきた時代だね。'],
+  [1984,1, 1984,4, 'えんだ',   '日本はものづくり大国として輝いている時代。輸出が絶好調！'],
+  [1985,1, 1985,4, '局長',     'プラザ合意！一夜にして円高が進み、輸出企業に大打撃。歴史的な転換点だ。'],
+  [1986,1, 1986,4, 'えんだ',   'バブル景気スタート！株も不動産もじわじわ上がり始めているよ。'],
+  [1987,1, 1987,4, 'カウッシー','ブラックマンデー！株価が一日で大暴落。でも日本はすぐ回復したよ。'],
+  [1988,1, 1988,4, 'えんだ',   'バブル最盛期！地価も株価も天井知らず。みんなお金持ちになった気分。'],
+  [1989,1, 1989,4, '局長',     '昭和が終わり平成が始まった！バブルは頂点を迎えているよ。'],
+  [1990,1, 1990,4, 'カウッシー','バブル崩壊！日銀が急に金利を上げた。株価が急落し始めているぞ。'],
+  [1991,1, 1991,4, 'カウッシー','バブル完全崩壊。土地神話も崩れた。企業は大量の不良債権を抱えたよ。'],
+  [1992,1, 1992,4, 'ためぞう', '失われた時代の始まり。地道に分散投資が大切だね。'],
+  [1993,1, 1993,4, 'ためぞう', '55年体制崩壊！政治も経済も激動の時代。こんな時こそ安全資産だね。'],
+  [1994,1, 1994,4, 'ためぞう', '超低金利時代の始まり。銀行預金の金利がほぼゼロになったよ。'],
+  [1995,1, 1995,4, 'カウッシー','阪神淡路大震災と地下鉄サリン事件。円高も進み経済に打撃。'],
+  [1996,1, 1996,4, 'ためぞう', '住専問題発覚。不良債権処理に巨額の公的資金が使われた。'],
+  [1997,1, 1997,4, 'カウッシー','消費税5%引き上げ！アジア通貨危機も重なり景気が急悪化。'],
+  [1998,1, 1998,4, 'カウッシー','長銀・日債銀が破綻。金融システムが崩壊の危機に瀕していた。'],
+  [1999,1, 1999,4, '局長',     'ITバブル始動！世界中がインターネットに熱狂している！'],
+  [2000,1, 2000,4, '局長',     'ITバブル絶頂期！でも株価は少しずつ崩れ始めているかも？'],
+  [2001,1, 2001,4, 'カウッシー','9.11同時多発テロ、そしてITバブル崩壊。世界が震撼した。'],
+  [2002,1, 2002,4, 'ためぞう', '超デフレの時代。物価が下がり続け、企業も家計も苦しい。'],
+  [2003,1, 2003,4, 'ためぞう', '小泉改革が進む。郵政民営化への議論が盛んになってきた。'],
+  [2004,1, 2004,4, 'えんだ',   '景気回復の兆し！企業収益が改善されてきているよ。'],
+  [2005,1, 2005,4, '局長',     '郵政選挙！自民党の大勝で改革路線が加速した。'],
+  [2006,1, 2006,4, 'カウッシー','アメリカで住宅バブルが加速中。この先どうなるんだろう…。'],
+  [2007,1, 2007,4, 'カウッシー','サブプライム問題が表面化！世界の金融市場に不安が広がっている。'],
+  [2008,1, 2008,4, 'カウッシー','リーマンショック！100年に一度の金融危機。世界が凍りついた。'],
+  [2009,1, 2009,4, '局長',     'リーマン後の底値から回復し始め！そしてビットコインが誕生した年だよ！'],
+  [2010,1, 2010,4, 'ためぞう', '民主党政権下での経済運営。円高と経済停滞が続いている。'],
+  [2011,1, 2011,4, 'カウッシー','東日本大震災…。復興に向けて日本中が立ち上がった。'],
+  [2012,1, 2012,4, 'えんだ',   '日銀が異次元緩和の準備を始める。アベノミクス前夜だ！'],
+  [2013,1, 2013,4, '局長',     'アベノミクス元年！円安・株高が一気に進んでいる！'],
+  [2014,1, 2014,4, '局長',     '消費税8%に増税。でも円安効果で輸出企業は好調。仮想通貨も本格化！'],
+  [2015,1, 2015,4, 'ためぞう', '中国株式市場が大暴落！世界経済に動揺が走っている。'],
+  [2016,1, 2016,4, 'カウッシー','Brexitとトランプ当選！予想外の出来事が相次いだ。'],
+  [2017,1, 2017,4, 'えんだ',   '仮想通貨バブル！ビットコインが一年で20倍になった！'],
+  [2018,1, 2018,4, 'カウッシー','仮想通貨バブル崩壊。米国は利上げ継続で世界経済に影響が。'],
+  [2019,1, 2019,4, '局長',     '消費税10%に増税。米中貿易摩擦で先行き不透明な時代だ。'],
+  [2020,1, 2020,4, 'カウッシー','コロナショック！株が大暴落したが、意外と早く回復した。'],
+  [2021,1, 2021,4, 'えんだ',   'ワクチン普及で経済再開！低金利のおかげで資産価格が急上昇。'],
+  [2022,1, 2022,4, 'カウッシー','インフレ加速！各国が利上げ競争。円安が進んで輸入物価も上昇。'],
+  [2023,1, 2023,4, '局長',     'AI革命が始まり株式市場が熱い！日銀も緩和から正常化へ転換の兆し。'],
+  [2024,1, 2024,4, '局長',     '日銀がついに利上げ！AI・半導体相場が続く。歴史的な転換点だ。'],
+  [2025,1, 2025,4, '局長',     'AI・半導体が世界経済をリード！新しい投資機会が広がっている。'],
 ];
 
 function getCryptoLabel(row) {
@@ -1484,9 +1599,9 @@ const TITLES = [
     check: ()   => masterData[currentIndex].年 <= 1988 && masterData[currentIndex].年 >= 1970 && (holdings['株式']||0) > 0 },
   { id: 'oil_gold',     stars: 1, name: 'オイルショック乗り越え', desc: '1974年以降に金を保有',
     check: ()   => masterData[currentIndex].年 >= 1974 && (holdings['金']||0) > 0 },
-  { id: 'abenomics',    stars: 1, name: 'アベノミクス乗り',     desc: '2012年Q4に株式を保有',
+  { id: 'abenomics',    stars: 1, name: 'アベノミクス乗り',     desc: '2012年イベント4に株式を保有',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 2012 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
-  { id: 'btc_dawn',     stars: 1, name: 'BTC黎明期',            desc: '2013年Q3（BTC初登場）に即購入',
+  { id: 'btc_dawn',     stars: 1, name: 'BTC黎明期',            desc: '2013年イベント3（BTC初登場）に即購入',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 2013 && r.イベント === 3 && (holdings['？？？？？']||0) > 0; }},
   { id: 'corona_buy',   stars: 1, name: 'コロナ禍投資家',       desc: '2020年に株式を保有',
     check: ()   => masterData[currentIndex].年 === 2020 && (holdings['株式']||0) > 0 },
@@ -1508,9 +1623,9 @@ const TITLES = [
     check: tot  => { const hasSafe = (holdings['銀行預金']||0) > 0 || (holdings['国債']||0) > 0; return !hasSafe && tot >= 100_000_000; }},
   { id: 'bubble_land',  stars: 2, name: 'バブル紳士',           desc: '1989年に不動産10口以上保有',
     check: ()   => masterData[currentIndex].年 === 1989 && (holdings['不動産']||0) >= 10 },
-  { id: 'black_mon',    stars: 2, name: 'ブラックマンデー生存者', desc: '1987年Q4に株式を保有',
+  { id: 'black_mon',    stars: 2, name: 'ブラックマンデー生存者', desc: '1987年イベント4に株式を保有',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 1987 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
-  { id: 'lehman',       stars: 2, name: 'リーマン生存者',       desc: '2008年Q4に株式を保有して生き残る',
+  { id: 'lehman',       stars: 2, name: 'リーマン生存者',       desc: '2008年イベント4に株式を保有して生き残る',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 2008 && r.イベント === 4 && (holdings['株式']||0) > 0; }},
   { id: 'nikkei_ath',   stars: 2, name: '史上最高値の時代',     desc: '2024年以降・株式を100口以上保有',
     check: ()   => masterData[currentIndex].年 >= 2024 && (holdings['株式']||0) >= 100 },
@@ -1532,11 +1647,11 @@ const TITLES = [
     check: ()   => { const r = masterData[currentIndex]; return (holdings['？？？？？']||0)*(r['？？？？？']||0) >= 100_000_000; }},
   { id: 'kausshi_all',  stars: 3, name: 'カウッシーの欲望',     desc: '全8資産を各10口以上保有',
     check: ()   => ASSET_KEYS.every(a => (holdings[a.id]||0) >= 10) },
-  { id: 's3_bub90',     stars: 3, name: '★★★ バブル崩壊',      desc: '1990年Q2・株式10口以上保有したまま耐える',
+  { id: 's3_bub90',     stars: 3, name: '★★★ バブル崩壊',      desc: '1990年イベント2・株式10口以上保有したまま耐える',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 1990 && r.イベント === 2 && (holdings['株式']||0) >= 10; }},
-  { id: 's3_lem08',     stars: 3, name: '★★★ リーマンショック', desc: '2008年Q4・株式20口以上保有したまま生き残る',
+  { id: 's3_lem08',     stars: 3, name: '★★★ リーマンショック', desc: '2008年イベント4・株式20口以上保有したまま生き残る',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 2008 && r.イベント === 4 && (holdings['株式']||0) >= 20; }},
-  { id: 's3_cov20',     stars: 3, name: '★★★ コロナ底値',      desc: '2020年Q2・株式10口以上保有して底値を掴む',
+  { id: 's3_cov20',     stars: 3, name: '★★★ コロナ底値',      desc: '2020年イベント2・株式10口以上保有して底値を掴む',
     check: ()   => { const r = masterData[currentIndex]; return r.年 === 2020 && r.イベント === 2 && (holdings['株式']||0) >= 10; }},
   { id: 'ouru_cert',    stars: 3, name: '局長認定投資家',       desc: '全8資産保有かつ配当/ターン50万以上',
     check: ()   => { if (!ASSET_KEYS.every(a => (holdings[a.id]||0) > 0)) return false; const r = masterData[currentIndex]; let d = 0; ASSET_KEYS.forEach(a => { if (a.divKey) d += (holdings[a.id]||0)*(r[a.divKey]||0); }); return d >= 500_000; }},
@@ -1553,7 +1668,9 @@ let step = 1;
 let currentIndex = 0;
 let pendingSell = 0;        // 不動産売り注文中の口数
 let history = [];           // Undoスタック (最大30件)
-let unlockedTitles = new Set();
+let unlockedTitles   = new Set();
+let portfolioHistory = [];
+let graphMode        = 'price';
 
 const EVENT_LABELS = ['', 'Q1', 'Q2', 'Q3', 'Q4'];
 
@@ -1604,7 +1721,7 @@ function updateEventOptions() {
   for (let e = 1; e <= 4; e++) {
     const o = document.createElement('option');
     o.value = e;
-    o.textContent = `E${e} ${EVENT_LABELS[e]}`;
+    o.textContent = `イベント${e}`;
     selE.appendChild(o);
   }
 }
@@ -1739,7 +1856,7 @@ function updateDisplay() {
   document.getElementById('timeLabel').textContent =
     row.年 === 0
       ? 'チュートリアル'
-      : `${row.年}年 イベント${row.イベント} ${EVENT_LABELS[row.イベント]}`;
+      : `${row.年}年 イベント${row.イベント}`;
 
   let total = 0, divT = 0;
   ASSET_KEYS.forEach(a => {
@@ -1820,8 +1937,12 @@ function updateDisplay() {
   document.getElementById('btnPrev').disabled = currentIndex <= 0;
   document.getElementById('btnNext').disabled = currentIndex >= masterData.length - 1;
 
-  // グラフ・称号チェック・比較カード更新・キャラセリフ
+  // 記録・グラフ・称号チェック・比較カード更新・キャラセリフ
+  recordPortfolio();
   drawGraph();
+  if (graphMode === 'portfolio' && document.getElementById('tab-graph').classList.contains('active')) {
+    drawPortfolioGraph();
+  }
   checkTitles(total);
   renderCompare();
   renderTitles();
@@ -1844,6 +1965,85 @@ function doSim() {
   const yPct   = (price > 0 && divPer > 0) ? ((divPer * 4 / price) * 100).toFixed(2) : '—';
   document.getElementById('simResult').textContent =
     `購入コスト  : ${fmt(cost)} 円\n配当(1ターン): ${fmt(divAmt)} 円\n配当(年間)  : ${fmt(divAmt * 4)} 円\n利回り目安  : ${yPct} %`;
+}
+
+// ============================================================
+// PORTFOLIO GRAPH
+// ============================================================
+function recordPortfolio() {
+  const row = masterData[currentIndex];
+  if (!row || row.年 === 0) return;
+  const snap = { idx: currentIndex, 年: row.年, イベント: row.イベント, values: {}, total: 0 };
+  ASSET_KEYS.forEach(a => {
+    const val = (holdings[a.id] || 0) * (row[a.id] || 0);
+    snap.values[a.id] = val;
+    snap.total += val;
+  });
+  const ei = portfolioHistory.findIndex(h => h.idx === currentIndex);
+  if (ei >= 0) portfolioHistory[ei] = snap;
+  else { portfolioHistory.push(snap); portfolioHistory.sort((a, b) => a.idx - b.idx); }
+}
+
+function drawPortfolioGraph() {
+  const svg    = document.getElementById('portfolioSvg');
+  const legend = document.getElementById('portfolioLegend');
+  const labels = document.getElementById('portfolioLabels');
+  const W = 600, H = 200, PX = 8, PY = 10;
+
+  const hist = portfolioHistory;
+  if (hist.length < 2) {
+    svg.innerHTML = `<text x="300" y="100" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="14" font-family="sans-serif">資産を購入すると表示されます</text>`;
+    legend.innerHTML = ''; labels.innerHTML = '';
+    document.getElementById('portfolioTotal').textContent = '─';
+    return;
+  }
+
+  const maxTot = Math.max(...hist.map(h => h.total)) || 1;
+  const n = hist.length;
+  const toX = i => PX + (i / (n - 1)) * (W - 2 * PX);
+  const toY = v => PY + (1 - v / maxTot) * (H - 2 * PY);
+
+  const assetsWithValue = ASSET_KEYS.filter(a => hist.some(h => h.values[a.id] > 0));
+  let svgContent = '';
+
+  for (let ai = assetsWithValue.length - 1; ai >= 0; ai--) {
+    const pts = [];
+    for (let i = 0; i < n; i++) {
+      let cum = 0;
+      for (let j = 0; j <= ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
+      pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
+    }
+    for (let i = n - 1; i >= 0; i--) {
+      let cum = 0;
+      for (let j = 0; j < ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
+      pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
+    }
+    svgContent += `<polygon points="${pts.join(' ')}" fill="${assetsWithValue[ai].color}" opacity="0.75"/>`;
+  }
+
+  const topPts = hist.map((h, i) => `${toX(i).toFixed(1)},${toY(h.total).toFixed(1)}`).join(' ');
+  svgContent += `<polyline points="${topPts}" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linejoin="round"/>`;
+  svg.innerHTML = svgContent;
+
+  const sH = hist[0], eH = hist[n - 1], mH = hist[Math.floor(n / 2)];
+  labels.innerHTML = `<span>${sH.年}年</span><span>${mH.年}年</span><span>${eH.年}年</span>`;
+  document.getElementById('portfolioTotal').textContent = fmt(eH.total) + '円';
+  legend.innerHTML = assetsWithValue.map(a =>
+    `<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:rgba(255,255,255,0.75)">
+      <div style="width:8px;height:8px;border-radius:50%;background:${a.color};flex-shrink:0"></div>
+      <span>${a.emoji}</span>
+    </div>`
+  ).join('');
+}
+
+function setGraphMode(mode, btn) {
+  graphMode = mode;
+  document.querySelectorAll('.graph-mode-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('graphModePrice').style.display     = mode === 'price'     ? '' : 'none';
+  document.getElementById('graphModePortfolio').style.display = mode === 'portfolio' ? '' : 'none';
+  if (mode === 'portfolio') drawPortfolioGraph();
+  else { drawGraph(); renderCompare(); }
 }
 
 // ============================================================
@@ -1953,7 +2153,7 @@ function checkTitles(total) {
       if (t.check(total)) {
         unlockedTitles.add(t.id);
         const prize = PRIZE[t.stars];
-        showToast(`🏆 称号解除！「${t.name}」 +${fmt(prize)}円`);
+        showToast(`🏅 バッジ獲得！「${t.name}」 +${fmt(prize)}円`);
       }
     } catch(e) {}
   });
@@ -1962,7 +2162,7 @@ function checkTitles(total) {
 function renderTitles() {
   if (!document.getElementById('tab-titles').classList.contains('active')) return;
   const unlocked = unlockedTitles.size;
-  document.getElementById('titlesSummary').textContent = `${unlocked} / ${TITLES.length} 解除済み`;
+  document.getElementById('titlesSummary').textContent = `${unlocked} / ${TITLES.length} バッジ獲得`;
   let html = '';
   const censor = s => s.replace(/？？？？？/g, '<span class="censored">？？？？？</span>');
   TITLES.forEach(t => {
@@ -1985,7 +2185,10 @@ function showTab(name, btn) {
   document.getElementById('tab-' + name).classList.add('active');
   if (btn) btn.classList.add('active');
   if (name === 'titles') renderTitles();
-  if (name === 'graph')  { drawGraph(); renderCompare(); }
+  if (name === 'graph') {
+    if (graphMode === 'portfolio') drawPortfolioGraph();
+    else { drawGraph(); renderCompare(); }
+  }
 }
 
 // ============================================================
