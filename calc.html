@@ -813,12 +813,33 @@ body {
   padding: 12px;
   margin-bottom: 10px;
 }
+/* ─── Preset grid (関数電卓プリセット行) ──────────────── */
+.calc-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 5px;
+}
+.ckey-pre {
+  background: rgba(245,200,66,0.07);
+  color: var(--gold);
+  border-color: rgba(245,200,66,0.2);
+  font-size: 11px !important;
+  padding: 8px 2px !important;
+  font-family: 'Dela Gothic One',sans-serif;
+}
+.ckey-pre:hover { background: rgba(245,200,66,0.16); }
+.ckey-pre-wide { grid-column: span 2; }
+.calc-section-div {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  margin: 5px 0 6px;
+}
 .wc-to-cash-btn {
   width: 100%; margin-top: 10px;
   background: rgba(46,204,113,0.15); color: #2ecc71;
   border: 1.5px solid rgba(46,204,113,0.5);
-  border-radius: 10px; padding: 13px;
-  font-size: 15px; font-weight: 900;
+  border-radius: 10px; padding: 12px;
+  font-size: 14px; font-weight: 900;
   font-family: 'Dela Gothic One',sans-serif;
   cursor: pointer; transition: all 0.12s;
 }
@@ -827,7 +848,7 @@ body {
   width: 100%; margin-top: 6px;
   background: rgba(91,200,232,0.08); color: var(--sky);
   border: 1px solid rgba(91,200,232,0.3);
-  border-radius: 8px; padding: 8px;
+  border-radius: 8px; padding: 7px;
   font-size: 11px; font-weight: 700;
   cursor: pointer; font-family: 'Zen Maru Gothic',sans-serif;
   text-align: center; transition: all 0.1s;
@@ -1394,27 +1415,25 @@ body {
         <span class="wh-balance" id="cashDisplay">💴 ¥ 0</span>
         <button class="wh-reset-btn" onclick="resetCash()">リセット</button>
       </div>
-      <div class="wh-input-row">
-        <input type="number" id="cashInput" inputmode="numeric" placeholder="金額（例: 1000）">
-        <button class="wh-op-btn plus"  onclick="applyFromInput(1)">＋</button>
-        <button class="wh-op-btn minus" onclick="applyFromInput(-1)">－</button>
-      </div>
-      <div class="wh-chips">
-        <button class="sqp" onclick="setCashInput(1000)">1千</button>
-        <button class="sqp" onclick="setCashInput(5000)">5千</button>
-        <button class="sqp" onclick="setCashInput(10000)">1万</button>
-        <button class="sqp" onclick="setCashInput(50000)">5万</button>
-        <button class="sqp" onclick="setCashInput(100000)">10万</button>
-        <button class="sqp" onclick="setCashInput(500000)">50万</button>
-        <button class="sqp" onclick="setCashInput(1000000)">100万</button>
-        <button class="sqp" onclick="setCashInput(5000000)">500万</button>
-        <button class="sqp" onclick="setCashInput(10000000)">1000万</button>
-      </div>
     </div>
 
-    <!-- ── 電卓（メイン） ── -->
+    <!-- ── 電卓（メイン・関数電卓スタイル） ── -->
     <div class="wallet-calc-card">
       <div class="calc-disp" id="calcDisp">0</div>
+      <!-- プリセット行 -->
+      <div class="calc-preset-grid">
+        <button class="ckey ckey-pre" onclick="cSet(1000)">1千</button>
+        <button class="ckey ckey-pre" onclick="cSet(5000)">5千</button>
+        <button class="ckey ckey-pre" onclick="cSet(10000)">1万</button>
+        <button class="ckey ckey-pre" onclick="cSet(50000)">5万</button>
+        <button class="ckey ckey-pre" onclick="cSet(100000)">10万</button>
+        <button class="ckey ckey-pre" onclick="cSet(500000)">50万</button>
+        <button class="ckey ckey-pre" onclick="cSet(1000000)">100万</button>
+        <button class="ckey ckey-pre" onclick="cSet(5000000)">500万</button>
+        <button class="ckey ckey-pre ckey-pre-wide" onclick="cSet(10000000)">1000万</button>
+      </div>
+      <div class="calc-section-div"></div>
+      <!-- 通常キー -->
       <div class="calc-keys">
         <button class="ckey cl"        onclick="cClear()">C</button>
         <button class="ckey bk"        onclick="cBack()">⌫</button>
@@ -1436,9 +1455,8 @@ body {
         <button class="ckey"           onclick="cDot()">．</button>
         <button class="ckey eq"        onclick="cSolve()">=</button>
       </div>
-      <!-- 現金に加算ボタン：残高バナーのすぐ下に配置 -->
-      <button class="wc-to-cash-btn" onclick="calcToCash()">💴 計算結果を現金に加算</button>
-      <button class="calc-to-sim"    onclick="calcToSim()">→ この値をシミュの口数に反映</button>
+      <button class="wc-to-cash-btn" onclick="calcToCash()">💴 現金に加算</button>
+      <button class="calc-to-sim"    onclick="calcToSim()">→ シミュの口数に反映</button>
     </div>
 
     <!-- ── サブツール ── -->
@@ -3333,6 +3351,7 @@ function cSolve(reset = true) {
 
 function cClear() { cBuf = '0'; cOpr = null; cPrev = null; cNew = false; cDisp(); }
 function cBack()  { cBuf = cBuf.length > 1 ? cBuf.slice(0, -1) : '0'; cDisp(); }
+function cSet(v)  { cBuf = String(v); cOpr = null; cPrev = null; cNew = true; cDisp(); }
 
 // ============================================================
 // AUTO-SAVE
