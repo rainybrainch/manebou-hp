@@ -44,7 +44,7 @@ body {
 }
 
 /* ─── Nav ────────────────────────────────────────────────── */
-nav {
+.top-nav {
   position: fixed;
   top: 0;
   left: 0;
@@ -816,7 +816,6 @@ nav {
 /* ─── Bottom Nav ─────────────────────────────────────────── */
 .bottom-nav {
   position: fixed;
-  top: auto;
   bottom: 0;
   left: 0;
   right: 0;
@@ -825,13 +824,9 @@ nav {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 2px solid var(--gold);
-  border-bottom: none;
-  padding: 0;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
   display: flex;
-  justify-content: stretch;
-  align-items: stretch;
   height: 60px;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .tab-btn {
@@ -865,7 +860,7 @@ nav {
 </head>
 <body>
 
-<nav>
+<nav class="top-nav">
   <span class="nav-spacer"></span>
   <span class="nav-title">計算機ツール</span>
   <span class="nav-spacer"></span>
