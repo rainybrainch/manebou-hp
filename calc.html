@@ -2101,6 +2101,45 @@ body {
   .tab-btn { max-width: none; }
 }
 
+/* ─── Ending Screen ─────────────────────────────────────── */
+.ending-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(10,10,30,0.92); backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+.ending-overlay.show { opacity: 1; pointer-events: all; }
+.ending-card {
+  background: linear-gradient(160deg, #1a1a2e 0%, #2a1a4e 100%);
+  border: 2px solid var(--gold); border-radius: 24px;
+  padding: 32px 24px 28px; max-width: 340px; width: 90%;
+  text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+  animation: ending-pop 0.5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes ending-pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.ending-label { font-size: 11px; letter-spacing: 4px; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+.ending-title { font-family: 'Dela Gothic One', sans-serif; font-size: 20px; color: #fff; line-height: 1.4; margin-bottom: 16px; }
+.ending-char img { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--gold); object-fit: cover; object-position: top; margin-bottom: 16px; }
+.ending-rank-wrap { margin-bottom: 20px; }
+.ending-rank-label { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 2px; margin-bottom: 4px; }
+.ending-rank { font-family: 'Dela Gothic One', sans-serif; font-size: 28px; }
+.ending-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 24px; }
+.ending-stat { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 6px; }
+.ending-stat-label { font-size: 9px; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
+.ending-stat-val { font-family: 'Dela Gothic One', sans-serif; font-size: 13px; color: var(--gold); }
+.ending-btn-primary {
+  width: 100%; padding: 14px; background: var(--gold); color: var(--dark);
+  border: none; border-radius: 12px; font-family: 'Dela Gothic One', sans-serif;
+  font-size: 15px; cursor: pointer; margin-bottom: 10px;
+  box-shadow: 0 4px 0 var(--gold-dark); transition: transform 0.08s, box-shadow 0.08s;
+}
+.ending-btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--gold-dark); }
+.ending-btn-secondary {
+  width: 100%; padding: 11px; background: none;
+  border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px;
+  color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer;
+}
+
 /* ─── Firebase Auth UI ───────────────────────────────────── */
 .nav-auth-wrap { margin-left: auto; flex-shrink: 0; display: flex; align-items: center; }
 .nav-auth-btn {
@@ -4558,6 +4597,10 @@ function updateDisplay() {
   renderTitles();
   updateCharSpeech(row.年, row.イベント);
   saveGame();
+  // 2025年イベント4 = ゲーム完走
+  if (currentIndex >= masterData.length - 1) {
+    setTimeout(showEnding, 1200);
+  }
 }
 
 // ============================================================
@@ -6101,6 +6144,72 @@ window.addEventListener('DOMContentLoaded', function() {
     }
   }, 800);
 });
+// ============================================================
+// ENDING SCREEN
+// ============================================================
+const RANKS = [
+  { min: 100_0000_0000, label: '👑 伝説',   color: '#e040fb' },
+  { min:  10_0000_0000, label: '💎 資産家', color: '#f5c842' },
+  { min:   1_0000_0000, label: '🏆 億り人', color: '#f5c842' },
+  { min:      3000_0000, label: '🏦 ベテラン', color: '#5bc8e8' },
+  { min:       500_0000, label: '💼 中堅',  color: '#4caf7d' },
+  { min:             0,  label: '🌱 初心者', color: '#aaa'    },
+];
+function getEndingRank(total) {
+  return RANKS.find(r => total >= r.min) || RANKS[RANKS.length - 1];
+}
+
+function showEnding() {
+  const total   = _calcTotalAssets();
+  const rank    = getEndingRank(total);
+  const badges  = unlockedTitles.size;
+  const el      = document.getElementById('endingOverlay');
+  if (!el) return;
+
+  document.getElementById('endRank').textContent  = rank.label;
+  document.getElementById('endRank').style.color  = rank.color;
+  document.getElementById('endTotal').textContent = fmt(total) + '円';
+  document.getElementById('endBadges').textContent = badges + ' / ' + TITLES.length + ' 個';
+  document.getElementById('endCash').textContent  = fmt(cashBalance) + '円';
+
+  el.classList.add('show');
+  if (_fbUser) cloudSaveNow(true);
+}
+
+function closeEnding() {
+  const el = document.getElementById('endingOverlay');
+  if (el) el.classList.remove('show');
+}
 </script>
+
+<!-- ═══ ENDING OVERLAY ══════════════════════════════════════ -->
+<div id="endingOverlay" class="ending-overlay">
+  <div class="ending-card">
+    <div class="ending-label">🏁 GAME CLEAR</div>
+    <div class="ending-title">1970〜2025年<br>完走おめでとう！</div>
+    <div class="ending-char"><img src="images/img5.webp" alt="おーる局長"></div>
+    <div class="ending-rank-wrap">
+      <div class="ending-rank-label">投資家ランク</div>
+      <div class="ending-rank" id="endRank">🌱 初心者</div>
+    </div>
+    <div class="ending-stats">
+      <div class="ending-stat">
+        <div class="ending-stat-label">最終総資産</div>
+        <div class="ending-stat-val" id="endTotal">---</div>
+      </div>
+      <div class="ending-stat">
+        <div class="ending-stat-label">現金残高</div>
+        <div class="ending-stat-val" id="endCash">---</div>
+      </div>
+      <div class="ending-stat">
+        <div class="ending-stat-label">獲得バッジ</div>
+        <div class="ending-stat-val" id="endBadges">0</div>
+      </div>
+    </div>
+    <button class="ending-btn-primary" onclick="closeEnding()">結果を確認する</button>
+    <button class="ending-btn-secondary" onclick="closeEnding();showTab('titles',null)">バッジを見る</button>
+  </div>
+</div>
+
 </body>
 </html>
