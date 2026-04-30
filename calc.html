@@ -369,21 +369,27 @@ body {
   gap: 8px;
 }
 
-.value-block { text-align: center; }
+.value-block { text-align: center; min-width: 0; overflow: hidden; }
 
 .value-block-lbl {
   font-size: 9px;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   color: rgba(255, 255, 255, 0.4);
   display: block;
   margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .value-block-num {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: clamp(20px, 5vw, 28px);
+  font-size: clamp(14px, 4vw, 24px);
   display: block;
   line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .value-block-unit {
@@ -452,7 +458,7 @@ body {
   background: var(--cream);
   border: 3px solid var(--dark);
   border-radius: 14px;
-  padding: 0;
+  padding: 10px 11px 8px;
   cursor: pointer;
   overflow: hidden;
   box-shadow: 0 7px 0 rgba(0,0,0,0.45);
@@ -460,25 +466,56 @@ body {
   transition: transform 0.08s ease, box-shadow 0.08s ease;
   text-align: left;
   -webkit-tap-highlight-color: transparent;
+  display: flex;
+  flex-direction: column;
 }
 .asset-btn:hover          { transform: translateY(-3px); box-shadow: 0 10px 0 rgba(0,0,0,0.35); }
 .asset-btn:active         { transform: translateY(6px);  box-shadow: 0 1px  0 rgba(0,0,0,0.45); }
 .asset-btn:disabled       { opacity: 0.42; cursor: not-allowed; filter: grayscale(0.5); box-shadow: none; }
 .asset-btn:disabled:hover { transform: none; box-shadow: none; }
 
-.asset-top {
-  position: relative;
-  padding: 10px 12px 8px;
+/* New card layout */
+.a-card-top {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #fff;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 4px;
+  margin-bottom: 5px;
 }
-
-.a-emoji { font-size: 26px; line-height: 1; flex-shrink: 0; }
-.a-name  { font-family: 'Dela Gothic One', sans-serif; font-size: 14px; line-height: 1.2; }
-
-.asset-body { padding: 7px 12px 10px; background: var(--cream); }
+.a-name-lbl {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: clamp(10px, 3vw, 13px);
+  color: var(--dark);
+  line-height: 1.25;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.a-qty-num {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: clamp(20px, 5vw, 26px);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.a-price-lbl {
+  font-size: clamp(9px, 2.5vw, 12px);
+  color: #666;
+  display: block;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.a-cart-row {
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 3px;
+  display: block;
+}
 
 .btn-bond-locked {
   opacity: 0.42;
@@ -486,11 +523,12 @@ body {
   cursor: not-allowed;
 }
 
+/* Keep .a-price for any legacy usage */
 .a-price {
-  font-size: 14px;
-  color: #555;
+  font-size: clamp(9px, 2.5vw, 12px);
+  color: #666;
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .a-div {
@@ -536,31 +574,6 @@ body {
   animation: ticker-slide 3.5s linear forwards;
 }
 .asset-btn-owned { border-color: var(--green); }
-.a-owned-badge {
-  position: absolute;
-  top: 5px;
-  right: 6px;
-  background: rgba(0,0,0,0.38);
-  color: #fff;
-  font-size: 8px;
-  font-weight: 700;
-  padding: 2px 5px;
-  border-radius: 6px;
-  line-height: 1.4;
-}
-
-/* Cart badge on asset button */
-.a-cart-badge {
-  position: absolute;
-  bottom: 4px;
-  left: 6px;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 5px;
-  border-radius: 6px;
-  line-height: 1.4;
-  background: rgba(0,0,0,0.45);
-}
 .asset-btn-cart-buy  { border-color: var(--gold) !important; }
 .asset-btn-cart-sell { border-color: var(--sky)  !important; }
 
@@ -622,19 +635,6 @@ body {
   margin-top: 2px;
 }
 
-.a-qty {
-  font-family: 'Dela Gothic One', sans-serif;
-  font-size: 17px;
-  color: var(--dark);
-  display: block;
-}
-.a-hold {
-  font-family: 'Zen Maru Gothic', sans-serif;
-  font-size: 10px;
-  color: rgba(0,0,0,0.48);
-  display: block;
-  margin-top: 1px;
-}
 .a-spark {
   display: block;
   width: 100%;
@@ -1681,20 +1681,18 @@ body {
 .hold-item    { padding: 4px 8px; font-size: 13px; }
 .hold-item-val { font-size: 12px; }
 .value-divider { margin: 6px 0; }
-.value-block-lbl { font-size: 10px; margin-bottom: 3px; }
-.value-block-num { font-size: clamp(16px, 4vw, 22px); }
+.value-block-lbl { font-size: 9px; margin-bottom: 3px; }
+.value-block-num { font-size: clamp(13px, 3.5vw, 20px); }
 .action-row   { margin-bottom: 8px; }
 .btn-reset    { padding: 8px; font-size: 12px; }
 
 .asset-grid   { grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 8px; }
-.asset-top    { padding: 6px 5px 4px; gap: 3px; }
-.a-emoji      { font-size: 15px; }
-.a-name       { font-size: 9px; line-height: 1.1; }
-.asset-body   { padding: 3px 5px 5px; }
-.a-price      { font-size: 8px; margin-bottom: 1px; }
+.asset-btn    { padding: 7px 8px 6px; }
+.a-card-top   { margin-bottom: 3px; }
+.a-name-lbl   { font-size: clamp(9px, 2.5vw, 11px); }
+.a-qty-num    { font-size: clamp(17px, 4.5vw, 22px); }
+.a-price-lbl  { font-size: 8px; }
 .a-div        { font-size: 8px; margin-bottom: 1px; }
-.a-qty        { font-size: 15px; }
-.a-hold       { font-size: 9px; }
 
 /* ─── Compact Char Speech ────────────────────────────────── */
 .char-speech-mini {
@@ -1840,6 +1838,97 @@ body {
   animation: navSideTick 2.8s cubic-bezier(0.25,0,0.5,1) forwards;
 }
 
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE LAYOUT
+   ─ mobile  : < 768px  (default, 680px max)
+   ─ tablet  : 768–1023px
+   ─ desktop : 1024px+
+   ═══════════════════════════════════════════════════ */
+
+/* Column containers — stacked on mobile by default */
+.game-col-left  { min-width: 0; }
+.game-col-right { min-width: 0; }
+
+/* ── Tablet (768px+) ─────────────────────────────── */
+@media (min-width: 768px) {
+  .top-nav, .bottom-nav { max-width: 960px; }
+  .wrap { max-width: 960px; padding-left: 24px; padding-right: 24px; }
+
+  #tab-game {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  .game-col-right {
+    position: sticky;
+    top: 72px;
+  }
+
+  .asset-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+
+  /* Data tab: 2 columns */
+  .data-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .data-col-left, .data-col-right { min-width: 0; }
+
+  /* Titles: 2-column badge grid */
+  #titlesGrid { column-count: 2; column-gap: 12px; }
+  #titlesGrid .title-row { break-inside: avoid; }
+
+  /* Wider bottom-nav tabs */
+  .tab-btn { font-size: 11px; }
+}
+
+/* ── Desktop (1024px+) ───────────────────────────── */
+@media (min-width: 1024px) {
+  .top-nav, .bottom-nav { max-width: 1240px; }
+  .wrap { max-width: 1240px; padding-left: 40px; padding-right: 40px; }
+
+  /* Bottom nav: tabs don't over-stretch */
+  .bottom-nav { justify-content: center; gap: 0; padding-left: 40px; padding-right: 40px; }
+  .tab-btn { flex: 0 1 140px; max-width: 140px; }
+
+  /* Game tab: bigger left column */
+  #tab-game { grid-template-columns: 1fr 1.2fr; gap: 24px; }
+
+  /* Card sizing */
+  .asset-btn   { border-radius: 16px; padding: 12px 13px 10px; }
+  .a-name-lbl  { font-size: 13px; }
+  .a-qty-num   { font-size: 28px; }
+  .a-price-lbl { font-size: 11px; }
+
+  /* Value nums: more breathing room */
+  .value-block-num { font-size: clamp(18px, 2.2vw, 26px); }
+
+  /* Step buttons: larger tap targets */
+  .step-btn { padding: 10px 8px; font-size: 13px; }
+
+  /* Chart tab: bigger canvas area */
+  #myChart, #myChart2, #portfolioChart { height: 340px !important; }
+
+  /* Top nav: increase height slightly for PC */
+  .top-nav { padding: 12px 24px; }
+  .nav-char { width: 32px; height: 32px; }
+  .nav-title { font-size: 16px; }
+
+  /* Badge grid: 3 columns */
+  #titlesGrid { column-count: 3; }
+
+  /* bottom nav labels */
+  .tab-btn { font-size: 12px; gap: 3px; }
+  .tab-btn svg, .tab-btn .tb-icon { font-size: 24px; }
+
+  /* Data tab: 2-col layout handled in 768px+ */
+}
+
+/* ── Large desktop (1400px+) ─────────────────────── */
+@media (min-width: 1400px) {
+  .top-nav, .bottom-nav { max-width: 1440px; }
+  .wrap { max-width: 1440px; }
+  .asset-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  #tab-game { grid-template-columns: 1fr 1.3fr; gap: 28px; }
+}
+
 </style>
 </head>
 <body>
@@ -1860,6 +1949,7 @@ body {
 
   <!-- ════ TAB: GAME ════ -->
   <div id="tab-game" class="tab-page active">
+    <div class="game-col-left">
 
     <!-- CHAR SPEECH (compact) -->
     <div class="char-speech-mini">
@@ -1911,6 +2001,8 @@ body {
       </div>
     </div>
 
+    </div><!-- /game-col-left -->
+    <div class="game-col-right">
     <!-- ASSET BUTTONS -->
     <div class="asset-grid" id="btnWrap"></div>
 
@@ -1946,6 +2038,7 @@ body {
       </div>
     </div>
 
+    </div><!-- /game-col-right -->
   </div><!-- /tab-game -->
 
   <!-- ════ TAB: お財布 ════ -->
@@ -1968,6 +2061,8 @@ body {
       </div>
     </div>
 
+    <div class="data-cols">
+    <div class="data-col-left">
     <!-- ── 計算機 ── -->
     <div class="wallet-section-label">🧮 計算機</div>
     <div class="wallet-calc-card">
@@ -2010,6 +2105,8 @@ body {
       <button class="wc-to-cash-btn" onclick="calcToCash()">💴 現金に加算</button>
     </div>
 
+    </div><!-- /data-col-left -->
+    <div class="data-col-right">
     <!-- ── サブツール ── -->
     <div class="wallet-tools-sep">サブツール</div>
     <div class="calc-subtabs">
@@ -2056,6 +2153,8 @@ body {
         </div>
       </div>
     </div>
+    </div><!-- /data-col-right -->
+    </div><!-- /data-cols -->
 
   </div><!-- /tab-data -->
 
@@ -3436,7 +3535,6 @@ function setStep(n, btn) {
   step = n;
   document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  updateDisplay();
 }
 
 // ─── History ─────────────────────────────────────────────────
@@ -4038,42 +4136,32 @@ function updateDisplay() {
             ? '<span style="display:block;font-size:8px;color:#ff9999">上限3個</span>' : '')
       : '';
     const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row) : a.label;
-    const stepAbs = Math.abs(step);
-    const stepSign = step > 0 ? '＋' : '－';
-    const stepQtyColor = step > 0 ? '#27ae60' : '#e74c3c';
-    const holdQty = holdings[a.id] || 0;
-    const holdStr = a.id === '？？？？？'
-      ? `保有 ${holdQty}/3個`
-      : `保有 ${holdQty}個`;
+    const cartEntry = pendingCart[a.id];
+    const ownedQty  = holdings[a.id] || 0;
+    const qtyColor  = ownedQty > 0 ? 'var(--green)' : 'rgba(0,0,0,0.22)';
     const divRaw = (a.divKey && ok) ? (row[a.divKey] || 0) : 0;
     const divPerUnit = divRaw !== 0 ? calcDiv(divRaw, 1) : 0;
     const divYield = (divRaw !== 0 && price > 0) ? ((divPerUnit * 4) / price * 100).toFixed(1) : null;
     const divLine = divRaw !== 0
-      ? `<span class="a-div">💰 +${fmt(divPerUnit)}円/個${divYield ? ' · ' + divYield + '%/年' : ''}</span>`
-      : `<span class="a-div" style="visibility:hidden">─</span>`;
+      ? `<span class="a-div">💰 +${fmt(divPerUnit)}円${divYield ? ' · ' + divYield + '%' : ''}</span>`
+      : '';
     const spark = ok ? makeSparkline(a.id, a.color) : '';
-    const ownedQty = holdings[a.id] || 0;
-    const ownedBadge = ownedQty > 0 ? '<span class="a-owned-badge">✓</span>' : '';
-    const cartEntry = pendingCart[a.id];
     const cartBadge = cartEntry
-      ? `<span class="a-cart-badge" style="color:${cartEntry.dir>0?'var(--gold)':'#f77'}">` +
-        (cartEntry.dir > 0 ? '+' : '-') + cartEntry.qty + '個</span>'
+      ? `<span class="a-cart-row" style="color:${cartEntry.dir>0?'var(--gold)':'#e74c3c'}">`
+        + (cartEntry.dir > 0 ? '＋' : '－') + cartEntry.qty + '個 カート中</span>'
       : '';
     btn.classList.toggle('asset-btn-owned',    ownedQty > 0);
     btn.classList.toggle('asset-btn-cart-buy',  !!(cartEntry && cartEntry.dir > 0));
     btn.classList.toggle('asset-btn-cart-sell', !!(cartEntry && cartEntry.dir < 0));
-    btn.innerHTML = `<div class="asset-top" style="background:${a.color}">
-      <span class="a-emoji">${a.emoji}</span>
-      <span class="a-name">${displayLabel}</span>
-      ${ownedBadge}${cartBadge}
+    btn.innerHTML = `<div class="a-card-top">
+      <span class="a-name-lbl">${a.emoji} ${displayLabel}</span>
+      <span class="a-qty-num" style="color:${qtyColor}">${ownedQty}</span>
     </div>
-    <div class="asset-body">
-      <span class="a-price">${ok ? fmt(price) + '円/個' : '─ 未登場 ─'}${cryptoNote}</span>
-      ${divLine}
-      <span class="a-qty" style="color:${stepQtyColor}">${stepSign}${stepAbs}個</span>
-      <span class="a-hold">${holdStr}${orderInfo}</span>
-      ${spark}
-    </div>`;
+    <span class="a-price-lbl">${ok ? '単価: ' + fmt(price) + '円' : '─ 未登場 ─'}${cryptoNote}</span>
+    ${divLine}
+    ${orderInfo}
+    ${cartBadge}
+    ${spark}`;
   });
 
   document.getElementById('btnPrev').disabled = currentIndex <= 0;
