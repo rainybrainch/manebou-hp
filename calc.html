@@ -406,13 +406,19 @@ body {
 .step-section {
   margin-bottom: 14px;
   animation: fadeUp 0.7s ease 0.2s both;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 10px 12px 12px;
 }
 
 .step-lbl {
   font-size: 10px;
-  letter-spacing: 3px;
-  color: rgba(255, 255, 255, 0.35);
-  margin-bottom: 7px;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .step-row {
@@ -591,17 +597,40 @@ body {
   border-top: 2px solid var(--gold);
   padding: 8px 16px;
   display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+}
+.cart-top-row {
+  display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+}
+.cart-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 .cart-items {
   flex: 1;
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(255,255,255,0.85);
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cart-item-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   white-space: nowrap;
-  text-overflow: ellipsis;
+}
+.cart-summary {
+  font-size: 12px;
+  font-weight: 700;
+  flex: 1;
   min-width: 0;
 }
 .cart-cancel-btn {
@@ -1668,7 +1697,7 @@ body {
 
 /* ─── Compact Game Tab ───────────────────────────────────── */
 .date-bar     { padding: 8px 12px; margin-bottom: 8px; }
-.date-jump    { margin-top: 8px; margin-bottom: 0; box-shadow: none !important; border-color: rgba(255,255,255,0.1) !important; }
+.date-jump    { margin-top: 0; margin-bottom: 0; box-shadow: none !important; border-color: rgba(255,255,255,0.1) !important; background: rgba(255,255,255,0.03) !important; }
 .date-jump .date-row { margin-bottom: 0; }
 .value-panel  { padding: 10px 14px; margin-bottom: 8px; }
 .step-section { margin-bottom: 8px; }
@@ -1845,8 +1874,15 @@ body {
    ═══════════════════════════════════════════════════ */
 
 /* Column containers — stacked on mobile by default */
-.game-col-left  { min-width: 0; }
+.game-col-left  { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .game-col-right { min-width: 0; }
+
+/* Tighten the default mobile spacing since flex gap handles it */
+.game-col-left .char-speech-mini { margin-bottom: 0; }
+.game-col-left .date-bar         { margin-bottom: 0; }
+.game-col-left .value-panel      { margin-bottom: 0; }
+.game-col-left .action-row       { margin-bottom: 0; }
+.game-col-left .date-jump        { margin-bottom: 0; }
 
 /* ── Tablet (768px+) ─────────────────────────────── */
 @media (min-width: 768px) {
@@ -1855,16 +1891,20 @@ body {
 
   #tab-game {
     display: grid;
-    grid-template-columns: 1fr 1.1fr;
+    grid-template-columns: 1fr 1.05fr;
     gap: 18px;
     align-items: start;
   }
   .game-col-right {
     position: sticky;
     top: 72px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 18px;
+    padding: 12px;
   }
 
-  .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px; }
 
   /* Data tab: 2 columns */
   .data-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
@@ -1887,20 +1927,21 @@ body {
   .bottom-nav { justify-content: center; gap: 0; padding-left: 40px; padding-right: 40px; }
   .tab-btn { flex: 0 1 140px; max-width: 140px; }
 
-  /* Game tab: bigger left column */
-  #tab-game { grid-template-columns: 1fr 1.2fr; gap: 24px; }
+  /* Game tab: balanced columns */
+  #tab-game { grid-template-columns: 1fr 1.15fr; gap: 24px; }
+  .game-col-right { padding: 16px; }
 
   /* Card sizing */
-  .asset-btn   { border-radius: 16px; padding: 12px 13px 10px; }
-  .a-name-lbl  { font-size: 13px; }
-  .a-qty-num   { font-size: 28px; }
+  .asset-btn   { border-radius: 16px; padding: 14px 14px 12px; }
+  .a-name-lbl  { font-size: 14px; }
+  .a-qty-num   { font-size: 30px; }
   .a-price-lbl { font-size: 11px; }
 
   /* Value nums: more breathing room */
   .value-block-num { font-size: clamp(18px, 2.2vw, 26px); }
 
   /* Step buttons: larger tap targets */
-  .step-btn { padding: 10px 8px; font-size: 13px; }
+  .step-btn { padding: 11px 8px; font-size: 14px; }
 
   /* Chart tab: bigger canvas area */
   #myChart, #myChart2, #portfolioChart { height: 340px !important; }
@@ -1917,15 +1958,17 @@ body {
   .tab-btn { font-size: 12px; gap: 3px; }
   .tab-btn svg, .tab-btn .tb-icon { font-size: 24px; }
 
-  /* Data tab: 2-col layout handled in 768px+ */
+  /* left col spacing */
+  .game-col-left { gap: 12px; }
 }
 
 /* ── Large desktop (1400px+) ─────────────────────── */
 @media (min-width: 1400px) {
   .top-nav, .bottom-nav { max-width: 1440px; }
   .wrap { max-width: 1440px; }
-  .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  #tab-game { grid-template-columns: 1fr 1.3fr; gap: 28px; }
+  .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  #tab-game { grid-template-columns: 1fr 1.25fr; gap: 32px; }
+  .game-col-right { padding: 20px; }
 }
 
 </style>
@@ -1992,14 +2035,29 @@ body {
       </div>
     </div>
 
+    <!-- UNDO -->
+    <div class="action-row">
+      <button class="btn-reset" style="border-color:rgba(91,200,232,0.35);background:rgba(91,200,232,0.08);color:#7ee6f8;" onclick="undoAction()">↩ 戻す</button>
+    </div>
+
+    <!-- JUMP TO YEAR -->
+    <div class="date-bar date-jump">
+      <div class="date-row">
+        <select id="selY" onchange="updateEventOptions()"></select>
+        <select id="selE"></select>
+        <button class="btn-jump" onclick="dateJump()">移動</button>
+      </div>
+    </div>
+
     </div><!-- /game-col-left -->
     <div class="game-col-right">
+
     <!-- ASSET BUTTONS -->
     <div class="asset-grid" id="btnWrap"></div>
 
     <!-- STEP SELECTOR -->
     <div class="step-section">
-      <div class="step-lbl">売買個数 <span class="step-hint">資産ボタンを押すとこの個数だけ売買します</span></div>
+      <div class="step-lbl">売買個数 <span class="step-hint">タップでカートに入ります</span></div>
       <div class="step-row">
         <button class="step-btn plus active" onclick="setStep(1,this)">＋1</button>
         <button class="step-btn plus" onclick="setStep(10,this)">＋10</button>
@@ -2011,20 +2069,6 @@ body {
         <button class="step-btn minus" onclick="setStep(-10,this)">－10</button>
         <button class="step-btn minus" onclick="setStep(-100,this)">－100</button>
         <button class="step-btn minus" onclick="setStep(-1000,this)">－1K</button>
-      </div>
-    </div>
-
-    <!-- UNDO -->
-    <div class="action-row">
-      <button class="btn-reset" style="border-color:rgba(91,200,232,0.35);background:rgba(91,200,232,0.08);color:#7ee6f8;" onclick="undoAction()">↩ 戻す</button>
-    </div>
-
-    <!-- JUMP TO YEAR (moved to bottom) -->
-    <div class="date-bar date-jump">
-      <div class="date-row">
-        <select id="selY" onchange="updateEventOptions()"></select>
-        <select id="selE"></select>
-        <button class="btn-jump" onclick="dateJump()">移動</button>
       </div>
     </div>
 
@@ -2500,9 +2544,14 @@ body {
 
 <!-- CART BAR -->
 <div id="cartBar" class="cart-bar" style="display:none">
-  <div class="cart-items" id="cartItems"></div>
-  <button class="cart-cancel-btn" onclick="cancelCart()">クリア</button>
-  <button class="cart-confirm-btn" onclick="confirmCart()">確定する！</button>
+  <div class="cart-top-row">
+    <div class="cart-items" id="cartItems"></div>
+    <button class="cart-cancel-btn" onclick="cancelCart()">クリア</button>
+  </div>
+  <div class="cart-bottom-row">
+    <span class="cart-summary" id="cartSummary"></span>
+    <button class="cart-confirm-btn" onclick="confirmCart()">確定する！</button>
+  </div>
 </div>
 
 <!-- BOTTOM NAV -->
@@ -3787,16 +3836,28 @@ function updateCartBar() {
   if (items.length === 0) { bar.style.display = 'none'; return; }
   bar.style.display = 'flex';
   const row = masterData[currentIndex];
-  const parts = items.map(([id, {qty, dir}]) => {
+
+  const itemsEl = document.getElementById('cartItems');
+  itemsEl.innerHTML = items.map(([id, {qty, dir}]) => {
     const a = ASSET_KEYS.find(x => x.id === id);
-    return (a ? a.emoji + ' ' : '') + (dir > 0 ? '+' : '-') + qty + '個';
-  });
-  const totalCost = items.reduce((s, [id, {qty, dir}]) => {
     const p = row ? (row[id] || 0) : 0;
-    return s + (dir > 0 ? qty * p : 0);
-  }, 0);
-  const costStr = totalCost > 0 ? '　合計 ' + fmt(totalCost) + '円' : '';
-  document.getElementById('cartItems').textContent = parts.join('　') + costStr;
+    const color = dir > 0 ? '#ffd966' : '#7ef7ae';
+    return `<div class="cart-item-row">
+      <span>${a ? a.emoji : ''} ${a ? a.label : id}</span>
+      <span style="color:${color};font-weight:700">${dir > 0 ? '+' : '-'}${qty}個</span>
+      <span style="color:rgba(255,255,255,0.45);font-size:11px">${fmt(p)}円×${qty}</span>
+    </div>`;
+  }).join('');
+
+  const buyTotal  = items.reduce((s, [id, {qty, dir}]) => s + (dir > 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
+  const sellTotal = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
+  const summaryEl = document.getElementById('cartSummary');
+  if (summaryEl) {
+    const parts = [];
+    if (buyTotal  > 0) parts.push(`<span style="color:#ffd966">💳 必要: ${fmt(buyTotal)}円</span>`);
+    if (sellTotal > 0) parts.push(`<span style="color:#7ef7ae">💰 獲得: +${fmt(sellTotal)}円</span>`);
+    summaryEl.innerHTML = parts.join('　');
+  }
 }
 
 function executeTrade(id, qty, dir) {
@@ -3878,16 +3939,28 @@ function updateCartBar() {
   if (items.length === 0) { bar.style.display = 'none'; return; }
   bar.style.display = 'flex';
   const row = masterData[currentIndex];
-  const parts = items.map(([id, {qty, dir}]) => {
+
+  const itemsEl = document.getElementById('cartItems');
+  itemsEl.innerHTML = items.map(([id, {qty, dir}]) => {
     const a = ASSET_KEYS.find(x => x.id === id);
-    return (a ? a.emoji + ' ' : '') + (dir > 0 ? '+' : '-') + qty + '個';
-  });
-  const totalCost = items.reduce((s, [id, {qty, dir}]) => {
     const p = row ? (row[id] || 0) : 0;
-    return s + (dir > 0 ? qty * p : 0);
-  }, 0);
-  const costStr = totalCost > 0 ? '　合計 ' + fmt(totalCost) + '円' : '';
-  document.getElementById('cartItems').textContent = parts.join('　') + costStr;
+    const color = dir > 0 ? '#ffd966' : '#7ef7ae';
+    return `<div class="cart-item-row">
+      <span>${a ? a.emoji : ''} ${a ? a.label : id}</span>
+      <span style="color:${color};font-weight:700">${dir > 0 ? '+' : '-'}${qty}個</span>
+      <span style="color:rgba(255,255,255,0.45);font-size:11px">${fmt(p)}円×${qty}</span>
+    </div>`;
+  }).join('');
+
+  const buyTotal  = items.reduce((s, [id, {qty, dir}]) => s + (dir > 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
+  const sellTotal = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
+  const summaryEl = document.getElementById('cartSummary');
+  if (summaryEl) {
+    const parts = [];
+    if (buyTotal  > 0) parts.push(`<span style="color:#ffd966">💳 必要: ${fmt(buyTotal)}円</span>`);
+    if (sellTotal > 0) parts.push(`<span style="color:#7ef7ae">💰 獲得: +${fmt(sellTotal)}円</span>`);
+    summaryEl.innerHTML = parts.join('　');
+  }
 }
 
 let _assetResetPending = false, _assetResetTimer = null;
