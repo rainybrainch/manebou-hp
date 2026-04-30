@@ -278,12 +278,12 @@ body {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 6px 10px 0;
-  border-left: 3px solid;
-  border-radius: 0 8px 8px 0;
-  margin-bottom: 4px;
-  background: rgba(255, 255, 255, 0.05);
-  font-size: 12px;
+  padding: 8px 12px 6px;
+  border-left: 4px solid;
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 13px;
   overflow: hidden;
 }
 
@@ -314,8 +314,8 @@ body {
 
 .hold-item-val {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
   text-align: right;
 }
 
@@ -1628,7 +1628,7 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 .tab-page         { display: none; }
-.tab-page.active  { display: block; animation: tabSlideIn 0.22s ease; }
+.tab-page.active  { display: block; animation: tabSlideIn 0.22s ease; min-height: calc(100vh - 157px); }
 
 /* ─── Tab Section (data / calc tabs) ────────────────────── */
 .tab-section {
@@ -1722,8 +1722,8 @@ body {
 .step-hint    { font-size: 11px; color: #aaa; font-weight: 400; }
 .step-row     { gap: 4px; margin-bottom: 4px; }
 .step-btn     { padding: 9px 5px; font-size: 13px; border-radius: 8px; }
-.hold-list    { min-height: 0; max-height: 64px; overflow-y: auto; margin-bottom: 6px; }
-.hold-item    { padding: 4px 8px; font-size: 13px; }
+.hold-list    { min-height: 0; margin-bottom: 6px; }
+.hold-item    { padding: 6px 10px; font-size: 13px; }
 .hold-item-val { font-size: 12px; }
 .value-divider { margin: 6px 0; }
 .value-block-lbl { font-size: 9px; margin-bottom: 3px; }
@@ -2042,7 +2042,7 @@ body {
         <div class="hold-empty">保有なし</div>
       </div>
       <hr class="value-divider">
-      <div class="value-nums value-nums-3">
+      <div class="value-nums">
         <div class="value-block">
           <span class="value-block-lbl">総資産</span>
           <span class="value-block-num"><span id="dispTotal">0</span><span class="value-block-unit">円</span></span>
@@ -2051,10 +2051,6 @@ body {
           <span class="value-block-lbl">配当 / ターン</span>
           <span class="value-block-num"><span id="dispDiv" style="color:var(--green)">0</span><span class="value-block-unit" style="color:var(--green)">円</span></span>
           <span id="dispDivYear">年間 ─</span>
-        </div>
-        <div class="value-block">
-          <span class="value-block-lbl">👛 お財布</span>
-          <span class="value-block-num"><span id="dispCashTop">0</span><span class="value-block-unit">円</span></span>
         </div>
       </div>
     </div>
