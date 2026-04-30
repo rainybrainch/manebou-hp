@@ -618,6 +618,12 @@ if (_auth) _auth.onAuthStateChanged(async user => {
       showNicknameModal(user.email.split('@')[0]);
       return;
     }
+    // ?noredirect付きアクセスはダッシュボード表示（設定からの遷移など）
+    const noRedirect = new URLSearchParams(location.search).has('noredirect');
+    if (noRedirect) {
+      showDashboard(user);
+      return;
+    }
     location.href = 'calc.html';
     return;
   } else {
@@ -629,6 +635,21 @@ if (_auth) _auth.onAuthStateChanged(async user => {
     _groupId = null; _role = null;
   }
 });
+
+function showDashboard(user) {
+  document.getElementById('heroSection').style.display = 'none';
+  document.getElementById('dashboard').style.display = '';
+  document.getElementById('navLoginBtn').style.display = 'none';
+  const av = document.getElementById('navAvatar');
+  av.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
+  av.style.display = '';
+  document.getElementById('logoutName').textContent = user.displayName || user.email;
+  document.getElementById('myName').textContent = user.displayName || user.email.split('@')[0];
+  const myAv = document.getElementById('myAvatar');
+  myAv.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
+  loadMyData(user);
+  loadProfile(user);
+}
 
 // ─── Load my save data ────────────────────────────────────
 async function loadMyData(user) {
