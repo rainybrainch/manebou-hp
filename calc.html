@@ -11,8 +11,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="マネぼう">
-<link rel="apple-touch-icon" href="images/icon-180.png">
-<link rel="icon" type="image/png" sizes="32x32" href="images/icon-32.png">
+<link rel="apple-touch-icon" href="images/img5.webp">
+<link rel="icon" type="image/webp" href="images/img5.webp">
 <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
 <!-- Firebase SDK -->
@@ -1536,6 +1536,52 @@ body {
 /* ─── Rules tip box ─────────────────────────────────── */
 .rules-tip { display: flex; gap: 8px; background: rgba(91,200,232,0.07); border: 1px solid rgba(91,200,232,0.25); border-radius: 8px; padding: 9px 11px; font-size: 11px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-top: 10px; }
 .rules-tip > span:first-child { flex-shrink: 0; font-size: 14px; }
+/* ─── Step cards (rules section) ───────────────────── */
+.step-cards { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 4px; }
+.step-card { display: flex; gap: 10px; align-items: flex-start; background: rgba(0,0,0,0.04); border-radius: 10px; padding: 10px 12px; border: 1px solid rgba(0,0,0,0.05); }
+.step-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Dela Gothic One', sans-serif; font-size: 11px; flex-shrink: 0; margin-top: 1px; }
+.step-n1 { background: rgba(91,200,232,0.2); color: #1693b3; }
+.step-n2 { background: rgba(245,200,66,0.25); color: #9a7000; }
+.step-n3 { background: rgba(76,175,125,0.2); color: #1e8449; }
+.step-n4 { background: rgba(232,53,74,0.15); color: var(--red); }
+.step-card-title { font-size: 12px; font-weight: 800; color: rgba(0,0,0,0.72); margin-bottom: 2px; }
+.step-card-desc { font-size: 10px; color: rgba(0,0,0,0.5); line-height: 1.55; }
+/* ─── Rule callout (不動産) ─────────────────────────── */
+.rule-callout {
+  background: rgba(245,200,66,0.07);
+  border: 2px solid rgba(245,200,66,0.35);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 12px;
+}
+.rule-callout-title {
+  font-size: 11px; font-weight: 800; color: #9a7000;
+  display: flex; align-items: center; gap: 5px; margin-bottom: 10px;
+}
+.sell-flow {
+  display: flex; align-items: center; gap: 6px;
+  justify-content: center; flex-wrap: nowrap;
+}
+.sell-flow-step {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: rgba(255,255,255,0.55); border-radius: 10px; padding: 8px 6px;
+  font-size: 10px; border: 1.5px solid rgba(0,0,0,0.08); text-align: center;
+}
+.sell-flow-step .sf-icon { font-size: 20px; line-height: 1.1; }
+.sell-flow-step .sf-label { font-weight: 800; font-size: 10px; color: rgba(0,0,0,0.7); }
+.sell-flow-step .sf-sub { font-size: 9px; color: rgba(0,0,0,0.4); line-height: 1.3; }
+.sell-flow-step.sf-now { background: rgba(245,200,66,0.2); border-color: rgba(245,200,66,0.6); }
+.sell-flow-step.sf-wait { background: rgba(91,200,232,0.15); border-color: rgba(91,200,232,0.4); }
+.sell-flow-step.sf-done { background: rgba(76,175,125,0.15); border-color: rgba(76,175,125,0.45); }
+.sell-flow-arrow { font-size: 14px; color: rgba(0,0,0,0.25); flex-shrink: 0; }
+/* ─── Pending sell badge on asset card ──────────────── */
+.pending-sell-badge {
+  background: rgba(255,120,120,0.15); border: 1px solid rgba(255,100,100,0.45);
+  border-radius: 6px; padding: 2px 7px; font-size: 10px; font-weight: 700;
+  color: #e05050; margin-top: 4px; text-align: center;
+  animation: psb-pulse 1.8s ease-in-out infinite;
+}
+@keyframes psb-pulse { 0%,100%{opacity:1} 50%{opacity:0.55} }
 /* ─── Rank table ─────────────────────────────────────── */
 .rank-table { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
 .rank-row { display: flex; flex-direction: column; gap: 3px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 12px; }
@@ -2510,15 +2556,35 @@ body {
       </div>
       <div class="rules-block" style="margin-top:10px">
         <h4>🗂 ゲームの進め方</h4>
-        <ul>
-          <li><strong>① イベントを確認する</strong>── 1970年から始まり、左下のスタートマスから時計回りに盤を進む。各年ごとに経済イベントが4回発生し、年の初めには余剰金が自動で現金に加算される</li>
-          <li><strong>② 資産を売買する</strong>── 右側の個数ボタン（＋1/＋10 など）で売買する数量を選んでから、資産ボタンをタップするとカートに入る。カートバーの「確定する！」で取引が完了する</li>
-          <li><strong>③「次へ▶」を押す</strong>── 次のイベントへ進む。配当対象の資産を保有していれば配当が自動加算される</li>
-          <li><strong>④ 2025年を完走してゴール！</strong>── 1970年から2025年まで全55年間を駆け抜け、最終的な総資産でランクが決まる</li>
-        </ul>
-        <div class="rules-tip">
-          <span>💡</span>
-          <span><strong>不動産を売るとき</strong>は他の資産とは異なり「売り注文」ボタンが表示されます。年代ジャンプ機能（画面下）で特定の年に直接飛ぶこともできます。</span>
+        <div class="step-cards">
+          <div class="step-card"><div class="step-num step-n1">1</div><div><div class="step-card-title">📋 イベントを確認する</div><div class="step-card-desc">1970年スタート。各年4回のイベントが発生し、年の初めに余剰金が現金に自動加算される</div></div></div>
+          <div class="step-card"><div class="step-num step-n2">2</div><div><div class="step-card-title">💹 資産を売買する</div><div class="step-card-desc">＋1/＋10などで数量を選び、資産ボタンでカートに入れる。「確定する！」で取引完了</div></div></div>
+          <div class="step-card"><div class="step-num step-n3">3</div><div><div class="step-card-title">▶ 「次へ」を押す</div><div class="step-card-desc">次のイベントへ進む。配当対象の資産を持っていれば配当が自動加算される</div></div></div>
+          <div class="step-card"><div class="step-num step-n4">4</div><div><div class="step-card-title">🏁 2025年を完走！</div><div class="step-card-desc">全55年間を駆け抜け、最終的な総資産でランクが決まる</div></div></div>
+        </div>
+
+        <div class="rule-callout">
+          <div class="rule-callout-title">🏠 不動産の売却ルール</div>
+          <div class="sell-flow">
+            <div class="sell-flow-step sf-now">
+              <span class="sf-icon">📝</span>
+              <span class="sf-label">売り注文</span>
+              <span class="sf-sub">このターン</span>
+            </div>
+            <span class="sell-flow-arrow">▶</span>
+            <div class="sell-flow-step sf-wait">
+              <span class="sf-icon">⏳</span>
+              <span class="sf-label">次へ▶を押す</span>
+              <span class="sf-sub">1イベント待機</span>
+            </div>
+            <span class="sell-flow-arrow">▶</span>
+            <div class="sell-flow-step sf-done">
+              <span class="sf-icon">💰</span>
+              <span class="sf-label">現金化！</span>
+              <span class="sf-sub">次のイベント価格</span>
+            </div>
+          </div>
+          <p style="font-size:10px;color:rgba(0,0,0,0.45);margin-top:8px;text-align:center">他の資産と違い、売却は即時ではなく1イベント後に執行されます</p>
         </div>
 
         <h4 style="margin-top:14px">🏆 投資家ランク</h4>
@@ -4008,7 +4074,7 @@ function showTradeModal(id) {
 
   const noteEl = document.getElementById('tmNote');
   if (isRealEstateSell) {
-    noteEl.textContent = '⏳ 次のターンに売却が執行されます';
+    noteEl.textContent = '⏳ 売り注文が確定します。「次へ▶」を押した後のイベントで現金化されます';
     noteEl.style.display = '';
   } else {
     noteEl.style.display = 'none';
@@ -4291,11 +4357,18 @@ function stepTime(dir) {
     pushHistory();
     // NEXT時に不動産の売り注文を実行
     if (dir === 1 && pendingSell > 0) {
-      const prevQty = holdings['不動産'] || 0;
-      const newQty  = Math.max(0, prevQty - pendingSell);
+      const sellQty  = Math.min(pendingSell, holdings['不動産'] || 0);
+      const nextPrice = (masterData[ni] || {})['不動産'] || 0;
+      const sellAmt  = sellQty * nextPrice;
+      const prevQty  = holdings['不動産'] || 0;
+      const newQty   = Math.max(0, prevQty - sellQty);
       if (prevQty > 0) costBasis['不動産'] = (costBasis['不動産'] || 0) * (newQty / prevQty);
       holdings['不動産'] = newQty;
       pendingSell = 0;
+      if (sellQty > 0) {
+        addCash(sellAmt, `🏠 不動産売却 ${sellQty}個`);
+        showToast(`🏠 不動産 ${sellQty}個 売却しました！ +${fmt(sellAmt)}円`, 4000);
+      }
     }
     const prevRow = masterData[currentIndex];
     currentIndex = ni;
@@ -4422,7 +4495,7 @@ function updateDisplay() {
     btn.style.boxShadow = (ok && !bondLocked) ? `4px 4px 0 ${a.shadow}` : '2px 2px 0 rgba(0,0,0,0.08)';
     btn.classList.toggle('btn-bond-locked', bondLocked);
     const orderInfo = (a.id === '不動産' && pendingSell > 0)
-      ? `<span style="display:block;font-size:9px;color:#ff9999;margin-top:2px">⏳売注 ${pendingSell}個</span>` : '';
+      ? `<div class="pending-sell-badge">⏳ 売注文中 ${pendingSell}個 → 次のイベントで現金化</div>` : '';
     // 仮想通貨の購入不可期間・上限注記
     const cryptoNote = a.id === '？？？？？' && ok
       ? ((row.年 < 2014 || (row.年 === 2014 && row.イベント < 4))
@@ -5768,7 +5841,7 @@ function _buildSavePayload() {
     portfolioHistory: portfolioHistory.slice(-220),
     cashBalance,
     cashHistLog: cashHistLog.slice(0, 50),
-    savedAt: firebase.firestore.FieldValue.serverTimestamp()
+    savedAt: new Date()
   };
 }
 
@@ -5793,7 +5866,7 @@ async function cloudSaveNow(silent) {
           year,
           cashBalance,
           totalAssets: _calcTotalAssets(),
-          updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
+          updatedAt:   new Date()
         }, { merge: true });
     }
     if (!silent) showToast('☁️ クラウドに保存しました', 2500);
@@ -5808,7 +5881,7 @@ async function cloudLoad() {
     const d = snap.data();
     const localRaw = localStorage.getItem(SAVE_KEY);
     const local    = localRaw ? JSON.parse(localRaw) : null;
-    const cloudMs  = d.savedAt ? d.savedAt.toMillis() : 0;
+    const cloudMs  = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
     const localMs  = local && local._cloudTs ? local._cloudTs : 0;
     if (!local || cloudMs > localMs) {
       _applyCloudData(d);
