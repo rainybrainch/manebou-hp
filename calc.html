@@ -1577,11 +1577,13 @@ body {
 /* ─── Pending sell badge on asset card ──────────────── */
 .pending-sell-badge {
   background: rgba(255,120,120,0.15); border: 1px solid rgba(255,100,100,0.45);
-  border-radius: 6px; padding: 2px 7px; font-size: 10px; font-weight: 700;
+  border-radius: 6px; padding: 4px 7px; font-size: 10px; font-weight: 700;
   color: #e05050; margin-top: 4px; text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
   animation: psb-pulse 1.8s ease-in-out infinite;
 }
 @keyframes psb-pulse { 0%,100%{opacity:1} 50%{opacity:0.55} }
+.cancel-sell-btn { background: rgba(224,80,80,0.2); border: 1px solid rgba(224,80,80,0.5); border-radius: 4px; color: #e05050; font-size: 9px; font-weight: 700; padding: 2px 6px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 /* ─── Rank table ─────────────────────────────────────── */
 .rank-table { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
 .rank-row { display: flex; flex-direction: column; gap: 3px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 12px; }
@@ -4306,6 +4308,15 @@ function cancelCart() {
   updateDisplay();
 }
 
+function cancelPendingSell() {
+  if (!pendingSell) return;
+  pushHistory();
+  pendingSell = 0;
+  showToast('🏠 不動産の売り注文を取り消しました');
+  updateDisplay();
+  saveGame();
+}
+
 let _assetResetPending = false, _assetResetTimer = null;
 function assetReset() {
   if (!_assetResetPending) {
@@ -4498,7 +4509,7 @@ function updateDisplay() {
     btn.style.boxShadow = (ok && !bondLocked) ? `4px 4px 0 ${a.shadow}` : '2px 2px 0 rgba(0,0,0,0.08)';
     btn.classList.toggle('btn-bond-locked', bondLocked);
     const orderInfo = (a.id === '不動産' && pendingSell > 0)
-      ? `<div class="pending-sell-badge">⏳ 売注文中 ${pendingSell}個 → 次のイベントで現金化</div>` : '';
+      ? `<div class="pending-sell-badge">⏳ 売注文中 ${pendingSell}個 → 次のイベントで現金化<button class="cancel-sell-btn" onclick="cancelPendingSell()">✕ 注文取消</button></div>` : '';
     // 仮想通貨の購入不可期間・上限注記
     const cryptoNote = a.id === '？？？？？' && ok
       ? ((row.年 < 2014 || (row.年 === 2014 && row.イベント < 4))
@@ -5399,21 +5410,34 @@ function showToast(msg, duration) {
 let _ppTimer = null;
 function showPurchasePopup(items, row, buyTotal, sellTotal) {
   const popup = document.getElementById('purchasePopup');
-  const hasBuy  = items.some(([, {dir}]) => dir > 0);
-  const hasSell = items.some(([, {dir}]) => dir < 0);
-  const label   = hasBuy && hasSell ? '売買しました！' : hasBuy ? '購入しました！' : '売却しました！';
+  const hasBuy         = items.some(([, {dir}]) => dir > 0);
+  const hasNormalSell  = items.some(([id, {dir}]) => dir < 0 && id !== '不動産');
+  const hasRESell      = items.some(([id, {dir}]) => dir < 0 && id === '不動産');
+  const hasSell        = hasNormalSell || hasRESell;
+  let label;
+  if (hasBuy && hasSell)        label = '売買しました！';
+  else if (hasBuy)              label = '購入しました！';
+  else if (hasRESell && !hasNormalSell) label = '売り注文を出しました！';
+  else                          label = '売却しました！';
 
   let listHTML = '';
   items.forEach(([id, {qty, dir}]) => {
     const a = ASSET_KEYS.find(x => x.id === id);
     const name = a ? `${a.emoji} ${a.label}` : id;
     const price = row ? (row[id] || 0) : 0;
-    const sign = dir > 0 ? '+' : '−';
-    const cls  = dir > 0 ? 'buy' : 'sell';
-    listHTML += `<div class="pp-item">
-      <span class="pp-item-name">${name}</span>
-      <span class="pp-item-qty ${cls}">${sign}${qty}個 (${fmt(price * qty)}円)</span>
-    </div>`;
+    if (dir < 0 && id === '不動産') {
+      listHTML += `<div class="pp-item">
+        <span class="pp-item-name">${name}</span>
+        <span class="pp-item-qty" style="color:#f5c842">⏳ ${qty}個 売注文（次イベントで現金化）</span>
+      </div>`;
+    } else {
+      const sign = dir > 0 ? '+' : '−';
+      const cls  = dir > 0 ? 'buy' : 'sell';
+      listHTML += `<div class="pp-item">
+        <span class="pp-item-name">${name}</span>
+        <span class="pp-item-qty ${cls}">${sign}${qty}個 (${fmt(price * qty)}円)</span>
+      </div>`;
+    }
   });
 
   let sumHTML = '';
