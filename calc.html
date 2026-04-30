@@ -301,7 +301,7 @@ body {
 }
 
 .hold-empty {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.55);
   font-size: 12px;
   padding: 6px 0;
   letter-spacing: 1px;
@@ -317,7 +317,7 @@ body {
   background: linear-gradient(135deg, rgba(245,200,66,0.18), rgba(245,200,66,0.08));
   border: 2px solid var(--gold);
   border-radius: 12px;
-  padding: 10px 14px;
+  padding: 14px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -934,6 +934,11 @@ body {
 .compare-tbl .pos { color: #27ae60; }
 .compare-tbl .neg { color: #c0392b; }
 .compare-tbl tr:last-child td { border-bottom: none; }
+
+@media (max-width: 600px) {
+  .asset-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
 @media (max-width: 400px) {
   .compare-tbl { font-size: 11px; }
 }
@@ -981,7 +986,7 @@ body {
 .title-item.locked   .title-prize { color: rgba(255,255,255,0.25); }
 
 /* ─── Rank (value-panel 3列目) ───────────────────────────── */
-.value-nums-3 { grid-template-columns: 1fr 1fr 72px !important; }
+.value-nums-3 { grid-template-columns: 1fr 1fr 1fr !important; }
 #rankVal { font-family: 'Zen Maru Gothic', sans-serif; font-size: clamp(11px,3vw,14px); display: block; line-height: 1.2; font-weight: 700; white-space: nowrap; }
 
 /* ─── Simulator ──────────────────────────────────────────── */
@@ -1080,7 +1085,7 @@ body {
   margin-bottom: 8px;
   display: flex; flex-direction: column; gap: 6px;
   position: sticky;
-  top: 48px;
+  top: calc(48px + env(safe-area-inset-top, 0px));
   z-index: 50;
   backdrop-filter: blur(8px);
 }
@@ -1162,7 +1167,7 @@ body {
   color: var(--gold);
   border-color: rgba(245,200,66,0.2);
   font-size: 11px !important;
-  padding: 8px 2px !important;
+  padding: 8px 5px !important;
   font-family: 'Dela Gothic One',sans-serif;
 }
 .ckey-pre:hover { background: rgba(245,200,66,0.16); }
@@ -1200,7 +1205,7 @@ body {
 .hist-tx-row {
   display: flex; align-items: center;
   padding: 5px 2px; gap: 6px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 .hist-tx-row:last-child { border-bottom: none; }
 .hist-tx-icon { font-size: 13px; flex-shrink: 0; }
@@ -1369,7 +1374,7 @@ body {
 .ad-text { color: rgba(255,255,255,0.78); }
 /* ─── Asset cards v2 (expanded) ────────────────────── */
 .asset-cards-v2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 4px; }
-.acv2 { border-radius: 10px; padding: 10px 12px; border: 1.5px solid; display: flex; flex-direction: column; gap: 5px; }
+.acv2 { border-radius: 10px; padding: 10px 12px; border: 1.5px solid; display: flex; flex-direction: column; gap: 5px; align-self: stretch; }
 .acv2-head { display: flex; align-items: center; gap: 8px; }
 .acv2-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
 .acv2-title { flex: 1; min-width: 0; }
@@ -1402,10 +1407,24 @@ body {
 .rules-tip { display: flex; gap: 8px; background: rgba(91,200,232,0.07); border: 1px solid rgba(91,200,232,0.25); border-radius: 8px; padding: 9px 11px; font-size: 11px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-top: 10px; }
 .rules-tip > span:first-child { flex-shrink: 0; font-size: 14px; }
 /* ─── Rank table ─────────────────────────────────────── */
-.rank-table { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; }
-.rank-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 7px 12px; }
+.rank-table { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.rank-row { display: flex; flex-direction: column; gap: 3px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 12px; }
 .rank-grade { font-family: 'Dela Gothic One', sans-serif; font-size: 13px; }
-.rank-cond { font-size: 11px; color: rgba(255,255,255,0.45); }
+.rank-cond { font-size: 10px; color: rgba(255,255,255,0.45); }
+/* cream-background overrides for rules/rank sections */
+.tab-section .rules-tip { color: rgba(0,0,0,0.65); background: rgba(91,200,232,0.1); border-color: rgba(91,200,232,0.3); }
+.tab-section .rank-row  { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.07); }
+.tab-section .rank-cond { color: rgba(0,0,0,0.45); }
+/* asset cards — icon-centered card style */
+.tab-section .asset-cards-v2 { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 479px) { .tab-section .asset-cards-v2 { grid-template-columns: repeat(2, 1fr); } }
+.tab-section .acv2 { flex-direction: column; align-items: center; text-align: center; padding: 14px 6px 12px; border-radius: 18px; border-width: 1.5px; gap: 6px; }
+.tab-section .acv2-head { flex-direction: column; align-items: center; gap: 6px; }
+.tab-section .acv2-icon { font-size: 40px; line-height: 1.1; }
+.tab-section .acv2-title { align-items: center; }
+.tab-section .acv2-name { font-size: 13px; font-weight: 800; }
+.tab-section .acv2-badge { background: transparent !important; border: none !important; padding: 2px 0 0 !important; font-size: 10px !important; font-weight: 500 !important; color: rgba(0,0,0,0.4) !important; margin-top: 0 !important; }
+.tab-section .acv2-desc { display: none; }
 .rbl-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px; }
 /* ─── Board Annotate ─────────────────────────────────────── */
 .board-annotate { position: relative; display: block; margin: 10px 0 8px; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,0.18); aspect-ratio: 1/1; }
@@ -1576,6 +1595,7 @@ body {
   transition: filter 0.15s;
 }
 .tab-btn::before { display: none; }
+.tab-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; border-radius: 4px; }
 
 .tab-inner {
   display: flex;
@@ -1607,7 +1627,7 @@ body {
 .step-lbl     { margin-bottom: 4px; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
 .step-hint    { font-size: 10px; color: #aaa; font-weight: 400; }
 .step-row     { gap: 4px; margin-bottom: 4px; }
-.step-btn     { padding: 7px 2px; font-size: 11px; border-radius: 8px; }
+.step-btn     { padding: 7px 5px; font-size: 11px; border-radius: 8px; }
 .hold-list    { min-height: 0; max-height: 64px; overflow-y: auto; margin-bottom: 6px; }
 .hold-item    { padding: 3px 8px; font-size: 11px; }
 .hold-item-val { font-size: 10px; }
@@ -1679,8 +1699,8 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 .gss-item {
-  flex: 1; padding: 7px 8px; text-align: center;
-  border-right: 1px solid rgba(255,255,255,0.07);
+  flex: 1; padding: 9px 10px; text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
 }
 .gss-item:last-child { border-right: none; }
 .gss-label { font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: .5px; margin-bottom: 2px; }
@@ -1830,8 +1850,8 @@ body {
           <span id="dispDivYear">年間 ─</span>
         </div>
         <div class="value-block">
-          <span class="value-block-lbl">投資家</span>
-          <span class="value-block-num"><span id="rankVal" style="color:#555">─</span></span>
+          <span class="value-block-lbl">👛 お財布</span>
+          <span class="value-block-num"><span id="dispCashTop">0</span><span class="value-block-unit">円</span></span>
         </div>
       </div>
     </div>
@@ -2071,56 +2091,78 @@ body {
 
         <h4 style="margin-top:14px">📦 8種類の資産</h4>
         <div class="asset-cards-v2">
-
-          <div class="acv2-title">
+          <div class="acv2 safe">
+            <div class="acv2-head">
+              <span class="acv2-icon">🏦</span>
+              <div class="acv2-title">
                 <span class="acv2-name">銀行預金</span>
                 <span class="acv2-badge safe">安全型</span>
-              
-            <div class="acv2-source">情報源: ─</div>
+              </div>
+            </div>
           </div>
-<div class="acv2-title">
-                <span class="acv2-name">株式</span>
-                <span class="acv2-badge growth">成長型</span>
-              
-            <div class="acv2-source">情報源: ─</div>
-          </div>
-<div class="acv2-title">
-                <span class="acv2-name">金</span>
-                <span class="acv2-badge real">実物資産</span>
-              
-            <div class="acv2-source">情報源: ─</div>
-          </div>
-<div class="acv2-title">
-                <span class="acv2-name">投資信託</span>
-                <span class="acv2-badge growth">成長型</span>
-              
-            <div class="acv2-source">情報源: ─</div>
-          </div>
-<div class="acv2-title">
+          <div class="acv2 safe">
+            <div class="acv2-head">
+              <span class="acv2-icon">📜</span>
+              <div class="acv2-title">
                 <span class="acv2-name">国債</span>
                 <span class="acv2-badge safe">安全型</span>
-              
-            <div class="acv2-source">情報源: ─</div>
+              </div>
+            </div>
           </div>
-<div class="acv2-title">
-                <span class="acv2-name">ドル</span>
-                <span class="acv2-badge fx">外貨</span>
-              
-            <div class="acv2-source">情報源: ─</div>
+          <div class="acv2 growth">
+            <div class="acv2-head">
+              <span class="acv2-icon">📈</span>
+              <div class="acv2-title">
+                <span class="acv2-name">株式</span>
+                <span class="acv2-badge growth">成長型</span>
+              </div>
+            </div>
           </div>
-<div class="acv2-title">
+          <div class="acv2 growth">
+            <div class="acv2-head">
+              <span class="acv2-icon">📊</span>
+              <div class="acv2-title">
+                <span class="acv2-name">投資信託</span>
+                <span class="acv2-badge growth">成長型</span>
+              </div>
+            </div>
+          </div>
+          <div class="acv2 real">
+            <div class="acv2-head">
+              <span class="acv2-icon">🥇</span>
+              <div class="acv2-title">
+                <span class="acv2-name">金</span>
+                <span class="acv2-badge real">実物資産</span>
+              </div>
+            </div>
+          </div>
+          <div class="acv2 real">
+            <div class="acv2-head">
+              <span class="acv2-icon">🏠</span>
+              <div class="acv2-title">
                 <span class="acv2-name">不動産</span>
                 <span class="acv2-badge real">実物資産</span>
-              
-            <div class="acv2-source">情報源: ─</div>
+              </div>
+            </div>
           </div>
-<div class="acv2-title">
+          <div class="acv2 fx">
+            <div class="acv2-head">
+              <span class="acv2-icon">💵</span>
+              <div class="acv2-title">
+                <span class="acv2-name">ドル</span>
+                <span class="acv2-badge fx">外貨</span>
+              </div>
+            </div>
+          </div>
+          <div class="acv2 secret">
+            <div class="acv2-head">
+              <span class="acv2-icon">🪙</span>
+              <div class="acv2-title">
                 <span class="acv2-name">？？？？？</span>
                 <span class="acv2-badge secret">秘密</span>
-              
-            <div class="acv2-source">情報源: ─</div>
+              </div>
+            </div>
           </div>
-
         </div>
         <h4 style="margin-top:14px">📱 アプリの各タブ</h4>
         <ul>
@@ -3849,8 +3891,7 @@ function updateDisplay() {
   // ランク
   const g = getGrade(total);
   const rv = document.getElementById('rankVal');
-  rv.textContent = g.grade;
-  rv.style.color = g.color;
+  if (rv) { rv.textContent = g.grade; rv.style.color = g.color; }
 
   // 保有リスト（不動産の売り注文中も表示）
   let html = '';
@@ -4005,6 +4046,8 @@ const txHistory   = [];
 
 function updateCashDisplay() {
   document.getElementById('cashDisplay').textContent = '¥ ' + fmt(cashBalance);
+  const ct = document.getElementById('dispCashTop');
+  if (ct) ct.textContent = fmt(cashBalance);
 }
 
 function renderCashLog() {
