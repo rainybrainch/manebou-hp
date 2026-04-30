@@ -38,6 +38,10 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 }
 .nav-login-btn:hover{background:rgba(245,200,66,0.1);}
 .nav-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;cursor:pointer;display:none;}
+.logout-menu{position:absolute;top:52px;right:16px;background:rgba(26,26,46,0.98);border:1.5px solid rgba(245,200,66,0.3);border-radius:12px;padding:12px;min-width:160px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.logout-name{font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.logout-btn{width:100%;background:rgba(232,53,74,0.15);border:1.5px solid rgba(232,53,74,0.4);border-radius:8px;color:#e8354a;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;padding:8px;cursor:pointer;transition:background 0.2s;}
+.logout-btn:hover{background:rgba(232,53,74,0.28);}
 
 /* ─── Layout ─── */
 .wrap{max-width:680px;margin:0 auto;padding:72px 16px 20px;}
@@ -265,7 +269,11 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   </a>
   <div class="nav-right">
     <button class="nav-login-btn" id="navLoginBtn" onclick="signIn()">☁️ ログイン</button>
-    <img class="nav-avatar" id="navAvatar" src="" alt="">
+    <img class="nav-avatar" id="navAvatar" src="" alt="" onclick="toggleLogoutMenu()">
+    <div class="logout-menu" id="logoutMenu" style="display:none">
+      <div class="logout-name" id="logoutName"></div>
+      <button class="logout-btn" onclick="signOut()">ログアウト</button>
+    </div>
   </div>
 </nav>
 
@@ -379,8 +387,19 @@ function signIn() {
   _auth.signInWithPopup(p).catch(e => showToast('ログイン失敗: ' + e.message));
 }
 function signOut() {
-  if (_auth) _auth.signOut();
+  if (_auth) _auth.signOut().then(() => {
+    document.getElementById('logoutMenu').style.display = 'none';
+  });
 }
+function toggleLogoutMenu() {
+  const m = document.getElementById('logoutMenu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', e => {
+  const av = document.getElementById('navAvatar');
+  const m  = document.getElementById('logoutMenu');
+  if (!av.contains(e.target) && !m.contains(e.target)) m.style.display = 'none';
+});
 
 if (_auth) _auth.onAuthStateChanged(async user => {
   _user = user;
@@ -391,6 +410,7 @@ if (_auth) _auth.onAuthStateChanged(async user => {
     const av = document.getElementById('navAvatar');
     av.src = user.photoURL || 'images/img5.webp';
     av.style.display = 'block';
+    document.getElementById('logoutName').textContent = user.displayName || user.email || 'ユーザー';
     document.getElementById('myName').textContent = user.displayName || 'ユーザー';
     document.getElementById('myAvatar').src = user.photoURL || 'images/img5.webp';
     await loadMyData(user);

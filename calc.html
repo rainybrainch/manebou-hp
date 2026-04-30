@@ -5827,7 +5827,7 @@ function signInWithGoogle() {
 }
 
 function signOutUser() {
-  _auth.signOut().then(() => { closeUserMenu(); showToast('ログアウトしました'); });
+  _auth.signOut().then(() => { location.href = 'home.html'; });
 }
 
 // --- Cloud Save / Load ---
