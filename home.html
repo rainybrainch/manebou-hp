@@ -48,13 +48,21 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .wrap{max-width:680px;margin:0 auto;padding:72px 16px 20px;position:relative;z-index:1;}
 
 /* ─── Hero ─── */
-.hero{text-align:center;padding:40px 0 32px;animation:fadeUp 0.6s ease both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.hero-char{width:90px;height:90px;border-radius:50%;border:4px solid var(--gold);object-fit:cover;object-position:top;margin:0 auto 18px;display:block;box-shadow:0 0 32px rgba(245,200,66,0.3);}
+.hero{
+  text-align:center;padding:36px 20px 32px;animation:fadeUp 0.6s ease both;
+  background:rgba(10,10,30,0.64);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,0.07);border-radius:24px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.07);
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes shimmer{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3) drop-shadow(0 0 8px rgba(245,200,66,0.55))}}
+@keyframes glowPulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.4}50%{transform:translate(-50%,-50%) scale(1.5);opacity:0.9}}
+.hero-char{width:90px;height:90px;border-radius:50%;border:4px solid var(--gold);object-fit:cover;object-position:top;margin:0 auto 18px;display:block;box-shadow:0 0 32px rgba(245,200,66,0.3);animation:float 4s ease-in-out 0.7s infinite;}
 .hero-label{display:inline-block;background:var(--gold);color:var(--dark);font-size:10px;font-weight:700;letter-spacing:4px;padding:3px 14px;border-radius:4px;margin-bottom:12px;}
 .hero-title{font-family:'Dela Gothic One',sans-serif;font-size:clamp(22px,6vw,32px);margin-bottom:8px;line-height:1.2;}
 .hero-title .ac{color:var(--sky);}
-.hero-title .ag{color:var(--gold);}
+.hero-title .ag{color:var(--gold);animation:shimmer 3s ease-in-out 1s infinite;}
 .hero-sub{color:rgba(255,255,255,0.5);font-size:12px;line-height:1.8;margin-bottom:24px;}
 .btn-google-big{
   display:inline-flex;align-items:center;gap:10px;
@@ -237,7 +245,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .auth-form{text-align:left;max-width:300px;margin:0 auto;}
 .auth-mode-label{font-size:12px;color:rgba(255,255,255,0.55);text-align:center;margin-bottom:12px;}
 .auth-input{width:100%;background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.15);border-radius:10px;padding:11px 14px;color:#fff;font-size:14px;font-family:'Zen Maru Gothic',sans-serif;margin-bottom:10px;display:block;}
-.auth-input:focus{outline:none;border-color:var(--sky);}
+.auth-input:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(91,200,232,0.13);}
 .auth-input::placeholder{color:rgba(255,255,255,0.25);}
 .btn-email-login{width:100%;background:var(--gold);color:var(--dark);border:none;border-radius:12px;padding:13px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;transition:opacity 0.15s;}
 .btn-email-login:hover{opacity:0.88;}
@@ -261,9 +269,11 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 /* ─── BG Scroll ─── */
 .bg-scroll{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
 .bg-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(8,8,24,0.86) 0%,rgba(12,8,28,0.90) 100%);}
-.bg-rows{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:16px 0;}
-.bg-row{display:flex;gap:12px;animation:bgScrollL 45s linear infinite;will-change:transform;}
-.bg-row:nth-child(2){animation:bgScrollR 38s linear infinite;}
+.bg-overlay::after{content:'';position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(91,200,232,0.045) 0%,transparent 65%);animation:glowPulse 5s ease-in-out infinite;pointer-events:none;}
+.bg-rows{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:14px 0;}
+.bg-row{display:flex;gap:12px;animation:bgScrollL 45s linear infinite;will-change:transform;opacity:0.7;}
+.bg-row:nth-child(2){animation:bgScrollR 38s linear infinite;opacity:0.85;}
+.bg-row:nth-child(3){animation:bgScrollL 60s linear infinite;opacity:0.5;}
 @keyframes bgScrollL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes bgScrollR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .bg-card{flex-shrink:0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:8px 14px;}
@@ -274,8 +284,8 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 
 /* ─── Avatar Picker ─── */
 .avatar-pick-wrap{display:none;text-align:center;margin-bottom:16px;}
-.avatar-pick{width:78px;height:78px;border-radius:50%;border:2.5px dashed rgba(245,200,66,0.45);background:rgba(255,255,255,0.05);margin:0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;position:relative;overflow:hidden;transition:border-color 0.2s,background 0.2s;}
-.avatar-pick:hover{border-color:var(--gold);background:rgba(245,200,66,0.07);}
+.avatar-pick{width:78px;height:78px;border-radius:50%;border:2.5px dashed rgba(245,200,66,0.45);background:rgba(255,255,255,0.05);margin:0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;position:relative;overflow:hidden;transition:border-color 0.2s,background 0.2s,transform 0.2s;}
+.avatar-pick:hover{border-color:var(--gold);background:rgba(245,200,66,0.07);transform:scale(1.06);}
 .avatar-pick img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;}
 .avatar-pick-hint{font-size:10px;color:rgba(255,255,255,0.28);margin-top:6px;}
 </style>
@@ -497,6 +507,7 @@ function toggleEmailAuthMode() {
   document.getElementById('authName').style.display = isReg ? '' : 'none';
   document.getElementById('authAvatarWrap').style.display = isReg ? '' : 'none';
   _selectedAvatarFile = null;
+  document.getElementById('avatarFileInput').value = '';
   const prev = document.getElementById('avatarPreview');
   prev.style.display = 'none'; prev.src = '';
   document.getElementById('avatarPickIcon').style.display = '';
@@ -946,7 +957,7 @@ async function loadBgPlayers() {
 function renderBgScroll(players) {
   const rows = document.getElementById('bgRows');
   if (!rows) return;
-  for (let r = 0; r < 2; r++) {
+  for (let r = 0; r < 3; r++) {
     const row = document.createElement('div');
     row.className = 'bg-row';
     const arr = [...players, ...players]; // duplicate for seamless loop
