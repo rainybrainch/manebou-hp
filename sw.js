@@ -1,4 +1,4 @@
-const CACHE = 'manebou-v3';
+const CACHE = 'manebou-v4';
 const STATIC = [
   './calc.html',
   './manifest.json',
