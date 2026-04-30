@@ -100,6 +100,14 @@ body {
 }
 
 .nav-spacer { width: 60px; flex-shrink: 0; }
+.nav-brand { display: flex; align-items: center; gap: 7px; }
+.nav-char { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; object-position: top center; border: 1.5px solid var(--gold); background: rgba(255,255,255,0.9); flex-shrink: 0; transition: border-color 0.2s; }
+@keyframes navCharPop {
+  0%   { transform: scale(0.5); opacity: 0.3; }
+  65%  { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.nav-char.pop { animation: navCharPop 0.38s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
 /* ─── Layout ─────────────────────────────────────────────── */
 .wrap {
@@ -1224,6 +1232,23 @@ body {
 .hist-tx-sell  { color: #e8354a; font-weight: 700; font-size: 12px; }
 .hist-tx-cash-in  { color: #2ecc71; font-weight: 700; font-size: 12px; }
 .hist-tx-cash-out { color: #e8354a; font-weight: 700; font-size: 12px; }
+.cash-log-entry {
+  padding: 9px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.cash-log-entry:last-child { border-bottom: none; }
+.cle-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+.cle-icon   { font-size: 14px; flex-shrink: 0; }
+.cle-when   { flex: 1; font-size: 10px; color: rgba(255,255,255,0.38); letter-spacing: 0.5px; }
+.cle-amt-in  { font-size: 12px; font-weight: 700; color: #2ecc71; white-space: nowrap; }
+.cle-amt-out { font-size: 12px; font-weight: 700; color: #e8354a; white-space: nowrap; }
+.cle-desc { font-size: 11px; color: rgba(255,255,255,0.75); margin-left: 20px; margin-bottom: 2px; }
+.cle-breakdown { font-size: 9px; color: rgba(255,255,255,0.38); margin-left: 20px; line-height: 1.7; }
 .hist-tx-time  { color: rgba(255,255,255,0.28); font-size: 10px; white-space: nowrap; }
 .hist-empty    { color: rgba(255,255,255,0.2); font-size: 11px; text-align: center; padding: 14px 0; }
 .hist-mini-tabs {
@@ -1806,7 +1831,10 @@ body {
 
 <nav class="top-nav">
   <span class="nav-spacer"></span>
-  <span class="nav-title" id="navTitle">マネぼうアプリ</span>
+  <span class="nav-brand">
+    <img class="nav-char" src="images/img5.webp" alt="">
+    <span class="nav-title" id="navTitle">マネぼうアプリ</span>
+  </span>
   <div class="nav-side-ticker" id="navSideTicker">
     <span class="nav-side-text" id="navBannerText"></span>
   </div>
@@ -3805,8 +3833,14 @@ function stepTime(dir) {
         if (pendingSalary > 0) { pendingSalary = 0; pendingSalaryYear = 0; }
         if (row.イベント >= 2 && row.イベント <= 4) {
           let divT = 0;
-          ASSET_KEYS.forEach(a => { if (a.divKey) divT += calcDiv(row[a.divKey] || 0, holdings[a.id] || 0); });
-          if (divT > 0) addCash(divT, `${row.年}年 イベント${row.イベント} 配当`);
+          const divBreakdown = [];
+          ASSET_KEYS.forEach(a => {
+            if (a.divKey) {
+              const d = calcDiv(row[a.divKey] || 0, holdings[a.id] || 0);
+              if (d > 0) { divT += d; divBreakdown.push({ emoji: a.emoji, label: a.label, amount: d }); }
+            }
+          });
+          if (divT > 0) addCash(divT, `${row.年}年 イベント${row.イベント} 配当`, divBreakdown);
         }
       }
     }
@@ -4067,12 +4101,41 @@ function renderCashLog() {
   if (!el) return;
   if (!cashHistLog.length) { el.innerHTML = '<div class="hist-empty">履歴なし</div>'; return; }
   el.innerHTML = cashHistLog.map(e => {
-    const cls  = e.amount >= 0 ? 'hist-tx-cash-in' : 'hist-tx-cash-out';
-    const sign = e.amount >= 0 ? '+' : '';
-    return `<div class="hist-tx-row">
-      <span class="hist-tx-label">${e.label || '手動'}</span>
-      <span class="${cls}">${sign}${fmt(e.amount)}円</span>
-    </div>`;
+    const isIn = e.amount >= 0;
+    const amtCls = isIn ? 'cle-amt-in' : 'cle-amt-out';
+    const sign   = isIn ? '+' : '';
+    const amtStr = sign + fmt(e.amount) + '円';
+    let icon, when, desc, detail = '';
+    if (e.type === 'salary') {
+      icon = '💰';
+      when = e.year ? e.year + '年' : 'チュートリアル';
+      desc = '余剰金として現金を確保しました';
+    } else if (e.type === 'dividend') {
+      icon = '📊';
+      when = e.year + '年 イベント' + e.event;
+      desc = '配当によって収入がありました';
+      if (e.breakdown && e.breakdown.length > 0) {
+        const parts = e.breakdown.map(b => b.emoji + ' ' + b.label + ' +' + fmt(b.amount) + '円').join(' · ');
+        detail = '<div class="cle-breakdown">内訳: ' + parts + '</div>';
+      }
+    } else if (e.type === 'start') {
+      icon = '🎮';
+      when = 'ゲーム開始';
+      desc = '初期資金を受け取りました';
+    } else {
+      icon = isIn ? '📥' : '📤';
+      when = e.label || '手動';
+      desc = isIn ? '現金を追加しました' : '現金を引き去りました';
+    }
+    return '<div class="cash-log-entry">'
+      + '<div class="cle-header">'
+      + '<span class="cle-icon">' + icon + '</span>'
+      + '<span class="cle-when">' + when + '</span>'
+      + '<span class="' + amtCls + '">' + amtStr + '</span>'
+      + '</div>'
+      + '<div class="cle-desc">' + desc + '</div>'
+      + detail
+      + '</div>';
   }).join('');
 }
 
@@ -4102,9 +4165,17 @@ function logTx(type, id, qty) {
   renderTxLog();
 }
 
-function addCash(amount, label) {
+function addCash(amount, label, breakdown) {
+  let type = 'manual', year = null, event = null;
+  if (label) {
+    const sm = label.match(/(\d{4})年 余剰金/);
+    const dm = label.match(/(\d{4})年 イベント(\d) 配当/);
+    if (sm)   { type = 'salary';   year = parseInt(sm[1]); }
+    else if (dm) { type = 'dividend'; year = parseInt(dm[1]); event = parseInt(dm[2]); }
+    else if (label.includes('ゲーム開始')) type = 'start';
+  }
   cashBalance += amount;
-  cashHistLog.unshift({ amount, balance: cashBalance, label: label || null });
+  cashHistLog.unshift({ amount, balance: cashBalance, label: label || null, type, year, event, breakdown: breakdown || null });
   if (cashHistLog.length > 50) cashHistLog.pop();
   renderCashLog();
   updateCashDisplay();
@@ -4250,7 +4321,7 @@ function drawPortfolioGraph() {
   } else {
     const diff = curTotal - curSav;
     const diffColor = diff >= 0 ? '#1a7a40' : '#b00020';
-    const diffLabel = diff >= 0 ? `📈 貯金より +${fmtJP(diff)}円` : `📉 貯金より ${fmtJP(diff)}円`;
+    const diffLabel = diff >= 0 ? `📈 貯金より +${fmt(diff)}円` : `📉 貯金より ${fmt(Math.abs(diff))}円`;
     legend.innerHTML = legendAssets.map(a => {
       const qty = holdings[a.id] || 0;
       const val = qty * (curRow ? curRow[a.id]||0 : 0);
@@ -4346,11 +4417,10 @@ function incomeHoverAt(i) {
 
   const el = id => document.getElementById(id);
   const set = (id, val) => { const e = el(id); if (e) e.textContent = val; };
-  const fmtS = v => fmtJP(v) + '円';
-  set('incStatSalary',  fmtS(d.給料));
-  set('incStatTax',     fmtS(d.税収));
-  set('incStatLife',    fmtS(d.生活費));
-  set('incStatSurplus', fmtS(d.余剰金));
+  set('incStatSalary',  fmt(d.給料) + '円');
+  set('incStatTax',     fmt(d.税収) + '円');
+  set('incStatLife',    fmt(d.生活費) + '円');
+  set('incStatSurplus', fmt(d.余剰金) + '円');
 
   const svg = document.getElementById('incomeSvg');
   let cl = svg.querySelector('.inc-crosshair');
@@ -4411,7 +4481,6 @@ function incomeTouch(e) {
 }
 
 function updateIncomeLegend(d) {
-  const fmtV = v => v != null ? '¥' + Number(v).toLocaleString() : '─';
   const el = id => document.getElementById(id);
   const set = (id, val) => { const e = el(id); if (e) e.textContent = val; };
 
@@ -4424,15 +4493,15 @@ function updateIncomeLegend(d) {
     set('incStatSurplus', '─');
     return;
   }
-  set('incVal-給料',   fmtV(d.給料));
-  set('incVal-税収',   fmtV(d.税収));
-  set('incVal-生活費', fmtV(d.生活費));
-  set('incVal-余剰金', fmtV(d.余剰金));
+  set('incVal-給料',   '¥' + fmt(d.給料));
+  set('incVal-税収',   '¥' + fmt(d.税収));
+  set('incVal-生活費', '¥' + fmt(d.生活費));
+  set('incVal-余剰金', '¥' + fmt(d.余剰金));
   set('incLegendYear', d.年 + '年の収支');
-  set('incStatSalary',  fmtJP(d.給料) + '円');
-  set('incStatTax',     fmtJP(d.税収) + '円');
-  set('incStatLife',    fmtJP(d.生活費) + '円');
-  set('incStatSurplus', fmtJP(d.余剰金) + '円');
+  set('incStatSalary',  fmt(d.給料) + '円');
+  set('incStatTax',     fmt(d.税収) + '円');
+  set('incStatLife',    fmt(d.生活費) + '円');
+  set('incStatSurplus', fmt(d.余剰金) + '円');
 }
 
 function setGraphMode(mode, btn) {
@@ -4526,7 +4595,7 @@ function drawAllAssetsGraph() {
     return `<div class="pl-row">
       <div class="pl-dot" style="background:${a.color}"></div>
       <div class="pl-name">${a.emoji} ${a.label}</div>
-      <div class="pl-val" style="color:${a.color}">${fmtJP(p)}円</div>
+      <div class="pl-val" style="color:${a.color}">${fmt(p)}円</div>
       <div class="pl-pct" style="width:52px;color:inherit"><span class="${pctCls}">${pct >= 0 ? '+' : ''}${pct}%</span></div>
     </div>`;
   }).join('') + `<div class="pl-total-row"><span class="pl-total-label">1970年基準 変化率</span></div>`;
@@ -4635,8 +4704,8 @@ function drawGraph() {
   const pctEl = document.getElementById('graphChangeRate');
   const curEl = document.getElementById('graphCurPrice');
   const pkEl  = document.getElementById('graphPeakPrice');
-  if (curEl) curEl.textContent = fmtJP(curP) + '円';
-  if (pkEl)  pkEl.textContent  = fmtJP(peakP) + '円';
+  if (curEl) curEl.textContent = fmt(curP) + '円';
+  if (pkEl)  pkEl.textContent  = fmt(peakP) + '円';
   if (pctEl && baseP > 0) {
     const pct = ((curP - baseP) / baseP * 100).toFixed(0);
     pctEl.textContent = (pct >= 0 ? '+' : '') + pct + '%';
@@ -4803,6 +4872,13 @@ const TAB_BANNERS = {
   titles: '🏅  バッジ　実績を集めよう',
   calc:   '⚙️  設定　ルール確認・アプリ設定',
 };
+const TAB_CHARS = {
+  game:   'images/img8.webp',
+  data:   'images/img6.webp',
+  graph:  'images/img7.webp',
+  titles: 'images/img5.webp',
+  calc:   'images/img5.webp',
+};
 
 let _bannerTimer = null;
 function showTab(name, btn) {
@@ -4824,6 +4900,14 @@ function showTab(name, btn) {
     bannerEl.classList.add('running');
     if (_bannerTimer) clearTimeout(_bannerTimer);
     _bannerTimer = setTimeout(() => bannerEl.classList.remove('running'), 2800);
+  }
+  // Nav char swap
+  const charEl = document.querySelector('.nav-char');
+  if (charEl && TAB_CHARS[name]) {
+    charEl.classList.remove('pop');
+    void charEl.offsetWidth;
+    charEl.src = TAB_CHARS[name];
+    charEl.classList.add('pop');
   }
 }
 
@@ -4960,6 +5044,11 @@ window.addEventListener('DOMContentLoaded', function() {
       b.textContent = TAB_BANNERS['game'];
       b.classList.add('running');
       setTimeout(function(){ b.classList.remove('running'); }, 2800);
+    }
+    var c = document.querySelector('.nav-char');
+    if (c && typeof TAB_CHARS !== 'undefined') {
+      c.src = TAB_CHARS['game'];
+      c.classList.add('pop');
     }
   }, 800);
 });
