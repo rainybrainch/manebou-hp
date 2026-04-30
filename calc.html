@@ -4192,12 +4192,14 @@ function updateCartBar() {
   }).join('');
 
   const buyTotal  = items.reduce((s, [id, {qty, dir}]) => s + (dir > 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
-  const sellTotal = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
+  const sellTotal = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 && id !== '不動産' ? qty * (row ? row[id] || 0 : 0) : 0), 0);
+  const realEstateSellQty = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 && id === '不動産' ? qty : 0), 0);
   const summaryEl = document.getElementById('cartSummary');
   if (summaryEl) {
     const parts = [];
     if (buyTotal  > 0) parts.push(`<span style="color:#ffd966">💳 ${fmt(buyTotal)}円</span>`);
     if (sellTotal > 0) parts.push(`<span style="color:#7ef7ae">💰 +${fmt(sellTotal)}円</span>`);
+    if (realEstateSellQty > 0) parts.push(`<span style="color:#f5c842">⏳ 不動産${realEstateSellQty}個 売注文</span>`);
     summaryEl.innerHTML = parts.join(' ');
   }
 }
@@ -4276,7 +4278,8 @@ function confirmCart() {
   const row = masterData[currentIndex];
   const items = Object.entries(pendingCart);
   const buyTotal  = items.reduce((s, [id, {qty, dir}]) => s + (dir > 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
-  const sellTotal = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
+  // 不動産売却は次のイベントで現金化するため即時sellTotalに含めない
+  const sellTotal = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 && id !== '不動産' ? qty * (row ? row[id] || 0 : 0) : 0), 0);
   const buyQty    = items.reduce((s, [id, {qty, dir}]) => s + (dir > 0 ? qty : 0), 0);
   const sellQty   = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 ? qty : 0), 0);
   if (buyTotal > cashBalance) {
