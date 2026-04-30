@@ -2503,7 +2503,7 @@ body {
       </div>
       <!-- 盤面：注釈付きオーバーレイ -->
       <div class="board-annotate">
-        <img src="images/img9.webp" alt="チュートリアル盤面" onerror="this.style.display='none'">
+        <img src="images/img9.webp" alt="チュートリアル盤面" loading="lazy" onerror="this.style.display='none'">
         <!-- ① イベントパネル：4隅 -->
         <span class="ba-badge ba-event"  style="top:13%;left:13%">①</span>
         <span class="ba-badge ba-event"  style="top:13%;left:88%">①</span>
@@ -4049,54 +4049,47 @@ function showTradeModal(id) {
   const divPerUnit = divRaw ? calcDiv(divRaw, 1) : 0;
   const isRealEstateSell = id === '不動産' && !isBuy;
 
-  document.getElementById('tmEmoji').textContent = a.emoji;
+  const _set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+  _set('tmEmoji', a.emoji);
   const nameEl = document.getElementById('tmName');
-  nameEl.textContent = displayLabel;
-  nameEl.style.color = a.color;
+  if (nameEl) { nameEl.textContent = displayLabel; nameEl.style.color = a.color; }
   const head = document.getElementById('tmHead');
-  head.style.borderBottomColor = a.color;
-  head.style.background = a.color + '18';
-
-  document.getElementById('tmAction').textContent = isBuy ? '🟢 購入' : (isRealEstateSell ? '⏳ 売り注文' : '🔴 売却');
-  document.getElementById('tmQty').textContent = qty + '個';
-  document.getElementById('tmUnitPrice').textContent = fmt(price) + '円/個';
+  if (head) { head.style.borderBottomColor = a.color; head.style.background = a.color + '18'; }
+  _set('tmAction', isBuy ? '🟢 購入' : (isRealEstateSell ? '⏳ 売り注文' : '🔴 売却'));
+  _set('tmQty', qty + '個');
+  _set('tmUnitPrice', fmt(price) + '円/個');
 
   const totalEl = document.getElementById('tmTotal');
-  totalEl.textContent = fmt(total) + '円';
-  totalEl.style.color = isBuy ? '#e87070' : '#4caf7d';
+  if (totalEl) { totalEl.textContent = fmt(total) + '円'; totalEl.style.color = isBuy ? '#e87070' : '#4caf7d'; }
 
   const divInfo = document.getElementById('tmDivInfo');
-  if (isBuy && divPerUnit > 0) {
-    const add = divPerUnit * qty;
-    divInfo.textContent = '💰 配当 +' + fmt(add) + '円/ターン追加（年間 +' + fmt(add * 4) + '円）';
-    divInfo.style.display = '';
-  } else {
-    divInfo.style.display = 'none';
+  if (divInfo) {
+    if (isBuy && divPerUnit > 0) {
+      const add = divPerUnit * qty;
+      divInfo.textContent = '💰 配当 +' + fmt(add) + '円/ターン追加（年間 +' + fmt(add * 4) + '円）';
+      divInfo.style.display = '';
+    } else {
+      divInfo.style.display = 'none';
+    }
   }
 
   const noteEl = document.getElementById('tmNote');
-  if (isRealEstateSell) {
-    noteEl.textContent = '⏳ 売り注文が確定します。「次へ▶」を押した後のイベントで現金化されます';
-    noteEl.style.display = '';
-  } else {
-    noteEl.style.display = 'none';
+  if (noteEl) {
+    noteEl.textContent = isRealEstateSell ? '⏳ 売り注文が確定します。「次へ▶」を押した後のイベントで現金化されます' : '';
+    noteEl.style.display = isRealEstateSell ? '' : 'none';
   }
 
   const btn = document.getElementById('tmConfirm');
-  if (isBuy) {
-    btn.style.background = 'var(--gold)';
-    btn.style.color = 'var(--dark)';
-    btn.style.borderColor = 'var(--gold-dark)';
-    btn.style.boxShadow = '2px 2px 0 var(--gold-dark)';
-  } else {
-    btn.style.background = 'var(--sky)';
-    btn.style.color = 'var(--dark)';
-    btn.style.borderColor = '#2aa0c0';
-    btn.style.boxShadow = '2px 2px 0 #2aa0c0';
+  if (btn) {
+    Object.assign(btn.style, isBuy
+      ? { background: 'var(--gold)', color: 'var(--dark)', borderColor: 'var(--gold-dark)', boxShadow: '2px 2px 0 var(--gold-dark)' }
+      : { background: 'var(--sky)',  color: 'var(--dark)', borderColor: '#2aa0c0',          boxShadow: '2px 2px 0 #2aa0c0' }
+    );
   }
 
   pendingTradeId = id;
-  document.getElementById('tradeModal').style.display = 'flex';
+  const modal = document.getElementById('tradeModal');
+  if (modal) modal.style.display = 'flex';
 }
 
 function closeTradeModal() {
@@ -4646,10 +4639,19 @@ let cashBalance = 0;
 const cashHistLog = [];
 const txHistory   = [];
 
+// DOM cache — populated after DOMContentLoaded
+const _el = {};
+document.addEventListener('DOMContentLoaded', () => {
+  ['cashDisplay','dispCashTop','cashLog','txLog','timeLabel','navTitle',
+   'tickerBar','navBannerText','tradeModal','cartBar','cartBody','cartItems',
+   'cartSummary','cartToggleBtn','selY','selE','navAuthBtn','navUserAvatar',
+   'userMenu','userMenuName','userMenuEmail','userMenuGroup','leaveGroupBtn'
+  ].forEach(id => { _el[id] = document.getElementById(id); });
+});
+
 function updateCashDisplay() {
-  document.getElementById('cashDisplay').textContent = '¥ ' + fmt(cashBalance);
-  const ct = document.getElementById('dispCashTop');
-  if (ct) ct.textContent = fmt(cashBalance);
+  if (_el.cashDisplay) _el.cashDisplay.textContent = '¥ ' + fmt(cashBalance);
+  if (_el.dispCashTop) _el.dispCashTop.textContent = fmt(cashBalance);
 }
 
 function renderCashLog() {
@@ -5126,9 +5128,12 @@ function setGraphMode(mode, btn) {
   graphMode = mode;
   document.querySelectorAll('#tab-graph .cst-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  document.getElementById('graphModePrice').style.display     = mode === 'price'     ? '' : 'none';
-  document.getElementById('graphModePortfolio').style.display = mode === 'portfolio' ? '' : 'none';
-  document.getElementById('graphModeIncome').style.display    = mode === 'income'    ? '' : 'none';
+  ['graphModePrice','graphModePortfolio','graphModeIncome'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.display = 'none';
+  });
+  const active = { price:'graphModePrice', portfolio:'graphModePortfolio', income:'graphModeIncome' }[mode];
+  const activeEl = active && document.getElementById(active);
+  if (activeEl) activeEl.style.display = '';
   if (mode === 'portfolio') drawPortfolioGraph();
   else if (mode === 'income') drawIncomeChart();
   else { drawGraph(); renderCompare(); }
