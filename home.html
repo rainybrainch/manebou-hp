@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>マネぼう塾 ホーム</title>
+<title>マネぼうログイン</title>
 <link rel="icon" type="image/webp" href="images/img5.webp">
 <link rel="apple-touch-icon" href="images/img5.webp">
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
@@ -283,7 +283,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   <div id="heroSection" class="hero">
     <img class="hero-char" src="images/img5.webp" alt="おーる局長">
     <span class="hero-label">MANEBOU</span>
-    <h1 class="hero-title"><span class="ac">マネぼう</span><br><span class="ag">アプリ</span></h1>
+    <h1 class="hero-title"><span class="ac">マネぼう</span><br><span class="ag">ログイン</span></h1>
     <p class="hero-sub">1970〜2025年の日本経済史を舞台に<br>資産を育てるボードゲーム補助アプリ<br>ログインでグループ参加・クラウドセーブが使えます</p>
     <button class="btn-google-big" onclick="signIn()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
@@ -404,17 +404,9 @@ document.addEventListener('click', e => {
 if (_auth) _auth.onAuthStateChanged(async user => {
   _user = user;
   if (user) {
-    document.getElementById('heroSection').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('navLoginBtn').style.display = 'none';
-    const av = document.getElementById('navAvatar');
-    av.src = user.photoURL || 'images/img5.webp';
-    av.style.display = 'block';
-    document.getElementById('logoutName').textContent = user.displayName || user.email || 'ユーザー';
-    document.getElementById('myName').textContent = user.displayName || 'ユーザー';
-    document.getElementById('myAvatar').src = user.photoURL || 'images/img5.webp';
-    await loadMyData(user);
-    await loadProfile(user);
+    // ログイン済みならアプリへ遷移
+    location.href = 'calc.html';
+    return;
   } else {
     document.getElementById('heroSection').style.display = 'block';
     document.getElementById('dashboard').style.display = 'none';
