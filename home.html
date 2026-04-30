@@ -26,7 +26,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   border-bottom:3px solid var(--gold);
   padding:10px 20px;display:flex;align-items:center;gap:10px;
 }
-.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;}
 .nav-logo img{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--gold);object-fit:cover;object-position:top;}
 .nav-logo-text{font-family:'Dela Gothic One',sans-serif;font-size:15px;color:var(--sky);}
 .nav-logo-sub{font-size:9px;color:rgba(255,255,255,0.4);display:block;font-family:'Zen Maru Gothic',sans-serif;}
@@ -229,11 +229,49 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 @media(min-width:680px){
   .top-nav,.wrap{max-width:720px;}
 }
+
+/* ─── Email Auth ─── */
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:rgba(255,255,255,0.3);font-size:12px;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.12);}
+.auth-form{text-align:left;max-width:300px;margin:0 auto;}
+.auth-mode-label{font-size:12px;color:rgba(255,255,255,0.55);text-align:center;margin-bottom:12px;}
+.auth-input{width:100%;background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.15);border-radius:10px;padding:11px 14px;color:#fff;font-size:14px;font-family:'Zen Maru Gothic',sans-serif;margin-bottom:10px;display:block;}
+.auth-input:focus{outline:none;border-color:var(--sky);}
+.auth-input::placeholder{color:rgba(255,255,255,0.25);}
+.btn-email-login{width:100%;background:var(--gold);color:var(--dark);border:none;border-radius:12px;padding:13px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;transition:opacity 0.15s;}
+.btn-email-login:hover{opacity:0.88;}
+.btn-email-login:disabled{opacity:0.5;cursor:default;}
+.auth-toggle{font-size:11px;color:rgba(255,255,255,0.4);margin-top:12px;text-align:center;}
+.auth-toggle a{color:var(--sky);cursor:pointer;text-decoration:underline;}
+
+/* ─── Nickname Modal ─── */
+.nick-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:2000;align-items:center;justify-content:center;}
+.nick-modal.open{display:flex;}
+.nick-box{background:#1a1a2e;border:3px solid var(--gold);border-radius:22px;padding:32px 24px;width:90%;max-width:340px;text-align:center;}
+.nick-box h2{font-family:'Dela Gothic One',sans-serif;font-size:18px;color:var(--gold);margin-bottom:8px;}
+.nick-box p{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.8;margin-bottom:20px;}
+.nick-input{width:100%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);border-radius:12px;padding:13px 16px;color:#fff;font-size:16px;font-family:'Zen Maru Gothic',sans-serif;text-align:center;margin-bottom:14px;}
+.nick-input:focus{outline:none;border-color:var(--gold);}
+.nick-hint{font-size:10px;color:rgba(255,255,255,0.3);margin-bottom:16px;}
+.btn-nick-save{width:100%;background:var(--gold);color:var(--dark);border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;transition:opacity 0.15s;}
+.btn-nick-save:hover{opacity:0.88;}
+.btn-nick-save:disabled{opacity:0.5;cursor:default;}
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
+
+<!-- Nickname Modal -->
+<div class="nick-modal" id="nicknameModal">
+  <div class="nick-box">
+    <h2>ニックネーム設定</h2>
+    <p>ランキングやグループで<br>公開される名前です</p>
+    <input class="nick-input" type="text" id="nicknameInput" placeholder="ニックネーム" maxlength="20" autocomplete="nickname">
+    <p class="nick-hint">省略するとメールアドレスの名前が使われます</p>
+    <button class="btn-nick-save" id="nickSaveBtn" onclick="saveNickname()">設定してはじめる</button>
+  </div>
+</div>
 
 <!-- Group Modal -->
 <div class="modal-overlay" id="groupModal">
@@ -263,10 +301,10 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 </div>
 
 <nav class="top-nav">
-  <a class="nav-logo" href="index.html">
+  <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <img src="images/img5.webp" alt="おーる局長">
     <div><span class="nav-logo-text">マネぼう塾</span><span class="nav-logo-sub">by RAINY BRAIN</span></div>
-  </a>
+  </div>
   <div class="nav-right">
     <button class="nav-login-btn" id="navLoginBtn" onclick="signIn()">☁️ ログイン</button>
     <img class="nav-avatar" id="navAvatar" src="" alt="" onclick="toggleLogoutMenu()">
@@ -289,8 +327,20 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
       Googleでログイン
     </button>
-    <p class="hero-note">ログインなしでもゲームは遊べます</p>
-    <div style="margin-top:20px">
+
+    <div class="auth-divider">または</div>
+
+    <div class="auth-form">
+      <p class="auth-mode-label" id="authModeLabel">メールアドレスでログイン</p>
+      <input class="auth-input" type="text" id="authName" placeholder="ニックネーム" autocomplete="nickname" style="display:none">
+      <input class="auth-input" type="email" id="authEmail" placeholder="メールアドレス" autocomplete="email">
+      <input class="auth-input" type="password" id="authPassword" placeholder="パスワード（6文字以上）" autocomplete="current-password">
+      <button class="btn-email-login" id="authSubmitBtn" onclick="submitEmailAuth()">ログイン</button>
+      <p class="auth-toggle" id="authToggleText">アカウントがない方は<a onclick="toggleEmailAuthMode()">新規登録</a></p>
+    </div>
+
+    <p class="hero-note" style="margin-top:16px">ログインなしでもゲームは遊べます</p>
+    <div style="margin-top:12px">
       <a href="calc.html" style="color:rgba(255,255,255,0.35);font-size:12px;text-decoration:none;">▶ ゲームをはじめる（ログインなし）</a>
     </div>
   </div>
@@ -391,6 +441,91 @@ function signOut() {
     document.getElementById('logoutMenu').style.display = 'none';
   });
 }
+
+// ─── Email / Password Auth ────────────────────────────────
+let _emailAuthMode = 'login';
+
+function toggleEmailAuthMode() {
+  _emailAuthMode = _emailAuthMode === 'login' ? 'register' : 'login';
+  const isReg = _emailAuthMode === 'register';
+  document.getElementById('authModeLabel').textContent = isReg ? '新規アカウント作成' : 'メールアドレスでログイン';
+  document.getElementById('authSubmitBtn').textContent = isReg ? 'アカウント作成' : 'ログイン';
+  document.getElementById('authName').style.display = isReg ? '' : 'none';
+  document.getElementById('authPassword').autocomplete = isReg ? 'new-password' : 'current-password';
+  document.getElementById('authToggleText').innerHTML = isReg
+    ? 'すでにアカウントをお持ちの方は<a onclick="toggleEmailAuthMode()">ログイン</a>'
+    : 'アカウントがない方は<a onclick="toggleEmailAuthMode()">新規登録</a>';
+}
+
+async function submitEmailAuth() {
+  if (!_auth) { showToast('Firebase未接続です'); return; }
+  const email = document.getElementById('authEmail').value.trim();
+  const pass  = document.getElementById('authPassword').value;
+  if (!email || !pass) { showToast('メールとパスワードを入力してください'); return; }
+  if (pass.length < 6)  { showToast('パスワードは6文字以上にしてください'); return; }
+  const btn = document.getElementById('authSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = '処理中...';
+  try {
+    if (_emailAuthMode === 'login') {
+      await _auth.signInWithEmailAndPassword(email, pass);
+      // onAuthStateChanged がニックネーム未設定チェックを行う
+    } else {
+      const inputName = document.getElementById('authName').value.trim();
+      const name = inputName || email.split('@')[0];
+      const cred = await _auth.createUserWithEmailAndPassword(email, pass);
+      await cred.user.updateProfile({ displayName: name });
+      // Firestore にも保存
+      if (_db) {
+        await _db.collection('users').doc(cred.user.uid).set({
+          name, email: cred.user.email, photoURL: '',
+          role: 'player', groupId: null, createdAt: new Date()
+        });
+      }
+    }
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found':      'メールアドレスが見つかりません',
+      'auth/wrong-password':      'パスワードが正しくありません',
+      'auth/invalid-credential':  'メールアドレスまたはパスワードが正しくありません',
+      'auth/email-already-in-use':'このメールアドレスは既に使用中です',
+      'auth/weak-password':       'パスワードは6文字以上にしてください',
+      'auth/invalid-email':       'メールアドレスの形式が正しくありません',
+    };
+    showToast(msgs[e.code] || e.message);
+    btn.disabled = false;
+    btn.textContent = _emailAuthMode === 'login' ? 'ログイン' : 'アカウント作成';
+  }
+}
+
+// ─── Nickname Modal ───────────────────────────────────────
+function showNicknameModal(defaultName) {
+  document.getElementById('nicknameInput').value = defaultName;
+  document.getElementById('nicknameModal').classList.add('open');
+}
+
+async function saveNickname() {
+  const user = _auth && _auth.currentUser;
+  if (!user) return;
+  const input = document.getElementById('nicknameInput').value.trim();
+  const name  = input || user.email.split('@')[0];
+  const btn   = document.getElementById('nickSaveBtn');
+  btn.disabled = true; btn.textContent = '保存中...';
+  try {
+    await user.updateProfile({ displayName: name });
+    if (_db) {
+      await _db.collection('users').doc(user.uid).set(
+        { name, email: user.email, photoURL: user.photoURL || '', role: 'player', groupId: null, createdAt: new Date() },
+        { merge: true }
+      );
+    }
+    location.href = 'calc.html';
+  } catch(e) {
+    showToast('保存に失敗しました');
+    btn.disabled = false; btn.textContent = '設定してはじめる';
+  }
+}
+
 function toggleLogoutMenu() {
   const m = document.getElementById('logoutMenu');
   m.style.display = m.style.display === 'none' ? 'block' : 'none';
@@ -404,7 +539,12 @@ document.addEventListener('click', e => {
 if (_auth) _auth.onAuthStateChanged(async user => {
   _user = user;
   if (user) {
-    // ログイン済みならアプリへ遷移
+    // メール/パスワードユーザーでニックネーム未設定なら設定モーダルを表示
+    const isEmailUser = user.providerData.some(p => p.providerId === 'password');
+    if (isEmailUser && !user.displayName) {
+      showNicknameModal(user.email.split('@')[0]);
+      return;
+    }
     location.href = 'calc.html';
     return;
   } else {
