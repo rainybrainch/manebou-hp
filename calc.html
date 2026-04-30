@@ -2056,6 +2056,7 @@ body {
 }
 
 /* ─── Firebase Auth UI ───────────────────────────────────── */
+.nav-auth-wrap { margin-left: auto; flex-shrink: 0; display: flex; align-items: center; }
 .nav-auth-btn {
   flex-shrink: 0;
   background: none;
@@ -2078,7 +2079,6 @@ body {
   cursor: pointer;
   object-fit: cover;
   flex-shrink: 0;
-  margin-left: auto;
 }
 .auth-overlay, .modal-overlay {
   display: none;
@@ -2190,7 +2190,7 @@ body {
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
       Googleでログイン
     </button>
-    <span class="auth-cancel" onclick="closeAuthOverlay()">キャンセル</span>
+    <button class="auth-cancel" onclick="closeAuthOverlay()">キャンセル</button>
   </div>
 </div>
 
@@ -2204,7 +2204,8 @@ body {
       <button class="modal-tab" onclick="switchGroupTab('create',this)">作成する（講師）</button>
     </div>
     <div id="groupTabJoin">
-      <input class="modal-input" id="groupCodeInput" placeholder="XXXXXX" maxlength="6">
+      <input class="modal-input" id="groupCodeInput" placeholder="XXXXXX" maxlength="6"
+        oninput="this.value=this.value.toUpperCase()" autocomplete="off" spellcheck="false">
       <button class="btn-modal-action" onclick="joinGroup()">グループに参加</button>
     </div>
     <div id="groupTabCreate" style="display:none">
@@ -2213,9 +2214,10 @@ body {
       <div id="groupCreatedInfo" style="display:none">
         <div class="modal-group-code-label">グループコード（プレイヤーに共有）</div>
         <div class="modal-group-code" id="createdGroupCode">------</div>
+        <button class="btn-modal-action" style="background:rgba(245,200,66,0.15);color:var(--gold);border:1.5px solid var(--gold);margin-top:4px" onclick="copyGroupCode()">📋 コードをコピー</button>
       </div>
     </div>
-    <span class="modal-close" onclick="closeGroupModal()">閉じる</span>
+    <button class="modal-close" onclick="closeGroupModal()">閉じる</button>
   </div>
 </div>
 
@@ -2226,6 +2228,7 @@ body {
   <div class="user-menu-group" id="userMenuGroup"></div>
   <button class="user-menu-btn" onclick="openGroupModal()">👥 グループ管理</button>
   <button class="user-menu-btn" onclick="cloudSaveNow()">☁️ 今すぐ保存</button>
+  <button class="user-menu-btn danger" id="leaveGroupBtn" style="display:none" onclick="leaveGroup()">🚪 グループを抜ける</button>
   <button class="user-menu-btn danger" onclick="signOutUser()">ログアウト</button>
 </div>
 
@@ -2239,8 +2242,10 @@ body {
     <span class="nav-side-text" id="navBannerText"></span>
   </div>
   <div class="ticker-bar" id="tickerBar"></div>
-  <button class="nav-auth-btn" id="navAuthBtn" onclick="openAuthOverlay()">☁️ ログイン</button>
-  <img class="nav-user-avatar" id="navUserAvatar" src="" alt="" style="display:none" onclick="toggleUserMenu()">
+  <div class="nav-auth-wrap">
+    <button class="nav-auth-btn" id="navAuthBtn" onclick="openAuthOverlay()">☁️ ログイン</button>
+    <img class="nav-user-avatar" id="navUserAvatar" src="" alt="ユーザーアバター" style="display:none" onclick="toggleUserMenu()">
+  </div>
 </nav>
 
 <div class="wrap">
@@ -5713,11 +5718,38 @@ async function _loadUserProfile(user) {
 
 function _updateGroupLabel() {
   const el = document.getElementById('userMenuGroup');
+  const btn = document.getElementById('leaveGroupBtn');
   if (_groupId) {
     el.textContent = (_role === 'instructor' ? '👑 講師 | ' : '🎮 プレイヤー | ') + 'グループ: ' + _groupId;
+    if (btn) btn.style.display = '';
   } else {
     el.textContent = 'グループ未参加';
+    if (btn) btn.style.display = 'none';
   }
+}
+
+function copyGroupCode() {
+  const code = document.getElementById('createdGroupCode').textContent;
+  if (code === '------') return;
+  navigator.clipboard.writeText(code).then(() => {
+    showToast('コードをコピーしました: ' + code, 2500);
+  }).catch(() => {
+    showToast('コード: ' + code, 3000);
+  });
+}
+
+async function leaveGroup() {
+  if (!_fbUser || !_db || !_groupId) return;
+  closeUserMenu();
+  try {
+    await _db.collection('users').doc(_fbUser.uid).update({ groupId: null, role: 'player' });
+    if (_instructorUnsub) { _instructorUnsub(); _instructorUnsub = null; }
+    const panel = document.getElementById('instructorPanel');
+    if (panel) panel.remove();
+    _groupId = null; _role = 'player';
+    _updateGroupLabel();
+    showToast('グループから抜けました', 3000);
+  } catch(e) { showToast('エラー: ' + e.message, 4000); }
 }
 
 // --- Google Sign In / Out ---
@@ -5754,8 +5786,8 @@ function _calcTotalAssets() {
   return total;
 }
 
-async function cloudSaveNow() {
-  if (!_fbUser || !_db) { showToast('ログインが必要です'); return; }
+async function cloudSaveNow(silent) {
+  if (!_fbUser || !_db) { if (!silent) showToast('ログインが必要です'); return; }
   try {
     await _db.collection('saves').doc(_fbUser.uid).set(_buildSavePayload());
     if (_groupId) {
@@ -5771,8 +5803,8 @@ async function cloudSaveNow() {
           updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true });
     }
-    showToast('☁️ クラウドに保存しました', 2500);
-  } catch(e) { showToast('保存失敗: ' + e.message, 4000); }
+    if (!silent) showToast('☁️ クラウドに保存しました', 2500);
+  } catch(e) { if (!silent) showToast('保存失敗: ' + e.message, 4000); }
 }
 
 async function cloudLoad() {
@@ -5826,7 +5858,7 @@ function _buildLocalSnapshot() {
 }
 
 // Auto cloud save every 3 min when in a group
-setInterval(() => { if (_fbUser && _groupId) cloudSaveNow(); }, 3 * 60 * 1000);
+setInterval(() => { if (_fbUser && _groupId) cloudSaveNow(true); }, 3 * 60 * 1000);
 
 // --- Group Management ---
 async function createGroup() {
