@@ -15,7 +15,10 @@
 body{font-family:'Zen Maru Gothic',sans-serif;color:var(--dark);background:var(--cream);min-height:100vh;}
 
 nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,26,46,0.95);backdrop-filter:blur(16px);border-bottom:3px solid var(--gold);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
-.nav-title{font-family:'Dela Gothic One',sans-serif;font-size:15px;color:var(--sky);}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo img{height:30px;width:auto;}
+.nav-logo-text{font-family:'Dela Gothic One',sans-serif;font-size:16px;color:var(--sky);line-height:1.2;}
+.nav-logo-sub{font-size:9px;color:rgba(255,255,255,0.5);font-family:'Zen Maru Gothic',sans-serif;letter-spacing:2px;display:block;}
 .nav-back{color:rgba(255,255,255,0.7);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color 0.2s;}
 .nav-back:hover{color:var(--gold);}
 
@@ -55,7 +58,9 @@ footer{text-align:center;padding:32px 20px;background:var(--dark);color:rgba(255
 <body>
 
 <nav>
-  <span class="nav-title">マネぼう塾</span>
+  <div class="nav-logo">
+    <div class="nav-logo-text">マネぼう塾<span class="nav-logo-sub">by RAINY BRAIN</span></div>
+  </div>
   <a href="index.html" class="nav-back">← HPに戻る</a>
 </nav>
 

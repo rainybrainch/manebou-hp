@@ -15,6 +15,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="images/icon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 
 /* ─── Variables ──────────────────────────────────────────── */
@@ -80,7 +84,6 @@ body {
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
-  overflow: hidden;
 }
 
 .nav-back {
@@ -268,69 +271,6 @@ body {
   animation: fadeUp 0.7s ease 0.15s both;
 }
 
-.hold-list {
-  min-height: 34px;
-  margin-bottom: 12px;
-}
-
-.hold-item {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px 6px;
-  border-left: 4px solid;
-  border-radius: 0 10px 10px 0;
-  margin-bottom: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  font-size: 13px;
-  overflow: hidden;
-}
-
-.hold-div-row {
-  flex: 0 0 100%;
-  font-size: 10px;
-  color: #4caf7d;
-  background: rgba(76,175,125,0.08);
-  border-top: 1px solid rgba(76,175,125,0.18);
-  padding: 3px 0 4px;
-  margin-top: 5px;
-  letter-spacing: 0.3px;
-}
-
-.hold-div-row strong {
-  font-family: 'Dela Gothic One', sans-serif;
-  font-size: 11px;
-  color: #5ecf8e;
-}
-
-.hold-div-row .div-annual {
-  opacity: 0.6;
-  font-size: 9px;
-  margin-left: 6px;
-}
-
-.hold-item-name { font-weight: 700; }
-
-.hold-item-val {
-  font-family: 'Dela Gothic One', sans-serif;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: right;
-}
-
-.hold-empty {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 12px;
-  padding: 6px 0;
-  letter-spacing: 1px;
-}
-
-.value-divider {
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 10px 0;
-}
 
 .value-nums {
   display: grid;
@@ -431,12 +371,12 @@ body {
 
 .asset-btn {
   background: var(--cream);
-  border: 3px solid var(--dark);
+  border: 3px solid var(--ac, var(--dark));
   border-radius: 14px;
   padding: 10px 11px 8px;
   cursor: pointer;
   overflow: hidden;
-  box-shadow: 0 7px 0 rgba(0,0,0,0.45);
+  box-shadow: 0 6px 0 var(--as, rgba(0,0,0,0.45));
   transform: translateY(0);
   transition: transform 0.08s ease, box-shadow 0.08s ease;
   text-align: left;
@@ -444,8 +384,8 @@ body {
   display: flex;
   flex-direction: column;
 }
-.asset-btn:hover          { transform: translateY(-3px); box-shadow: 0 10px 0 rgba(0,0,0,0.35); }
-.asset-btn:active         { transform: translateY(6px);  box-shadow: 0 1px  0 rgba(0,0,0,0.45); }
+.asset-btn:hover          { transform: translateY(-3px); box-shadow: 0 9px 0 var(--as, rgba(0,0,0,0.35)); }
+.asset-btn:active         { transform: translateY(5px);  box-shadow: 0 1px 0 var(--as, rgba(0,0,0,0.45)); }
 .asset-btn:disabled       { opacity: 0.42; cursor: not-allowed; filter: grayscale(0.5); box-shadow: none; }
 .asset-btn:disabled:hover { transform: none; box-shadow: none; }
 
@@ -576,41 +516,55 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 680px;  /* overridden by media queries below */
+  max-width: 680px;
   z-index: 310;
   background: var(--dark);
   border-top: 2px solid var(--gold);
-  padding: 8px 16px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
 }
-.cart-top-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* Expandable items area – slides up/down */
+.cart-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.28s ease;
+  padding: 0 14px;
 }
-.cart-bottom-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+.cart-body.open {
+  max-height: 260px;
+  padding: 8px 14px 4px;
 }
 .cart-items {
-  flex: 1;
   font-size: 12px;
   color: rgba(255,255,255,0.85);
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+  gap: 3px;
 }
 .cart-item-row {
   display: flex;
   align-items: center;
   gap: 6px;
   white-space: nowrap;
+}
+/* Always-visible footer strip */
+.cart-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+}
+.cart-toggle-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.55);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  line-height: 1;
 }
 .cart-summary {
   font-size: 12px;
@@ -946,6 +900,130 @@ body {
   white-space: nowrap;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ─── Purchase Popup ─────────────────────────────────────── */
+#purchasePopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  background: var(--white);
+  border: 3px solid var(--dark);
+  border-radius: 20px;
+  box-shadow: 8px 8px 0 var(--dark);
+  padding: 20px 24px;
+  min-width: 240px;
+  max-width: min(320px, 85vw);
+  z-index: 600;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+}
+#purchasePopup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.pp-title {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: 15px;
+  color: var(--dark);
+  text-align: center;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+.pp-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.pp-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  gap: 8px;
+}
+.pp-item-name { font-weight: 700; flex: 1; }
+.pp-item-qty { font-family: 'Dela Gothic One', sans-serif; font-size: 13px; }
+.pp-item-qty.buy { color: var(--red); }
+.pp-item-qty.sell { color: var(--green); }
+.pp-summary {
+  border-top: 2px solid rgba(0,0,0,0.1);
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pp-sum-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-family: 'Dela Gothic One', sans-serif;
+}
+.pp-sum-row.cash-out { color: var(--red); }
+.pp-sum-row.cash-in  { color: var(--green); }
+
+/* ─── Loading Overlay ────────────────────────────────────── */
+#loadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 700;
+  background: rgba(26, 26, 46, 0.90);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+#loadingOverlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+.lo-char {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  object-fit: cover;
+  object-position: top center;
+  background: rgba(255,255,255,0.9);
+  animation: loBounce 0.55s ease-in-out infinite alternate;
+  box-shadow: 0 0 24px rgba(245,200,66,0.35);
+}
+@keyframes loBounce {
+  from { transform: translateY(0px) scale(1); }
+  to   { transform: translateY(-14px) scale(1.04); }
+}
+.lo-label {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: 20px;
+  color: var(--gold);
+  letter-spacing: 3px;
+}
+.lo-msg {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  min-height: 1.4em;
+}
+.lo-dots {
+  display: flex;
+  gap: 8px;
+}
+.lo-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: loDot 0.85s ease-in-out infinite;
+}
+.lo-dots span:nth-child(2) { animation-delay: 0.15s; }
+.lo-dots span:nth-child(3) { animation-delay: 0.30s; }
+@keyframes loDot {
+  0%, 80%, 100% { transform: scale(0.55); opacity: 0.35; }
+  40%           { transform: scale(1.25); opacity: 1; }
+}
 
 /* ─── Compare Table ──────────────────────────────────────── */
 #compareTable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -1682,10 +1760,6 @@ body {
 .step-hint    { font-size: 11px; color: #aaa; font-weight: 400; }
 .step-row     { gap: 4px; margin-bottom: 4px; }
 .step-btn     { padding: 9px 5px; font-size: 13px; border-radius: 8px; }
-.hold-list    { min-height: 0; margin-bottom: 6px; }
-.hold-item    { padding: 6px 10px; font-size: 13px; }
-.hold-item-val { font-size: 12px; }
-.value-divider { margin: 6px 0; }
 .value-block-lbl { font-size: 9px; margin-bottom: 3px; }
 .value-block-num { font-size: clamp(16px, 4vw, 22px); }
 .action-row   { margin-bottom: 8px; }
@@ -1809,44 +1883,52 @@ body {
 .pl-total-val   { color: var(--gold-dark); font-family: 'Dela Gothic One',sans-serif; font-size: 14px; }
 .pl-saving-compare { display: flex; align-items: center; justify-content: space-between; padding: 5px 6px 2px; border-top: 1px dashed rgba(26,26,46,0.12); margin-top: 4px; font-size: 11px; color: rgba(26,26,46,0.5); }
 .pl-saving-diff    { text-align: right; padding: 2px 6px 6px; font-family: 'Dela Gothic One',sans-serif; font-size: 12px; }
+.pl-diff {
+  flex-shrink: 0;
+  width: 62px;
+  text-align: right;
+  font-size: 10px;
+  font-family: 'Dela Gothic One', sans-serif;
+  overflow: hidden;
+  white-space: nowrap;
+}
 @media (max-width: 520px) {
   .pl-bar-wrap { display: none; }
   .pl-pct { display: none; }
-  .pl-val { width: 72px; }
+  .pl-val { width: 66px; }
   .pl-qty { width: 30px; }
+  .pl-diff { width: 58px; }
 }
 
 
-@keyframes navSideTick {
-  0%   { transform: translateX(110%); opacity: 1; }
-  18%  { transform: translateX(0%);   opacity: 1; }
-  78%  { transform: translateX(0%);   opacity: 1; }
-  96%  { transform: translateX(-10%); opacity: 0; }
-  100% { transform: translateX(-110%);opacity: 0; }
+@keyframes navBannerFlow {
+  0%   { transform: translateX(100vw); opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateX(-180%); opacity: 0; }
 }
 .nav-side-ticker {
   flex: 1;
+  min-width: 0;
   overflow: hidden;
-  height: 22px;
+  height: 26px;
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 8px;
   position: relative;
 }
 .nav-side-text {
   position: absolute;
-  left: 0;
   white-space: nowrap;
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--gold);
-  letter-spacing: 0.8px;
-  text-shadow: 0 0 6px rgba(245,200,66,0.5);
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(245,200,66,0.55);
   opacity: 0;
-  transform: translateX(110%);
+  pointer-events: none;
 }
 .nav-side-text.running {
-  animation: navSideTick 2.8s cubic-bezier(0.25,0,0.5,1) forwards;
+  animation: navBannerFlow 5s linear forwards;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1877,13 +1959,20 @@ body {
   .wrap { max-width: 960px; padding-left: 24px; padding-right: 24px; }
   .cart-bar { max-width: 960px; }
 
-  #tab-game {
+  #tab-game.active {
     display: grid;
     grid-template-columns: 1fr 1.05fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "left  right"
+      "steps right"
+      "jump  jump";
     gap: 18px;
     align-items: start;
   }
+  .game-col-left  { grid-area: left; }
   .game-col-right {
+    grid-area: right;
     position: sticky;
     top: 72px;
     background: rgba(255,255,255,0.025);
@@ -1891,11 +1980,10 @@ body {
     border-radius: 18px;
     padding: 12px;
   }
+  .game-step-area { grid-area: steps; }
+  .game-jump-bar  { grid-area: jump; }
 
   .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px; }
-
-  /* Year-jump bar spans both columns */
-  .game-jump-bar { grid-column: 1 / -1; }
 
   /* Data tab: 2 columns */
   .data-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
@@ -1904,9 +1992,6 @@ body {
   /* Titles: 2-column badge grid */
   #titlesGrid { column-count: 2; column-gap: 12px; }
   #titlesGrid .title-row { break-inside: avoid; }
-
-  /* Wider bottom-nav tabs */
-  .tab-btn { font-size: 11px; }
 }
 
 /* ── Desktop (1024px+) ───────────────────────────── */
@@ -1920,7 +2005,7 @@ body {
   .tab-btn { flex: 1; max-width: 200px; }
 
   /* Game tab: balanced columns */
-  #tab-game { grid-template-columns: 1fr 1.15fr; gap: 24px; }
+  #tab-game.active { grid-template-columns: 1fr 1.15fr; gap: 24px; }
   .game-col-right { padding: 16px; }
 
   /* Card sizing */
@@ -1943,6 +2028,9 @@ body {
   .nav-char { width: 32px; height: 32px; }
   .nav-title { font-size: 16px; }
 
+  /* Wallet sticky header: offset for taller nav (12px*2 + 32px = 56px) */
+  .wallet-header { top: calc(56px + env(safe-area-inset-top, 0px)); }
+
   /* Badge grid: 3 columns */
   #titlesGrid { column-count: 3; }
 
@@ -1960,13 +2048,186 @@ body {
   .wrap { max-width: 1440px; }
   .cart-bar { max-width: 1440px; }
   .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
-  #tab-game { grid-template-columns: 1fr 1.25fr; gap: 32px; }
+  #tab-game.active { grid-template-columns: 1fr 1.25fr; gap: 32px; }
   .game-col-right { padding: 20px; }
+  .game-step-area { padding: 0 4px; }
+  /* タブを均等に広げる（max-width 制限を解除） */
+  .tab-btn { max-width: none; }
 }
+
+/* ─── Firebase Auth UI ───────────────────────────────────── */
+.nav-auth-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1.5px solid rgba(245,200,66,0.5);
+  border-radius: 20px;
+  padding: 4px 10px;
+  color: var(--gold);
+  font-size: 11px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.nav-auth-btn:hover { background: rgba(245,200,66,0.12); }
+.nav-user-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  cursor: pointer;
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.auth-overlay, .modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.auth-overlay.open, .modal-overlay.open { display: flex; }
+.auth-box, .modal-box {
+  background: #1a1a2e;
+  border-radius: 20px;
+  padding: 28px 22px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+.auth-box { border: 3px solid var(--gold); }
+.modal-box { border: 3px solid var(--sky); }
+.auth-box h2 { font-family: 'Dela Gothic One', sans-serif; font-size: 18px; color: var(--gold); margin-bottom: 8px; }
+.modal-box h2 { font-family: 'Dela Gothic One', sans-serif; font-size: 17px; color: var(--sky); margin-bottom: 6px; }
+.auth-box p, .modal-box p { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 20px; }
+.btn-google {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; background: #fff; color: #333; border: none; border-radius: 10px;
+  padding: 12px 16px; font-size: 14px; font-weight: 700; cursor: pointer; margin-bottom: 12px;
+  transition: background 0.2s;
+}
+.btn-google:hover { background: #f0f0f0; }
+.btn-google img { width: 20px; height: 20px; }
+.auth-cancel, .modal-close { color: rgba(255,255,255,0.4); font-size: 12px; cursor: pointer; }
+.auth-cancel:hover, .modal-close:hover { color: #fff; }
+.modal-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.modal-tab {
+  flex: 1; padding: 8px;
+  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: 8px; color: rgba(255,255,255,0.6); font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: 'Zen Maru Gothic', sans-serif;
+}
+.modal-tab.active { background: rgba(91,200,232,0.15); border-color: var(--sky); color: var(--sky); }
+.modal-input {
+  width: 100%; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 10px; padding: 10px 14px; color: #fff; font-size: 15px;
+  font-family: 'Zen Maru Gothic', sans-serif; text-align: center; letter-spacing: 4px; margin-bottom: 14px;
+}
+.modal-input:focus { outline: none; border-color: var(--sky); }
+.modal-input.no-track { letter-spacing: 0; }
+.btn-modal-action {
+  width: 100%; background: var(--sky); color: var(--dark); border: none; border-radius: 10px;
+  padding: 12px; font-size: 14px; font-weight: 700; font-family: 'Zen Maru Gothic', sans-serif;
+  cursor: pointer; margin-bottom: 10px;
+}
+.btn-modal-action:hover { opacity: 0.88; }
+.modal-group-code {
+  font-family: 'Dela Gothic One', sans-serif; font-size: 28px; color: var(--gold);
+  letter-spacing: 6px; margin: 12px 0;
+  background: rgba(245,200,66,0.08); border: 2px dashed var(--gold);
+  border-radius: 10px; padding: 12px;
+}
+.modal-group-code-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+.user-menu {
+  display: none; position: fixed; top: 55px; right: calc(50% - 330px);
+  background: #1a1a2e; border: 2px solid var(--gold); border-radius: 12px;
+  padding: 14px 16px; z-index: 500; min-width: 200px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+@media (max-width: 680px) { .user-menu { right: 12px; } }
+.user-menu.open { display: block; }
+.user-menu-name { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+.user-menu-email { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
+.user-menu-group { font-size: 12px; color: var(--sky); margin-bottom: 12px; }
+.user-menu-btn {
+  display: block; width: 100%;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; color: #fff; font-size: 12px;
+  font-family: 'Zen Maru Gothic', sans-serif; padding: 8px 10px; cursor: pointer;
+  text-align: left; margin-bottom: 6px;
+}
+.user-menu-btn:hover { background: rgba(255,255,255,0.13); }
+.user-menu-btn.danger { color: var(--red); border-color: rgba(232,53,74,0.3); }
+.instructor-panel {
+  background: rgba(91,200,232,0.06); border: 2px solid rgba(91,200,232,0.3);
+  border-radius: 14px; padding: 14px; margin-top: 10px;
+}
+.instructor-panel h3 { font-size: 13px; color: var(--sky); margin-bottom: 10px; }
+.member-card {
+  background: rgba(255,255,255,0.05); border-radius: 10px;
+  padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
+}
+.member-card:last-child { margin-bottom: 0; }
+.member-card img { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; }
+.member-info { flex: 1; min-width: 0; }
+.member-name { font-size: 12px; font-weight: 700; }
+.member-cash { font-size: 11px; color: var(--gold); }
+.member-year { font-size: 10px; color: rgba(255,255,255,0.4); }
 
 </style>
 </head>
 <body>
+
+<!-- ════ LOGIN OVERLAY ════ -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <h2>☁️ クラウドセーブ</h2>
+    <p>Googleアカウントでログインすると<br>データのクラウド保存・グループ参加ができます</p>
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+      Googleでログイン
+    </button>
+    <span class="auth-cancel" onclick="closeAuthOverlay()">キャンセル</span>
+  </div>
+</div>
+
+<!-- ════ GROUP MODAL ════ -->
+<div class="modal-overlay" id="groupModal">
+  <div class="modal-box">
+    <h2>👥 グループ</h2>
+    <p>講師がグループを作成し<br>プレイヤーはコードで参加できます</p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchGroupTab('join',this)">参加する</button>
+      <button class="modal-tab" onclick="switchGroupTab('create',this)">作成する（講師）</button>
+    </div>
+    <div id="groupTabJoin">
+      <input class="modal-input" id="groupCodeInput" placeholder="XXXXXX" maxlength="6">
+      <button class="btn-modal-action" onclick="joinGroup()">グループに参加</button>
+    </div>
+    <div id="groupTabCreate" style="display:none">
+      <input class="modal-input no-track" id="groupNameInput" placeholder="グループ名" maxlength="20">
+      <button class="btn-modal-action" onclick="createGroup()">グループを作成</button>
+      <div id="groupCreatedInfo" style="display:none">
+        <div class="modal-group-code-label">グループコード（プレイヤーに共有）</div>
+        <div class="modal-group-code" id="createdGroupCode">------</div>
+      </div>
+    </div>
+    <span class="modal-close" onclick="closeGroupModal()">閉じる</span>
+  </div>
+</div>
+
+<!-- ════ USER MENU ════ -->
+<div class="user-menu" id="userMenu">
+  <div class="user-menu-name" id="userMenuName">--</div>
+  <div class="user-menu-email" id="userMenuEmail">--</div>
+  <div class="user-menu-group" id="userMenuGroup"></div>
+  <button class="user-menu-btn" onclick="openGroupModal()">👥 グループ管理</button>
+  <button class="user-menu-btn" onclick="cloudSaveNow()">☁️ 今すぐ保存</button>
+  <button class="user-menu-btn danger" onclick="signOutUser()">ログアウト</button>
+</div>
 
 <nav class="top-nav">
   <span class="nav-spacer"></span>
@@ -1978,6 +2239,8 @@ body {
     <span class="nav-side-text" id="navBannerText"></span>
   </div>
   <div class="ticker-bar" id="tickerBar"></div>
+  <button class="nav-auth-btn" id="navAuthBtn" onclick="openAuthOverlay()">☁️ ログイン</button>
+  <img class="nav-user-avatar" id="navUserAvatar" src="" alt="" style="display:none" onclick="toggleUserMenu()">
 </nav>
 
 <div class="wrap">
@@ -2007,19 +2270,20 @@ body {
     <!-- VALUE PANEL -->
     <div class="value-panel">
 
-      <div class="hold-list" id="holdList">
-        <div class="hold-empty">保有なし</div>
-      </div>
-      <hr class="value-divider">
       <div class="value-nums">
         <div class="value-block">
           <span class="value-block-lbl">総資産</span>
           <span class="value-block-num"><span id="dispTotal">0</span><span class="value-block-unit">円</span></span>
+          <span id="rankVal">─</span>
         </div>
         <div class="value-block">
           <span class="value-block-lbl">配当 / ターン</span>
           <span class="value-block-num"><span id="dispDiv" style="color:var(--green)">0</span><span class="value-block-unit" style="color:var(--green)">円</span></span>
           <span id="dispDivYear">年間 ─</span>
+        </div>
+        <div class="value-block" style="grid-column:1/-1;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
+          <span class="value-block-lbl">💰 現金残高</span>
+          <span class="value-block-num" style="font-size:clamp(14px,3.5vw,20px)"><span id="dispCashTop">0</span><span class="value-block-unit">円</span></span>
         </div>
       </div>
     </div>
@@ -2030,8 +2294,10 @@ body {
     <!-- ASSET BUTTONS -->
     <div class="asset-grid" id="btnWrap"></div>
 
-    <!-- STEP SELECTOR -->
-    <div class="step-section">
+    </div><!-- /game-col-right -->
+
+    <!-- STEP SELECTOR (outside columns → PC grid places it under left col) -->
+    <div class="step-section game-step-area">
       <div class="step-lbl">売買個数 <span class="step-hint">タップでカートに入ります</span></div>
       <div class="step-row">
         <button class="step-btn plus active" onclick="setStep(1,this)">＋1</button>
@@ -2046,8 +2312,6 @@ body {
         <button class="step-btn minus" onclick="setStep(-1000,this)">－1K</button>
       </div>
     </div>
-
-    </div><!-- /game-col-right -->
 
     <!-- JUMP TO YEAR (full-width bottom) -->
     <div class="date-bar date-jump game-jump-bar">
@@ -2074,7 +2338,7 @@ body {
       </div>
       <div class="wh-input-row" style="margin-top:8px">
         <button class="wh-sign-toggle is-plus" id="cashSignToggle" onclick="toggleCashSign()">＋</button>
-        <input id="cashInput" type="number" inputmode="numeric" placeholder="金額" min="0" style="width:90px;flex:none">
+        <input id="cashInput" type="number" inputmode="numeric" placeholder="金額" min="0" style="max-width:90px;flex:1;min-width:0">
         <input id="cashLabelInput" type="text" class="wh-label-input" placeholder="メモ（例：配当、給与）">
         <button class="wh-op-btn wh-apply-btn plus" id="cashApplyBtn" onclick="applyFromInput()">追加</button>
       </div>
@@ -2367,6 +2631,16 @@ body {
           <span>マネぼう公式サイト</span>
           <a class="setting-link" href="https://rainybrainch.github.io/manebou-hp/" target="_blank">🌐 こちら</a>
         </div>
+        <div class="setting-row">
+          <span>グッズ・スタンプ</span>
+          <a class="setting-link" href="shop.html" target="_blank">🛍️ ショップ</a>
+        </div>
+        <div class="setting-row">
+          <span>クラウドセーブ</span>
+          <button class="setting-btn" id="cloudSaveSettingBtn"
+            style="background:rgba(91,200,232,0.1);color:var(--sky);border-color:rgba(91,200,232,0.3)"
+            onclick="openAuthOverlay()">ログイン</button>
+        </div>
       </div>
     </div>
 
@@ -2377,9 +2651,9 @@ body {
 
     <!-- モード切替 -->
     <div class="calc-subtabs" style="margin-bottom:10px">
-      <button class="cst-btn active" onclick="setGraphMode('portfolio',this)">💰<br>わたしの</button>
-      <button class="cst-btn" onclick="setGraphMode('price',this)">📊<br>歴史</button>
-      <button class="cst-btn" onclick="setGraphMode('income',this)">💴<br>余剰金</button>
+      <button class="cst-btn active" onclick="setGraphMode('portfolio',this)">💰<br>わたしの<br>チャート</button>
+      <button class="cst-btn" onclick="setGraphMode('price',this)">📊<br>歴史<br>チャート</button>
+      <button class="cst-btn" onclick="setGraphMode('income',this)">💴<br>余剰金<br>チャート</button>
     </div>
 
     <!-- 歴史チャートモード -->
@@ -2454,49 +2728,30 @@ body {
       </div>
     </div>
 
-    <!-- 余剰金チャートモード（データ準備中） -->
+    <!-- 余剰金チャートモード -->
     <div id="graphModeIncome" style="display:none">
       <div class="graph-card">
         <div class="graph-card-head">
           <span class="graph-card-title">💴 給料・収支チャート</span>
-        </div>
-        <div id="incHoverYear" style="text-align:center;font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:3px;margin-bottom:4px;min-height:14px">─</div>
-        <div class="graph-stat-strip">
-          <div class="gss-item">
-            <div class="gss-label">給料</div>
-            <div class="gss-val" id="incStatSalary" style="color:#4caf7d">─</div>
-          </div>
-          <div class="gss-item">
-            <div class="gss-label">税金</div>
-            <div class="gss-val" id="incStatTax" style="color:#e8354a">─</div>
-          </div>
-          <div class="gss-item">
-            <div class="gss-label">生活費</div>
-            <div class="gss-val" id="incStatLife" style="color:#f39c12">─</div>
-          </div>
-          <div class="gss-item">
-            <div class="gss-label">余剰金</div>
-            <div class="gss-val gold" id="incStatSurplus">─</div>
-          </div>
+          <span id="incHoverYear" style="font-size:11px;color:rgba(255,255,255,0.45);letter-spacing:2px">─</span>
         </div>
         <div class="graph-svg-wrap" style="position:relative"
              onmousemove="incomeHover(event)" onmouseleave="incomeLeave()"
-             ontouchmove="incomeTouch(event)" ontouchstart="incomeTouch(event)">
+             ontouchmove="incomeTouch(event)" ontouchstart="incomeTouch(event)" ontouchend="incomeLeave()">
           <svg id="incomeSvg" viewBox="0 0 600 180" preserveAspectRatio="none"
                style="width:100%;height:180px;display:block;border-radius:8px;background:rgba(0,0,0,0.2)">
-            <text x="300" y="70" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">💴 ゲームを進めると表示されます</text>
+            <text x="300" y="78" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます</text><text x="300" y="100" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="'Zen Maru Gothic',sans-serif">次へ ▶ で1970年へ進もう</text>
           </svg>
         </div>
         <div class="graph-labels" id="incomeLabels"></div>
       </div>
       <div class="tab-section">
-        <div class="tab-section-title">📋 収支内訳</div>
+        <div class="tab-section-title">📋 収支内訳<span id="incLegendYear" style="font-size:10px;color:rgba(255,255,255,0.35);font-family:'Zen Maru Gothic',sans-serif;font-weight:400;margin-left:8px">ゲームを進めると表示されます</span></div>
         <div class="portfolio-legend" id="incomeLegend">
           <div class="pl-row"><div class="pl-dot" style="background:#27ae60"></div><div class="pl-name">💼 給料</div><div class="pl-val" id="incVal-給料" style="color:#27ae60">─</div></div>
           <div class="pl-row"><div class="pl-dot" style="background:#e8354a"></div><div class="pl-name">🏛 税金・社会保険</div><div class="pl-val" id="incVal-税収" style="color:#e8354a">─</div></div>
           <div class="pl-row"><div class="pl-dot" style="background:#f39c12"></div><div class="pl-name">🛒 生活費</div><div class="pl-val" id="incVal-生活費" style="color:#f39c12">─</div></div>
           <div class="pl-row"><div class="pl-dot" style="background:#F5C842"></div><div class="pl-name">💰 余剰金</div><div class="pl-val" id="incVal-余剰金" style="color:#F5C842">─</div></div>
-          <div class="pl-total-row"><span class="pl-total-label" id="incLegendYear">1970年以降プレイすると表示されます</span></div>
         </div>
       </div>
     </div>
@@ -2536,12 +2791,13 @@ body {
 
 <!-- CART BAR -->
 <div id="cartBar" class="cart-bar" style="display:none">
-  <div class="cart-top-row">
+  <div class="cart-body open" id="cartBody">
     <div class="cart-items" id="cartItems"></div>
-    <button class="cart-cancel-btn" onclick="cancelCart()">クリア</button>
   </div>
-  <div class="cart-bottom-row">
+  <div class="cart-footer">
+    <button class="cart-toggle-btn" id="cartToggleBtn" onclick="toggleCartBody()">▲</button>
     <span class="cart-summary" id="cartSummary"></span>
+    <button class="cart-cancel-btn" onclick="cancelCart()">クリア</button>
     <button class="cart-confirm-btn" onclick="confirmCart()">確定する！</button>
   </div>
 </div>
@@ -2581,6 +2837,14 @@ body {
 </nav>
 
 <div id="toast" class="toast"></div>
+<div id="purchasePopup"></div>
+
+<div id="loadingOverlay">
+  <img class="lo-char" id="loChar" src="images/img5.webp" alt="">
+  <div class="lo-label" id="loLabel">処理中...</div>
+  <div class="lo-dots"><span></span><span></span><span></span></div>
+  <div class="lo-msg" id="loMsg"></div>
+</div>
 
 <script>
 // ============================================================
@@ -2926,11 +3190,68 @@ const ASSET_KEYS = [
 // CHARACTERS & ERA COMMENTS
 // ============================================================
 const CHARS = {
-  局長:      { img: 'images/img5.webp', name: 'おーる局長',  id: 'charimg-局長' },
-  えんだ:    { img: 'images/img6.webp', name: 'えんだ',      id: 'charimg-えんだ' },
-  ためぞう:  { img: 'images/img7.webp', name: 'ためぞう',    id: 'charimg-ためぞう' },
-  カウッシー:{ img: 'images/img8.webp', name: 'カウッシー',  id: 'charimg-カウッシー' },
+  局長:      { img: 'images/img5.webp', img2: 'images/img5-2.webp', img3: 'images/img5-3.webp', name: 'おーる局長',  id: 'charimg-局長' },
+  えんだ:    { img: 'images/img6.webp', img2: 'images/img6-2.webp', img3: 'images/img6-3.webp', name: 'えんだ',      id: 'charimg-えんだ' },
+  ためぞう:  { img: 'images/img7.webp', img2: 'images/img7-2.webp', img3: 'images/img7-3.webp', name: 'ためぞう',    id: 'charimg-ためぞう' },
+  カウッシー:{ img: 'images/img8.webp', img2: 'images/img8-2.webp', img3: 'images/img8-3.webp', name: 'カウッシー',  id: 'charimg-カウッシー' },
 };
+
+const LOAD_MSGS = {
+  局長: {
+    buy:   ['局長権限で承認中！', '取引を確認してます'],
+    sell:  ['局長が精算中です', '売却を承認中...'],
+    both:  ['局長が売買を処理中！', '一気にやってやる！'],
+    reset: ['局長がデータを消去中...', '初期化を承認します'],
+  },
+  えんだ: {
+    buy:   ['どんどん買うよ！', 'えんだが仕入れ中♪'],
+    sell:  ['売るタイミングよし！', 'えんだが売却処理中'],
+    both:  ['売って買って！全部やる！', 'えんだが全力処理中♪'],
+    reset: ['えんだがリセット中♪', 'また最初から頑張ろう！'],
+  },
+  ためぞう: {
+    buy:   ['本当に買って大丈夫...？', 'ためぞうが確認中...'],
+    sell:  ['売るのはもったいないけど...', 'ためぞうが売却中...'],
+    both:  ['いっぺんにやるの...？', 'ためぞうが処理中...'],
+    reset: ['本当に消すの...？', 'ためぞうが初期化中...'],
+  },
+  カウッシー: {
+    buy:   ['任せろ！一気に買うぞ！', 'カウッシーが突撃中！'],
+    sell:  ['超速で売却するぞ！', 'カウッシーが処理中！'],
+    both:  ['全部やってやる！', 'カウッシーが爆速処理中！'],
+    reset: ['データを全消去するぞ！', 'カウッシーが初期化中！'],
+  },
+};
+
+let _loTimer = null;
+function showLoadingScreen(label, onDone) {
+  const keys = Object.keys(CHARS);
+  const key  = keys[Math.floor(Math.random() * keys.length)];
+  const char = CHARS[key];
+  const msgs = LOAD_MSGS[key];
+  const bucket = label.includes('売買') ? 'both'
+               : label.includes('購入') ? 'buy'
+               : label.includes('売却') ? 'sell'
+               : label.includes('削除') ? 'reset'
+               : 'sell';
+  const pool = msgs[bucket];
+  const msg  = pool[Math.floor(Math.random() * pool.length)];
+
+  const imgSrc = (bucket === 'buy' || bucket === 'both') ? char.img2
+               : (bucket === 'sell' || bucket === 'reset') ? char.img3
+               : char.img;
+  const overlay = document.getElementById('loadingOverlay');
+  document.getElementById('loChar').src = imgSrc;
+  document.getElementById('loLabel').textContent = label;
+  document.getElementById('loMsg').textContent = msg;
+
+  overlay.classList.add('show');
+  clearTimeout(_loTimer);
+  _loTimer = setTimeout(() => {
+    overlay.classList.remove('show');
+    setTimeout(onDone, 200);
+  }, 850);
+}
 
 // [fromYear, fromEvent, toYear, toEvent, charKey, text]
 const ERA_COMMENTS = [
@@ -3100,8 +3421,20 @@ function updateCharSpeech(year, event) {
     const el = document.getElementById(c.id);
     if (el) el.classList.remove('active-speaker');
   });
-  const el = document.getElementById(ch.id);
-  if (el) el.classList.add('active-speaker');
+  const speakerEl = document.getElementById(ch.id);
+  if (speakerEl) speakerEl.classList.add('active-speaker');
+
+  // ナビキャラを年代キャラに更新
+  const navCharEl = document.querySelector('.nav-char');
+  if (navCharEl && navCharEl.src !== ch.img) {
+    navCharEl.classList.remove('pop');
+    void navCharEl.offsetWidth;
+    navCharEl.src = ch.img;
+    navCharEl.classList.add('pop');
+  }
+
+  // セリフを横断幕スタイルで流す（改行を空白に変換）
+  showNavBanner(ch.name + '：' + matchText.replace(/\n/g, '　'), 5000);
 }
 
 // ============================================================
@@ -3750,14 +4083,33 @@ function pressAsset(id) {
   updateDisplay();
 }
 
+let _cartBodyOpen = true;
+
+function toggleCartBody() {
+  _cartBodyOpen = !_cartBodyOpen;
+  const body = document.getElementById('cartBody');
+  const btn  = document.getElementById('cartToggleBtn');
+  if (body) body.classList.toggle('open', _cartBodyOpen);
+  if (btn)  btn.textContent = _cartBodyOpen ? '▲' : '▼';
+}
+
 function updateCartBar() {
   const bar = document.getElementById('cartBar');
   if (!bar) return;
   const items = Object.entries(pendingCart);
   if (items.length === 0) { bar.style.display = 'none'; return; }
   bar.style.display = 'flex';
-  const row = masterData[currentIndex];
 
+  // 新アイテム追加時は自動展開
+  if (!_cartBodyOpen) {
+    _cartBodyOpen = true;
+    const body = document.getElementById('cartBody');
+    const btn  = document.getElementById('cartToggleBtn');
+    if (body) body.classList.add('open');
+    if (btn)  btn.textContent = '▲';
+  }
+
+  const row = masterData[currentIndex];
   const itemsEl = document.getElementById('cartItems');
   itemsEl.innerHTML = items.map(([id, {qty, dir}]) => {
     const a = ASSET_KEYS.find(x => x.id === id);
@@ -3775,9 +4127,9 @@ function updateCartBar() {
   const summaryEl = document.getElementById('cartSummary');
   if (summaryEl) {
     const parts = [];
-    if (buyTotal  > 0) parts.push(`<span style="color:#ffd966">💳 必要: ${fmt(buyTotal)}円</span>`);
-    if (sellTotal > 0) parts.push(`<span style="color:#7ef7ae">💰 獲得: +${fmt(sellTotal)}円</span>`);
-    summaryEl.innerHTML = parts.join('　');
+    if (buyTotal  > 0) parts.push(`<span style="color:#ffd966">💳 ${fmt(buyTotal)}円</span>`);
+    if (sellTotal > 0) parts.push(`<span style="color:#7ef7ae">💰 +${fmt(sellTotal)}円</span>`);
+    summaryEl.innerHTML = parts.join(' ');
   }
 }
 
@@ -3866,15 +4218,14 @@ function confirmCart() {
   items.forEach(([id, {qty, dir}]) => executeTrade(id, qty, dir));
   if (buyTotal  > 0) addCash(-buyTotal,  '資産購入');
   if (sellTotal > 0) addCash(sellTotal,  '資産売却');
-  const toastParts = [];
-  if (buyTotal  > 0) toastParts.push('現金 -' + fmt(buyTotal) + '円');
-  if (buyQty    > 0) toastParts.push('資産 +' + buyQty + '個');
-  if (sellTotal > 0) toastParts.push('現金 +' + fmt(sellTotal) + '円');
-  if (sellQty   > 0) toastParts.push('資産 -' + sellQty + '個');
-  if (toastParts.length) showToast(toastParts.join(' / '));
   Object.keys(pendingCart).forEach(k => delete pendingCart[k]);
   updateCartBar();
   updateDisplay();
+
+  const hasBuy  = items.some(([, {dir}]) => dir > 0);
+  const hasSell = items.some(([, {dir}]) => dir < 0);
+  const loadLabel = hasBuy && hasSell ? '売買中...' : hasBuy ? '購入中...' : '売却中...';
+  showLoadingScreen(loadLabel, () => showPurchasePopup(items, row, buyTotal, sellTotal));
 }
 
 function cancelCart() {
@@ -3901,7 +4252,7 @@ function assetReset() {
 }
 
 function animateStep(callback) {
-  const ids = ['timeLabel', 'holdList', 'btnWrap', 'speechText', 'speechCharImg', 'speechCharName'];
+  const ids = ['timeLabel', 'btnWrap', 'speechText', 'speechCharImg', 'speechCharName'];
   const els = ids.map(id => document.getElementById(id)).filter(Boolean);
   const vn = document.querySelector('.value-nums');
   if (vn) els.push(vn);
@@ -4053,43 +4404,6 @@ function updateDisplay() {
   const rv = document.getElementById('rankVal');
   if (rv) { rv.textContent = g.grade; rv.style.color = g.color; }
 
-  // 保有リスト（不動産の売り注文中も表示）
-  let html = '';
-  ASSET_KEYS.forEach(a => {
-    const q = holdings[a.id] || 0;
-    if (!q && !(a.id === '不動産' && pendingSell > 0)) return;
-    const p = row[a.id] || 0;
-    const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row) : a.label;
-    const orderBadge = (a.id === '不動産' && pendingSell > 0)
-      ? ` <span style="color:#ff9999;font-size:10px">⏳売り注文中 ${pendingSell}個</span>` : '';
-    if (q > 0) {
-      const curVal  = q * p;
-      const basis   = costBasis[a.id] || 0;
-      const pnl     = curVal - basis;
-      const pnlSign = pnl >= 0 ? '+' : '';
-      const pnlCls  = pnl >= 0 ? 'pos' : 'neg';
-      const pnlHtml = basis > 0
-        ? ` <span class="${pnlCls}" style="font-size:9px">${pnlSign}${fmt(pnl)}円</span>` : '';
-      const divRaw2 = (a.divKey) ? (row[a.divKey] || 0) : 0;
-      const divTotal2 = divRaw2 !== 0 ? calcDiv(divRaw2, q) : 0;
-      const divBadge = (a.divKey && divRaw2 !== 0)
-        ? `<div class="hold-div-row">💰 配当 <strong>+${fmt(divTotal2)}円</strong>/ターン<span class="div-annual">📅 年間 +${fmt(divTotal2 * 4)}円</span></div>`
-        : '';
-      html += `<div class="hold-item" style="border-left-color:${a.color}">
-        <span class="hold-item-name" style="color:${a.color}">${a.emoji} ${displayLabel}${orderBadge}</span>
-        <span class="hold-item-val">${q}個 × ${fmt(p)} = ${fmt(curVal)}円${pnlHtml}</span>
-        ${divBadge}
-      </div>`;
-    } else if (a.id === '不動産' && pendingSell > 0) {
-      html += `<div class="hold-item" style="border-left-color:${a.color}">
-        <span class="hold-item-name" style="color:${a.color}">${a.emoji} ${a.label}${orderBadge}</span>
-        <span class="hold-item-val">次ターンで売却</span>
-      </div>`;
-    }
-  });
-  const holdListEl = document.getElementById('holdList');
-  if (holdListEl) holdListEl.innerHTML = html || '<div class="hold-empty">保有なし</div>';
-
   // 資産ボタン
   ASSET_KEYS.forEach(a => {
     const btn = document.getElementById('abtn-' + a.id);
@@ -4127,6 +4441,8 @@ function updateDisplay() {
       ? `<span class="a-cart-row" style="color:${cartEntry.dir>0?'var(--gold)':'#e74c3c'}">`
         + (cartEntry.dir > 0 ? '＋' : '－') + cartEntry.qty + '個 カート中</span>'
       : '';
+    btn.style.setProperty('--ac', a.color);
+    btn.style.setProperty('--as', a.shadow);
     btn.classList.toggle('asset-btn-owned',    ownedQty > 0);
     btn.classList.toggle('asset-btn-cart-buy',  !!(cartEntry && cartEntry.dir > 0));
     btn.classList.toggle('asset-btn-cart-sell', !!(cartEntry && cartEntry.dir < 0));
@@ -4433,7 +4749,7 @@ function drawPortfolioGraph() {
 
   const hist = portfolioHistory;
   if (hist.length < 2) {
-    svg.innerHTML = `<text x="300" y="100" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-size="14" font-family="sans-serif">資産を購入すると表示されます</text>`;
+    svg.innerHTML = `<text x="300" y="90" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます</text><text x="300" y="112" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="'Zen Maru Gothic',sans-serif">次へ ▶ で1970年へ進もう</text>`;
     legend.innerHTML = ''; labels.innerHTML = '';
     document.getElementById('portfolioTotal').textContent = '─';
     return;
@@ -4496,34 +4812,58 @@ function drawPortfolioGraph() {
   if (navLabel) {
     navLabel.textContent = isLatest
       ? '現在'
-      : viewH.年 + '年 イベント' + (viewH.イベント || '');
+      : viewH.イベント ? viewH.年 + '年 E' + viewH.イベント : viewH.年 + '年';
   }
 
   const viewTotal  = viewH.total;
-  const viewAssets = ASSET_KEYS.filter(a => (viewH.values[a.id] || 0) > 0);
+  const viewAssets = ASSET_KEYS.filter(a => (viewH.values[a.id] || 0) > 0 || (viewH.qtys && viewH.qtys[a.id] > 0));
   const viewSav    = savMap[viewH.年] || 0;
+  const prevH      = viewIdx > 0 ? hist[viewIdx - 1] : null;
 
   if (viewAssets.length === 0) {
     legend.innerHTML = '<div style="font-size:11px;color:rgba(26,26,46,0.45);padding:8px 6px">この時点では資産がありません</div>';
   } else {
-    const diff = viewTotal - viewSav;
-    const diffColor = diff >= 0 ? '#1a7a40' : '#b00020';
-    const diffLabel = diff >= 0 ? `📈 貯金より +${fmt(diff)}円` : `📉 貯金より ${fmt(Math.abs(diff))}円`;
+    const savDiff = viewTotal - viewSav;
+    const savDiffColor = savDiff >= 0 ? '#1a7a40' : '#b00020';
+    const savDiffLabel = savDiff >= 0 ? `📈 貯金より +${fmt(savDiff)}円` : `📉 貯金より ${fmt(Math.abs(savDiff))}円`;
     legend.innerHTML = viewAssets.map(a => {
       const val = viewH.values[a.id] || 0;
       const qty = viewH.qtys ? (viewH.qtys[a.id] || 0) : '─';
       const pct = viewTotal > 0 ? ((val / viewTotal) * 100) : 0;
+      const prevVal = prevH ? (prevH.values[a.id] || 0) : null;
+      let diffHTML = '<div class="pl-diff" style="color:rgba(26,26,46,0.3)">─</div>';
+      if (prevVal !== null) {
+        const d = val - prevVal;
+        if (d !== 0) {
+          const dc = d > 0 ? 'var(--green)' : 'var(--red)';
+          const ds = d > 0 ? `+${fmtShort(d)}` : `${fmtShort(d)}`;
+          diffHTML = `<div class="pl-diff" style="color:${dc}">${ds}</div>`;
+        } else {
+          diffHTML = '<div class="pl-diff" style="color:rgba(26,26,46,0.3)">±0</div>';
+        }
+      }
       return `<div class="pl-row">
         <div class="pl-dot" style="background:${a.color}"></div>
         <div class="pl-name">${a.emoji} ${a.label}</div>
         <div class="pl-qty">${qty}個</div>
         <div class="pl-val">¥${fmtShort(val)}</div>
+        ${diffHTML}
         <div class="pl-pct">${pct.toFixed(1)}%</div>
         <div class="pl-bar-wrap"><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:${Math.round(pct)}%;background:${a.color}"></div></div></div>
       </div>`;
     }).join('') +
-    `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(viewTotal)}</span></div>` +
-    (viewSav > 0 ? `<div class="pl-saving-compare"><span>💰 貯金した場合</span><span>¥${fmt(viewSav)}</span></div><div class="pl-saving-diff" style="color:${diffColor}">${diffLabel}</div>` : '');
+    (() => {
+      const prevTotal = prevH ? prevH.total : null;
+      let totalDiffHTML = '';
+      if (prevTotal !== null) {
+        const d = viewTotal - prevTotal;
+        const dc = d >= 0 ? '#1a7a40' : '#b00020';
+        const ds = d >= 0 ? `+${fmt(d)}円` : `${fmt(d)}円`;
+        totalDiffHTML = `<span style="font-size:11px;color:${dc};font-family:'Dela Gothic One',sans-serif;margin-left:8px;">${ds}</span>`;
+      }
+      return `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(viewTotal)}</span>${totalDiffHTML}</div>`;
+    })() +
+    (viewSav > 0 ? `<div class="pl-saving-compare"><span>💰 貯金した場合</span><span>¥${fmt(viewSav)}</span></div><div class="pl-saving-diff" style="color:${savDiffColor}">${savDiffLabel}</div>` : '');
   }
 }
 
@@ -4542,11 +4882,11 @@ function drawIncomeChart() {
   const W = 600, H = 180, PX = 8, PY = 12;
 
   const curRow = masterData[currentIndex];
-  const curYear = curRow ? curRow.年 : 0;
-  const visible = INCOME_DATA.filter(d => typeof d.年 === 'number' && (curYear === 0 || d.年 <= curYear));
+  const curYear = curRow ? (curRow.年 || 0) : 0;
+  const visible = INCOME_DATA.filter(d => typeof d.年 === 'number' && curYear > 0 && d.年 <= curYear);
 
   if (visible.length === 0) {
-    svg.innerHTML = `<text x="300" y="70" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">💴 1970年以降のデータが表示されます</text><text x="300" y="93" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="sans-serif">ゲームを進めると表示されます</text>`;
+    svg.innerHTML = `<text x="300" y="78" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます</text><text x="300" y="100" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="'Zen Maru Gothic',sans-serif">次へ ▶ で1970年へ進もう</text>`;
     labels.innerHTML = '';
     updateIncomeLegend(null);
     return;
@@ -4682,11 +5022,7 @@ function updateIncomeLegend(d) {
 
   if (!d) {
     ['給料','税収','生活費','余剰金'].forEach(k => set('incVal-'+k, '─'));
-    set('incLegendYear', '1970年以降のデータなし');
-    set('incStatSalary',  '─');
-    set('incStatTax',     '─');
-    set('incStatLife',    '─');
-    set('incStatSurplus', '─');
+    set('incLegendYear', 'ゲームを進めると表示されます');
     return;
   }
   set('incVal-給料',   '¥' + fmt(d.給料));
@@ -4694,10 +5030,6 @@ function updateIncomeLegend(d) {
   set('incVal-生活費', '¥' + fmt(d.生活費));
   set('incVal-余剰金', '¥' + fmt(d.余剰金));
   set('incLegendYear', d.年 + '年の収支');
-  set('incStatSalary',  fmt(d.給料) + '円');
-  set('incStatTax',     fmt(d.税収) + '円');
-  set('incStatLife',    fmt(d.生活費) + '円');
-  set('incStatSurplus', fmt(d.余剰金) + '円');
 }
 
 function setGraphMode(mode, btn) {
@@ -4723,7 +5055,7 @@ function drawAllAssetsGraph() {
   const count    = endIdx - startIdx + 1;
 
   if (count < 2) {
-    svg.innerHTML = `<text x="300" y="70" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="16" font-family="'Zen Maru Gothic',sans-serif">📊 1970年以降のデータなし</text><text x="300" y="95" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="12" font-family="sans-serif">ゲームを進めると表示されます</text>`;
+    svg.innerHTML = `<text x="300" y="78" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます</text><text x="300" y="100" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="'Zen Maru Gothic',sans-serif">次へ ▶ で1970年へ進もう</text>`;
     labels.innerHTML = ''; legend.innerHTML = '';
     return;
   }
@@ -4806,13 +5138,14 @@ function makeSparkline(id, color) {
   const prices = [];
   for (let i = start; i <= end; i++) prices.push(masterData[i][id] || 0);
   if (prices.every(p => p === 0)) return '';
-  if (prices.length < 2) prices.push(prices[0]); // 1点のみなら水平線
+  if (prices.length < 2) prices.push(prices[0]);
   const minP = Math.min(...prices), maxP = Math.max(...prices);
-  const range = maxP - minP || 1;
+  const range = maxP - minP;
   const W = 60, H = 16, pad = 1;
   const n = prices.length;
+  const toY = p => range === 0 ? H / 2 : pad + (1 - (p - minP) / range) * (H - 2 * pad);
   const pts = prices.map((p, i) =>
-    `${(pad + i / (n - 1) * (W - 2 * pad)).toFixed(1)},${(pad + (1 - (p - minP) / range) * (H - 2 * pad)).toFixed(1)}`
+    `${(pad + i / (n - 1) * (W - 2 * pad)).toFixed(1)},${toY(p).toFixed(1)}`
   ).join(' ');
   return `<svg class="a-spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
 }
@@ -4844,7 +5177,7 @@ function drawGraph() {
   const count    = endIdx - startIdx + 1;
 
   if (count < 2) {
-    svg.innerHTML = `<text x="300" y="55" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="16" font-family="'Zen Maru Gothic',sans-serif">📊 1970年以降のデータなし</text><text x="300" y="78" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="12" font-family="sans-serif">ゲームを進めると表示されます</text>`;
+    svg.innerHTML = `<text x="300" y="62" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます</text><text x="300" y="84" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="'Zen Maru Gothic',sans-serif">次へ ▶ で1970年へ進もう</text>`;
     labels.innerHTML = '';
     return;
   }
@@ -4928,7 +5261,11 @@ function getGrade(total) {
 function renderCompare() {
   if (!document.getElementById('tab-graph').classList.contains('active')) return;
   const row = masterData[currentIndex];
-  if (!row) return;
+  if (!row || currentIndex === 0) {
+    document.getElementById('compareTable').innerHTML =
+      `<div style="text-align:center;padding:24px 0;color:rgba(255,255,255,0.4);font-size:13px;font-family:'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます<br><span style="font-size:11px;opacity:0.6">次へ ▶ で1970年へ進もう</span></div>`;
+    return;
+  }
 
   const prevRow = currentIndex > 1 ? masterData[currentIndex - 1] : null;
   let rows = '';
@@ -4972,12 +5309,46 @@ function renderCompare() {
 // ============================================================
 let _toastTimer = null;
 
-function showToast(msg) {
+function showToast(msg, duration) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), duration || 3000);
+}
+
+let _ppTimer = null;
+function showPurchasePopup(items, row, buyTotal, sellTotal) {
+  const popup = document.getElementById('purchasePopup');
+  const hasBuy  = items.some(([, {dir}]) => dir > 0);
+  const hasSell = items.some(([, {dir}]) => dir < 0);
+  const label   = hasBuy && hasSell ? '売買しました！' : hasBuy ? '購入しました！' : '売却しました！';
+
+  let listHTML = '';
+  items.forEach(([id, {qty, dir}]) => {
+    const a = ASSET_KEYS.find(x => x.id === id);
+    const name = a ? `${a.emoji} ${a.label}` : id;
+    const price = row ? (row[id] || 0) : 0;
+    const sign = dir > 0 ? '+' : '−';
+    const cls  = dir > 0 ? 'buy' : 'sell';
+    listHTML += `<div class="pp-item">
+      <span class="pp-item-name">${name}</span>
+      <span class="pp-item-qty ${cls}">${sign}${qty}個 (${fmt(price * qty)}円)</span>
+    </div>`;
+  });
+
+  let sumHTML = '';
+  if (buyTotal  > 0) sumHTML += `<div class="pp-sum-row cash-out"><span>現金</span><span>−${fmt(buyTotal)}円</span></div>`;
+  if (sellTotal > 0) sumHTML += `<div class="pp-sum-row cash-in"><span>現金</span><span>+${fmt(sellTotal)}円</span></div>`;
+
+  popup.innerHTML = `
+    <div class="pp-title">${label}</div>
+    <div class="pp-list">${listHTML}</div>
+    <div class="pp-summary">${sumHTML}</div>`;
+
+  popup.classList.add('show');
+  clearTimeout(_ppTimer);
+  _ppTimer = setTimeout(() => popup.classList.remove('show'), 2000);
 }
 
 function checkTitles(total) {
@@ -4987,7 +5358,10 @@ function checkTitles(total) {
       if (t.check(total)) {
         unlockedTitles.add(t.id);
         const prize = PRIZE[t.stars];
-        showToast(`🏅 バッジ獲得！「${t.name}」 +${fmt(prize)}円`);
+        cashBalance += prize;
+        cashHistLog.unshift({ amount: prize, balance: cashBalance, label: `🏅 バッジ獲得「${t.name}」`, type: 'title' });
+        updateCashDisplay();
+        showToast(`🏅 バッジ獲得！「${t.name}」 +${fmt(prize)}円`, 4500);
       }
     } catch(e) {}
   });
@@ -5069,7 +5443,7 @@ function showNavBanner(text, duration) {
   el.textContent = text;
   el.classList.add('running');
   if (_bannerTimer) clearTimeout(_bannerTimer);
-  _bannerTimer = setTimeout(() => el.classList.remove('running'), duration || 2800);
+  _bannerTimer = setTimeout(() => el.classList.remove('running'), duration || 5000);
 }
 
 const TAB_BANNERS = {
@@ -5096,6 +5470,7 @@ function showTab(name, btn) {
   if (name === 'titles') renderTitles();
   if (name === 'graph') {
     if (graphMode === 'portfolio') drawPortfolioGraph();
+    else if (graphMode === 'income') drawIncomeChart();
     else { drawGraph(); renderCompare(); }
   }
   // Nav banner animation
@@ -5216,21 +5591,44 @@ function clearSave() {
   }
   clearTimeout(_clearSaveTimer); _clearSavePending = false;
   localStorage.removeItem(SAVE_KEY);
-  currentIndex = 0;
+
+  // ゲーム状態を完全リセット（ローディング表示前に実行）
+  currentIndex      = 0;
+  step              = 1;
+  pendingSell       = 0;
+  pendingSalary     = 0;
+  pendingSalaryYear = 0;
+  portfolioViewIdx  = -1;
+  graphMode         = 'portfolio';
+  history           = [];
+  portfolioHistory  = [];
+  unlockedTitles    = new Set();
+  incomeVisible     = null;
   ASSET_KEYS.forEach(a => { holdings[a.id] = 0; costBasis[a.id] = 0; });
-  pendingSell = 0;
-  Object.keys(pendingCart).forEach(k => delete pendingCart[k]); updateCartBar();
-  unlockedTitles = new Set();
-  portfolioHistory = [];
-  history = [];
+  Object.keys(pendingCart).forEach(k => delete pendingCart[k]);
+
+  // 現金を初期状態に
   cashBalance = SALARY_DATA[0];
   cashHistLog.length = 0;
   cashHistLog.unshift({ amount: SALARY_DATA[0], balance: SALARY_DATA[0], label: 'ゲーム開始 初期資金', type: 'start' });
-  updateCashDisplay();
-  renderCashLog();
-  updateEventOptions();
-  updateDisplay();
-  showToast('セーブデータを削除しました');
+
+  // ローディング表示 → 完了後に画面を更新してタブ移動
+  showLoadingScreen('データ削除中...', () => {
+    document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+    const firstPlusBtn = document.querySelector('.step-btn.plus');
+    if (firstPlusBtn) firstPlusBtn.classList.add('active');
+
+    updateCartBar();
+    updateCashDisplay();
+    renderCashLog();
+    updateEventOptions();
+    updateDisplay();
+    saveGame();
+
+    const gameBtn = document.querySelector('.tab-btn[onclick*="game"]');
+    showTab('game', gameBtn);
+    showToast('データを削除しました。チュートリアルからスタート！');
+  });
 }
 
 // ============================================================
@@ -5243,7 +5641,314 @@ function toggleCard(id) {
   arrow.classList.toggle('open', open);
 }
 
+// ============================================================
+// FIREBASE: Auth + Cloud Save + Groups
+// ============================================================
+let _auth = null, _db = null;
+try {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDUqrAgL2TYCoKom3B67Go2CTXpo0HlTP4",
+    authDomain: "manebou-app-41dd3.firebaseapp.com",
+    projectId: "manebou-app-41dd3",
+    storageBucket: "manebou-app-41dd3.firebasestorage.app",
+    messagingSenderId: "185792077295",
+    appId: "1:185792077295:web:299acd59423d9706f76a1a"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  _auth = firebase.auth();
+  _db   = firebase.firestore();
+} catch(e) { console.warn('Firebase init failed:', e); }
+
+let _fbUser = null;
+let _groupId = null;
+let _role = null;
+let _instructorUnsub = null;
+
+if (_auth) _auth.onAuthStateChanged(async user => {
+  _fbUser = user;
+  if (user) {
+    document.getElementById('navAuthBtn').style.display = 'none';
+    const av = document.getElementById('navUserAvatar');
+    av.src = user.photoURL || 'images/icon-192.png';
+    av.style.display = '';
+    document.getElementById('userMenuName').textContent  = user.displayName || 'ユーザー';
+    document.getElementById('userMenuEmail').textContent = user.email || '';
+    const btn = document.getElementById('cloudSaveSettingBtn');
+    if (btn) { btn.textContent = '保存'; }
+    await _loadUserProfile(user);
+    await cloudLoad();
+  } else {
+    document.getElementById('navAuthBtn').style.display = '';
+    document.getElementById('navUserAvatar').style.display = 'none';
+    document.getElementById('userMenuGroup').textContent = '';
+    _groupId = null; _role = null;
+    if (_instructorUnsub) { _instructorUnsub(); _instructorUnsub = null; }
+    const btn = document.getElementById('cloudSaveSettingBtn');
+    if (btn) { btn.textContent = 'ログイン'; }
+  }
+});
+
+async function _loadUserProfile(user) {
+  try {
+    const snap = await _db.collection('users').doc(user.uid).get();
+    if (snap.exists) {
+      const d = snap.data();
+      _groupId = d.groupId || null;
+      _role    = d.role    || 'player';
+    } else {
+      await _db.collection('users').doc(user.uid).set({
+        name: user.displayName || 'ユーザー',
+        email: user.email,
+        photoURL: user.photoURL || '',
+        role: 'player',
+        groupId: null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      _groupId = null; _role = 'player';
+    }
+    _updateGroupLabel();
+    if (_role === 'instructor' && _groupId) _startInstructorListener();
+  } catch(e) {}
+}
+
+function _updateGroupLabel() {
+  const el = document.getElementById('userMenuGroup');
+  if (_groupId) {
+    el.textContent = (_role === 'instructor' ? '👑 講師 | ' : '🎮 プレイヤー | ') + 'グループ: ' + _groupId;
+  } else {
+    el.textContent = 'グループ未参加';
+  }
+}
+
+// --- Google Sign In / Out ---
+function signInWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  _auth.signInWithPopup(provider)
+    .then(() => { closeAuthOverlay(); showToast('ログインしました！', 3000); })
+    .catch(e => { showToast('ログイン失敗: ' + e.message, 4000); });
+}
+
+function signOutUser() {
+  _auth.signOut().then(() => { closeUserMenu(); showToast('ログアウトしました'); });
+}
+
+// --- Cloud Save / Load ---
+function _buildSavePayload() {
+  return {
+    currentIndex,
+    holdings: { ...holdings },
+    costBasis: { ...costBasis },
+    pendingSell,
+    unlockedTitles: [...unlockedTitles],
+    portfolioHistory: portfolioHistory.slice(-220),
+    cashBalance,
+    cashHistLog: cashHistLog.slice(0, 50),
+    savedAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+}
+
+function _calcTotalAssets() {
+  const row = masterData[currentIndex];
+  let total = cashBalance;
+  if (row) ASSET_KEYS.forEach(a => { total += (holdings[a.id] || 0) * (row[a.id] || 0); });
+  return total;
+}
+
+async function cloudSaveNow() {
+  if (!_fbUser || !_db) { showToast('ログインが必要です'); return; }
+  try {
+    await _db.collection('saves').doc(_fbUser.uid).set(_buildSavePayload());
+    if (_groupId) {
+      const row = masterData[currentIndex];
+      const year = row ? (row.年 === 0 ? 'チュートリアル' : String(row.年)) : '---';
+      await _db.collection('groups').doc(_groupId)
+        .collection('members').doc(_fbUser.uid).set({
+          name:        _fbUser.displayName || 'ユーザー',
+          photoURL:    _fbUser.photoURL || '',
+          year,
+          cashBalance,
+          totalAssets: _calcTotalAssets(),
+          updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+    }
+    showToast('☁️ クラウドに保存しました', 2500);
+  } catch(e) { showToast('保存失敗: ' + e.message, 4000); }
+}
+
+async function cloudLoad() {
+  if (!_fbUser || !_db) return;
+  try {
+    const snap = await _db.collection('saves').doc(_fbUser.uid).get();
+    if (!snap.exists) return;
+    const d = snap.data();
+    const localRaw = localStorage.getItem(SAVE_KEY);
+    const local    = localRaw ? JSON.parse(localRaw) : null;
+    const cloudMs  = d.savedAt ? d.savedAt.toMillis() : 0;
+    const localMs  = local && local._cloudTs ? local._cloudTs : 0;
+    if (!local || cloudMs > localMs) {
+      _applyCloudData(d);
+      showToast('☁️ クラウドからデータを読み込みました', 3000);
+    }
+  } catch(e) {}
+}
+
+function _applyCloudData(d) {
+  if (d.currentIndex !== undefined) currentIndex = d.currentIndex;
+  if (d.cashBalance  !== undefined) cashBalance  = d.cashBalance;
+  if (d.holdings)  ASSET_KEYS.forEach(a => { holdings[a.id]  = (d.holdings  || {})[a.id]  || 0; });
+  if (d.costBasis) ASSET_KEYS.forEach(a => { costBasis[a.id] = (d.costBasis || {})[a.id] || 0; });
+  if (d.pendingSell !== undefined) pendingSell = d.pendingSell || 0;
+  if (d.unlockedTitles) unlockedTitles = new Set(d.unlockedTitles);
+  if (d.portfolioHistory) portfolioHistory = d.portfolioHistory;
+  if (d.cashHistLog) { cashHistLog.length = 0; d.cashHistLog.forEach(e => cashHistLog.push(e)); }
+  const cloudMs = d.savedAt ? d.savedAt.toMillis() : 0;
+  try {
+    const payload = _buildLocalSnapshot();
+    payload._cloudTs = cloudMs;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
+  } catch(e) {}
+  updateDisplay();
+  updateCashDisplay();
+  renderCashLog();
+}
+
+function _buildLocalSnapshot() {
+  return {
+    currentIndex,
+    holdings: { ...holdings },
+    costBasis: { ...costBasis },
+    pendingSell,
+    unlockedTitles: [...unlockedTitles],
+    portfolioHistory: portfolioHistory.slice(-220),
+    cashBalance,
+    cashHistLog: cashHistLog.slice(0, 50)
+  };
+}
+
+// Auto cloud save every 3 min when in a group
+setInterval(() => { if (_fbUser && _groupId) cloudSaveNow(); }, 3 * 60 * 1000);
+
+// --- Group Management ---
+async function createGroup() {
+  if (!_fbUser || !_db) return;
+  const name = document.getElementById('groupNameInput').value.trim();
+  if (!name) { showToast('グループ名を入力してください'); return; }
+  const code = Math.random().toString(36).substr(2, 6).toUpperCase();
+  try {
+    await _db.collection('groups').doc(code).set({
+      name, code,
+      instructorId:   _fbUser.uid,
+      instructorName: _fbUser.displayName || 'ユーザー',
+      createdAt:      firebase.firestore.FieldValue.serverTimestamp()
+    });
+    await _db.collection('users').doc(_fbUser.uid).update({ groupId: code, role: 'instructor' });
+    _groupId = code; _role = 'instructor';
+    _updateGroupLabel();
+    document.getElementById('createdGroupCode').textContent = code;
+    document.getElementById('groupCreatedInfo').style.display = '';
+    _startInstructorListener();
+    showToast('グループ作成！コード: ' + code, 5000);
+  } catch(e) { showToast('作成失敗: ' + e.message, 4000); }
+}
+
+async function joinGroup() {
+  if (!_fbUser || !_db) return;
+  const code = document.getElementById('groupCodeInput').value.trim().toUpperCase();
+  if (code.length < 4) { showToast('コードを入力してください'); return; }
+  try {
+    const snap = await _db.collection('groups').doc(code).get();
+    if (!snap.exists) { showToast('グループが見つかりません'); return; }
+    await _db.collection('users').doc(_fbUser.uid).update({ groupId: code, role: 'player' });
+    _groupId = code; _role = 'player';
+    _updateGroupLabel();
+    closeGroupModal();
+    showToast('グループに参加しました！', 3000);
+    await cloudSaveNow();
+  } catch(e) { showToast('参加失敗: ' + e.message, 4000); }
+}
+
+// --- Instructor real-time listener ---
+function _startInstructorListener() {
+  if (_instructorUnsub) _instructorUnsub();
+  _instructorUnsub = _db.collection('groups').doc(_groupId)
+    .collection('members')
+    .orderBy('totalAssets', 'desc')
+    .onSnapshot(snap => {
+      _ensureInstructorPanel();
+      _renderInstructorPanel(snap.docs.map(d => d.data()));
+    }, () => {});
+}
+
+function _ensureInstructorPanel() {
+  if (document.getElementById('instructorPanel')) return;
+  const tab = document.getElementById('tab-settings');
+  if (!tab) return;
+  const panel = document.createElement('div');
+  panel.id = 'instructorPanel';
+  panel.className = 'tab-section';
+  panel.innerHTML =
+    '<div class="tab-section-title">👑 講師ビュー — グループメンバー</div>' +
+    '<div class="instructor-panel" id="instructorPanelInner">' +
+    '<div style="color:rgba(255,255,255,0.4);font-size:12px;text-align:center">読み込み中...</div>' +
+    '</div>';
+  tab.appendChild(panel);
+}
+
+function _renderInstructorPanel(members) {
+  const el = document.getElementById('instructorPanelInner');
+  if (!el) return;
+  if (!members.length) {
+    el.innerHTML = '<div style="color:rgba(255,255,255,0.4);font-size:12px;text-align:center">まだメンバーがいません</div>';
+    return;
+  }
+  el.innerHTML = members.map((m, i) =>
+    '<div class="member-card">' +
+    '<img src="' + (m.photoURL || 'images/icon-192.png') + '" alt="" onerror="this.src=\'images/icon-192.png\'">' +
+    '<div class="member-info">' +
+    '<div class="member-name">' + (i+1) + '. ' + _esc(m.name || 'ユーザー') + '</div>' +
+    '<div class="member-cash">💰 総資産 ' + fmt(m.totalAssets || 0) + '円</div>' +
+    '<div class="member-year">📅 ' + (m.year || '---') + '年 / 💵 現金 ' + fmt(m.cashBalance || 0) + '円</div>' +
+    '</div></div>'
+  ).join('');
+}
+
+function _esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// --- UI helpers ---
+function openAuthOverlay() {
+  closeUserMenu();
+  if (_fbUser) { openGroupModal(); return; }
+  document.getElementById('authOverlay').classList.add('open');
+}
+function closeAuthOverlay() { document.getElementById('authOverlay').classList.remove('open'); }
+function openGroupModal()   { closeUserMenu(); document.getElementById('groupModal').classList.add('open'); }
+function closeGroupModal()  { document.getElementById('groupModal').classList.remove('open'); }
+function toggleUserMenu()   { document.getElementById('userMenu').classList.toggle('open'); }
+function closeUserMenu()    { document.getElementById('userMenu').classList.remove('open'); }
+
+function switchGroupTab(tab, btn) {
+  document.querySelectorAll('.modal-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('groupTabJoin').style.display   = tab === 'join'   ? '' : 'none';
+  document.getElementById('groupTabCreate').style.display = tab === 'create' ? '' : 'none';
+}
+
+document.addEventListener('click', e => {
+  const menu = document.getElementById('userMenu');
+  if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target.id !== 'navUserAvatar')
+    menu.classList.remove('open');
+  const ao = document.getElementById('authOverlay');
+  if (ao && ao.classList.contains('open') && e.target === ao) closeAuthOverlay();
+  const gm = document.getElementById('groupModal');
+  if (gm && gm.classList.contains('open') && e.target === gm) closeGroupModal();
+});
+
 window.addEventListener('DOMContentLoaded', function() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
   init();
   setTimeout(function() {
     if (typeof showNavBanner !== 'undefined' && typeof TAB_BANNERS !== 'undefined') {
