@@ -4509,7 +4509,7 @@ function updateDisplay() {
     btn.style.boxShadow = (ok && !bondLocked) ? `4px 4px 0 ${a.shadow}` : '2px 2px 0 rgba(0,0,0,0.08)';
     btn.classList.toggle('btn-bond-locked', bondLocked);
     const orderInfo = (a.id === '不動産' && pendingSell > 0)
-      ? `<div class="pending-sell-badge">⏳ 売注文中 ${pendingSell}個 → 次のイベントで現金化<button class="cancel-sell-btn" onclick="cancelPendingSell()">✕ 注文取消</button></div>` : '';
+      ? `<div class="pending-sell-badge">⏳ 売注文中 ${pendingSell}個 → 次のイベントで現金化<button class="cancel-sell-btn" onclick="event.stopPropagation();cancelPendingSell()">✕ 注文取消</button></div>` : '';
     // 仮想通貨の購入不可期間・上限注記
     const cryptoNote = a.id === '？？？？？' && ok
       ? ((row.年 < 2014 || (row.年 === 2014 && row.イベント < 4))
@@ -5936,7 +5936,7 @@ function _applyCloudData(d) {
   if (d.unlockedTitles) unlockedTitles = new Set(d.unlockedTitles);
   if (d.portfolioHistory) portfolioHistory = d.portfolioHistory;
   if (d.cashHistLog) { cashHistLog.length = 0; d.cashHistLog.forEach(e => cashHistLog.push(e)); }
-  const cloudMs = d.savedAt ? d.savedAt.toMillis() : 0;
+  const cloudMs = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
   try {
     const payload = _buildLocalSnapshot();
     payload._cloudTs = cloudMs;
@@ -5960,8 +5960,8 @@ function _buildLocalSnapshot() {
   };
 }
 
-// Auto cloud save every 3 min when in a group
-setInterval(() => { if (_fbUser && _groupId) cloudSaveNow(true); }, 3 * 60 * 1000);
+// Auto cloud save every 3 min when logged in
+setInterval(() => { if (_fbUser) cloudSaveNow(true); }, 3 * 60 * 1000);
 
 // --- Group Management ---
 async function createGroup() {
