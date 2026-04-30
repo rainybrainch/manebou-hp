@@ -332,38 +332,6 @@ body {
   margin: 10px 0;
 }
 
-.salary-panel {
-  background: linear-gradient(135deg, rgba(245,200,66,0.18), rgba(245,200,66,0.08));
-  border: 2px solid var(--gold);
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.salary-panel-left { flex: 1; min-width: 0; }
-.salary-panel-lbl  { font-size: 12px; color: var(--gold); letter-spacing: 1px; font-weight: 700; margin-bottom: 2px; }
-.salary-panel-amt  { font-family: 'Dela Gothic One', sans-serif; font-size: 18px; color: #fff; }
-.salary-panel-note { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
-.salary-claim-btn  {
-  flex-shrink: 0;
-  background: var(--gold);
-  color: var(--dark);
-  font-family: 'Dela Gothic One', sans-serif;
-  font-size: 13px;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 14px;
-  cursor: pointer;
-  box-shadow: 0 4px 0 var(--gold-dark);
-  transform: translateY(0);
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
-}
-.salary-claim-btn:hover  { transform: translateY(-2px); box-shadow: 0 6px 0 var(--gold-dark); }
-.salary-claim-btn:active { transform: translateY(4px);  box-shadow: 0 0  0 var(--gold-dark); }
-
 .value-nums {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -608,7 +576,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 680px;
+  max-width: 680px;  /* overridden by media queries below */
   z-index: 310;
   background: var(--dark);
   border-top: 2px solid var(--gold);
@@ -713,13 +681,7 @@ body {
 }
 .btn-reset:hover { background: rgba(232, 53, 74, 0.2); }
 
-/* ─── Navigation Buttons ─────────────────────────────────── */
-.nav-btns {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  animation: fadeUp 0.7s ease 0.3s both;
-}
+
 
 .btn-prev {
   flex: 1;
@@ -1055,8 +1017,6 @@ body {
 .title-item.unlocked .title-prize { color: var(--gold); }
 .title-item.locked   .title-prize { color: rgba(255,255,255,0.25); }
 
-/* ─── Rank (value-panel 3列目) ───────────────────────────── */
-.value-nums-3 { grid-template-columns: 1fr 1fr 1fr !important; }
 #rankVal { font-family: 'Zen Maru Gothic', sans-serif; font-size: clamp(11px,3vw,14px); display: block; line-height: 1.2; font-weight: 700; white-space: nowrap; }
 
 /* ─── Simulator ──────────────────────────────────────────── */
@@ -1727,7 +1687,7 @@ body {
 .hold-item-val { font-size: 12px; }
 .value-divider { margin: 6px 0; }
 .value-block-lbl { font-size: 9px; margin-bottom: 3px; }
-.value-block-num { font-size: clamp(13px, 3.5vw, 20px); }
+.value-block-num { font-size: clamp(16px, 4vw, 22px); }
 .action-row   { margin-bottom: 8px; }
 .btn-reset    { padding: 8px; font-size: 12px; }
 
@@ -1816,6 +1776,12 @@ body {
 }
 
 .portfolio-legend { padding: 0; overflow: hidden; }
+.port-hist-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.port-hist-hdr .tab-section-title { margin-bottom: 0; }
+.port-time-nav { display: flex; align-items: center; gap: 6px; }
+.pt-nav-btn { background: rgba(26,26,46,0.08); border: 1px solid rgba(26,26,46,0.18); border-radius: 6px; padding: 3px 8px; font-size: 12px; cursor: pointer; color: var(--dark); }
+.pt-nav-btn:hover { background: rgba(26,26,46,0.15); }
+#portNavLabel { font-family: "Dela Gothic One",sans-serif; font-size: 11px; color: var(--dark); min-width: 62px; text-align: center; }
 .pl-row {
   display: flex; align-items: center; gap: 5px;
   padding: 6px 8px; border-radius: 6px; font-size: 11px;
@@ -1909,6 +1875,7 @@ body {
 @media (min-width: 768px) {
   .top-nav, .bottom-nav { max-width: 960px; }
   .wrap { max-width: 960px; padding-left: 24px; padding-right: 24px; }
+  .cart-bar { max-width: 960px; }
 
   #tab-game {
     display: grid;
@@ -1946,6 +1913,7 @@ body {
 @media (min-width: 1024px) {
   .top-nav, .bottom-nav { max-width: 1240px; }
   .wrap { max-width: 1240px; padding-left: 40px; padding-right: 40px; }
+  .cart-bar { max-width: 1240px; }
 
   /* Bottom nav: tabs don't over-stretch */
   .bottom-nav { justify-content: center; gap: 0; padding-left: 40px; padding-right: 40px; }
@@ -1990,6 +1958,7 @@ body {
 @media (min-width: 1400px) {
   .top-nav, .bottom-nav { max-width: 1440px; }
   .wrap { max-width: 1440px; }
+  .cart-bar { max-width: 1440px; }
   .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   #tab-game { grid-template-columns: 1fr 1.25fr; gap: 32px; }
   .game-col-right { padding: 20px; }
@@ -2038,10 +2007,6 @@ body {
     <!-- VALUE PANEL -->
     <div class="value-panel">
 
-      <div class="hold-list" id="holdList">
-        <div class="hold-empty">保有なし</div>
-      </div>
-      <hr class="value-divider">
       <div class="value-nums">
         <div class="value-block">
           <span class="value-block-lbl">総資産</span>
@@ -2276,13 +2241,13 @@ body {
         <h4>🗂 ゲームの進め方</h4>
         <ul>
           <li><strong>① イベントを確認する</strong>── 1970年から始まり、左下のスタートマスから時計回りに盤を進む。各年ごとに経済イベントが4回発生し、年の初めには余剰金が自動で現金に加算される</li>
-          <li><strong>② 資産を売買する</strong>── 資産ボタンを押すと選択している個数だけ売買される。下の個数ボタン（＋1/＋10 など）で数量を先に選んでおこう</li>
+          <li><strong>② 資産を売買する</strong>── 右側の個数ボタン（＋1/＋10 など）で売買する数量を選んでから、資産ボタンをタップするとカートに入る。カートバーの「確定する！」で取引が完了する</li>
           <li><strong>③「次へ▶」を押す</strong>── 次のイベントへ進む。配当対象の資産を保有していれば配当が自動加算される</li>
           <li><strong>④ 2025年を完走してゴール！</strong>── 1970年から2025年まで全55年間を駆け抜け、最終的な総資産でランクが決まる</li>
         </ul>
         <div class="rules-tip">
           <span>💡</span>
-          <span><strong>不動産を売るとき</strong>は他の資産とは異なり「売り注文」ボタンが表示されます。直前の操作を取り消したいときは<strong>「↩ 戻す」ボタン</strong>（最大30回）を使いましょう。年代ジャンプ機能で特定の年に直接飛ぶこともできます。</span>
+          <span><strong>不動産を売るとき</strong>は他の資産とは異なり「売り注文」ボタンが表示されます。年代ジャンプ機能（画面下）で特定の年に直接飛ぶこともできます。</span>
         </div>
 
         <h4 style="margin-top:14px">🏆 投資家ランク</h4>
@@ -2473,7 +2438,14 @@ body {
         <div class="graph-labels" id="portfolioLabels"></div>
       </div>
       <div class="tab-section">
-        <div class="tab-section-title">📋 保有内訳</div>
+        <div class="port-hist-hdr">
+          <div class="tab-section-title">📋 保有内訳</div>
+          <div class="port-time-nav">
+            <button class="pt-nav-btn" onclick="portNavStep(-1)">◀</button>
+            <span id="portNavLabel">現在</span>
+            <button class="pt-nav-btn" onclick="portNavStep(1)">▶</button>
+          </div>
+        </div>
         <div id="portfolioLegend" class="portfolio-legend"></div>
       </div>
     </div>
@@ -3249,6 +3221,7 @@ const pendingCart = {};     // カート: { id: { qty, dir, price } }
 let history = [];           // Undoスタック (最大30件)
 let unlockedTitles   = new Set();
 let portfolioHistory = [];
+let portfolioViewIdx = -1;
 let graphMode        = 'portfolio';
 
 const EVENT_NAMES = {
@@ -3906,37 +3879,6 @@ function cancelCart() {
   updateDisplay();
 }
 
-function updateCartBar() {
-  const bar = document.getElementById('cartBar');
-  if (!bar) return;
-  const items = Object.entries(pendingCart);
-  if (items.length === 0) { bar.style.display = 'none'; return; }
-  bar.style.display = 'flex';
-  const row = masterData[currentIndex];
-
-  const itemsEl = document.getElementById('cartItems');
-  itemsEl.innerHTML = items.map(([id, {qty, dir}]) => {
-    const a = ASSET_KEYS.find(x => x.id === id);
-    const p = row ? (row[id] || 0) : 0;
-    const color = dir > 0 ? '#ffd966' : '#7ef7ae';
-    return `<div class="cart-item-row">
-      <span>${a ? a.emoji : ''} ${a ? a.label : id}</span>
-      <span style="color:${color};font-weight:700">${dir > 0 ? '+' : '-'}${qty}個</span>
-      <span style="color:rgba(255,255,255,0.45);font-size:11px">${fmt(p)}円×${qty}</span>
-    </div>`;
-  }).join('');
-
-  const buyTotal  = items.reduce((s, [id, {qty, dir}]) => s + (dir > 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
-  const sellTotal = items.reduce((s, [id, {qty, dir}]) => s + (dir < 0 ? qty * (row ? row[id] || 0 : 0) : 0), 0);
-  const summaryEl = document.getElementById('cartSummary');
-  if (summaryEl) {
-    const parts = [];
-    if (buyTotal  > 0) parts.push(`<span style="color:#ffd966">💳 必要: ${fmt(buyTotal)}円</span>`);
-    if (sellTotal > 0) parts.push(`<span style="color:#7ef7ae">💰 獲得: +${fmt(sellTotal)}円</span>`);
-    summaryEl.innerHTML = parts.join('　');
-  }
-}
-
 let _assetResetPending = false, _assetResetTimer = null;
 function assetReset() {
   if (!_assetResetPending) {
@@ -3970,14 +3912,16 @@ function animateStep(callback) {
 function recordPortfolio() {
   const row = masterData[currentIndex];
   if (!row || row.年 === 0) return;
-  const values = {};
+  const values = {}, qtys = {};
   let total = 0;
   ASSET_KEYS.forEach(a => {
-    const val = (holdings[a.id] || 0) * (row[a.id] || 0);
+    const q = holdings[a.id] || 0;
+    const val = q * (row[a.id] || 0);
     values[a.id] = val;
+    qtys[a.id] = q;
     total += val;
   });
-  portfolioHistory.push({ 年: row.年, total, values });
+  portfolioHistory.push({ 年: row.年, イベント: row.イベント, total, values, qtys });
   if (portfolioHistory.length > 220) portfolioHistory.shift();
 }
 
@@ -4139,8 +4083,8 @@ function updateDisplay() {
       </div>`;
     }
   });
-  document.getElementById('holdList').innerHTML =
-    html || '<div class="hold-empty">保有なし</div>';
+  const holdListEl = document.getElementById('holdList');
+  if (holdListEl) holdListEl.innerHTML = html || '<div class="hold-empty">保有なし</div>';
 
   // 資産ボタン
   ASSET_KEYS.forEach(a => {
@@ -4539,21 +4483,32 @@ function drawPortfolioGraph() {
   labels.innerHTML = `<span>${sH.年}年</span><span>${mH.年}年</span><span>${eH.年}年</span>`;
   document.getElementById('portfolioTotal').textContent = fmt(eH.total) + '円';
 
-  const curRow = masterData[currentIndex];
-  const legendAssets = ASSET_KEYS.filter(a => (holdings[a.id]||0) > 0);
-  const curTotal = legendAssets.reduce((s, a) => s + (holdings[a.id]||0) * (curRow ? curRow[a.id]||0 : 0), 0);
-  const curSav   = savMap[curRow ? curRow.年 : 0] || 0;
+  // 表示する時点を決定（portfolioViewIdx: -1=現在, 0..n-1=過去）
+  const navLabel = document.getElementById('portNavLabel');
+  const viewIdx = (portfolioViewIdx >= 0 && portfolioViewIdx < hist.length)
+    ? portfolioViewIdx : hist.length - 1;
+  const viewH = hist[viewIdx];
+  const isLatest = viewIdx === hist.length - 1;
+  if (navLabel) {
+    navLabel.textContent = isLatest
+      ? '現在'
+      : viewH.年 + '年' + (viewH.イベント ? ' E' + viewH.イベント : '');
+  }
 
-  if (legendAssets.length === 0) {
-    legend.innerHTML = '<div style="font-size:11px;color:rgba(26,26,46,0.45);padding:8px 6px">現在保有している資産はありません</div>';
+  const viewTotal  = viewH.total;
+  const viewAssets = ASSET_KEYS.filter(a => (viewH.values[a.id] || 0) > 0);
+  const viewSav    = savMap[viewH.年] || 0;
+
+  if (viewAssets.length === 0) {
+    legend.innerHTML = '<div style="font-size:11px;color:rgba(26,26,46,0.45);padding:8px 6px">この時点では資産がありません</div>';
   } else {
-    const diff = curTotal - curSav;
+    const diff = viewTotal - viewSav;
     const diffColor = diff >= 0 ? '#1a7a40' : '#b00020';
     const diffLabel = diff >= 0 ? `📈 貯金より +${fmt(diff)}円` : `📉 貯金より ${fmt(Math.abs(diff))}円`;
-    legend.innerHTML = legendAssets.map(a => {
-      const qty = holdings[a.id] || 0;
-      const val = qty * (curRow ? curRow[a.id]||0 : 0);
-      const pct = curTotal > 0 ? ((val / curTotal) * 100) : 0;
+    legend.innerHTML = viewAssets.map(a => {
+      const val = viewH.values[a.id] || 0;
+      const qty = viewH.qtys ? (viewH.qtys[a.id] || 0) : '─';
+      const pct = viewTotal > 0 ? ((val / viewTotal) * 100) : 0;
       return `<div class="pl-row">
         <div class="pl-dot" style="background:${a.color}"></div>
         <div class="pl-name">${a.emoji} ${a.label}</div>
@@ -4563,9 +4518,18 @@ function drawPortfolioGraph() {
         <div class="pl-bar-wrap"><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:${Math.round(pct)}%;background:${a.color}"></div></div></div>
       </div>`;
     }).join('') +
-    `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(curTotal)}</span></div>` +
-    (curSav > 0 ? `<div class="pl-saving-compare"><span>💰 貯金した場合</span><span>¥${fmt(curSav)}</span></div><div class="pl-saving-diff" style="color:${diffColor}">${diffLabel}</div>` : '');
+    `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(viewTotal)}</span></div>` +
+    (viewSav > 0 ? `<div class="pl-saving-compare"><span>💰 貯金した場合</span><span>¥${fmt(viewSav)}</span></div><div class="pl-saving-diff" style="color:${diffColor}">${diffLabel}</div>` : '');
   }
+}
+
+function portNavStep(dir) {
+  const hist = portfolioHistory;
+  if (hist.length < 2) return;
+  let idx = (portfolioViewIdx >= 0 && portfolioViewIdx < hist.length) ? portfolioViewIdx : hist.length - 1;
+  idx = Math.max(0, Math.min(hist.length - 1, idx + dir));
+  portfolioViewIdx = idx;
+  drawPortfolioGraph();
 }
 
 function drawIncomeChart() {
