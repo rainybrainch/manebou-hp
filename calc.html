@@ -4374,7 +4374,7 @@ function stepTime(dir) {
     currentIndex = ni;
     const row = masterData[currentIndex];
     if (dir === 1 && row.年 > 0) {
-      if (row.イベント === 1 && prevRow.イベント === 4) {
+      if (row.イベント === 1 && (prevRow.イベント === 4 || prevRow.年 === 0)) {
         const sal = SALARY_DATA[row.年];
         if (sal && sal > 0) {
           addCash(sal, `${row.年}年 余剰金`);
