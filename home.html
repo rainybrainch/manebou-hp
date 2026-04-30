@@ -469,7 +469,7 @@ try {
   _storage = firebase.storage();
 } catch(e) { console.warn('Firebase init failed', e); }
 
-let _user = null, _groupId = null, _role = null, _memberUnsub = null;
+let _user = null, _groupId = null, _role = null, _memberUnsub = null, _registering = false;
 
 function fmt(n) { return Math.round(n||0).toLocaleString('ja-JP'); }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -522,6 +522,7 @@ async function submitEmailAuth() {
     } else {
       const inputName = document.getElementById('authName').value.trim();
       const name = inputName || email.split('@')[0];
+      _registering = true;
       const cred = await _auth.createUserWithEmailAndPassword(email, pass);
       let photoURL = '';
       if (_selectedAvatarFile) {
@@ -534,8 +535,12 @@ async function submitEmailAuth() {
           role: 'player', groupId: null, createdAt: new Date()
         });
       }
+      _registering = false;
+      location.href = 'calc.html';
+      return;
     }
   } catch(e) {
+    _registering = false;
     const msgs = {
       'auth/user-not-found':      'メールアドレスが見つかりません',
       'auth/wrong-password':      'パスワードが正しくありません',
@@ -595,6 +600,7 @@ document.addEventListener('click', e => {
 if (_auth) _auth.onAuthStateChanged(async user => {
   _user = user;
   if (user) {
+    if (_registering) return; // 登録処理中はonAuthStateChangedを無視
     // メール/パスワードユーザーでニックネーム未設定なら設定モーダルを表示
     const isEmailUser = user.providerData.some(p => p.providerId === 'password');
     if (isEmailUser && !user.displayName) {
