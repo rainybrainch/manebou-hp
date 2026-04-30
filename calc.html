@@ -628,6 +628,13 @@ body {
   color: var(--dark);
   display: block;
 }
+.a-hold {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  font-size: 10px;
+  color: rgba(0,0,0,0.48);
+  display: block;
+  margin-top: 1px;
+}
 .a-spark {
   display: block;
   width: 100%;
@@ -1687,6 +1694,7 @@ body {
 .a-price      { font-size: 8px; margin-bottom: 1px; }
 .a-div        { font-size: 8px; margin-bottom: 1px; }
 .a-qty        { font-size: 12px; }
+.a-hold       { font-size: 9px; }
 
 /* ─── Compact Char Speech ────────────────────────────────── */
 .char-speech-mini {
@@ -2295,9 +2303,9 @@ body {
         <div class="tab-section-title">⚖️ 資産比較</div>
         <div id="compareTable"></div>
       </div>
-      <!-- 全資産: 凡例 -->
+      <!-- 全資産: 価格一覧 -->
       <div id="histAllLegendSection" class="tab-section" style="display:none">
-        <div class="tab-section-title">📋 凡例</div>
+        <div class="tab-section-title">📋 各資産の価格一覧</div>
         <div id="allAssetsLegend" class="portfolio-legend"></div>
       </div>
     </div>
@@ -2774,14 +2782,14 @@ const INCOME_DATA = [
 // ASSET DEFINITIONS
 // ============================================================
 const ASSET_KEYS = [
-  { id:'銀行預金',   label:'銀行預金',   emoji:'🏦', color:'#27ae60', shadow:'var(--green)',  divKey:'配当銀行預金' },
-  { id:'株式',       label:'株式',       emoji:'📈', color:'#c0392b', shadow:'var(--red)',    divKey:'株式配当' },
-  { id:'金',         label:'金',         emoji:'✨', color:'#b8860b', shadow:'var(--gold)',   divKey: null },
-  { id:'投資信託',   label:'投資信託',   emoji:'📊', color:'#7d3c98', shadow:'var(--purple)', divKey: null },
-  { id:'国債',       label:'国債',       emoji:'🏛️', color:'#1a6fa8', shadow:'var(--sky)',    divKey:'配当国債' },
-  { id:'ドル',       label:'ドル', emoji:'💵', color:'#117a65', shadow:'#16a085',       divKey: null },
-  { id:'不動産',     label:'不動産',     emoji:'🏠', color:'#a04000', shadow:'#d35400',       divKey:'配当不動産収入' },
-  { id:'？？？？？', label:'？？？？？', emoji:'❓', color:'#6c0000', shadow:'#c0392b',       divKey: null },
+  { id:'銀行預金',   label:'銀行預金',   emoji:'🏦', color:'#e74c3c', shadow:'#c0392b', divKey:'配当銀行預金' },
+  { id:'株式',       label:'株式',       emoji:'📈', color:'#e67e22', shadow:'#d35400', divKey:'株式配当' },
+  { id:'金',         label:'金',         emoji:'✨', color:'#f1c40f', shadow:'#c9a800', divKey: null },
+  { id:'投資信託',   label:'投資信託',   emoji:'📊', color:'#8bc34a', shadow:'#558b2f', divKey: null },
+  { id:'国債',       label:'国債',       emoji:'🏛️', color:'#2980b9', shadow:'#1a6fa8', divKey:'配当国債' },
+  { id:'ドル',       label:'ドル',       emoji:'💵', color:'#29b6f6', shadow:'#0288d1', divKey: null },
+  { id:'不動産',     label:'不動産',     emoji:'🏠', color:'#9c27b0', shadow:'#6a1b9a', divKey:'配当不動産収入' },
+  { id:'？？？？？', label:'？？？？？', emoji:'❓', color:'#9e9e9e', shadow:'#616161', divKey: null },
 ];
 
 // ============================================================
@@ -3428,16 +3436,21 @@ function setStep(n, btn) {
   step = n;
   document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  updateDisplay();
 }
 
 // ─── History ─────────────────────────────────────────────────
 function pushHistory() {
-  history.push({ holdings: { ...holdings }, costBasis: { ...costBasis }, pendingSell, pendingSalary, pendingSalaryYear, currentIndex });
+  history.push({
+    holdings: { ...holdings }, costBasis: { ...costBasis },
+    pendingSell, pendingSalary, pendingSalaryYear, currentIndex,
+    cashBalance, cashHistLog: cashHistLog.slice()
+  });
   if (history.length > 30) history.shift();
 }
 
 function undoAction() {
-  if (!history.length) return;
+  if (!history.length) { showToast('戻す操作がありません'); return; }
   Object.keys(pendingCart).forEach(k => delete pendingCart[k]); updateCartBar();
   const s = history.pop();
   Object.assign(holdings, s.holdings);
@@ -3446,10 +3459,17 @@ function undoAction() {
   pendingSalary     = s.pendingSalary     || 0;
   pendingSalaryYear = s.pendingSalaryYear || 0;
   currentIndex = s.currentIndex;
+  if (s.cashBalance !== undefined) {
+    cashBalance = s.cashBalance;
+    if (s.cashHistLog) { cashHistLog.length = 0; s.cashHistLog.forEach(e => cashHistLog.push(e)); }
+    updateCashDisplay();
+    renderCashLog();
+  }
   const row = masterData[currentIndex];
   document.getElementById('selY').value = row.年;
   updateEventOptions();
   if (row.イベント > 0) document.getElementById('selE').value = row.イベント;
+  showToast('1つ前に戻しました');
   updateDisplay();
 }
 
@@ -3782,12 +3802,20 @@ function updateCartBar() {
   document.getElementById('cartItems').textContent = parts.join('　') + costStr;
 }
 
+let _assetResetPending = false, _assetResetTimer = null;
 function assetReset() {
-  if (!confirm('保有資産をすべてリセットしますか？')) return;
+  if (!_assetResetPending) {
+    _assetResetPending = true;
+    showToast('もう一度タップするとリセットします');
+    _assetResetTimer = setTimeout(() => { _assetResetPending = false; }, 3000);
+    return;
+  }
+  clearTimeout(_assetResetTimer); _assetResetPending = false;
   Object.keys(pendingCart).forEach(k => delete pendingCart[k]); updateCartBar();
   pushHistory();
   ASSET_KEYS.forEach(a => { holdings[a.id] = 0; costBasis[a.id] = 0; });
   pendingSell = 0;
+  showToast('資産をリセットしました');
   updateDisplay();
 }
 
@@ -4010,9 +4038,13 @@ function updateDisplay() {
             ? '<span style="display:block;font-size:8px;color:#ff9999">上限3個</span>' : '')
       : '';
     const displayLabel = a.id === '？？？？？' ? getCryptoLabel(row) : a.label;
-    const qtyInfo = a.id === '？？？？？'
-      ? ((holdings[a.id] || 0) > 0 ? `${holdings[a.id]}/3個${orderInfo}` : '')
-      : `${holdings[a.id] || 0}個${orderInfo}`;
+    const stepAbs = Math.abs(step);
+    const stepSign = step > 0 ? '＋' : '－';
+    const stepQtyColor = step > 0 ? '#27ae60' : '#e74c3c';
+    const holdQty = holdings[a.id] || 0;
+    const holdStr = a.id === '？？？？？'
+      ? `保有 ${holdQty}/3個`
+      : `保有 ${holdQty}個`;
     const divRaw = (a.divKey && ok) ? (row[a.divKey] || 0) : 0;
     const divPerUnit = divRaw !== 0 ? calcDiv(divRaw, 1) : 0;
     const divYield = (divRaw !== 0 && price > 0) ? ((divPerUnit * 4) / price * 100).toFixed(1) : null;
@@ -4021,7 +4053,7 @@ function updateDisplay() {
       : `<span class="a-div" style="visibility:hidden">─</span>`;
     const spark = ok ? makeSparkline(a.id, a.color) : '';
     const ownedQty = holdings[a.id] || 0;
-    const ownedBadge = ownedQty > 0 ? '<span class="a-owned-badge">✓ ' + ownedQty + '個</span>' : '';
+    const ownedBadge = ownedQty > 0 ? '<span class="a-owned-badge">✓</span>' : '';
     const cartEntry = pendingCart[a.id];
     const cartBadge = cartEntry
       ? `<span class="a-cart-badge" style="color:${cartEntry.dir>0?'var(--gold)':'#f77'}">` +
@@ -4038,7 +4070,8 @@ function updateDisplay() {
     <div class="asset-body">
       <span class="a-price">${ok ? fmt(price) + '円/個' : '─ 未登場 ─'}${cryptoNote}</span>
       ${divLine}
-      <span class="a-qty">${qtyInfo}</span>
+      <span class="a-qty" style="color:${stepQtyColor}">${stepSign}${stepAbs}個</span>
+      <span class="a-hold">${holdStr}${orderInfo}</span>
       ${spark}
     </div>`;
   });
@@ -5071,18 +5104,26 @@ function loadGame() {
   } catch(e) { return false; }
 }
 
+let _clearSavePending = false, _clearSaveTimer = null;
 function clearSave() {
-  if (!confirm('セーブデータを削除して最初からやり直しますか？')) return;
+  if (!_clearSavePending) {
+    _clearSavePending = true;
+    showToast('もう一度タップするとデータを削除します');
+    _clearSaveTimer = setTimeout(() => { _clearSavePending = false; }, 3000);
+    return;
+  }
+  clearTimeout(_clearSaveTimer); _clearSavePending = false;
   localStorage.removeItem(SAVE_KEY);
   currentIndex = 0;
   ASSET_KEYS.forEach(a => { holdings[a.id] = 0; costBasis[a.id] = 0; });
   pendingSell = 0;
+  Object.keys(pendingCart).forEach(k => delete pendingCart[k]); updateCartBar();
   unlockedTitles = new Set();
   portfolioHistory = [];
   history = [];
   cashBalance = SALARY_DATA[0];
   cashHistLog.length = 0;
-  cashHistLog.unshift({ amount: SALARY_DATA[0], balance: SALARY_DATA[0], label: 'ゲーム開始 初期資金' });
+  cashHistLog.unshift({ amount: SALARY_DATA[0], balance: SALARY_DATA[0], label: 'ゲーム開始 初期資金', type: 'start' });
   updateCashDisplay();
   renderCashLog();
   updateEventOptions();
