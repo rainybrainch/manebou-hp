@@ -1092,6 +1092,8 @@ body {
 }
 .sqp:hover, .sqp.active { background: var(--sky); color: #fff; }
 .sqp:active { transform: scale(0.94); }
+#simBuyBtn:not(:disabled):hover  { transform: translateY(-2px); box-shadow: 0 7px 0 var(--gold-dark); }
+#simBuyBtn:not(:disabled):active { transform: translateY(5px);  box-shadow: 0 0  0 var(--gold-dark); }
 
 /* ─── Wallet header (常時表示バナー) ─────────────────── */
 .wallet-header {
@@ -1143,6 +1145,11 @@ body {
 .wh-op-btn.plus  { background: rgba(46,204,113,0.12); color: #2ecc71; border-color: rgba(46,204,113,0.35); }
 .wh-op-btn.minus { background: rgba(232,53,74,0.10);  color: #e8354a; border-color: rgba(232,53,74,0.30); }
 .wh-op-btn:active { transform: scale(0.88); }
+.wh-apply-btn { width: auto; padding: 0 10px; height: 32px; font-size: 12px; white-space: nowrap; font-family: 'Zen Maru Gothic',sans-serif; font-weight: 700; }
+.wh-sign-toggle { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid; font-size: 17px; font-weight: 900; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.15s; }
+.wh-sign-toggle.is-plus  { background: rgba(46,204,113,0.15); color: #2ecc71; border-color: rgba(46,204,113,0.45); }
+.wh-sign-toggle.is-minus { background: rgba(232,53,74,0.12);  color: #e8354a; border-color: rgba(232,53,74,0.4); }
+.wh-sign-toggle:active { transform: scale(0.82); }
 .wh-label-input {
   flex: 1; min-width: 0;
   background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.75);
@@ -1946,10 +1953,10 @@ body {
         <button class="wh-reset-btn" onclick="resetCash()">リセット</button>
       </div>
       <div class="wh-input-row" style="margin-top:8px">
+        <button class="wh-sign-toggle is-plus" id="cashSignToggle" onclick="toggleCashSign()">＋</button>
         <input id="cashInput" type="number" inputmode="numeric" placeholder="金額" min="0" style="width:90px;flex:none">
         <input id="cashLabelInput" type="text" class="wh-label-input" placeholder="メモ（例：配当、給与）">
-        <button class="wh-op-btn minus" onclick="applyFromInput(-1)">－</button>
-        <button class="wh-op-btn plus"  onclick="applyFromInput(1)">＋</button>
+        <button class="wh-op-btn wh-apply-btn plus" id="cashApplyBtn" onclick="applyFromInput()">追加</button>
       </div>
     </div>
 
@@ -1993,7 +2000,6 @@ body {
         <button class="ckey eq"        onclick="cSolve()">=</button>
       </div>
       <button class="wc-to-cash-btn" onclick="calcToCash()">💴 現金に加算</button>
-      <button class="calc-to-sim"    onclick="calcToSim()">→ シミュの個数に反映</button>
     </div>
 
     <!-- ── サブツール ── -->
@@ -2020,6 +2026,10 @@ body {
           <button class="sqp" onclick="setSimQty(100)">100</button>
         </div>
         <div id="simResult">資産と個数を選ぶと自動計算されます</div>
+        <button id="simBuyBtn" onclick="simBuy()" style="display:none;width:100%;margin-top:10px;padding:12px;background:var(--gold);color:var(--dark);border:none;border-radius:12px;font-family:'Dela Gothic One',sans-serif;font-size:14px;cursor:pointer;box-shadow:0 5px 0 var(--gold-dark);transform:translateY(0);transition:transform 0.08s,box-shadow 0.08s">
+          💳 現金から購入する
+        </button>
+        <div id="simCashStatus" style="display:none;font-size:11px;text-align:center;margin-top:6px;color:rgba(26,26,46,0.5)"></div>
       </div>
     </div>
 
@@ -2229,7 +2239,7 @@ body {
         </div>
         <div class="setting-row">
           <span>マネぼう公式サイト</span>
-          <a class="setting-link" href="https://fukuisho0603.github.io/manebo/" target="_blank">🌐 こちら</a>
+          <a class="setting-link" href="https://rainybrainch.github.io/manebou-hp/" target="_blank">🌐 こちら</a>
         </div>
       </div>
     </div>
@@ -4056,17 +4066,56 @@ function updateDisplay() {
 function doSim() {
   const row = masterData[currentIndex];
   if (!row) return;
-  const id     = document.getElementById('simAsset').value;
-  const qty    = Math.max(0, parseInt(document.getElementById('simQty').value) || 0);
-  const price  = row[id] || 0;
-  const a      = ASSET_KEYS.find(x => x.id === id);
+  const id      = document.getElementById('simAsset').value;
+  const qty     = Math.max(0, parseInt(document.getElementById('simQty').value) || 0);
+  const price   = row[id] || 0;
+  const a       = ASSET_KEYS.find(x => x.id === id);
   const divRaw3 = (a && a.divKey) ? (row[a.divKey] || 0) : 0;
-  const cost   = qty * price;
-  const divAmt = calcDiv(divRaw3, qty);
+  const cost    = qty * price;
+  const divAmt  = calcDiv(divRaw3, qty);
   const perUnitRate = divRaw3 > 0 ? divRaw3 : (divRaw3 < 0 ? 1000 / (-divRaw3) : 0);
-  const yPct   = (price > 0 && divRaw3 !== 0) ? ((perUnitRate * 4 / price) * 100).toFixed(2) : '—';
+  const yPct    = (price > 0 && divRaw3 !== 0) ? ((perUnitRate * 4 / price) * 100).toFixed(2) : '—';
   document.getElementById('simResult').textContent =
     `購入コスト  : ${fmt(cost)} 円\n配当(1ターン): ${fmt(divAmt)} 円\n配当(年間)  : ${fmt(divAmt * 4)} 円\n利回り目安  : ${yPct} %`;
+
+  const btn    = document.getElementById('simBuyBtn');
+  const status = document.getElementById('simCashStatus');
+  if (btn && cost > 0 && price > 0) {
+    btn.style.display = '';
+    const enough = cashBalance >= cost;
+    btn.disabled = !enough;
+    btn.style.opacity = enough ? '1' : '0.45';
+    if (status) {
+      const remain = cashBalance - cost;
+      status.style.display = '';
+      status.textContent = enough
+        ? `現金残高: ${fmt(cashBalance)}円 → 購入後: ${fmt(remain)}円`
+        : `⚠ 現金が不足しています（残高: ${fmt(cashBalance)}円、不足: ${fmt(cost - cashBalance)}円）`;
+      status.style.color = enough ? 'rgba(26,26,46,0.5)' : '#b00020';
+    }
+  } else {
+    if (btn)    btn.style.display = 'none';
+    if (status) status.style.display = 'none';
+  }
+}
+
+function simBuy() {
+  const row = masterData[currentIndex];
+  if (!row) return;
+  const id    = document.getElementById('simAsset').value;
+  const qty   = Math.max(0, parseInt(document.getElementById('simQty').value) || 0);
+  const price = row[id] || 0;
+  if (!id || qty <= 0 || price <= 0) return;
+  const cost  = qty * price;
+  if (cashBalance < cost) { showToast(`💸 現金が足りません（残高: ${fmt(cashBalance)}円）`); return; }
+  const a     = ASSET_KEYS.find(x => x.id === id);
+  const label = (a ? a.label : id) + ' ×' + qty + ' 購入（シミュ）';
+  pushHistory();
+  addCash(-cost, label);
+  executeTrade(id, qty, 1);
+  updateDisplay();
+  showToast(`✅ ${a ? a.label : id} ×${qty} 購入！ -${fmt(cost)}円`);
+  doSim();
 }
 // ============================================================
 // SIMULATOR HELPERS + CASH MEMO
@@ -4103,8 +4152,8 @@ function renderCashLog() {
   el.innerHTML = cashHistLog.map(e => {
     const isIn = e.amount >= 0;
     const amtCls = isIn ? 'cle-amt-in' : 'cle-amt-out';
-    const sign   = isIn ? '+' : '';
-    const amtStr = sign + fmt(e.amount) + '円';
+    const sign   = isIn ? '+' : '-';
+    const amtStr = sign + fmt(Math.abs(e.amount)) + '円';
     let icon, when, desc, detail = '';
     if (e.type === 'salary') {
       icon = '💰';
@@ -4204,12 +4253,27 @@ function nextTicker() {
   bar.querySelector('.ticker-text').addEventListener('animationend', nextTicker, { once: true });
 }
 
-function applyFromInput(sign) {
+let _cashSign = 1;
+
+function toggleCashSign() {
+  _cashSign = -_cashSign;
+  const tog = document.getElementById('cashSignToggle');
+  const btn = document.getElementById('cashApplyBtn');
+  if (_cashSign > 0) {
+    tog.textContent = '＋'; tog.className = 'wh-sign-toggle is-plus';
+    if (btn) { btn.textContent = '追加'; btn.className = 'wh-op-btn wh-apply-btn plus'; }
+  } else {
+    tog.textContent = '－'; tog.className = 'wh-sign-toggle is-minus';
+    if (btn) { btn.textContent = '減少'; btn.className = 'wh-op-btn wh-apply-btn minus'; }
+  }
+}
+
+function applyFromInput() {
   const v = parseInt(document.getElementById('cashInput').value) || 0;
   if (v === 0) return;
   const labelEl = document.getElementById('cashLabelInput');
-  const label = (labelEl && labelEl.value.trim()) || '手動';
-  addCash(sign * v, label);
+  const label = (labelEl && labelEl.value.trim()) || (_cashSign > 0 ? '収入' : '支出');
+  addCash(_cashSign * v, label);
   document.getElementById('cashInput').value = '';
   if (labelEl) labelEl.value = '';
 }
