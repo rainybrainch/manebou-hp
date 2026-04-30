@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マネぼう塾 ホーム</title>
+<link rel="icon" type="image/webp" href="images/img5.webp">
+<link rel="apple-touch-icon" href="images/img5.webp">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<style>
+:root {
+  --sky:#5BC8E8; --red:#E8354A; --gold:#F5C842; --gold-dark:#D4A017;
+  --green:#4CAF7D; --dark:#1A1A2E; --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--white);min-height:100vh;padding-bottom:40px;}
+
+/* ─── Nav ─── */
+.top-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(26,26,46,0.97);backdrop-filter:blur(16px);
+  border-bottom:3px solid var(--gold);
+  padding:10px 20px;display:flex;align-items:center;gap:10px;
+}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.nav-logo img{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--gold);object-fit:cover;object-position:top;}
+.nav-logo-text{font-family:'Dela Gothic One',sans-serif;font-size:15px;color:var(--sky);}
+.nav-logo-sub{font-size:9px;color:rgba(255,255,255,0.4);display:block;font-family:'Zen Maru Gothic',sans-serif;}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nav-login-btn{
+  background:none;border:1.5px solid rgba(245,200,66,0.5);border-radius:20px;
+  padding:5px 14px;color:var(--gold);font-size:12px;font-family:'Zen Maru Gothic',sans-serif;
+  font-weight:700;cursor:pointer;white-space:nowrap;transition:background 0.2s;
+}
+.nav-login-btn:hover{background:rgba(245,200,66,0.1);}
+.nav-avatar{width:30px;height:30px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;cursor:pointer;display:none;}
+
+/* ─── Layout ─── */
+.wrap{max-width:680px;margin:0 auto;padding:72px 16px 20px;}
+
+/* ─── Hero ─── */
+.hero{text-align:center;padding:40px 0 32px;animation:fadeUp 0.6s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero-char{width:90px;height:90px;border-radius:50%;border:4px solid var(--gold);object-fit:cover;object-position:top;margin:0 auto 18px;display:block;box-shadow:0 0 32px rgba(245,200,66,0.3);}
+.hero-label{display:inline-block;background:var(--gold);color:var(--dark);font-size:10px;font-weight:700;letter-spacing:4px;padding:3px 14px;border-radius:4px;margin-bottom:12px;}
+.hero-title{font-family:'Dela Gothic One',sans-serif;font-size:clamp(22px,6vw,32px);margin-bottom:8px;line-height:1.2;}
+.hero-title .ac{color:var(--sky);}
+.hero-title .ag{color:var(--gold);}
+.hero-sub{color:rgba(255,255,255,0.5);font-size:12px;line-height:1.8;margin-bottom:24px;}
+.btn-google-big{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#fff;color:#333;border:none;border-radius:12px;
+  padding:14px 24px;font-size:14px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 18px rgba(0,0,0,0.25);transition:transform 0.15s,box-shadow 0.15s;
+  font-family:'Zen Maru Gothic',sans-serif;
+}
+.btn-google-big:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.35);}
+.btn-google-big img{width:22px;height:22px;}
+.hero-note{font-size:10px;color:rgba(255,255,255,0.3);margin-top:12px;}
+
+/* ─── Section ─── */
+.section{margin-bottom:20px;animation:fadeUp 0.5s ease both;}
+.section-title{
+  font-family:'Dela Gothic One',sans-serif;font-size:13px;
+  color:var(--sky);letter-spacing:2px;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(91,200,232,0.2);}
+
+/* ─── My card ─── */
+.my-card{
+  background:rgba(245,200,66,0.06);border:2px solid rgba(245,200,66,0.3);
+  border-radius:16px;padding:16px;display:flex;gap:14px;align-items:center;
+}
+.my-avatar{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
+.my-info{flex:1;min-width:0;}
+.my-name{font-family:'Dela Gothic One',sans-serif;font-size:16px;margin-bottom:4px;}
+.my-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.my-stat{font-size:11px;color:rgba(255,255,255,0.5);}
+.my-stat strong{color:var(--gold);font-size:13px;}
+.btn-play{
+  background:var(--gold);color:var(--dark);border:none;border-radius:12px;
+  padding:10px 20px;font-family:'Dela Gothic One',sans-serif;font-size:13px;
+  cursor:pointer;white-space:nowrap;transition:opacity 0.15s;flex-shrink:0;
+  text-decoration:none;display:inline-flex;align-items:center;gap:6px;
+}
+.btn-play:hover{opacity:0.85;}
+
+/* ─── Group panel ─── */
+.group-panel{
+  background:rgba(91,200,232,0.06);border:2px solid rgba(91,200,232,0.25);
+  border-radius:16px;padding:16px;
+}
+.group-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.group-name{font-family:'Dela Gothic One',sans-serif;font-size:14px;color:var(--sky);}
+.group-code-badge{
+  background:rgba(245,200,66,0.12);border:1px dashed rgba(245,200,66,0.5);
+  border-radius:8px;padding:4px 10px;font-family:'Dela Gothic One',sans-serif;
+  font-size:13px;color:var(--gold);letter-spacing:3px;cursor:pointer;
+  transition:background 0.2s;
+}
+.group-code-badge:hover{background:rgba(245,200,66,0.2);}
+.group-empty{color:rgba(255,255,255,0.4);font-size:12px;margin-bottom:12px;}
+.group-btns{display:flex;gap:8px;}
+.btn-group{
+  flex:1;padding:10px;border-radius:10px;border:none;font-size:12px;font-weight:700;
+  font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;transition:opacity 0.15s;
+}
+.btn-join{background:var(--sky);color:var(--dark);}
+.btn-create{background:rgba(91,200,232,0.15);color:var(--sky);border:1.5px solid rgba(91,200,232,0.4);}
+.btn-group:hover{opacity:0.85;}
+.btn-leave{
+  background:none;border:1px solid rgba(232,53,74,0.3);border-radius:8px;
+  color:var(--red);font-size:11px;font-family:'Zen Maru Gothic',sans-serif;
+  padding:4px 10px;cursor:pointer;
+}
+.role-badge{
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;
+  background:rgba(245,200,66,0.15);color:var(--gold);border:1px solid rgba(245,200,66,0.4);
+}
+.role-badge.player{background:rgba(91,200,232,0.12);color:var(--sky);border-color:rgba(91,200,232,0.35);}
+
+/* ─── Group join/create forms ─── */
+.group-form{margin-top:12px;display:none;}
+.group-form.show{display:block;}
+.group-input{
+  width:100%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.15);
+  border-radius:10px;padding:10px 14px;color:#fff;font-size:15px;
+  font-family:'Zen Maru Gothic',sans-serif;text-align:center;margin-bottom:10px;
+}
+.group-input:focus{outline:none;border-color:var(--sky);}
+.group-input.code{letter-spacing:5px;}
+.btn-submit{
+  width:100%;background:var(--sky);color:var(--dark);border:none;border-radius:10px;
+  padding:11px;font-size:13px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;
+}
+.btn-submit:hover{opacity:0.88;}
+.created-code-box{
+  text-align:center;background:rgba(245,200,66,0.08);border:2px dashed rgba(245,200,66,0.5);
+  border-radius:10px;padding:14px;margin-top:10px;display:none;
+}
+.created-code-label{font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:4px;}
+.created-code{font-family:'Dela Gothic One',sans-serif;font-size:28px;color:var(--gold);letter-spacing:6px;}
+.btn-copy{
+  margin-top:8px;background:rgba(245,200,66,0.15);border:1px solid rgba(245,200,66,0.4);
+  border-radius:8px;padding:6px 16px;color:var(--gold);font-size:11px;
+  font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;
+}
+
+/* ─── Members board ─── */
+.members-board{display:flex;flex-direction:column;gap:8px;margin-top:2px;}
+.member-row{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.04);border-radius:10px;padding:10px 12px;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.member-rank{font-family:'Dela Gothic One',sans-serif;font-size:13px;color:rgba(255,255,255,0.3);width:20px;text-align:center;flex-shrink:0;}
+.member-rank.top1{color:var(--gold);}
+.member-rank.top2{color:#ccc;}
+.member-rank.top3{color:#cd7f32;}
+.member-avatar{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2);object-fit:cover;flex-shrink:0;}
+.member-info{flex:1;min-width:0;}
+.member-name{font-size:12px;font-weight:700;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.member-assets{font-size:11px;color:var(--gold);}
+.member-sub{font-size:10px;color:rgba(255,255,255,0.35);}
+.member-me{border-color:rgba(245,200,66,0.35);background:rgba(245,200,66,0.05);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;animation:blink 2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ─── Hall of Fame ─── */
+.hof-list{display:flex;flex-direction:column;gap:8px;}
+.hof-row{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.03);border-radius:10px;padding:10px 12px;
+  border:1px solid rgba(255,255,255,0.05);transition:background 0.15s;
+}
+.hof-row:hover{background:rgba(255,255,255,0.06);}
+.hof-rank{font-family:'Dela Gothic One',sans-serif;font-size:14px;color:rgba(255,255,255,0.25);width:24px;text-align:center;flex-shrink:0;}
+.hof-rank.g{color:var(--gold);}
+.hof-rank.s{color:#ccc;}
+.hof-rank.b{color:#cd7f32;}
+.hof-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.15);flex-shrink:0;}
+.hof-info{flex:1;min-width:0;}
+.hof-name{font-size:12px;font-weight:700;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hof-assets{font-size:13px;color:var(--gold);font-weight:700;}
+.hof-meta{font-size:10px;color:rgba(255,255,255,0.3);}
+.hof-rank-badge{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:700;flex-shrink:0;}
+.hof-empty{color:rgba(255,255,255,0.3);font-size:12px;text-align:center;padding:20px;}
+
+/* ─── Loading ─── */
+.loading-dots{display:flex;gap:5px;justify-content:center;padding:20px;}
+.loading-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);animation:ld 1.2s ease-in-out infinite;}
+.loading-dots span:nth-child(2){animation-delay:0.2s;}
+.loading-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes ld{0%,80%,100%{transform:scale(1)}40%{transform:scale(1.5);background:var(--sky);}}
+
+/* ─── Toast ─── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(26,26,46,0.97);border:1.5px solid var(--gold);border-radius:12px;padding:10px 20px;font-size:12px;font-weight:700;color:var(--gold);z-index:900;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s;opacity:0;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ─── Modal ─── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#1a1a2e;border:3px solid var(--sky);border-radius:20px;padding:28px 22px;width:90%;max-width:360px;text-align:center;}
+.modal-box h2{font-family:'Dela Gothic One',sans-serif;font-size:17px;color:var(--sky);margin-bottom:6px;}
+.modal-box p{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px;}
+.modal-tabs{display:flex;gap:6px;margin-bottom:14px;}
+.modal-tab{flex:1;padding:8px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;}
+.modal-tab.active{background:rgba(91,200,232,0.15);border-color:var(--sky);color:var(--sky);}
+.modal-input{width:100%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 14px;color:#fff;font-size:15px;font-family:'Zen Maru Gothic',sans-serif;text-align:center;letter-spacing:4px;margin-bottom:12px;}
+.modal-input.no-track{letter-spacing:0;}
+.modal-input:focus{outline:none;border-color:var(--sky);}
+.btn-modal{width:100%;background:var(--sky);color:var(--dark);border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;margin-bottom:10px;}
+.btn-modal:hover{opacity:0.88;}
+.btn-close-modal{color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;background:none;border:none;font-family:'Zen Maru Gothic',sans-serif;}
+.btn-close-modal:hover{color:#fff;}
+.modal-code-box{margin-top:10px;display:none;}
+.modal-code-label{font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:4px;}
+.modal-code{font-family:'Dela Gothic One',sans-serif;font-size:28px;color:var(--gold);letter-spacing:6px;background:rgba(245,200,66,0.08);border:2px dashed var(--gold);border-radius:10px;padding:10px;margin-bottom:8px;}
+
+@media(min-width:680px){
+  .top-nav,.wrap{max-width:720px;}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- Group Modal -->
+<div class="modal-overlay" id="groupModal">
+  <div class="modal-box">
+    <h2>👥 グループ</h2>
+    <p>講師がグループを作成し<br>プレイヤーはコードで参加</p>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchTab('join',this)">参加する</button>
+      <button class="modal-tab" onclick="switchTab('create',this)">作成する（講師）</button>
+    </div>
+    <div id="tabJoin">
+      <input class="modal-input" id="joinCodeInput" placeholder="XXXXXX" maxlength="6"
+        oninput="this.value=this.value.toUpperCase()" autocomplete="off">
+      <button class="btn-modal" onclick="joinGroup()">参加する</button>
+    </div>
+    <div id="tabCreate" style="display:none">
+      <input class="modal-input no-track" id="createNameInput" placeholder="グループ名" maxlength="20">
+      <button class="btn-modal" onclick="createGroup()">グループを作成</button>
+      <div class="modal-code-box" id="modalCodeBox">
+        <div class="modal-code-label">グループコード（プレイヤーに共有）</div>
+        <div class="modal-code" id="modalCodeText">------</div>
+        <button class="btn-copy" onclick="copyCode()" style="margin-bottom:0">📋 コピー</button>
+      </div>
+    </div>
+    <button class="btn-close-modal" onclick="closeGroupModal()">閉じる</button>
+  </div>
+</div>
+
+<nav class="top-nav">
+  <a class="nav-logo" href="index.html">
+    <img src="images/img5.webp" alt="おーる局長">
+    <div><span class="nav-logo-text">マネぼう塾</span><span class="nav-logo-sub">by RAINY BRAIN</span></div>
+  </a>
+  <div class="nav-right">
+    <button class="nav-login-btn" id="navLoginBtn" onclick="signIn()">☁️ ログイン</button>
+    <img class="nav-avatar" id="navAvatar" src="" alt="">
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO (未ログイン) -->
+  <div id="heroSection" class="hero">
+    <img class="hero-char" src="images/img5.webp" alt="おーる局長">
+    <span class="hero-label">MANEBOU</span>
+    <h1 class="hero-title"><span class="ac">マネぼう</span><br><span class="ag">アプリ</span></h1>
+    <p class="hero-sub">1970〜2025年の日本経済史を舞台に<br>資産を育てるボードゲーム補助アプリ<br>ログインでグループ参加・クラウドセーブが使えます</p>
+    <button class="btn-google-big" onclick="signIn()">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
+      Googleでログイン
+    </button>
+    <p class="hero-note">ログインなしでもゲームは遊べます</p>
+    <div style="margin-top:20px">
+      <a href="calc.html" style="color:rgba(255,255,255,0.35);font-size:12px;text-decoration:none;">▶ ゲームをはじめる（ログインなし）</a>
+    </div>
+  </div>
+
+  <!-- DASHBOARD (ログイン後) -->
+  <div id="dashboard" style="display:none">
+
+    <!-- 自分のカード -->
+    <div class="section" style="animation-delay:0.05s">
+      <div class="my-card" id="myCard">
+        <img class="my-avatar" id="myAvatar" src="" alt="">
+        <div class="my-info">
+          <div class="my-name" id="myName">--</div>
+          <div class="my-stats">
+            <div class="my-stat">総資産 <strong id="myAssets">---</strong>円</div>
+            <div class="my-stat">現金 <strong id="myCash">---</strong>円</div>
+            <div class="my-stat">年 <strong id="myYear">---</strong></div>
+          </div>
+        </div>
+        <a href="calc.html" class="btn-play">▶ ゲームへ</a>
+      </div>
+    </div>
+
+    <!-- グループ -->
+    <div class="section" style="animation-delay:0.1s">
+      <div class="section-title">👥 グループ</div>
+      <div class="group-panel">
+        <!-- 未参加 -->
+        <div id="groupEmpty">
+          <p class="group-empty">まだグループに参加していません<br>講師から受け取ったコードで参加できます</p>
+          <div class="group-btns">
+            <button class="btn-group btn-join" onclick="openGroupModal('join')">コードで参加</button>
+            <button class="btn-group btn-create" onclick="openGroupModal('create')">グループを作成</button>
+          </div>
+        </div>
+        <!-- 参加中 -->
+        <div id="groupActive" style="display:none">
+          <div class="group-header">
+            <div>
+              <span id="groupRoleBadge" class="role-badge">プレイヤー</span>
+              <span class="group-name" id="groupNameLabel" style="margin-left:8px">--</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span class="group-code-badge" id="groupCodeBadge" onclick="copyGroupCode()" title="タップでコピー">------</span>
+              <button class="btn-leave" onclick="leaveGroup()">退出</button>
+            </div>
+          </div>
+          <!-- メンバーボード -->
+          <div id="membersBoard" class="members-board">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /dashboard -->
+
+  <!-- HALL OF FAME (全員に公開) -->
+  <div class="section" id="hofSection" style="animation-delay:0.15s">
+    <div class="section-title">🏆 殿堂入り記録</div>
+    <div class="hof-list" id="hofList">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ─── Firebase ───────────────────────────────────────────
+let _auth = null, _db = null;
+try {
+  const cfg = {
+    apiKey: "AIzaSyDUqrAgL2TYCoKom3B67Go2CTXpo0HlTP4",
+    authDomain: "manebou-app-41dd3.firebaseapp.com",
+    projectId: "manebou-app-41dd3",
+    storageBucket: "manebou-app-41dd3.firebasestorage.app",
+    messagingSenderId: "185792077295",
+    appId: "1:185792077295:web:299acd59423d9706f76a1a"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(cfg);
+  _auth = firebase.auth();
+  _db   = firebase.firestore();
+} catch(e) { console.warn('Firebase init failed', e); }
+
+let _user = null, _groupId = null, _role = null, _memberUnsub = null;
+
+function fmt(n) { return Math.round(n||0).toLocaleString('ja-JP'); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ─── Auth ────────────────────────────────────────────────
+function signIn() {
+  if (!_auth) { showToast('Firebase未接続です'); return; }
+  const p = new firebase.auth.GoogleAuthProvider();
+  _auth.signInWithPopup(p).catch(e => showToast('ログイン失敗: ' + e.message));
+}
+function signOut() {
+  if (_auth) _auth.signOut();
+}
+
+if (_auth) _auth.onAuthStateChanged(async user => {
+  _user = user;
+  if (user) {
+    document.getElementById('heroSection').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('navLoginBtn').style.display = 'none';
+    const av = document.getElementById('navAvatar');
+    av.src = user.photoURL || 'images/img5.webp';
+    av.style.display = 'block';
+    document.getElementById('myName').textContent = user.displayName || 'ユーザー';
+    document.getElementById('myAvatar').src = user.photoURL || 'images/img5.webp';
+    await loadMyData(user);
+    await loadProfile(user);
+  } else {
+    document.getElementById('heroSection').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('navLoginBtn').style.display = '';
+    document.getElementById('navAvatar').style.display = 'none';
+    if (_memberUnsub) { _memberUnsub(); _memberUnsub = null; }
+    _groupId = null; _role = null;
+  }
+});
+
+// ─── Load my save data ────────────────────────────────────
+async function loadMyData(user) {
+  if (!_db) return;
+  try {
+    const snap = await _db.collection('saves').doc(user.uid).get();
+    if (snap.exists) {
+      const d = snap.data();
+      document.getElementById('myAssets').textContent = fmt(d.totalAssets || d.cashBalance || 0);
+      document.getElementById('myCash').textContent   = fmt(d.cashBalance || 0);
+      // year from currentIndex → read from leaderboard instead
+    }
+    const lb = await _db.collection('leaderboard').doc(user.uid).get();
+    if (lb.exists) {
+      const d = lb.data();
+      document.getElementById('myAssets').textContent = fmt(d.totalAssets || 0);
+      document.getElementById('myCash').textContent   = fmt(d.cashBalance || 0);
+      document.getElementById('myYear').textContent   = d.year || '---';
+    }
+  } catch(e) {}
+}
+
+// ─── Load profile / group ─────────────────────────────────
+async function loadProfile(user) {
+  if (!_db) return;
+  try {
+    const snap = await _db.collection('users').doc(user.uid).get();
+    if (snap.exists) {
+      const d = snap.data();
+      _groupId = d.groupId || null;
+      _role    = d.role    || 'player';
+      if (_groupId) await showGroup();
+      else showNoGroup();
+    } else {
+      await _db.collection('users').doc(user.uid).set({
+        name: user.displayName || 'ユーザー',
+        email: user.email, photoURL: user.photoURL || '',
+        role: 'player', groupId: null,
+        createdAt: new Date()
+      });
+      showNoGroup();
+    }
+  } catch(e) { showNoGroup(); }
+}
+
+// ─── Group display ────────────────────────────────────────
+function showNoGroup() {
+  document.getElementById('groupEmpty').style.display = '';
+  document.getElementById('groupActive').style.display = 'none';
+}
+
+async function showGroup() {
+  document.getElementById('groupEmpty').style.display = 'none';
+  document.getElementById('groupActive').style.display = '';
+  document.getElementById('groupCodeBadge').textContent = _groupId;
+  const roleBadge = document.getElementById('groupRoleBadge');
+  roleBadge.textContent = _role === 'instructor' ? '👑 講師' : '🎮 プレイヤー';
+  roleBadge.className = 'role-badge' + (_role === 'player' ? ' player' : '');
+  try {
+    const gSnap = await _db.collection('groups').doc(_groupId).get();
+    if (gSnap.exists) document.getElementById('groupNameLabel').textContent = gSnap.data().name || _groupId;
+  } catch(e) {}
+  startMemberListener();
+}
+
+function startMemberListener() {
+  if (_memberUnsub) _memberUnsub();
+  _memberUnsub = _db.collection('groups').doc(_groupId)
+    .collection('members')
+    .orderBy('totalAssets', 'desc')
+    .onSnapshot(snap => {
+      renderMembers(snap.docs.map(d => ({ uid: d.id, ...d.data() })));
+    }, () => {});
+}
+
+function renderMembers(members) {
+  const el = document.getElementById('membersBoard');
+  if (!members.length) {
+    el.innerHTML = '<p style="font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:12px">まだメンバーがいません</p>';
+    return;
+  }
+  el.innerHTML = members.map((m, i) => {
+    const rankCls = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
+    const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1);
+    const isMe = _user && m.uid === _user.uid;
+    return `<div class="member-row${isMe?' member-me':''}">
+      <div class="member-rank ${rankCls}">${rankIcon}</div>
+      <img class="member-avatar" src="${esc(m.photoURL||'images/img5.webp')}" alt="" onerror="this.src='images/img5.webp'">
+      <div class="member-info">
+        <div class="member-name">${isMe?'<span style="color:var(--gold)">★ </span>':''}${esc(m.name||'ユーザー')}</div>
+        <div class="member-assets">💰 ${fmt(m.totalAssets)}円</div>
+        <div class="member-sub">📅 ${esc(m.year||'---')}年 / 💵 ${fmt(m.cashBalance)}円</div>
+      </div>
+      <span class="live-dot"></span>
+    </div>`;
+  }).join('');
+}
+
+// ─── Group join/create ────────────────────────────────────
+async function joinGroup() {
+  if (!_user || !_db) return;
+  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
+  if (code.length < 4) { showToast('コードを入力してください'); return; }
+  try {
+    const snap = await _db.collection('groups').doc(code).get();
+    if (!snap.exists) { showToast('グループが見つかりません'); return; }
+    await _db.collection('users').doc(_user.uid).update({ groupId: code, role: 'player' });
+    _groupId = code; _role = 'player';
+    closeGroupModal();
+    await showGroup();
+    showToast('グループに参加しました！');
+  } catch(e) { showToast('エラー: ' + e.message); }
+}
+
+async function createGroup() {
+  if (!_user || !_db) return;
+  const name = document.getElementById('createNameInput').value.trim();
+  if (!name) { showToast('グループ名を入力してください'); return; }
+  const code = Math.random().toString(36).substr(2,6).toUpperCase();
+  try {
+    await _db.collection('groups').doc(code).set({
+      name, code, instructorId: _user.uid,
+      instructorName: _user.displayName || 'ユーザー',
+      createdAt: new Date()
+    });
+    await _db.collection('users').doc(_user.uid).update({ groupId: code, role: 'instructor' });
+    _groupId = code; _role = 'instructor';
+    document.getElementById('modalCodeText').textContent = code;
+    document.getElementById('modalCodeBox').style.display = 'block';
+    await showGroup();
+    showToast('グループを作成しました！コード: ' + code, 5000);
+  } catch(e) { showToast('エラー: ' + e.message); }
+}
+
+async function leaveGroup() {
+  if (!_user || !_db) return;
+  try {
+    await _db.collection('users').doc(_user.uid).update({ groupId: null, role: 'player' });
+    if (_memberUnsub) { _memberUnsub(); _memberUnsub = null; }
+    _groupId = null; _role = 'player';
+    showNoGroup();
+    showToast('グループから退出しました');
+  } catch(e) { showToast('エラー: ' + e.message); }
+}
+
+function copyGroupCode() {
+  navigator.clipboard.writeText(_groupId||'').then(()=>showToast('コードをコピー: '+_groupId));
+}
+function copyCode() {
+  const code = document.getElementById('modalCodeText').textContent;
+  navigator.clipboard.writeText(code).then(()=>showToast('コピーしました: '+code));
+}
+
+// ─── Hall of Fame ─────────────────────────────────────────
+async function loadHallOfFame() {
+  if (!_db) {
+    document.getElementById('hofList').innerHTML = '<p class="hof-empty">データを読み込めませんでした</p>';
+    return;
+  }
+  try {
+    const snap = await _db.collection('leaderboard')
+      .orderBy('totalAssets', 'desc').limit(20).get();
+    if (snap.empty) {
+      document.getElementById('hofList').innerHTML = '<p class="hof-empty">まだ記録がありません<br>ゲームをプレイして記録を残そう！</p>';
+      return;
+    }
+    const rankIcons = ['🥇','🥈','🥉'];
+    const rankCls   = ['g','s','b'];
+    document.getElementById('hofList').innerHTML = snap.docs.map((d, i) => {
+      const m = d.data();
+      const rank = i < 3 ? `<span class="hof-rank ${rankCls[i]}">${rankIcons[i]}</span>` : `<span class="hof-rank">${i+1}</span>`;
+      const assetRank = getAssetRank(m.totalAssets||0);
+      return `<div class="hof-row">
+        ${rank}
+        <img class="hof-avatar" src="${esc(m.photoURL||'images/img5.webp')}" alt="" onerror="this.src='images/img5.webp'">
+        <div class="hof-info">
+          <div class="hof-name">${esc(m.name||'プレイヤー')}</div>
+          <div class="hof-assets">💰 ${fmt(m.totalAssets)}円</div>
+          <div class="hof-meta">📅 ${esc(m.year||'---')}年 到達</div>
+        </div>
+        <span class="hof-rank-badge" style="${assetRank.style}">${assetRank.label}</span>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('hofList').innerHTML = '<p class="hof-empty">記録の読み込みに失敗しました</p>';
+  }
+}
+
+function getAssetRank(assets) {
+  if (assets >= 10_000_000_000) return { label:'👑 伝説', style:'color:#e040fb;background:rgba(224,64,251,0.1);border:1px solid rgba(224,64,251,0.3);border-radius:8px;padding:2px 8px;' };
+  if (assets >= 1_000_000_000)  return { label:'💎 資産家', style:'color:var(--gold);background:rgba(245,200,66,0.1);border:1px solid rgba(245,200,66,0.3);border-radius:8px;padding:2px 8px;' };
+  if (assets >= 100_000_000)    return { label:'🏆 億り人', style:'color:var(--gold);background:rgba(245,200,66,0.08);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:2px 8px;' };
+  if (assets >= 30_000_000)     return { label:'🏦 ベテラン', style:'color:var(--sky);background:rgba(91,200,232,0.08);border:1px solid rgba(91,200,232,0.25);border-radius:8px;padding:2px 8px;' };
+  if (assets >= 5_000_000)      return { label:'💼 中堅', style:'color:var(--green);background:rgba(76,175,125,0.08);border:1px solid rgba(76,175,125,0.25);border-radius:8px;padding:2px 8px;' };
+  return { label:'🌱 初心者', style:'color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:2px 8px;' };
+}
+
+// ─── Modal ────────────────────────────────────────────────
+function openGroupModal(tab) {
+  document.getElementById('groupModal').classList.add('open');
+  if (tab) {
+    const btn = document.querySelector(`.modal-tab:${tab==='join'?'first-child':'last-child'}`);
+    if (btn) switchTab(tab, btn);
+  }
+}
+function closeGroupModal() { document.getElementById('groupModal').classList.remove('open'); }
+function switchTab(tab, btn) {
+  document.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tabJoin').style.display   = tab==='join'   ? '' : 'none';
+  document.getElementById('tabCreate').style.display = tab==='create' ? '' : 'none';
+}
+document.addEventListener('click', e => {
+  const m = document.getElementById('groupModal');
+  if (m && m.classList.contains('open') && e.target === m) closeGroupModal();
+});
+
+// ─── Toast ────────────────────────────────────────────────
+let _toastTimer;
+function showToast(msg, dur) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>t.classList.remove('show'), dur||3000);
+}
+
+// ─── Init ─────────────────────────────────────────────────
+loadHallOfFame();
+</script>
+</body>
+</html>

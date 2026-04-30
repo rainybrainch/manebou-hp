@@ -2278,10 +2278,10 @@ body {
 
 <nav class="top-nav">
   <span class="nav-spacer"></span>
-  <span class="nav-brand">
+  <a class="nav-brand" href="home.html" style="text-decoration:none;">
     <img class="nav-char" src="images/img5.webp" alt="">
     <span class="nav-title" id="navTitle">マネぼうアプリ</span>
-  </span>
+  </a>
   <div class="nav-side-ticker" id="navSideTicker">
     <span class="nav-side-text" id="navBannerText"></span>
   </div>
@@ -5855,17 +5855,27 @@ function _calcTotalAssets() {
 async function cloudSaveNow(silent) {
   if (!_fbUser || !_db) { if (!silent) showToast('ログインが必要です'); return; }
   try {
+    const row = masterData[currentIndex];
+    const year = row ? (row.年 === 0 ? 'チュートリアル' : String(row.年)) : '---';
+    const totalAssets = _calcTotalAssets();
     await _db.collection('saves').doc(_fbUser.uid).set(_buildSavePayload());
+    // Write public leaderboard record
+    await _db.collection('leaderboard').doc(_fbUser.uid).set({
+      name:        _fbUser.displayName || 'ユーザー',
+      photoURL:    _fbUser.photoURL || '',
+      year,
+      cashBalance,
+      totalAssets,
+      updatedAt:   new Date()
+    }, { merge: true });
     if (_groupId) {
-      const row = masterData[currentIndex];
-      const year = row ? (row.年 === 0 ? 'チュートリアル' : String(row.年)) : '---';
       await _db.collection('groups').doc(_groupId)
         .collection('members').doc(_fbUser.uid).set({
           name:        _fbUser.displayName || 'ユーザー',
           photoURL:    _fbUser.photoURL || '',
           year,
           cashBalance,
-          totalAssets: _calcTotalAssets(),
+          totalAssets,
           updatedAt:   new Date()
         }, { merge: true });
     }

@@ -148,6 +148,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 }
 .bq-title{font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(15px,3.5vw,20px);color:var(--white);margin-bottom:8px;line-height:1.3;}
 .bq-desc{font-size:clamp(12px,2.5vw,14px);color:rgba(255,255,255,0.92);line-height:1.8;}
+.board-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+.bstat{background:var(--dark);border-radius:12px;padding:14px 10px;text-align:center;border:2px solid rgba(255,255,255,0.06);}
+.bstat-num{font-family:'Dela Gothic One',sans-serif;font-size:clamp(20px,5vw,28px);color:var(--gold);line-height:1;}
+.bstat-lbl{font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;line-height:1.4;}
 
 /* FOR WHO */
 .fwgrid{display:grid;grid-template-columns:1fr;gap:14px;}
@@ -260,7 +264,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(26,26,46,0.9
 .icard{border:3px solid var(--dark);border-radius:18px;padding:22px 18px;box-shadow:4px 4px 0 var(--dark);background:rgba(255,253,245,0.95);display:flex;gap:14px;}
 .icard:nth-child(1){border-top:6px solid var(--sky);}
 .icard:nth-child(2){border-top:6px solid var(--green);}
-.iavatar{width:56px;height:56px;border-radius:50%;border:3px solid var(--dark);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;background:var(--gold);}
+.iavatar{width:64px;height:64px;border-radius:50%;border:3px solid var(--dark);flex-shrink:0;background:var(--gold);overflow:hidden;}
+.iavatar img{width:100%;height:100%;object-fit:cover;display:block;}
 .ibody{flex:1;}
 .irole{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--sky);text-transform:uppercase;margin-bottom:3px;}
 .icard:nth-child(2) .irole{color:var(--green);}
@@ -364,6 +369,7 @@ footer strong{color:var(--gold);}
     <li><a href="#instructors" onclick="closeDrawer()">Instructors <span class="dm-sub">講師紹介</span></a></li>
     <li><a href="#contact" onclick="closeDrawer()">Contact <span class="dm-sub">お問い合わせ</span></a></li>
     <li><a href="shop.html" onclick="closeDrawer()">Shop <span class="dm-sub">グッズ・スタンプ</span></a></li>
+    <li><a href="home.html" onclick="closeDrawer()">App <span class="dm-sub">マネぼうアプリ</span></a></li>
     <li><a href="https://www.youtube.com/@Rainy_Brain_22" target="_blank" onclick="closeDrawer()">YouTube <span class="dm-sub">チャンネル</span></a></li>
     <li><a href="#cta" onclick="closeDrawer()">Apply <span class="dm-sub">無料体験申込</span></a></li>
   </ul>
@@ -398,7 +404,8 @@ footer strong{color:var(--gold);}
     <a href="#curriculum" class="menu-btn"><span class="mb-icon">📅</span>カリキュラム</a>
     <a href="#pricing" class="menu-btn"><span class="mb-icon">💴</span>料金プラン</a>
     <a href="#instructors" class="menu-btn"><span class="mb-icon">👨‍🏫</span>講師紹介</a>
-    <a href="shop.html" class="menu-btn" style="grid-column:span 2;"><span class="mb-icon">🛍️</span>グッズ・スタンプ</a>
+    <a href="home.html" class="menu-btn"><span class="mb-icon">📱</span>アプリ</a>
+    <a href="shop.html" class="menu-btn"><span class="mb-icon">🛍️</span>グッズ</a>
   </div>
   <div class="hero-loc">📍 東京都文京区千石（巣鴨駅近く）・完全少人数制</div>
   <div class="scroll-hint">SCROLL</div>
@@ -473,6 +480,11 @@ footer strong{color:var(--gold);}
           <p class="bq-desc">ネクストヒントで次の時代を予告。歴史を知るほど有利になる！</p>
         </div>
       </div>
+    </div>
+    <div class="board-stats">
+      <div class="bstat"><div class="bstat-num">55</div><div class="bstat-lbl">年分の<br>経済史を体験</div></div>
+      <div class="bstat"><div class="bstat-num">8</div><div class="bstat-lbl">種類の<br>資産を運用</div></div>
+      <div class="bstat"><div class="bstat-num">2〜4</div><div class="bstat-lbl">人で<br>プレイ可能</div></div>
     </div>
   </div>
 </div>
@@ -577,16 +589,8 @@ footer strong{color:var(--gold);}
       <button class="news-tab active" onclick="switchTab('news-panel')">News …お知らせ</button>
       <button class="news-tab" onclick="switchTab('camp-panel')">Campaign …キャンペーン</button>
     </div>
-    <div class="news-panel active" id="news-panel">
-      <div class="news-item"><p class="news-date">2026.04.28</p><p class="news-text">📢 ホームページを公開しました</p></div>
-      <div class="news-item"><p class="news-date">2026.04.27</p><p class="news-text">🎲 マネぼう塾、オープン準備中！無料体験会の受付を開始しました</p></div>
-      <div class="news-item news-hidden" style="display:none;"><p class="news-date">2026.03.01</p><p class="news-text">🎉 RAINY BRAIN 始動のお知らせ</p></div>
-      <div class="news-more" onclick="toggleMore('news-panel', this)"><span>view more</span><div class="news-more-circle">▶</div></div>
-    </div>
-    <div class="news-panel" id="camp-panel">
-      <div class="news-item"><p class="news-date">2026.04.28</p><p class="news-text">🎉 マネぼう塾公開記念！無料体験会 開催中</p></div>
-      <div class="news-item"><p class="news-date">2026.04.28</p><p class="news-text">🌟 先着限定・完全無料で参加できます。お気軽にご応募ください！</p></div>
-    </div>
+    <div class="news-panel active" id="news-panel"></div>
+    <div class="news-panel" id="camp-panel"></div>
   </div>
 </div>
 
@@ -656,7 +660,7 @@ footer strong{color:var(--gold);}
     <h2 class="stitle">講師紹介</h2>
     <div class="igrid">
       <div class="icard">
-        <div class="iavatar">🧑</div>
+        <div class="iavatar"><img src="images/img6.webp" alt="えんだ"></div>
         <div class="ibody">
           <p class="irole">CEO / 投資教育講師</p>
           <h3 class="iname">えんだ（阿部優貴）</h3>
@@ -665,7 +669,7 @@ footer strong{color:var(--gold);}
         </div>
       </div>
       <div class="icard">
-        <div class="iavatar">🦉</div>
+        <div class="iavatar"><img src="images/img5.webp" alt="ふくろう"></div>
         <div class="ibody">
           <p class="irole">CCO / ボードゲーム開発者</p>
           <h3 class="iname">ふくろう（福井紫耀）</h3>
@@ -750,6 +754,39 @@ footer strong{color:var(--gold);}
 </div>
 
 <script>
+// ============================================================
+// ニュースデータ — ここを編集するだけで更新できます
+// ============================================================
+const NEWS_ITEMS = [
+  { date: '2026.04.28', text: '📢 ホームページを公開しました' },
+  { date: '2026.04.27', text: '🎲 マネぼう塾、オープン準備中！無料体験会の受付を開始しました' },
+  { date: '2026.03.01', text: '🎉 RAINY BRAIN 始動のお知らせ' },
+];
+const CAMP_ITEMS = [
+  { date: '2026.04.28', text: '🎉 マネぼう塾公開記念！無料体験会 開催中' },
+  { date: '2026.04.28', text: '🌟 先着限定・完全無料で参加できます。お気軽にご応募ください！' },
+];
+
+function renderNewsPanel(panelId, items) {
+  const el = document.getElementById(panelId);
+  if (!el) return;
+  const VISIBLE = 2;
+  let html = items.map((n, i) =>
+    `<div class="news-item${i >= VISIBLE ? ' news-hidden' : ''}"${i >= VISIBLE ? ' style="display:none"' : ''}>
+      <p class="news-date">${n.date}</p>
+      <p class="news-text">${n.text}</p>
+    </div>`
+  ).join('');
+  if (items.length > VISIBLE) {
+    html += `<div class="news-more" onclick="toggleMore('${panelId}', this)"><span>view more</span><div class="news-more-circle">▶</div></div>`;
+  }
+  el.innerHTML = html;
+}
+
+renderNewsPanel('news-panel', NEWS_ITEMS);
+renderNewsPanel('camp-panel', CAMP_ITEMS);
+
+// ============================================================
 let current = 0;
 const slides = document.querySelectorAll('.slide');
 const dots = document.querySelectorAll('.dot');
