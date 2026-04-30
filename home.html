@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
 <style>
 :root {
   --sky:#5BC8E8; --red:#E8354A; --gold:#F5C842; --gold-dark:#D4A017;
@@ -44,7 +45,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .logout-btn:hover{background:rgba(232,53,74,0.28);}
 
 /* ─── Layout ─── */
-.wrap{max-width:680px;margin:0 auto;padding:72px 16px 20px;}
+.wrap{max-width:680px;margin:0 auto;padding:72px 16px 20px;position:relative;z-index:1;}
 
 /* ─── Hero ─── */
 .hero{text-align:center;padding:40px 0 32px;animation:fadeUp 0.6s ease both;}
@@ -256,9 +257,35 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .btn-nick-save{width:100%;background:var(--gold);color:var(--dark);border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;transition:opacity 0.15s;}
 .btn-nick-save:hover{opacity:0.88;}
 .btn-nick-save:disabled{opacity:0.5;cursor:default;}
+
+/* ─── BG Scroll ─── */
+.bg-scroll{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.bg-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(8,8,24,0.86) 0%,rgba(12,8,28,0.90) 100%);}
+.bg-rows{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:16px 0;}
+.bg-row{display:flex;gap:12px;animation:bgScrollL 45s linear infinite;will-change:transform;}
+.bg-row:nth-child(2){animation:bgScrollR 38s linear infinite;}
+@keyframes bgScrollL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes bgScrollR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.bg-card{flex-shrink:0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:8px 14px;}
+.bg-card-av{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.1);}
+.bg-card-av-def{display:flex;align-items:center;justify-content:center;background:rgba(91,200,232,0.12);font-size:15px;font-family:'Dela Gothic One',sans-serif;color:rgba(91,200,232,0.6);}
+.bg-card-name{font-size:12px;font-weight:700;color:rgba(255,255,255,0.45);white-space:nowrap;}
+.bg-card-val{font-size:10px;color:rgba(245,200,66,0.45);white-space:nowrap;margin-top:1px;}
+
+/* ─── Avatar Picker ─── */
+.avatar-pick-wrap{display:none;text-align:center;margin-bottom:16px;}
+.avatar-pick{width:78px;height:78px;border-radius:50%;border:2.5px dashed rgba(245,200,66,0.45);background:rgba(255,255,255,0.05);margin:0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;position:relative;overflow:hidden;transition:border-color 0.2s,background 0.2s;}
+.avatar-pick:hover{border-color:var(--gold);background:rgba(245,200,66,0.07);}
+.avatar-pick img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;}
+.avatar-pick-hint{font-size:10px;color:rgba(255,255,255,0.28);margin-top:6px;}
 </style>
 </head>
 <body>
+
+<div class="bg-scroll" id="bgScroll">
+  <div class="bg-overlay"></div>
+  <div class="bg-rows" id="bgRows"></div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -267,6 +294,14 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   <div class="nick-box">
     <h2>ニックネーム設定</h2>
     <p>ランキングやグループで<br>公開される名前です</p>
+    <div style="text-align:center;margin-bottom:16px;">
+      <div class="avatar-pick" style="margin:0 auto;" onclick="document.getElementById('nickAvatarInput').click()">
+        <span id="nickAvatarIcon">📷</span>
+        <img id="nickAvatarPreview" src="" alt="">
+      </div>
+      <p class="avatar-pick-hint" style="margin-top:6px;">プロフィール画像（省略可）</p>
+      <input type="file" id="nickAvatarInput" accept="image/*" style="display:none" onchange="previewNickAvatar(this)">
+    </div>
     <input class="nick-input" type="text" id="nicknameInput" placeholder="ニックネーム" maxlength="20" autocomplete="nickname">
     <p class="nick-hint">省略するとメールアドレスの名前が使われます</p>
     <button class="btn-nick-save" id="nickSaveBtn" onclick="saveNickname()">設定してはじめる</button>
@@ -331,6 +366,14 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
     <div class="auth-divider">または</div>
 
     <div class="auth-form">
+      <div class="avatar-pick-wrap" id="authAvatarWrap">
+        <div class="avatar-pick" id="avatarPick" onclick="document.getElementById('avatarFileInput').click()">
+          <span id="avatarPickIcon">📷</span>
+          <img id="avatarPreview" src="" alt="">
+        </div>
+        <p class="avatar-pick-hint">プロフィール画像（省略可）</p>
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="previewAvatar(this)">
+      </div>
       <p class="auth-mode-label" id="authModeLabel">メールアドレスでログイン</p>
       <input class="auth-input" type="text" id="authName" placeholder="ニックネーム" autocomplete="nickname" style="display:none">
       <input class="auth-input" type="email" id="authEmail" placeholder="メールアドレス" autocomplete="email">
@@ -410,7 +453,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 
 <script>
 // ─── Firebase ───────────────────────────────────────────
-let _auth = null, _db = null;
+let _auth = null, _db = null, _storage = null;
 try {
   const cfg = {
     apiKey: "AIzaSyDUqrAgL2TYCoKom3B67Go2CTXpo0HlTP4",
@@ -423,6 +466,7 @@ try {
   if (!firebase.apps.length) firebase.initializeApp(cfg);
   _auth = firebase.auth();
   _db   = firebase.firestore();
+  _storage = firebase.storage();
 } catch(e) { console.warn('Firebase init failed', e); }
 
 let _user = null, _groupId = null, _role = null, _memberUnsub = null;
@@ -451,6 +495,11 @@ function toggleEmailAuthMode() {
   document.getElementById('authModeLabel').textContent = isReg ? '新規アカウント作成' : 'メールアドレスでログイン';
   document.getElementById('authSubmitBtn').textContent = isReg ? 'アカウント作成' : 'ログイン';
   document.getElementById('authName').style.display = isReg ? '' : 'none';
+  document.getElementById('authAvatarWrap').style.display = isReg ? '' : 'none';
+  _selectedAvatarFile = null;
+  const prev = document.getElementById('avatarPreview');
+  prev.style.display = 'none'; prev.src = '';
+  document.getElementById('avatarPickIcon').style.display = '';
   document.getElementById('authPassword').autocomplete = isReg ? 'new-password' : 'current-password';
   document.getElementById('authToggleText').innerHTML = isReg
     ? 'すでにアカウントをお持ちの方は<a onclick="toggleEmailAuthMode()">ログイン</a>'
@@ -474,11 +523,14 @@ async function submitEmailAuth() {
       const inputName = document.getElementById('authName').value.trim();
       const name = inputName || email.split('@')[0];
       const cred = await _auth.createUserWithEmailAndPassword(email, pass);
-      await cred.user.updateProfile({ displayName: name });
-      // Firestore にも保存
+      let photoURL = '';
+      if (_selectedAvatarFile) {
+        photoURL = (await uploadAvatar(cred.user.uid, _selectedAvatarFile)) || '';
+      }
+      await cred.user.updateProfile({ displayName: name, photoURL: photoURL || null });
       if (_db) {
         await _db.collection('users').doc(cred.user.uid).set({
-          name, email: cred.user.email, photoURL: '',
+          name, email: cred.user.email, photoURL,
           role: 'player', groupId: null, createdAt: new Date()
         });
       }
@@ -512,10 +564,14 @@ async function saveNickname() {
   const btn   = document.getElementById('nickSaveBtn');
   btn.disabled = true; btn.textContent = '保存中...';
   try {
-    await user.updateProfile({ displayName: name });
+    let photoURL = user.photoURL || '';
+    if (_selectedNickAvatarFile) {
+      photoURL = (await uploadAvatar(user.uid, _selectedNickAvatarFile)) || photoURL;
+    }
+    await user.updateProfile({ displayName: name, photoURL: photoURL || null });
     if (_db) {
       await _db.collection('users').doc(user.uid).set(
-        { name, email: user.email, photoURL: user.photoURL || '', role: 'player', groupId: null, createdAt: new Date() },
+        { name, email: user.email, photoURL, role: 'player', groupId: null, createdAt: new Date() },
         { merge: true }
       );
     }
@@ -643,7 +699,7 @@ function renderMembers(members) {
     const isMe = _user && m.uid === _user.uid;
     return `<div class="member-row${isMe?' member-me':''}">
       <div class="member-rank ${rankCls}">${rankIcon}</div>
-      <img class="member-avatar" src="${esc(m.photoURL||'images/img5.webp')}" alt="" onerror="this.src='images/img5.webp'">
+      ${avatarImgSrc(m.uid, m.photoURL, 'member-avatar')}
       <div class="member-info">
         <div class="member-name">${isMe?'<span style="color:var(--gold)">★ </span>':''}${esc(m.name||'ユーザー')}</div>
         <div class="member-assets">💰 ${fmt(m.totalAssets)}円</div>
@@ -730,7 +786,7 @@ async function loadHallOfFame() {
       const assetRank = getAssetRank(m.totalAssets||0);
       return `<div class="hof-row">
         ${rank}
-        <img class="hof-avatar" src="${esc(m.photoURL||'images/img5.webp')}" alt="" onerror="this.src='images/img5.webp'">
+        ${avatarImgSrc(d.id, m.photoURL, 'hof-avatar')}
         <div class="hof-info">
           <div class="hof-name">${esc(m.name||'プレイヤー')}</div>
           <div class="hof-assets">💰 ${fmt(m.totalAssets)}円</div>
@@ -782,8 +838,127 @@ function showToast(msg, dur) {
   _toastTimer = setTimeout(()=>t.classList.remove('show'), dur||3000);
 }
 
+// ─── Avatar helpers ───────────────────────────────────────
+let _selectedAvatarFile = null, _selectedNickAvatarFile = null;
+
+function previewAvatar(input) {
+  const file = input.files[0]; if (!file) return;
+  _selectedAvatarFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('avatarPreview');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('avatarPickIcon').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function previewNickAvatar(input) {
+  const file = input.files[0]; if (!file) return;
+  _selectedNickAvatarFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('nickAvatarPreview');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('nickAvatarIcon').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function compressImage(file, size) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        const s = Math.min(img.width, img.height);
+        ctx.drawImage(img, (img.width-s)/2, (img.height-s)/2, s, s, 0, 0, size, size);
+        resolve(canvas.toDataURL('image/jpeg', 0.82));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadAvatar(uid, file) {
+  if (!_storage) return null;
+  try {
+    const dataUrl = await compressImage(file, 200);
+    const blob = await (await fetch(dataUrl)).blob();
+    const ref = _storage.ref(`avatars/${uid}`);
+    await ref.put(blob, { contentType: 'image/jpeg' });
+    return await ref.getDownloadURL();
+  } catch(e) { return null; }
+}
+
+// ─── Emoji Avatar ─────────────────────────────────────────
+const EMOJI_AVATARS = ['💰','💵','💎','🪙','💴','💶','💷','💳'];
+const _emojiCache = {};
+
+function getEmojiAvatar(uid) {
+  let h = 0;
+  for (let i = 0; i < (uid||'').length; i++) h = (h * 31 + uid.charCodeAt(i)) & 0xffffffff;
+  return EMOJI_AVATARS[Math.abs(h) % EMOJI_AVATARS.length];
+}
+
+function makeEmojiDataUrl(emoji) {
+  if (_emojiCache[emoji]) return _emojiCache[emoji];
+  const c = document.createElement('canvas');
+  c.width = c.height = 64;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#13132a';
+  ctx.fillRect(0, 0, 64, 64);
+  ctx.font = '36px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, 32, 36);
+  return (_emojiCache[emoji] = c.toDataURL('image/png'));
+}
+
+function avatarImgSrc(uid, photoURL, cls) {
+  if (photoURL) {
+    return `<img class="${cls}" src="${esc(photoURL)}" alt="" data-uid="${esc(uid)}" onerror="this.src=makeEmojiDataUrl(getEmojiAvatar(this.dataset.uid));this.onerror=null">`;
+  }
+  return `<img class="${cls}" src="${makeEmojiDataUrl(getEmojiAvatar(uid||''))}" alt="">`;
+}
+
+// ─── BG Scroll ────────────────────────────────────────────
+async function loadBgPlayers() {
+  if (!_db) return;
+  try {
+    const snap = await _db.collection('leaderboard').orderBy('totalAssets','desc').limit(24).get();
+    const players = [];
+    snap.forEach(d => { const p = d.data(); if (p.name) players.push({...p, uid: d.id}); });
+    if (players.length >= 2) renderBgScroll(players);
+  } catch(e) {}
+}
+
+function renderBgScroll(players) {
+  const rows = document.getElementById('bgRows');
+  if (!rows) return;
+  for (let r = 0; r < 2; r++) {
+    const row = document.createElement('div');
+    row.className = 'bg-row';
+    const arr = [...players, ...players]; // duplicate for seamless loop
+    arr.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'bg-card';
+      const name = p.name || '?';
+      const avEl = avatarImgSrc(p.uid || p.name, p.photoURL, 'bg-card-av');
+      card.innerHTML = `${avEl}<div><div class="bg-card-name">${esc(name)}</div><div class="bg-card-val">💰 ${fmt(p.totalAssets||0)}円</div></div>`;
+      row.appendChild(card);
+    });
+    rows.appendChild(row);
+  }
+}
+
 // ─── Init ─────────────────────────────────────────────────
 loadHallOfFame();
+loadBgPlayers();
 </script>
 </body>
 </html>
