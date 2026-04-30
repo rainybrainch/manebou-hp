@@ -363,7 +363,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 <div class="wrap">
 
   <!-- HERO (未ログイン) -->
-  <div id="heroSection" class="hero">
+  <div id="heroSection" class="hero" style="display:none">
     <img class="hero-char" src="images/img5.webp" alt="おーる局長">
     <span class="hero-label">MANEBOU</span>
     <h1 class="hero-title"><span class="ac">マネぼう</span><br><span class="ag">ログイン</span></h1>
@@ -621,7 +621,7 @@ if (_auth) _auth.onAuthStateChanged(async user => {
     location.href = 'calc.html';
     return;
   } else {
-    document.getElementById('heroSection').style.display = 'block';
+    document.getElementById('heroSection').style.display = '';
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('navLoginBtn').style.display = '';
     document.getElementById('navAvatar').style.display = 'none';
