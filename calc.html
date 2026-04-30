@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>マネぼうアプリ | マネぼう塾</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F5C842">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="マネぼう">
+<link rel="apple-touch-icon" href="images/icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 
@@ -1415,16 +1425,16 @@ body {
 .tab-section .rules-tip { color: rgba(0,0,0,0.65); background: rgba(91,200,232,0.1); border-color: rgba(91,200,232,0.3); }
 .tab-section .rank-row  { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.07); }
 .tab-section .rank-cond { color: rgba(0,0,0,0.45); }
-/* asset cards — icon-centered card style */
-.tab-section .asset-cards-v2 { grid-template-columns: repeat(4, 1fr); gap: 10px; }
-@media (max-width: 479px) { .tab-section .asset-cards-v2 { grid-template-columns: repeat(2, 1fr); } }
-.tab-section .acv2 { flex-direction: column; align-items: center; text-align: center; padding: 14px 6px 12px; border-radius: 18px; border-width: 1.5px; gap: 6px; }
-.tab-section .acv2-head { flex-direction: column; align-items: center; gap: 6px; }
-.tab-section .acv2-icon { font-size: 40px; line-height: 1.1; }
-.tab-section .acv2-title { align-items: center; }
-.tab-section .acv2-name { font-size: 13px; font-weight: 800; }
-.tab-section .acv2-badge { background: transparent !important; border: none !important; padding: 2px 0 0 !important; font-size: 10px !important; font-weight: 500 !important; color: rgba(0,0,0,0.4) !important; margin-top: 0 !important; }
-.tab-section .acv2-desc { display: none; }
+/* asset cards — icon-centered card style (help section) */
+#helpAssetGrid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; }
+@media (max-width: 479px) { #helpAssetGrid { grid-template-columns: repeat(2, 1fr) !important; } }
+#helpAssetGrid .acv2 { display: flex !important; flex-direction: column !important; align-items: center !important; text-align: center !important; padding: 14px 6px 12px !important; border-radius: 18px !important; border-width: 1.5px !important; gap: 4px !important; }
+#helpAssetGrid .acv2-head { display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important; width: 100%; }
+#helpAssetGrid .acv2-icon { font-size: 38px !important; line-height: 1.1 !important; }
+#helpAssetGrid .acv2-title { display: flex !important; flex-direction: column !important; align-items: center !important; flex: none !important; width: 100%; gap: 3px; }
+#helpAssetGrid .acv2-name { font-size: 13px !important; font-weight: 800 !important; display: block !important; }
+#helpAssetGrid .acv2-badge { background: transparent !important; border: none !important; padding: 0 !important; font-size: 10px !important; font-weight: 500 !important; color: rgba(0,0,0,0.4) !important; margin-top: 0 !important; display: block !important; }
+#helpAssetGrid .acv2-desc { display: none !important; }
 .rbl-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; margin-top: 1px; }
 /* ─── Board Annotate ─────────────────────────────────────── */
 .board-annotate { position: relative; display: block; margin: 10px 0 8px; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 12px rgba(0,0,0,0.18); aspect-ratio: 1/1; }
@@ -1748,6 +1758,8 @@ body {
 }
 .pl-total-label { font-size: 11px; color: rgba(26,26,46,0.5); }
 .pl-total-val   { color: var(--gold-dark); font-family: 'Dela Gothic One',sans-serif; font-size: 14px; }
+.pl-saving-compare { display: flex; align-items: center; justify-content: space-between; padding: 5px 6px 2px; border-top: 1px dashed rgba(26,26,46,0.12); margin-top: 4px; font-size: 11px; color: rgba(26,26,46,0.5); }
+.pl-saving-diff    { text-align: right; padding: 2px 6px 6px; font-family: 'Dela Gothic One',sans-serif; font-size: 12px; }
 @media (max-width: 520px) {
   .pl-bar-wrap { display: none; }
   .pl-pct { display: none; }
@@ -2081,16 +2093,16 @@ body {
         <h4 style="margin-top:14px">🏆 投資家ランク</h4>
         <p style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px">総資産額によってゲーム画面の「投資家」欄のランクが変わります。</p>
         <div class="rank-table">
-          <div class="rank-row"><span class="rank-grade" style="color:#aaa">🌱 初心者</span><span class="rank-cond">総資産 1円〜99万円</span></div>
-          <div class="rank-row"><span class="rank-grade" style="color:var(--green)">💼 中堅</span><span class="rank-cond">総資産 100万円以上</span></div>
-          <div class="rank-row"><span class="rank-grade" style="color:var(--sky)">🏦 ベテラン</span><span class="rank-cond">総資産 1,000万円以上</span></div>
-          <div class="rank-row"><span class="rank-grade" style="color:var(--gold)">🏆 億り人</span><span class="rank-cond">総資産 1億円以上</span></div>
-          <div class="rank-row"><span class="rank-grade" style="color:var(--gold)">💎 資産家</span><span class="rank-cond">総資産 10億円以上</span></div>
-          <div class="rank-row"><span class="rank-grade" style="color:#e040fb">👑 伝説</span><span class="rank-cond">総資産 1兆円以上</span></div>
+          <div class="rank-row"><span class="rank-grade" style="color:#aaa">🌱 初心者</span><span class="rank-cond">〜 499万円</span></div>
+          <div class="rank-row"><span class="rank-grade" style="color:var(--green)">💼 中堅</span><span class="rank-cond">500万円〜</span></div>
+          <div class="rank-row"><span class="rank-grade" style="color:var(--sky)">🏦 ベテラン</span><span class="rank-cond">3,000万円〜</span></div>
+          <div class="rank-row"><span class="rank-grade" style="color:var(--gold)">🏆 億り人</span><span class="rank-cond">1億円〜</span></div>
+          <div class="rank-row"><span class="rank-grade" style="color:var(--gold)">💎 資産家</span><span class="rank-cond">10億円〜</span></div>
+          <div class="rank-row"><span class="rank-grade" style="color:#e040fb">👑 伝説</span><span class="rank-cond">1兆円〜</span></div>
         </div>
 
         <h4 style="margin-top:14px">📦 8種類の資産</h4>
-        <div class="asset-cards-v2">
+        <div class="asset-cards-v2" id="helpAssetGrid">
           <div class="acv2 safe">
             <div class="acv2-head">
               <span class="acv2-icon">🏦</span>
@@ -3794,7 +3806,7 @@ function stepTime(dir) {
         if (row.イベント >= 2 && row.イベント <= 4) {
           let divT = 0;
           ASSET_KEYS.forEach(a => { if (a.divKey) divT += calcDiv(row[a.divKey] || 0, holdings[a.id] || 0); });
-          if (divT > 0) addCash(divT, `${row.年}年E${row.イベント} 配当`);
+          if (divT > 0) addCash(divT, `${row.年}年 イベント${row.イベント} 配当`);
         }
       }
     }
@@ -4073,7 +4085,7 @@ function renderTxLog() {
     const cls   = isBuy ? 'hist-tx-buy' : 'hist-tx-sell';
     const sign  = isBuy ? '＋' : '－';
     const icon  = isBuy ? '📈' : '📉';
-    const time  = e.year === 0 ? 'チュートリアル' : `${e.year}年 E${e.event}`;
+    const time  = e.year === 0 ? 'チュートリアル' : `${e.year}年 イベント${e.event}`;
     return `<div class="hist-tx-row">
       <span class="hist-tx-icon">${icon}</span>
       <span class="hist-tx-label">${e.id}</span>
@@ -4255,30 +4267,26 @@ function drawIncomeChart() {
   const toX = i => PX + (i / Math.max(n - 1, 1)) * (W - 2 * PX);
   const toY = v => PY + (1 - v / maxVal) * (H - 2 * PY);
 
-  const layers = [
-    { key: '生活費', color: '#f39c12', botFn: () => 0 },
-    { key: '税収',   color: '#e8354a', botFn: d => d.生活費 },
-    { key: '余剰金', color: '#F5C842', botFn: d => d.生活費 + d.税収 },
+  const lines = [
+    { key: '給料',   color: '#27ae60' },
+    { key: '生活費', color: '#f39c12' },
+    { key: '税収',   color: '#e8354a' },
+    { key: '余剰金', color: '#F5C842' },
   ];
 
   let svgContent = `<text x="2" y="${PY + 2}" fill="rgba(255,255,255,0.3)" font-size="6" font-family="sans-serif">${fmtJP(maxVal)}</text>`;
 
-  layers.forEach(layer => {
-    const pts = [];
-    for (let i = 0; i < n; i++) {
-      const d = visible[i];
-      pts.push(`${toX(i).toFixed(1)},${toY(layer.botFn(d) + d[layer.key]).toFixed(1)}`);
-    }
-    for (let i = n - 1; i >= 0; i--) {
-      const d = visible[i];
-      pts.push(`${toX(i).toFixed(1)},${toY(layer.botFn(d)).toFixed(1)}`);
-    }
-    svgContent += `<polygon points="${pts.join(' ')}" fill="${layer.color}" opacity="0.72"/>`;
+  lines.forEach(line => {
+    const pts = visible.map((d, i) => `${toX(i).toFixed(1)},${toY(d[line.key]).toFixed(1)}`).join(' ');
+    svgContent += `<polyline points="${pts}" fill="none" stroke="${line.color}" stroke-width="1.8" stroke-linejoin="round" opacity="0.9"/>`;
+    // 末端ドット
+    const lastD = visible[n - 1];
+    const lx = toX(n - 1).toFixed(1);
+    const ly = toY(lastD[line.key]).toFixed(1);
+    svgContent += `<circle cx="${lx}" cy="${ly}" r="2.5" fill="${line.color}"/>`;
   });
 
-  const linePts = visible.map((d, i) => `${toX(i).toFixed(1)},${toY(d.給料).toFixed(1)}`).join(' ');
-  svgContent += `<polyline points="${linePts}" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1.5" stroke-linejoin="round"/>`;
-
+  // 現在位置の縦線
   if (n > 1) {
     const cx = toX(n - 1).toFixed(1);
     svgContent += `<line x1="${cx}" y1="${PY}" x2="${cx}" y2="${H - PY}" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="2,2"/>`;
@@ -4475,14 +4483,14 @@ function drawAllAssetsGraph() {
   svgContent += `<line x1="${curX}" y1="${PY}" x2="${curX}" y2="${H - PY}" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="2,2"/>`;
 
   const eRow = masterData[endIdx];
-  const eLabel = eRow.イベント > 0 ? `E${eRow.イベント}` : '';
+  const eLabel = eRow.イベント > 0 ? `イベント${eRow.イベント}` : '';
   if (eLabel) svgContent += `<text x="${curX}" y="${PY - 1}" text-anchor="middle" fill="rgba(255,255,100,0.7)" font-size="7" font-family="sans-serif">${eLabel}</text>`;
 
   svg.innerHTML = svgContent;
 
   const sRow = masterData[startIdx];
   const mRow = masterData[Math.floor((startIdx + endIdx) / 2)];
-  const endLabel = eRow.イベント > 0 ? `${eRow.年}年E${eRow.イベント}` : `${eRow.年}年`;
+  const endLabel = eRow.イベント > 0 ? `${eRow.年}年 イベント${eRow.イベント}` : `${eRow.年}年`;
   labels.innerHTML = `<span>${sRow.年}年</span><span>${mRow.年}年</span><span>${endLabel}</span>`;
 
   // 凡例
@@ -4583,7 +4591,7 @@ function drawGraph() {
   });
 
   const eRowCur = masterData[endIdx];
-  const eNumLabel = eRowCur.イベント > 0 ? `E${eRowCur.イベント}` : '';
+  const eNumLabel = eRowCur.イベント > 0 ? `イベント${eRowCur.イベント}` : '';
   svgContent +=
     `<polyline points="${pts}" fill="none" stroke="var(--sky)" stroke-width="1.8" stroke-linejoin="round"/>` +
     `<line x1="${lastX}" y1="${PY}" x2="${lastX}" y2="${H - PY}" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="2,2"/>` +
@@ -4594,7 +4602,7 @@ function drawGraph() {
   const sRow = masterData[startIdx];
   const eRow = masterData[endIdx];
   const mRow = masterData[Math.floor((startIdx + endIdx) / 2)];
-  const endLabel = eRow.イベント > 0 ? `${eRow.年}年E${eRow.イベント}` : `${eRow.年}年`;
+  const endLabel = eRow.イベント > 0 ? `${eRow.年}年 イベント${eRow.イベント}` : `${eRow.年}年`;
   labels.innerHTML = `<span>${sRow.年}年</span><span>${mRow.年}年</span><span>${endLabel}</span>`;
 
   // スタットstrip更新
@@ -4617,11 +4625,11 @@ function drawGraph() {
 // GRADE
 // ============================================================
 function getGrade(total) {
-  if (total >= 1_000_000_000_000) return { grade: '👑伝説', color: '#e040fb' };
+  if (total >= 1_000_000_000_000) return { grade: '👑伝説',   color: '#e040fb' };
   if (total >= 1_000_000_000)     return { grade: '💎資産家', color: 'var(--gold)' };
   if (total >= 100_000_000)       return { grade: '🏆億り人', color: 'var(--gold)' };
-  if (total >= 10_000_000)        return { grade: '🏦ベテラン', color: 'var(--sky)' };
-  if (total >= 1_000_000)         return { grade: '💼中堅', color: 'var(--green)' };
+  if (total >= 30_000_000)        return { grade: '🏦ベテラン', color: 'var(--sky)' };
+  if (total >= 5_000_000)         return { grade: '💼中堅',   color: 'var(--green)' };
   if (total > 0)                  return { grade: '🌱初心者', color: '#aaa' };
   return { grade: '─', color: '#555' };
 }
