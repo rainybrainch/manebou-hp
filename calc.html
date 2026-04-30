@@ -1915,9 +1915,9 @@ body {
   .wrap { max-width: 1240px; padding-left: 40px; padding-right: 40px; }
   .cart-bar { max-width: 1240px; }
 
-  /* Bottom nav: tabs don't over-stretch */
-  .bottom-nav { justify-content: center; gap: 0; padding-left: 40px; padding-right: 40px; }
-  .tab-btn { flex: 0 1 140px; max-width: 140px; }
+  /* Bottom nav: tabs spread evenly */
+  .bottom-nav { justify-content: stretch; gap: 0; padding-left: 40px; padding-right: 40px; }
+  .tab-btn { flex: 1; max-width: 200px; }
 
   /* Game tab: balanced columns */
   #tab-game { grid-template-columns: 1fr 1.15fr; gap: 24px; }
@@ -2007,6 +2007,10 @@ body {
     <!-- VALUE PANEL -->
     <div class="value-panel">
 
+      <div class="hold-list" id="holdList">
+        <div class="hold-empty">保有なし</div>
+      </div>
+      <hr class="value-divider">
       <div class="value-nums">
         <div class="value-block">
           <span class="value-block-lbl">総資産</span>
@@ -4492,7 +4496,7 @@ function drawPortfolioGraph() {
   if (navLabel) {
     navLabel.textContent = isLatest
       ? '現在'
-      : viewH.年 + '年' + (viewH.イベント ? ' E' + viewH.イベント : '');
+      : viewH.年 + '年 イベント' + (viewH.イベント || '');
   }
 
   const viewTotal  = viewH.total;
