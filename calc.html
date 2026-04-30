@@ -1091,9 +1091,7 @@ body {
 .title-desc  { font-size: 9px; display: block; letter-spacing: 0.5px; }
 .title-item.unlocked .title-desc { color: rgba(255,255,255,0.55); }
 .title-item.locked   .title-desc { color: rgba(255,255,255,0.2); }
-.title-prize { font-size: 10px; font-weight: 700; display: block; margin-top: 4px; }
-.title-item.unlocked .title-prize { color: var(--gold); }
-.title-item.locked   .title-prize { color: rgba(255,255,255,0.25); }
+
 
 #rankVal { font-family: 'Zen Maru Gothic', sans-serif; font-size: clamp(11px,3vw,14px); display: block; line-height: 1.2; font-weight: 700; white-space: nowrap; }
 
@@ -5362,11 +5360,7 @@ function checkTitles(total) {
     try {
       if (t.check(total)) {
         unlockedTitles.add(t.id);
-        const prize = PRIZE[t.stars];
-        cashBalance += prize;
-        cashHistLog.unshift({ amount: prize, balance: cashBalance, label: `🏅 バッジ獲得「${t.name}」`, type: 'title' });
-        updateCashDisplay();
-        showToast(`🏅 バッジ獲得！「${t.name}」 +${fmt(prize)}円`, 4500);
+        showToast(`🏅 バッジ獲得！「${t.name}」`, 4500);
       }
     } catch(e) {}
   });
@@ -5403,9 +5397,8 @@ function renderTitles() {
       const cls   = unlockedTitles.has(t.id) ? 'unlocked' : 'locked';
       const icon  = unlockedTitles.has(t.id) ? '🏆' : '🔒';
       const stars = '⭐'.repeat(t.stars);
-      const prize = fmt(PRIZE[t.stars]);
       html += `<div class="title-item ${cls} s${t.stars}">
-        <span class="title-stars">${stars} +${prize}円</span>
+        <span class="title-stars">${stars}</span>
         <span class="title-name">${icon} ${censor(t.name)}</span>
         <span class="title-desc">${censor(t.desc)}</span>
       </div>`;
