@@ -2098,7 +2098,7 @@ body {
           <div class="rank-row"><span class="rank-grade" style="color:var(--sky)">🏦 ベテラン</span><span class="rank-cond">3,000万円〜</span></div>
           <div class="rank-row"><span class="rank-grade" style="color:var(--gold)">🏆 億り人</span><span class="rank-cond">1億円〜</span></div>
           <div class="rank-row"><span class="rank-grade" style="color:var(--gold)">💎 資産家</span><span class="rank-cond">10億円〜</span></div>
-          <div class="rank-row"><span class="rank-grade" style="color:#e040fb">👑 伝説</span><span class="rank-cond">1兆円〜</span></div>
+          <div class="rank-row"><span class="rank-grade" style="color:#e040fb">👑 伝説</span><span class="rank-cond">100億円〜</span></div>
         </div>
 
         <h4 style="margin-top:14px">📦 8種類の資産</h4>
@@ -4043,7 +4043,7 @@ function setSimQty(n) {
 }
 
 function calcToSim() {
-  const raw = document.getElementById('calcDisp').textContent.replace(/,/g, '');
+  const raw = document.getElementById('calcDisp').textContent.replace(/[,円]/g, '');
   const qty = Math.floor(Math.abs(parseFloat(raw) || 0));
   if (qty > 0) {
     document.getElementById('simQty').value = qty;
@@ -4161,7 +4161,7 @@ function resetCash() {
 }
 
 function calcToCash() {
-  const raw = document.getElementById('calcDisp').textContent.replace(/,/g, '');
+  const raw = document.getElementById('calcDisp').textContent.replace(/[,円]/g, '');
   const v = Math.round(parseFloat(raw) || 0);
   if (v !== 0) {
     addCash(v);
@@ -4192,10 +4192,18 @@ function drawPortfolioGraph() {
     return;
   }
 
+  // 貯金累計（余剰金を全額積み立てた場合・スタート100万）
+  let _savCum = 1_000_000;
+  const savMap = {};
+  for (const d of INCOME_DATA) { _savCum += d.余剰金; savMap[d.年] = _savCum; }
+
   const maxTot = Math.max(...hist.map(h => h.total)) || 1;
+  const maxSav = Math.max(...hist.map(h => savMap[h.年] || 0));
+  const maxY   = Math.max(maxTot, maxSav) || 1;
+
   const n = hist.length;
   const toX = i => PX + (i / (n - 1)) * (W - 2 * PX);
-  const toY = v => PY + (1 - v / maxTot) * (H - 2 * PY);
+  const toY = v => PY + (1 - v / maxY) * (H - 2 * PY);
 
   const assetsWithValue = ASSET_KEYS.filter(a => hist.some(h => h.values[a.id] > 0));
   let svgContent = '';
@@ -4217,6 +4225,15 @@ function drawPortfolioGraph() {
 
   const topPts = hist.map((h, i) => `${toX(i).toFixed(1)},${toY(h.total).toFixed(1)}`).join(' ');
   svgContent += `<polyline points="${topPts}" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+  // 貯金比較ライン（白破線）
+  const savPts = hist.map((h, i) => { const v = savMap[h.年]; return v ? `${toX(i).toFixed(1)},${toY(v).toFixed(1)}` : null; }).filter(Boolean).join(' ');
+  if (savPts) {
+    svgContent += `<polyline points="${savPts}" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-dasharray="5,3"/>`;
+    const lv = savMap[hist[n-1].年];
+    if (lv) svgContent += `<text x="${(toX(n-1)-4).toFixed(0)}" y="${(toY(lv)-4).toFixed(0)}" text-anchor="end" fill="rgba(255,255,255,0.38)" font-size="7" font-family="sans-serif">貯金</text>`;
+  }
+
   svg.innerHTML = svgContent;
 
   const sH = hist[0], eH = hist[n - 1], mH = hist[Math.floor(n / 2)];
@@ -4226,9 +4243,14 @@ function drawPortfolioGraph() {
   const curRow = masterData[currentIndex];
   const legendAssets = ASSET_KEYS.filter(a => (holdings[a.id]||0) > 0);
   const curTotal = legendAssets.reduce((s, a) => s + (holdings[a.id]||0) * (curRow ? curRow[a.id]||0 : 0), 0);
+  const curSav   = savMap[curRow ? curRow.年 : 0] || 0;
+
   if (legendAssets.length === 0) {
     legend.innerHTML = '<div style="font-size:11px;color:rgba(26,26,46,0.45);padding:8px 6px">現在保有している資産はありません</div>';
   } else {
+    const diff = curTotal - curSav;
+    const diffColor = diff >= 0 ? '#1a7a40' : '#b00020';
+    const diffLabel = diff >= 0 ? `📈 貯金より +${fmtJP(diff)}円` : `📉 貯金より ${fmtJP(diff)}円`;
     legend.innerHTML = legendAssets.map(a => {
       const qty = holdings[a.id] || 0;
       const val = qty * (curRow ? curRow[a.id]||0 : 0);
@@ -4242,7 +4264,8 @@ function drawPortfolioGraph() {
         <div class="pl-bar-wrap"><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:${Math.round(pct)}%;background:${a.color}"></div></div></div>
       </div>`;
     }).join('') +
-    `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(curTotal)}</span></div>`;
+    `<div class="pl-total-row"><span class="pl-total-label">合計</span><span class="pl-total-val">¥${fmt(curTotal)}</span></div>` +
+    (curSav > 0 ? `<div class="pl-saving-compare"><span>💰 貯金した場合</span><span>¥${fmt(curSav)}</span></div><div class="pl-saving-diff" style="color:${diffColor}">${diffLabel}</div>` : '');
   }
 }
 
@@ -4625,7 +4648,7 @@ function drawGraph() {
 // GRADE
 // ============================================================
 function getGrade(total) {
-  if (total >= 1_000_000_000_000) return { grade: '👑伝説',   color: '#e040fb' };
+  if (total >= 10_000_000_000)    return { grade: '👑伝説',   color: '#e040fb' };
   if (total >= 1_000_000_000)     return { grade: '💎資産家', color: 'var(--gold)' };
   if (total >= 100_000_000)       return { grade: '🏆億り人', color: 'var(--gold)' };
   if (total >= 30_000_000)        return { grade: '🏦ベテラン', color: 'var(--sky)' };
@@ -4816,7 +4839,9 @@ function cDisp() {
   const parts = abs.split('.');
   const intFmt = Number(parts[0] || '0').toLocaleString('ja-JP');
   const decPart = hasDot ? ('.' + (parts[1] || '')) : '';
-  document.getElementById('calcDisp').textContent = (neg ? '-' : '') + intFmt + decPart;
+  const numStr = (neg ? '-' : '') + intFmt + decPart;
+  const unit = !hasDot ? '<span style="font-size:13px;opacity:0.55;margin-left:4px">円</span>' : '';
+  document.getElementById('calcDisp').innerHTML = numStr + unit;
 }
 
 function cIn(v) {
