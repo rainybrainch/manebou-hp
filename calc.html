@@ -78,7 +78,8 @@ body {
   padding: 10px 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
   overflow: hidden;
 }
 
@@ -99,8 +100,8 @@ body {
   color: var(--sky);
 }
 
-.nav-spacer { width: 60px; flex-shrink: 0; }
-.nav-brand { display: flex; align-items: center; gap: 7px; }
+.nav-spacer { display: none; }
+.nav-brand { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
 .nav-char { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; object-position: top center; border: 1.5px solid var(--gold); background: rgba(255,255,255,0.9); flex-shrink: 0; transition: border-color 0.2s; }
 @keyframes navCharPop {
   0%   { transform: scale(0.5); opacity: 0.3; }
@@ -960,9 +961,7 @@ body {
 .compare-tbl .neg { color: #c0392b; }
 .compare-tbl tr:last-child td { border-bottom: none; }
 
-@media (max-width: 600px) {
-  .asset-grid { grid-template-columns: repeat(3, 1fr); }
-}
+
 
 @media (max-width: 400px) {
   .compare-tbl { font-size: 11px; }
@@ -1686,13 +1685,13 @@ body {
 .action-row   { margin-bottom: 8px; }
 .btn-reset    { padding: 8px; font-size: 12px; }
 
-.asset-grid   { grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 8px; }
-.asset-btn    { padding: 7px 8px 6px; }
-.a-card-top   { margin-bottom: 3px; }
-.a-name-lbl   { font-size: clamp(9px, 2.5vw, 11px); }
-.a-qty-num    { font-size: clamp(17px, 4.5vw, 22px); }
-.a-price-lbl  { font-size: 8px; }
-.a-div        { font-size: 8px; margin-bottom: 1px; }
+.asset-grid   { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
+.asset-btn    { padding: 12px 10px 10px; }
+.a-card-top   { margin-bottom: 4px; }
+.a-name-lbl   { font-size: clamp(12px, 3vw, 15px); }
+.a-qty-num    { font-size: clamp(22px, 5.5vw, 28px); }
+.a-price-lbl  { font-size: 10px; }
+.a-div        { font-size: 9px; margin-bottom: 2px; }
 
 /* ─── Compact Char Speech ────────────────────────────────── */
 .char-speech-mini {
@@ -1865,7 +1864,7 @@ body {
     top: 72px;
   }
 
-  .asset-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 
   /* Data tab: 2 columns */
   .data-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
@@ -1925,7 +1924,7 @@ body {
 @media (min-width: 1400px) {
   .top-nav, .bottom-nav { max-width: 1440px; }
   .wrap { max-width: 1440px; }
-  .asset-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .asset-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   #tab-game { grid-template-columns: 1fr 1.3fr; gap: 28px; }
 }
 
@@ -1971,15 +1970,7 @@ body {
 
     <!-- VALUE PANEL -->
     <div class="value-panel">
-      <!-- 余剰金パネル（E4→E1 時に表示） -->
-      <div class="salary-panel" id="salaryPanel" style="display:none">
-        <div class="salary-panel-left">
-          <div class="salary-panel-lbl">💰 余剰金が届きました</div>
-          <div class="salary-panel-amt" id="salaryAmt">0 円</div>
-          <div class="salary-panel-note">受け取らずに次へ進むと消えます</div>
-        </div>
-        <button class="salary-claim-btn" onclick="claimSalary()">受け取る！</button>
-      </div>
+
       <div class="hold-list" id="holdList">
         <div class="hold-empty">保有なし</div>
       </div>
@@ -3964,9 +3955,11 @@ function stepTime(dir) {
     if (dir === 1 && row.年 > 0) {
       if (row.イベント === 1 && prevRow.イベント === 4) {
         const sal = SALARY_DATA[row.年];
-        if (sal && sal > 0) { pendingSalary = sal; pendingSalaryYear = row.年; }
+        if (sal && sal > 0) {
+          addCash(sal, `${row.年}年 余剰金`);
+          showNavBanner(`💰 ${row.年}年 余剰金　＋${fmt(sal)}円　お財布に追加！`, 3500);
+        }
       } else {
-        if (pendingSalary > 0) { pendingSalary = 0; pendingSalaryYear = 0; }
         if (row.イベント >= 2 && row.イベント <= 4) {
           let divT = 0;
           const divBreakdown = [];
@@ -4060,15 +4053,6 @@ function updateDisplay() {
   document.getElementById('dispDiv').textContent   = fmt(divT);
   const divYrEl = document.getElementById('dispDivYear');
   if (divYrEl) divYrEl.textContent = divT > 0 ? '年間 ' + fmt(divT * 4) + '円' : '年間 ─';
-
-  // 余剰金パネル
-  const sp = document.getElementById('salaryPanel');
-  if (sp) {
-    sp.style.display = pendingSalary > 0 ? 'flex' : 'none';
-    if (pendingSalary > 0) {
-      document.getElementById('salaryAmt').textContent = fmt(pendingSalary) + ' 円';
-    }
-  }
 
   // ランク
   const g = getGrade(total);
@@ -5050,6 +5034,17 @@ function showCalcTab(name, btn) {
   if (btn) btn.classList.add('active');
 }
 
+function showNavBanner(text, duration) {
+  const el = document.getElementById('navBannerText');
+  if (!el) return;
+  el.classList.remove('running');
+  void el.offsetWidth;
+  el.textContent = text;
+  el.classList.add('running');
+  if (_bannerTimer) clearTimeout(_bannerTimer);
+  _bannerTimer = setTimeout(() => el.classList.remove('running'), duration || 2800);
+}
+
 const TAB_BANNERS = {
   game:   '💰  マネぼう　資産売買・ターン進行',
   data:   '👛  お財布　現金管理・計算機',
@@ -5077,15 +5072,7 @@ function showTab(name, btn) {
     else { drawGraph(); renderCompare(); }
   }
   // Nav banner animation
-  const bannerEl = document.getElementById('navBannerText');
-  if (bannerEl && TAB_BANNERS[name]) {
-    bannerEl.classList.remove('running');
-    void bannerEl.offsetWidth;
-    bannerEl.textContent = TAB_BANNERS[name];
-    bannerEl.classList.add('running');
-    if (_bannerTimer) clearTimeout(_bannerTimer);
-    _bannerTimer = setTimeout(() => bannerEl.classList.remove('running'), 2800);
-  }
+  if (TAB_BANNERS[name]) showNavBanner(TAB_BANNERS[name]);
   // Nav char swap
   const charEl = document.querySelector('.nav-char');
   if (charEl && TAB_CHARS[name]) {
@@ -5232,11 +5219,8 @@ function toggleCard(id) {
 window.addEventListener('DOMContentLoaded', function() {
   init();
   setTimeout(function() {
-    var b = document.getElementById('navBannerText');
-    if (b && typeof TAB_BANNERS !== 'undefined' && TAB_BANNERS['game']) {
-      b.textContent = TAB_BANNERS['game'];
-      b.classList.add('running');
-      setTimeout(function(){ b.classList.remove('running'); }, 2800);
+    if (typeof showNavBanner !== 'undefined' && typeof TAB_BANNERS !== 'undefined') {
+      showNavBanner(TAB_BANNERS['game']);
     }
     var c = document.querySelector('.nav-char');
     if (c && typeof TAB_CHARS !== 'undefined') {
