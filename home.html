@@ -417,7 +417,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       <p class="avatar-pick-hint" style="margin-top:6px;">プロフィール画像（省略可）</p>
       <input type="file" id="nickAvatarInput" accept="image/*" style="display:none" onchange="previewNickAvatar(this)">
     </div>
-    <input class="nick-input" type="text" id="nicknameInput" placeholder="ニックネーム" maxlength="20" autocomplete="nickname">
+    <input class="nick-input" type="text" id="nicknameInput" placeholder="ニックネーム（8文字以内）" maxlength="8" autocomplete="nickname">
     <p class="nick-hint">省略するとメールアドレスの名前が使われます</p>
     <button class="btn-nick-save" id="nickSaveBtn" onclick="saveNickname()">設定してはじめる</button>
   </div>
@@ -436,7 +436,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       <p class="edit-avatar-hint">タップして画像を変更</p>
       <input type="file" id="editAvatarInput" accept="image/*" style="display:none" onchange="previewEditAvatar(this)">
     </div>
-    <input class="profile-input" type="text" id="editNickInput" placeholder="ニックネーム" maxlength="20" autocomplete="nickname">
+    <input class="profile-input" type="text" id="editNickInput" placeholder="ニックネーム（8文字以内）" maxlength="8" autocomplete="nickname">
     <button class="btn-profile-save" id="profileSaveBtn" onclick="saveProfile()">保存する</button>
   </div>
 </div>
@@ -510,7 +510,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
         <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="previewAvatar(this)">
       </div>
       <p class="auth-mode-label" id="authModeLabel">メールアドレスでログイン</p>
-      <input class="auth-input" type="text" id="authName" placeholder="ニックネーム" autocomplete="nickname" style="display:none">
+      <input class="auth-input" type="text" id="authName" placeholder="ニックネーム（8文字以内）" maxlength="8" autocomplete="nickname" style="display:none">
       <input class="auth-input" type="email" id="authEmail" placeholder="メールアドレス" autocomplete="email">
       <input class="auth-input" type="password" id="authPassword" placeholder="パスワード（6文字以上）" autocomplete="current-password">
       <button class="btn-email-login" id="authSubmitBtn" onclick="submitEmailAuth()">ログイン</button>

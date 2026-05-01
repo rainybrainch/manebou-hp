@@ -1731,15 +1731,60 @@ body {
   border-bottom: 2px solid rgba(0,0,0,0.08);
 }
 
-/* ─── Titles Summary ─────────────────────────────────────── */
-.titles-summary {
-  text-align: center;
-  font-family: 'Dela Gothic One', sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 2px;
-  padding: 6px 0 10px;
+/* ─── Titles Player Card ─────────────────────────────────── */
+.titles-player-card {
+  background: linear-gradient(135deg, rgba(245,200,66,0.09) 0%, rgba(26,26,46,0.5) 100%);
+  border: 2px solid rgba(245,200,66,0.32);
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 24px rgba(245,200,66,0.08);
 }
+.titles-player-av {
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  object-fit: cover; object-position: top;
+  flex-shrink: 0;
+  box-shadow: 0 0 18px rgba(245,200,66,0.28);
+}
+.titles-player-info { flex: 1; min-width: 0; }
+.titles-player-name {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: 15px; color: var(--white);
+  margin-bottom: 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.titles-player-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 7px; }
+.titles-player-stat { font-size: 10px; color: rgba(255,255,255,0.4); }
+.titles-player-stat strong { color: var(--sky); font-size: 12px; }
+.titles-bar-wrap {
+  height: 5px; background: rgba(255,255,255,0.08);
+  border-radius: 3px; overflow: hidden;
+}
+.titles-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--sky) 100%);
+  border-radius: 3px;
+  transition: width 0.7s cubic-bezier(0.34,1.4,0.64,1);
+}
+.titles-badge-num {
+  text-align: center; flex-shrink: 0;
+}
+.titles-badge-num span {
+  font-family: 'Dela Gothic One', sans-serif;
+  font-size: 26px; color: var(--gold); display: block; line-height: 1;
+}
+.titles-badge-num small {
+  font-size: 9px; color: rgba(255,255,255,0.3);
+  letter-spacing: 1px; display: block; margin-top: 2px;
+}
+
+/* ─── Titles Summary (legacy, hidden) ───────────────────── */
+.titles-summary { display: none; }
 
 /* ─── Bottom Nav ─────────────────────────────────────────── */
 .bottom-nav {
@@ -2923,7 +2968,24 @@ body {
 
   <!-- ════ TAB: TITLES ════ -->
   <div id="tab-titles" class="tab-page">
-    <div class="titles-summary" id="titlesSummary">0 / 40 バッジ獲得</div>
+    <div class="titles-player-card">
+      <img class="titles-player-av" id="titlesPlayerAv" src="" alt="">
+      <div class="titles-player-info">
+        <div class="titles-player-name" id="titlesPlayerName">──</div>
+        <div class="titles-player-stats">
+          <div class="titles-player-stat">年代 <strong id="titlesPlayerYear">──</strong></div>
+          <div class="titles-player-stat">総資産 <strong id="titlesPlayerAssets">──</strong></div>
+        </div>
+        <div class="titles-bar-wrap">
+          <div class="titles-bar-fill" id="titlesBadgeBarFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="titles-badge-num">
+        <span id="titlesBadgeCount">0</span>
+        <small>バッジ獲得</small>
+      </div>
+    </div>
+    <div class="titles-summary" id="titlesSummary"></div>
     <div id="titlesGrid" class="titles-grid"></div>
   </div><!-- /tab-titles -->
 
@@ -5606,15 +5668,33 @@ function checkTitles(total) {
 
 function renderTitles() {
   if (!document.getElementById('tab-titles').classList.contains('active')) return;
-  const currentYear = masterData[currentIndex]?.年 || 0;
+  const row = masterData[currentIndex];
+  const currentYear = row?.年 || 0;
   const censor = s => s.replace(/？？？？？/g, '<span class="censored">？？？？？</span>');
 
   const visible = TITLES.filter(t => (t.visibleFrom || 0) <= currentYear);
   const hidden  = TITLES.filter(t => (t.visibleFrom || 0) > currentYear);
   const unlockedVisible = visible.filter(t => unlockedTitles.has(t.id)).length;
 
-  document.getElementById('titlesSummary').textContent =
-    `${unlockedVisible} / ${visible.length} バッジ獲得`;
+  // ── Player card ──
+  const name = _fbUser ? (_fbUser.displayName || 'ユーザー') : 'ゲスト';
+  const avSrc = _fbUser
+    ? (_fbUser.photoURL || makeEmojiDataUrl(getEmojiAvatar(_fbUser.uid)))
+    : makeEmojiDataUrl('👤');
+  const yearLabel = row && row.年 > 0
+    ? (row.イベント > 0 ? `${row.年}年 E${row.イベント}` : `${row.年}年`)
+    : 'チュートリアル';
+  const totalAssets = _calcTotalAssets ? _calcTotalAssets() : 0;
+  const pct = visible.length > 0 ? Math.round(unlockedVisible / visible.length * 100) : 0;
+
+  const avEl = document.getElementById('titlesPlayerAv');
+  avEl.src = avSrc;
+  avEl.onerror = () => { avEl.src = makeEmojiDataUrl(getEmojiAvatar(_fbUser?.uid || '')); avEl.onerror = null; };
+  document.getElementById('titlesPlayerName').textContent = name;
+  document.getElementById('titlesPlayerYear').textContent = yearLabel;
+  document.getElementById('titlesPlayerAssets').textContent = fmtShort(totalAssets) + '円';
+  document.getElementById('titlesBadgeCount').textContent = unlockedVisible;
+  document.getElementById('titlesBadgeBarFill').style.width = pct + '%';
 
   // 5年刻みバケット（スタート〜1974 は同じグループ、以降1975/1980…2025の刻み）
   const toBucket = vf => (vf === 0 || vf < 1975) ? 0 : Math.floor(vf / 5) * 5;
