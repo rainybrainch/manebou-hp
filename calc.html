@@ -180,7 +180,7 @@ body {
   background: rgba(255, 255, 255, 0.08);
   color: var(--white);
   border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 8px 10px;
   font-family: 'Zen Maru Gothic', sans-serif;
   font-size: 14px;
@@ -192,7 +192,7 @@ body {
   background: var(--gold);
   color: var(--dark);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 8px 18px;
   font-family: 'Dela Gothic One', sans-serif;
   font-size: 13px;
@@ -444,9 +444,21 @@ body {
 }
 .a-cart-row {
   font-size: 11px;
-  font-weight: 700;
-  margin-top: 3px;
-  display: block;
+  font-weight: 900;
+  margin-top: 6px;
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+  line-height: 1.5;
+}
+.a-cart-buy {
+  background: var(--gold);
+  color: var(--dark) !important;
+}
+.a-cart-sell {
+  background: #e74c3c;
+  color: #fff !important;
 }
 
 .btn-bond-locked {
@@ -506,8 +518,26 @@ body {
   animation: ticker-slide 3.5s linear forwards;
 }
 .asset-btn-owned { border-color: var(--green); }
-.asset-btn-cart-buy  { border-color: var(--gold) !important; }
-.asset-btn-cart-sell { border-color: var(--sky)  !important; }
+@keyframes cartBuyGlow {
+  0%,100% { box-shadow: 0 6px 0 var(--gold-dark), 0 0 0 2px rgba(245,200,66,0.35); }
+  50%     { box-shadow: 0 6px 0 var(--gold-dark), 0 0 0 4px rgba(245,200,66,0.6), 0 0 18px rgba(245,200,66,0.3); }
+}
+@keyframes cartSellGlow {
+  0%,100% { box-shadow: 0 6px 0 rgba(20,90,140,0.55), 0 0 0 2px rgba(91,200,232,0.35); }
+  50%     { box-shadow: 0 6px 0 rgba(20,90,140,0.55), 0 0 0 4px rgba(91,200,232,0.6), 0 0 18px rgba(91,200,232,0.3); }
+}
+.asset-btn-cart-buy {
+  border-color: var(--gold) !important;
+  border-width: 3px !important;
+  background: rgba(245,200,66,0.1) !important;
+  animation: cartBuyGlow 2s ease-in-out infinite !important;
+}
+.asset-btn-cart-sell {
+  border-color: var(--sky) !important;
+  border-width: 3px !important;
+  background: rgba(91,200,232,0.08) !important;
+  animation: cartSellGlow 2s ease-in-out infinite !important;
+}
 
 /* Cart confirmation bar */
 .cart-bar {
@@ -577,7 +607,7 @@ body {
   background: transparent;
   border: 1px solid rgba(255,255,255,0.25);
   color: rgba(255,255,255,0.55);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 5px 10px;
   font-size: 11px;
   cursor: pointer;
@@ -586,7 +616,7 @@ body {
   flex-shrink: 0;
   background: var(--gold);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 7px 14px;
   font-family: 'Dela Gothic One', sans-serif;
   font-size: 13px;
@@ -758,7 +788,7 @@ body {
   background: rgba(255,255,255,0.08);
   color: var(--white);
   border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 4px 10px;
   font-family: 'Zen Maru Gothic', sans-serif;
   font-size: 12px;
@@ -838,7 +868,7 @@ body {
   color: #4caf7d;
   background: rgba(76,175,125,0.1);
   border: 1px solid rgba(76,175,125,0.25);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 6px 10px;
 }
 .tm-note {
@@ -846,7 +876,7 @@ body {
   color: rgba(255,200,50,0.7);
   background: rgba(245,200,66,0.07);
   border: 1px solid rgba(245,200,66,0.2);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 5px 10px;
 }
 .tm-btns {
@@ -878,6 +908,8 @@ body {
   border: 2px solid transparent;
 }
 .tm-btn-confirm:active { opacity:0.75; transform:scale(0.97); }
+.tm-confirm-buy  { background:var(--gold);color:var(--dark);border-color:var(--gold-dark);box-shadow:2px 2px 0 var(--gold-dark); }
+.tm-confirm-sell { background:var(--sky);color:var(--dark);border-color:#2aa0c0;box-shadow:2px 2px 0 #2aa0c0; }
 
 /* ─── Toast ──────────────────────────────────────────────── */
 .toast {
@@ -1073,24 +1105,52 @@ body {
   color: rgba(255,255,255,0.25);
   padding: 12px 4px;
   border: 1px dashed rgba(255,255,255,0.1);
-  border-radius: 8px;
+  border-radius: 10px;
   margin-top: 4px;
 }
-.title-item { border-radius: 10px; padding: 8px 10px; border: 2px solid; border-top-width: 4px; }
-.title-item.unlocked { background: rgba(245,200,66,0.12); border-color: var(--gold); }
-.title-item.locked   { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); opacity: 0.42; }
+@keyframes titleGlowPulse{
+  0%,100%{box-shadow:0 0 0 rgba(245,200,66,0);}
+  50%    {box-shadow:0 0 12px rgba(245,200,66,0.35),0 0 24px rgba(245,200,66,0.12);}
+}
+@keyframes titleShimmer{
+  0%,100%{background-position:-200% 0;}
+  50%    {background-position:200% 0;}
+}
+.title-item {
+  border-radius: 10px; padding: 10px 12px; border: 2px solid; border-top-width: 4px;
+  position: relative; overflow: hidden; transition: transform 0.15s, box-shadow 0.15s;
+}
+.title-item:hover { transform: translateY(-2px); }
+.title-item.unlocked {
+  background: rgba(245,200,66,0.1); border-color: rgba(245,200,66,0.55);
+  animation: titleGlowPulse 3s ease-in-out infinite;
+}
+.title-item.unlocked::after {
+  content: '';position:absolute;inset:0;
+  background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,0.06) 50%, transparent 65%);
+  background-size: 200% 100%;
+  animation: titleShimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+.title-item.locked   { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); opacity: 0.65; }
 .title-item.s1 { border-top-color: var(--green) !important; }
 .title-item.s2 { border-top-color: var(--sky)   !important; }
 .title-item.s3 { border-top-color: var(--gold)  !important; }
-.title-stars { font-size: 9px; display: block; margin-bottom: 3px; letter-spacing: 1px; }
-.title-item.unlocked .title-stars { color: rgba(255,255,255,0.7); }
-.title-item.locked   .title-stars { color: rgba(255,255,255,0.25); }
-.title-name  { font-family: 'Dela Gothic One', sans-serif; font-size: 11px; display: block; margin-bottom: 2px; }
+.title-stars { font-size: 9px; display: block; margin-bottom: 4px; letter-spacing: 1px; }
+.title-item.unlocked .title-stars { color: rgba(255,255,255,0.8); }
+.title-item.locked   .title-stars { color: rgba(255,255,255,0.3); }
+.title-name  { font-family: 'Dela Gothic One', sans-serif; font-size: 12px; display: block; margin-bottom: 5px; }
 .title-item.unlocked .title-name { color: var(--gold); }
-.title-item.locked   .title-name { color: rgba(255,255,255,0.35); }
-.title-desc  { font-size: 9px; display: block; letter-spacing: 0.5px; }
-.title-item.unlocked .title-desc { color: rgba(255,255,255,0.55); }
-.title-item.locked   .title-desc { color: rgba(255,255,255,0.2); }
+.title-item.locked   .title-name { color: rgba(255,255,255,0.45); }
+.title-cond-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 1px;
+  padding: 1px 5px; border-radius: 3px; margin-bottom: 3px; display: inline-block;
+}
+.title-item.unlocked .title-cond-label { background: rgba(245,200,66,0.15); color: var(--gold); }
+.title-item.locked   .title-cond-label { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+.title-desc  { font-size: 10px; display: block; letter-spacing: 0.3px; line-height: 1.5; }
+.title-item.unlocked .title-desc { color: rgba(255,255,255,0.75); }
+.title-item.locked   .title-desc { color: rgba(255,255,255,0.55); }
 
 
 #rankVal { font-family: 'Zen Maru Gothic', sans-serif; font-size: clamp(11px,3vw,14px); display: block; line-height: 1.2; font-weight: 700; white-space: nowrap; }
@@ -1119,7 +1179,7 @@ body {
   background: #fff;
   color: var(--dark);
   border: 2px solid rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 8px 10px;
   font-size: 14px;
   width: 100%;
@@ -1131,7 +1191,7 @@ body {
   background: var(--green);
   color: #fff;
   border: 2px solid var(--dark);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 9px 18px;
   font-family: 'Dela Gothic One', sans-serif;
   font-size: 13px;
@@ -1147,7 +1207,7 @@ body {
 
 #simResult {
   background: rgba(91, 200, 232, 0.08);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 12px 14px;
   font-size: 13px;
   color: #333;
@@ -1289,21 +1349,32 @@ body {
   border-top: 1px solid rgba(255,255,255,0.07);
   margin: 5px 0 6px;
 }
+.calc-cash-row { display:flex; gap:8px; margin-top:10px; }
 .wc-to-cash-btn {
-  width: 100%; margin-top: 10px;
+  flex:1;
   background: rgba(46,204,113,0.15); color: #2ecc71;
   border: 1.5px solid rgba(46,204,113,0.5);
-  border-radius: 10px; padding: 12px;
-  font-size: 14px; font-weight: 900;
+  border-radius: 10px; padding: 12px 6px;
+  font-size: 13px; font-weight: 900;
   font-family: 'Dela Gothic One',sans-serif;
   cursor: pointer; transition: all 0.12s;
 }
 .wc-to-cash-btn:active { transform: scale(0.97); background: rgba(46,204,113,0.25); }
+.wc-from-cash-btn {
+  flex:1;
+  background: rgba(232,53,74,0.12); color: #ff6b7a;
+  border: 1.5px solid rgba(232,53,74,0.45);
+  border-radius: 10px; padding: 12px 6px;
+  font-size: 13px; font-weight: 900;
+  font-family: 'Dela Gothic One',sans-serif;
+  cursor: pointer; transition: all 0.12s;
+}
+.wc-from-cash-btn:active { transform: scale(0.97); background: rgba(232,53,74,0.22); }
 .calc-to-sim {
   width: 100%; margin-top: 6px;
   background: rgba(91,200,232,0.08); color: var(--sky);
   border: 1px solid rgba(91,200,232,0.3);
-  border-radius: 8px; padding: 7px;
+  border-radius: 10px; padding: 7px;
   font-size: 11px; font-weight: 700;
   cursor: pointer; font-family: 'Zen Maru Gothic',sans-serif;
   text-align: center; transition: all 0.1s;
@@ -1352,7 +1423,7 @@ body {
 .hmt-btn {
   flex: 1; padding: 7px 4px;
   background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4);
-  border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 10px;
   font-size: 11px; font-weight: 700; cursor: pointer;
   font-family: 'Zen Maru Gothic',sans-serif; transition: all 0.12s;
 }
@@ -1438,7 +1509,7 @@ body {
 }
 .cst-btn {
   flex: 1; padding: 9px 4px;
-  border: none; border-radius: 8px;
+  border: none; border-radius: 10px;
   background: transparent;
   color: rgba(255,255,255,0.45);
   font-size: 11px; font-weight: 700;
@@ -1463,7 +1534,7 @@ body {
 .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 13px; }
 .setting-row:last-child { border-bottom: none; }
 .setting-badge { font-size: 11px; color: var(--green); font-weight: 700; }
-.setting-btn { background: rgba(232,53,74,0.1); color: var(--red); border: 1.5px solid rgba(232,53,74,0.3); border-radius: 8px; padding: 6px 14px; font-size: 12px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; cursor: pointer; }
+.setting-btn { background: rgba(232,53,74,0.1); color: var(--red); border: 1.5px solid rgba(232,53,74,0.3); border-radius: 10px; padding: 6px 14px; font-size: 12px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; cursor: pointer; }
 .setting-link { color: var(--sky); font-weight: 700; font-size: 13px; text-decoration: none; }
 .setting-link:hover { text-decoration: underline; }
 .rules-board-img { width: 100%; border-radius: 12px; display: block; margin: 10px 0 8px; box-shadow: 0 3px 12px rgba(0,0,0,0.18); }
@@ -1483,7 +1554,7 @@ body {
 .ba-cw-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
 /* ─── Asset icon cards ──────────────────────────────── */
 .asset-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 5px; margin: 6px 0 10px; }
-.acard { display: flex; flex-direction: column; align-items: center; gap: 2px; border-radius: 8px; padding: 7px 4px; border: 1.5px solid; }
+.acard { display: flex; flex-direction: column; align-items: center; gap: 2px; border-radius: 10px; padding: 7px 4px; border: 1.5px solid; }
 .acard-icon { font-size: 22px; line-height: 1.2; }
 .acard-name { font-size: 9px; font-weight: 800; text-align: center; line-height: 1.2; color: inherit; }
 .acard-type { font-size: 8px; opacity: 0.65; }
@@ -1495,7 +1566,7 @@ body {
 /* ─── Asset description text ────────────────────────────── */
 .asset-desc { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
 .ad-row  { display: flex; align-items: flex-start; gap: 7px; font-size: 11px; line-height: 1.55; }
-.ad-tag  { font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 8px; flex-shrink: 0; margin-top: 2px; letter-spacing: 0.2px; border: 1px solid; }
+.ad-tag  { font-size: 8px; font-weight: 800; padding: 2px 6px; border-radius: 10px; flex-shrink: 0; margin-top: 2px; letter-spacing: 0.2px; border: 1px solid; }
 .ad-tag.safe   { background: rgba(91,200,232,0.2);  border-color: rgba(91,200,232,0.5);  color: #1693b3; }
 .ad-tag.growth { background: rgba(232,53,74,0.15);  border-color: rgba(232,53,74,0.4);   color: var(--red); }
 .ad-tag.real   { background: rgba(245,200,66,0.18); border-color: rgba(245,200,66,0.55); color: #9a7000; }
@@ -1530,11 +1601,11 @@ body {
 .acv2 .acv2-badge.real   { background: rgba(245,200,66,0.18); border-color: rgba(245,200,66,0.55); color: #9a7000; }
 .acv2 .acv2-badge.fx     { background: rgba(46,204,113,0.15); border-color: rgba(46,204,113,0.4);  color: #1e8449; }
 .acv2 .acv2-badge.secret { background: rgba(156,39,176,0.15); border-color: rgba(156,39,176,0.45); color: #7b1fa2; }
-.rbl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; line-height: 1.5; background: rgba(0,0,0,0.05); border-radius: 8px; padding: 7px 9px; }
+.rbl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; line-height: 1.5; background: rgba(0,0,0,0.05); border-radius: 10px; padding: 7px 9px; }
 .rbl-item-title { font-weight: 800; font-size: 12px; }
 .rbl-item-desc  { font-size: 10px; color: #888; margin-top: 1px; }
 /* ─── Rules tip box ─────────────────────────────────── */
-.rules-tip { display: flex; gap: 8px; background: rgba(91,200,232,0.07); border: 1px solid rgba(91,200,232,0.25); border-radius: 8px; padding: 9px 11px; font-size: 11px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-top: 10px; }
+.rules-tip { display: flex; gap: 8px; background: rgba(91,200,232,0.07); border: 1px solid rgba(91,200,232,0.25); border-radius: 10px; padding: 9px 11px; font-size: 11px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-top: 10px; }
 .rules-tip > span:first-child { flex-shrink: 0; font-size: 14px; }
 /* ─── Step cards (rules section) ───────────────────── */
 .step-cards { display: flex; flex-direction: column; gap: 8px; margin: 8px 0 4px; }
@@ -1850,7 +1921,7 @@ body {
 .step-lbl     { margin-bottom: 4px; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
 .step-hint    { font-size: 11px; color: #aaa; font-weight: 400; }
 .step-row     { gap: 4px; margin-bottom: 4px; }
-.step-btn     { padding: 9px 5px; font-size: 13px; border-radius: 8px; }
+.step-btn     { padding: 9px 5px; font-size: 13px; border-radius: 10px; }
 .value-block-lbl { font-size: 9px; margin-bottom: 3px; }
 .value-block-num { font-size: clamp(16px, 4vw, 22px); }
 .action-row   { margin-bottom: 8px; }
@@ -1907,7 +1978,7 @@ body {
 }
 .graph-card-select {
   background: rgba(255,255,255,0.07); color: #fff;
-  border: 1px solid rgba(255,255,255,0.15); border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
   padding: 5px 8px; font-size: 11px;
   font-family: 'Zen Maru Gothic',sans-serif;
 }
@@ -2299,25 +2370,42 @@ body {
 .modal-group-code-label { font-size: 11px; color: rgba(255,255,255,0.35); margin-bottom: 4px; text-align: center; }
 .modal-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0; }
 .user-menu {
-  display: none; position: fixed; top: 55px; right: calc(50% - 330px);
-  background: #1a1a2e; border: 2px solid var(--gold); border-radius: 12px;
-  padding: 14px 16px; z-index: 500; min-width: 200px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  position: fixed; top: 55px; right: calc(50% - 330px);
+  background: var(--dark); border: 2.5px solid var(--gold); border-radius: 16px;
+  padding: 16px 14px; z-index: 500; width: 220px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.75), 0 0 0 1px rgba(245,200,66,0.08);
+  transform: translateY(-8px) scale(0.93); opacity: 0; pointer-events: none;
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), opacity 0.15s;
 }
 @media (max-width: 680px) { .user-menu { right: 12px; } }
-.user-menu.open { display: block; }
-.user-menu-name { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
-.user-menu-email { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
-.user-menu-group { font-size: 12px; color: var(--sky); margin-bottom: 12px; }
-.user-menu-btn {
-  display: block; width: 100%;
-  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 8px; color: #fff; font-size: 12px;
-  font-family: 'Zen Maru Gothic', sans-serif; padding: 8px 10px; cursor: pointer;
-  text-align: left; margin-bottom: 6px;
+.user-menu.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
+.user-menu-avatar {
+  width: 48px; height: 48px; border-radius: 50%; border: 2.5px solid var(--gold);
+  object-fit: cover; display: block; margin: 0 auto 8px;
 }
-.user-menu-btn:hover { background: rgba(255,255,255,0.13); }
-.user-menu-btn.danger { color: var(--red); border-color: rgba(232,53,74,0.3); }
+.user-menu-name { font-weight: 700; font-size: 13px; text-align: center; margin-bottom: 3px; color: #fff; }
+.user-menu-email { font-size: 9px; color: rgba(255,255,255,0.35); text-align: center; margin-bottom: 10px; word-break: break-all; font-weight: 700; }
+.user-menu-save-badge {
+  font-size: 9px; font-weight: 700;
+  background: rgba(76,175,125,0.12); border: 1.5px solid var(--green);
+  border-radius: 20px; color: var(--green); padding: 3px 10px;
+  margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+  gap: 4px; width: fit-content;
+}
+.user-menu-divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 0 0 10px; }
+.user-menu-group { font-size: 11px; color: var(--sky); margin-bottom: 8px; text-align: center; }
+.user-menu-btn {
+  display: flex; align-items: center; gap: 7px; width: 100%;
+  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px; color: rgba(255,255,255,0.7); font-size: 11px; font-weight: 700;
+  font-family: 'Zen Maru Gothic', sans-serif; padding: 9px 10px; cursor: pointer;
+  text-align: left; margin-bottom: 6px; text-decoration: none; box-sizing: border-box;
+  transition: background 0.15s, border-color 0.15s;
+}
+.user-menu-btn:last-child { margin-bottom: 0; }
+.user-menu-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); color: #fff; }
+.user-menu-btn.danger { color: rgba(255,100,100,0.7); border-color: rgba(255,80,80,0.15); }
+.user-menu-btn.danger:hover { background: rgba(255,60,60,0.08); border-color: rgba(255,80,80,0.35); color: rgb(255,110,110); }
 .instructor-panel {
   background: rgba(91,200,232,0.06); border: 2px solid rgba(91,200,232,0.3);
   border-radius: 14px; padding: 14px; margin-top: 10px;
@@ -2333,6 +2421,59 @@ body {
 .member-name { font-size: 12px; font-weight: 700; }
 .member-cash { font-size: 11px; color: var(--gold); }
 .member-year { font-size: 10px; color: rgba(255,255,255,0.4); }
+
+/* ─── Dark Toggle Button ─── */
+.dark-toggle {
+  background: none; border: 2px solid rgba(255,255,255,0.22); border-radius: 8px;
+  color: rgba(255,255,255,0.65); cursor: pointer; padding: 4px 8px;
+  font-size: 14px; transition: all 0.2s; line-height: 1; margin-right: 6px; flex-shrink: 0;
+}
+.dark-toggle:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ─── Light Mode ─── */
+html.light body { background: #f0ece2; color: #1a1a2e; }
+html.light .top-nav { background: rgba(255,252,240,0.97); }
+html.light .nav-title { color: #1a7a9a; }
+html.light .page-sub { color: rgba(26,26,46,0.5); }
+html.light .dark-toggle { border-color: rgba(26,26,46,0.22); color: rgba(26,26,46,0.6); }
+html.light .dark-toggle:hover { border-color: var(--gold-dark); color: var(--gold-dark); }
+html.light .value-panel { background: rgba(255,252,240,0.95); }
+html.light .value-block-lbl, html.light .value-block-unit { color: rgba(26,26,46,0.42); }
+html.light .step-section { background: rgba(255,255,255,0.75); border-color: rgba(26,26,46,0.1); }
+html.light .step-lbl { color: rgba(26,26,46,0.42); border-bottom-color: rgba(26,26,46,0.08); }
+html.light .date-bar { background: rgba(255,252,240,0.95); border-color: rgba(26,26,46,0.2); box-shadow: 4px 4px 0 var(--sky); }
+html.light .date-bar select { background: #fff; color: #1a1a2e; border-color: rgba(26,26,46,0.2); }
+html.light .date-bar select option { background: #fff; color: #1a1a2e; }
+html.light .ticker-bar { background: rgba(26,26,46,0.9); }
+html.light .leaderboard-row, html.light .hof-row { background: rgba(26,26,46,0.04); border-color: rgba(26,26,46,0.08); }
+html.light .leaderboard-row:hover, html.light .hof-row:hover { background: rgba(26,26,46,0.09); }
+html.light .title-item { border-color: rgba(26,26,46,0.15) !important; }
+html.light .title-item.locked { background: rgba(26,26,46,0.04) !important; }
+html.light .title-name { color: #1a1a2e !important; }
+html.light .title-desc { color: rgba(26,26,46,0.55) !important; }
+html.light .member-card { background: rgba(26,26,46,0.05); }
+html.light .member-year { color: rgba(26,26,46,0.42); }
+html.light .instructor-panel { background: rgba(91,200,232,0.05); }
+html.light .nav-auth-btn { color: var(--gold-dark); border-color: rgba(212,160,23,0.5); }
+html.light .nav-auth-btn:hover { background: rgba(212,160,23,0.1); }
+
+/* ===== 賞状モーダル ===== */
+.cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.cert-backdrop.open{opacity:1;pointer-events:all;}
+.cert-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.88);z-index:2001;background:#0a0a1e;border:3px solid var(--gold);border-radius:20px;padding:16px;width:min(90vw,760px);pointer-events:none;opacity:0;transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1),opacity 0.25s;box-shadow:0 20px 60px rgba(0,0,0,0.8);}
+.cert-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
+.cert-canvas{width:100%;height:auto;border-radius:10px;display:block;}
+.cert-actions{display:flex;gap:10px;margin-top:14px;justify-content:center;}
+.cert-dl-btn{flex:1;max-width:200px;padding:12px 20px;background:var(--gold);color:var(--dark);border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.15s;}
+.cert-dl-btn:hover{opacity:0.85;}
+.cert-close-btn{padding:12px 20px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.cert-close-btn:hover{background:rgba(255,255,255,0.14);color:#fff;}
+/* 賞状コレクション一覧 */
+.cert-coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:4px 0;}
+.cert-coll-item{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.18s;}
+.cert-coll-item:hover{border-color:rgba(245,200,66,0.4);transform:translateY(-2px);}
+.cert-coll-thumb{width:100%;height:80px;object-fit:cover;display:block;}
+.cert-coll-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.7);padding:6px 8px;text-align:center;}
 
 </style>
 </head>
@@ -2377,7 +2518,7 @@ body {
       <button class="modal-tab" onclick="switchGroupTab('create',this)">👑 作成する</button>
     </div>
     <div id="groupTabJoin">
-      <input class="modal-input" id="groupCodeInput" placeholder="コードを入力" maxlength="6"
+      <input type="text" class="modal-input" id="groupCodeInput" placeholder="コードを入力" maxlength="6"
         oninput="this.value=this.value.toUpperCase()" autocomplete="off" spellcheck="false">
       <button class="btn-modal-action" onclick="joinGroup()">グループに参加する</button>
     </div>
@@ -2396,19 +2537,25 @@ body {
 
 <!-- ════ USER MENU ════ -->
 <div class="user-menu" id="userMenu">
+  <img class="user-menu-avatar" id="userMenuAvatar" src="" alt="プロフィール画像">
   <div class="user-menu-name" id="userMenuName">--</div>
   <div class="user-menu-email" id="userMenuEmail">--</div>
+  <div class="user-menu-save-badge">☁️ クラウド保存 ON</div>
   <div class="user-menu-group" id="userMenuGroup"></div>
+  <hr class="user-menu-divider">
+  <a class="user-menu-btn" href="home.html">🏠 アカウントページへ</a>
+  <a class="user-menu-btn" href="https://rainybrainch.github.io/manebou-pin/manebou-pin.html" target="_blank" rel="noopener">📋 マネぼうPinへ</a>
   <button class="user-menu-btn" onclick="openGroupModal()">👥 グループ管理</button>
   <button class="user-menu-btn" onclick="cloudSaveNow()">☁️ 今すぐ保存</button>
+  <button class="user-menu-btn" onclick="closeUserMenu();openCertCollection()">📜 賞状コレクション</button>
   <button class="user-menu-btn danger" id="leaveGroupBtn" style="display:none" onclick="leaveGroup()">🚪 グループを抜ける</button>
-  <button class="user-menu-btn danger" onclick="signOutUser()">ログアウト</button>
+  <button class="user-menu-btn danger" onclick="signOutUser()">🚪 ログアウト</button>
 </div>
 
 <nav class="top-nav">
   <span class="nav-spacer"></span>
   <a class="nav-brand" href="home.html?noredirect" style="text-decoration:none;">
-    <img class="nav-char" src="images/img5.webp" alt="">
+    <img class="nav-char" src="images/img5.webp" alt="おーる局長">
     <span class="nav-title" id="navTitle">マネぼうアプリ</span>
   </a>
   <div class="nav-side-ticker" id="navSideTicker">
@@ -2416,7 +2563,7 @@ body {
   </div>
   <div class="ticker-bar" id="tickerBar"></div>
   <div class="nav-auth-wrap">
-    <a href="https://rainybrainch.github.io/manebou-todo/manebou-todo.html" style="background:rgba(91,200,232,0.12);color:#5BC8E8;border:1.5px solid rgba(91,200,232,0.35);border-radius:16px;padding:5px 11px;font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap;margin-right:6px;">📋 TODO</a>
+    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="ライト/ダークモード切替">☀️</button>
     <button class="nav-auth-btn" id="navAuthBtn" onclick="openAuthOverlay()">☁️ ログイン</button>
     <img class="nav-user-avatar" id="navUserAvatar" src="" alt="ユーザーアバター" style="display:none" onclick="toggleUserMenu()">
   </div>
@@ -2430,7 +2577,7 @@ body {
 
     <!-- CHAR SPEECH (compact) -->
     <div class="char-speech-mini">
-      <img class="speech-char-img" id="speechCharImg" src="images/img5.webp" alt="" onerror="this.style.visibility='hidden'">
+      <img class="speech-char-img" id="speechCharImg" src="images/img5.webp" alt="キャラクター" onerror="this.style.visibility='hidden'">
       <div class="speech-bubble">
         <span class="speech-char-name" id="speechCharName">おーる局長</span>
         <span id="speechText">ようこそ！1970年から時代を旅しながら資産を育てよう！</span>
@@ -2564,7 +2711,10 @@ body {
         <button class="ckey"           onclick="cDot()">．</button>
         <button class="ckey eq"        onclick="cSolve()">=</button>
       </div>
-      <button class="wc-to-cash-btn" onclick="calcToCash()">💴 現金に加算</button>
+      <div class="calc-cash-row">
+        <button class="wc-to-cash-btn" onclick="calcToCash()">💴 ＋現金に加算</button>
+        <button class="wc-from-cash-btn" onclick="calcFromCash()">💸 −現金から引く</button>
+      </div>
     </div>
 
     </div><!-- /data-col-left -->
@@ -4239,10 +4389,8 @@ function showTradeModal(id) {
 
   const btn = document.getElementById('tmConfirm');
   if (btn) {
-    Object.assign(btn.style, isBuy
-      ? { background: 'var(--gold)', color: 'var(--dark)', borderColor: 'var(--gold-dark)', boxShadow: '2px 2px 0 var(--gold-dark)' }
-      : { background: 'var(--sky)',  color: 'var(--dark)', borderColor: '#2aa0c0',          boxShadow: '2px 2px 0 #2aa0c0' }
-    );
+    btn.classList.toggle('tm-confirm-buy', isBuy);
+    btn.classList.toggle('tm-confirm-sell', !isBuy);
   }
 
   pendingTradeId = id;
@@ -4565,6 +4713,14 @@ function stepTime(dir) {
     updateEventOptions();
     if (row.イベント > 0) document.getElementById('selE').value = row.イベント;
     updateDisplay();
+    // 賞状チェック
+    if (dir === 1) {
+      const certKey = _isCertMilestone(prevRow);
+      if (certKey) {
+        const ta = _calcTotalAssets();
+        setTimeout(() => triggerCertificate(certKey, ta), 900);
+      }
+    }
   });
 }
 
@@ -4690,8 +4846,7 @@ function updateDisplay() {
       : '';
     const spark = ok ? makeSparkline(a.id, a.color) : '';
     const cartBadge = cartEntry
-      ? `<span class="a-cart-row" style="color:${cartEntry.dir>0?'var(--gold)':'#e74c3c'}">`
-        + (cartEntry.dir > 0 ? '＋' : '－') + cartEntry.qty + '個 カート中</span>'
+      ? `<span class="a-cart-row ${cartEntry.dir>0?'a-cart-buy':'a-cart-sell'}">🛒 ${cartEntry.dir>0?'＋':'－'}${cartEntry.qty}個 カート中</span>`
       : '';
     btn.style.setProperty('--ac', a.color);
     btn.style.setProperty('--as', a.shadow);
@@ -4739,7 +4894,9 @@ function updateDisplay() {
 function doSim() {
   const row = masterData[currentIndex];
   if (!row) return;
-  const id      = document.getElementById('simAsset').value;
+  const simAssetEl = document.getElementById('simAsset');
+  if (!simAssetEl) return;
+  const id      = simAssetEl.value;
   const qty     = Math.max(0, parseInt(document.getElementById('simQty').value) || 0);
   const price   = row[id] || 0;
   const a       = ASSET_KEYS.find(x => x.id === id);
@@ -4809,9 +4966,233 @@ function calcToSim() {
   }
 }
 
+// ════ 賞状システム ════
+const CERT_MILESTONES = {
+  tutorial: { bgIdx:1,  title:'チュートリアル完了',   sub:'投資の第一歩を踏み出した' },
+  '1974':   { bgIdx:2,  title:'1974年の壁を突破',      sub:'石油ショック時代を乗り越えた' },
+  '1979':   { bgIdx:3,  title:'1979年の壁を突破',      sub:'第二次石油危機を生き抜いた' },
+  '1984':   { bgIdx:4,  title:'1984年の壁を突破',      sub:'バブル前夜の波に乗った' },
+  '1989':   { bgIdx:5,  title:'1989年の壁を突破',      sub:'バブル絶頂期を制した' },
+  '1994':   { bgIdx:6,  title:'1994年の壁を突破',      sub:'バブル崩壊後を生き残った' },
+  '1999':   { bgIdx:7,  title:'1999年の壁を突破',      sub:'ITバブルの波を乗りこなした' },
+  '2004':   { bgIdx:8,  title:'2004年の壁を突破',      sub:'ITバブル崩壊から立ち直った' },
+  '2009':   { bgIdx:9,  title:'2009年の壁を突破',      sub:'リーマンショックを乗り越えた' },
+  '2014':   { bgIdx:10, title:'2014年の壁を突破',      sub:'アベノミクス時代に挑んだ' },
+  '2019':   { bgIdx:11, title:'2019年の壁を突破',      sub:'コロナ前夜を経験した' },
+  '2024':   { bgIdx:12, title:'2024年の壁を突破',      sub:'令和の投資家になった' },
+  '2025':   { bgIdx:13, title:'全課程修了',             sub:'マネぼう塾を完全制覇した' },
+};
+
+function _isCertMilestone(prevRow) {
+  if (!prevRow) return null;
+  const nowRow  = masterData[currentIndex];
+  const prevYear = prevRow.年;
+  const nowYear  = nowRow ? nowRow.年 : null;
+  if ((prevYear === 0 || prevYear == null) && nowYear > 0) return 'tutorial';
+  if (nowYear !== prevYear && prevYear > 0) {
+    if (prevYear === 2025) return '2025';
+    const d = prevYear % 10;
+    if (d === 4 || d === 9) return String(prevYear);
+  }
+  return null;
+}
+
+function _certRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+}
+
+async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
+  const m = CERT_MILESTONES[certKey];
+  if (!m) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  // solid dark base
+  ctx.fillStyle = '#0e0a1e';
+  ctx.fillRect(0, 0, W, H);
+
+  // background image — very low opacity so text/numbers are invisible, only color/texture remains
+  await new Promise(resolve => {
+    const img = new Image();
+    img.onload  = () => {
+      ctx.globalAlpha = 0.18;
+      ctx.drawImage(img, 0, 0, W, H);
+      ctx.globalAlpha = 1.0;
+      resolve();
+    };
+    img.onerror = () => resolve();
+    img.src = `images/cert/cert-${m.bgIdx}.png`;
+  });
+
+  // center panel
+  const pw = 560, ph = 340, px = (W - pw) / 2, py = (H - ph) / 2;
+  ctx.fillStyle = 'rgba(255,250,230,0.92)';
+  _certRoundRect(ctx, px, py, pw, ph, 18);
+  ctx.fill();
+  ctx.strokeStyle = '#b8860b';
+  ctx.lineWidth = 3;
+  _certRoundRect(ctx, px + 6, py + 6, pw - 12, ph - 12, 14);
+  ctx.stroke();
+
+  // game title header
+  ctx.fillStyle = '#7a5200';
+  ctx.font = 'bold 13px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('マネぼう塾', W / 2, py + 32);
+
+  // seal stamp decoration
+  ctx.fillStyle = 'rgba(180,0,0,0.12)';
+  ctx.beginPath();
+  ctx.arc(W / 2, py + ph / 2 + 30, 70, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(180,0,0,0.25)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // 賞状 label
+  ctx.fillStyle = '#8b0000';
+  ctx.font = 'bold 22px "Hiragino Mincho ProN", "Yu Mincho", serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('賞　状', W / 2, py + 70);
+
+  // main title
+  ctx.fillStyle = '#1a0a00';
+  ctx.font = `bold 28px "Hiragino Mincho ProN", "Yu Mincho", serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText(m.title, W / 2, py + 120);
+
+  // sub title
+  ctx.fillStyle = '#5a3800';
+  ctx.font = `16px "Hiragino Mincho ProN", "Yu Mincho", serif`;
+  ctx.fillText(m.sub, W / 2, py + 152);
+
+  // divider line
+  ctx.strokeStyle = '#b8860b';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(px + 40, py + 168);
+  ctx.lineTo(px + pw - 40, py + 168);
+  ctx.stroke();
+
+  // player name
+  ctx.fillStyle = '#1a0a00';
+  ctx.font = `bold 20px "Hiragino Mincho ProN", "Yu Mincho", serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText(playerName || 'プレイヤー', W / 2, py + 205);
+
+  // assets
+  const assetsStr = '総資産 ' + (assets != null ? Number(assets).toLocaleString() + '円' : '---');
+  ctx.fillStyle = '#5a3800';
+  ctx.font = `14px "Hiragino Mincho ProN", "Yu Mincho", serif`;
+  ctx.fillText(assetsStr, W / 2, py + 233);
+
+  // date
+  ctx.fillStyle = '#888060';
+  ctx.font = '12px sans-serif';
+  ctx.fillText(dateStr, W / 2, py + 262);
+
+  // footer watermark
+  ctx.fillStyle = 'rgba(90,56,0,0.35)';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('by RAINY BRAIN', W / 2, py + ph - 14);
+}
+
+let _certCurrentKey = null;
+
+function triggerCertificate(certKey, assets) {
+  if (!CERT_MILESTONES[certKey]) return;
+  earnedCerts[certKey] = { assets, date: new Date().toLocaleDateString('ja-JP') };
+  saveGame();
+  const playerName = _fbUser
+    ? (_fbUser.displayName || _fbUser.email || 'プレイヤー')
+    : 'プレイヤー';
+  const dateStr = earnedCerts[certKey].date;
+  showCertModal(certKey, assets, dateStr, playerName);
+}
+
+async function showCertModal(certKey, assets, dateStr, playerName) {
+  const canvas = document.getElementById('certCanvas');
+  _certCurrentKey = certKey;
+  await _renderCertCanvas(canvas, certKey, playerName, assets, dateStr);
+  document.getElementById('certBackdrop').classList.add('open');
+  document.getElementById('certModal').classList.add('open');
+}
+
+function closeCert() {
+  document.getElementById('certBackdrop').classList.remove('open');
+  document.getElementById('certModal').classList.remove('open');
+}
+
+function downloadCert() {
+  const canvas = document.getElementById('certCanvas');
+  const key = _certCurrentKey || 'cert';
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href = url;
+    a.download = `マネぼう賞状_${key}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+  }, 'image/png');
+}
+
+async function openCertCollection() {
+  const grid = document.getElementById('certCollGrid');
+  grid.innerHTML = '';
+  const earned = Object.keys(earnedCerts);
+  if (earned.length === 0) {
+    grid.innerHTML = '<p style="color:rgba(255,255,255,0.45);font-size:13px;text-align:center;padding:20px 0;grid-column:1/-1;">まだ賞状を獲得していません</p>';
+  } else {
+    const playerName = (auth && auth.currentUser)
+      ? (auth.currentUser.displayName || auth.currentUser.email || 'プレイヤー')
+      : (playerNameStr || 'プレイヤー');
+    for (const key of earned) {
+      const m = CERT_MILESTONES[key];
+      if (!m) continue;
+      const thumbCanvas = document.createElement('canvas');
+      thumbCanvas.width  = 200;
+      thumbCanvas.height = 125;
+      await _renderCertCanvas(thumbCanvas, key, playerName, earnedCerts[key].assets, earnedCerts[key].date);
+      const item = document.createElement('div');
+      item.className = 'cert-coll-item';
+      item.appendChild(thumbCanvas);
+      thumbCanvas.style.cssText = 'width:100%;height:80px;object-fit:cover;display:block;border-radius:8px 8px 0 0;';
+      const lbl = document.createElement('div');
+      lbl.className = 'cert-coll-label';
+      lbl.textContent = m.title;
+      item.appendChild(lbl);
+      item.onclick = () => {
+        closeCertColl();
+        showCertModal(key, earnedCerts[key].assets, earnedCerts[key].date, playerName);
+      };
+      grid.appendChild(item);
+    }
+  }
+  document.getElementById('certCollBackdrop').classList.add('open');
+  document.getElementById('certCollModal').classList.add('open');
+}
+
+function closeCertColl() {
+  document.getElementById('certCollBackdrop').classList.remove('open');
+  document.getElementById('certCollModal').classList.remove('open');
+}
+// ════ 賞状システム END ════
+
 let cashBalance = 0;
 const cashHistLog = [];
 const txHistory   = [];
+let earnedCerts   = {};
 
 // DOM cache — populated after DOMContentLoaded
 const _el = {};
@@ -4821,7 +5202,19 @@ document.addEventListener('DOMContentLoaded', () => {
    'cartSummary','cartToggleBtn','selY','selE','navAuthBtn','navUserAvatar',
    'userMenu','userMenuName','userMenuEmail','userMenuGroup','leaveGroupBtn'
   ].forEach(id => { _el[id] = document.getElementById(id); });
+  // Light mode restore
+  if (localStorage.getItem('calcLightMode') === '1') {
+    document.documentElement.classList.add('light');
+    const btn = document.getElementById('darkToggle');
+    if (btn) btn.textContent = '🌙';
+  }
 });
+
+function toggleDark() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('darkToggle').textContent = isLight ? '🌙' : '☀️';
+  localStorage.setItem('calcLightMode', isLight ? '1' : '0');
+}
 
 function updateCashDisplay() {
   if (_el.cashDisplay) _el.cashDisplay.textContent = '¥ ' + fmt(cashBalance);
@@ -4989,12 +5382,28 @@ function resetCash() {
   updateCashDisplay();
 }
 
+function _calcFloor1000(raw) {
+  const v = parseFloat(raw.replace(/[,円]/g, '')) || 0;
+  return Math.floor(Math.abs(v) / 1000) * 1000 * (v < 0 ? -1 : 1);
+}
 function calcToCash() {
-  const raw = document.getElementById('calcDisp').textContent.replace(/[,円]/g, '');
-  const v = Math.round(parseFloat(raw) || 0);
+  const raw = document.getElementById('calcDisp').textContent;
+  const v = _calcFloor1000(raw);
   if (v !== 0) {
     addCash(v);
     showToast((v >= 0 ? '+' : '') + fmt(v) + '円を現金に加算しました');
+  } else {
+    showToast('⚠️ 1,000円未満は加算できません');
+  }
+}
+function calcFromCash() {
+  const raw = document.getElementById('calcDisp').textContent;
+  const v = Math.abs(_calcFloor1000(raw));
+  if (v !== 0) {
+    addCash(-v);
+    showToast('−' + fmt(v) + '円を現金から引きました');
+  } else {
+    showToast('⚠️ 1,000円未満は減算できません');
   }
 }
 
@@ -5683,7 +6092,9 @@ function renderTitles() {
     ? (_fbUser.photoURL || makeEmojiDataUrl(getEmojiAvatar(_fbUser.uid)))
     : makeEmojiDataUrl('👤');
   const yearLabel = row && row.年 > 0
-    ? (row.イベント > 0 ? `${row.年}年 E${row.イベント}` : `${row.年}年`)
+    ? (row.イベント > 0
+        ? `${row.年}年 ${(EVENT_NAMES[`${row.年}-${row.イベント}`] || {}).name || 'イベント' + row.イベント}`
+        : `${row.年}年`)
     : 'チュートリアル';
   const totalAssets = _calcTotalAssets ? _calcTotalAssets() : 0;
   const pct = visible.length > 0 ? Math.round(unlockedVisible / visible.length * 100) : 0;
@@ -5716,9 +6127,11 @@ function renderTitles() {
       const cls   = unlockedTitles.has(t.id) ? 'unlocked' : 'locked';
       const icon  = unlockedTitles.has(t.id) ? '🏆' : '🔒';
       const stars = '⭐'.repeat(t.stars);
+      const condLabel = unlockedTitles.has(t.id) ? '✅ 達成済み' : '🎯 達成条件';
       html += `<div class="title-item ${cls} s${t.stars}">
         <span class="title-stars">${stars}</span>
         <span class="title-name">${icon} ${censor(t.name)}</span>
+        <span class="title-cond-label">${condLabel}</span>
         <span class="title-desc">${censor(t.desc)}</span>
       </div>`;
     });
@@ -5892,6 +6305,7 @@ function loadGame() {
     cashBalance      = d.cashBalance ?? SALARY_DATA[0];
     cashHistLog.length = 0;
     (d.cashHistLog || []).forEach(e => cashHistLog.push(e));
+    if (d.earnedCerts) earnedCerts = { ...d.earnedCerts };
     updateCashDisplay();
     renderCashLog();
     return true;
@@ -5993,12 +6407,13 @@ function makeEmojiDataUrl(emoji) {
   const c = document.createElement('canvas');
   c.width = c.height = 64;
   const ctx = c.getContext('2d');
+  if (!ctx) return '';
   ctx.fillStyle = '#13132a';
   ctx.fillRect(0, 0, 64, 64);
   ctx.font = '36px serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(emoji, 32, 36);
+  ctx.fillText(emoji, 32, 33);
   return (_emojiCache[emoji] = c.toDataURL('image/png'));
 }
 
@@ -6017,6 +6432,11 @@ if (_auth) _auth.onAuthStateChanged(async user => {
     av.style.display = '';
     document.getElementById('userMenuName').textContent  = user.displayName || 'ユーザー';
     document.getElementById('userMenuEmail').textContent = user.email || '';
+    const umav = document.getElementById('userMenuAvatar');
+    if (umav) {
+      umav.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
+      umav.onerror = () => { umav.src = makeEmojiDataUrl(getEmojiAvatar(user.uid)); umav.onerror = null; };
+    }
     const btn = document.getElementById('cloudSaveSettingBtn');
     if (btn) { btn.textContent = '保存'; }
     const lr = document.getElementById('settingLogoutRow');
@@ -6123,6 +6543,7 @@ function _buildSavePayload() {
     portfolioHistory: portfolioHistory.slice(-220),
     cashBalance,
     cashHistLog: cashHistLog.slice(0, 50),
+    earnedCerts: { ...earnedCerts },
     savedAt: new Date()
   };
 }
@@ -6149,6 +6570,7 @@ async function cloudSaveNow(silent) {
       year,
       cashBalance,
       totalAssets,
+      gameBadgeCount: unlockedTitles.size,
       updatedAt:   new Date()
     }, { merge: true });
     if (_groupId) {
@@ -6208,6 +6630,7 @@ function _applyCloudData(d) {
   if (d.unlockedTitles) unlockedTitles = new Set(d.unlockedTitles);
   if (d.portfolioHistory) portfolioHistory = d.portfolioHistory;
   if (d.cashHistLog) { cashHistLog.length = 0; d.cashHistLog.forEach(e => cashHistLog.push(e)); }
+  if (d.earnedCerts) earnedCerts = { ...d.earnedCerts };
   const cloudMs = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
   try {
     const payload = _buildLocalSnapshot();
@@ -6240,7 +6663,8 @@ async function createGroup() {
   if (!_fbUser || !_db) return;
   const name = document.getElementById('groupNameInput').value.trim();
   if (!name) { showToast('グループ名を入力してください'); return; }
-  const code = Math.random().toString(36).substr(2, 6).toUpperCase();
+  const SAFE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const code = Array.from({length:6},()=>SAFE_CHARS[Math.floor(Math.random()*SAFE_CHARS.length)]).join('');
   try {
     await _db.collection('groups').doc(code).set({
       name, code,
@@ -6263,6 +6687,7 @@ async function joinGroup() {
   if (!_fbUser || !_db) return;
   const code = document.getElementById('groupCodeInput').value.trim().toUpperCase();
   if (code.length < 4) { showToast('コードを入力してください'); return; }
+  if (code.length !== 6) { showToast('コードは6文字で入力してください'); return; }
   try {
     const snap = await _db.collection('groups').doc(code).get();
     if (!snap.exists) { showToast('グループが見つかりません'); return; }
@@ -6443,6 +6868,27 @@ function closeEnding() {
     <button class="ending-btn-primary" onclick="closeEnding()">結果を確認する</button>
     <button class="ending-btn-secondary" onclick="closeEnding();showTab('titles',null)">バッジを見る</button>
   </div>
+</div>
+
+<!-- ════ 賞状モーダル ════ -->
+<div class="cert-backdrop" id="certBackdrop" onclick="closeCert()"></div>
+<div class="cert-modal" id="certModal">
+  <canvas class="cert-canvas" id="certCanvas" width="800" height="500"></canvas>
+  <div class="cert-actions">
+    <button class="cert-dl-btn" onclick="downloadCert()">💾 画像を保存</button>
+    <button class="cert-close-btn" onclick="closeCert()">✕ 閉じる</button>
+  </div>
+</div>
+
+<!-- ════ 賞状コレクションモーダル ════ -->
+<div class="cert-backdrop" id="certCollBackdrop" onclick="closeCertColl()"></div>
+<div class="cert-modal" id="certCollModal" style="max-height:85vh;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <span style="font-family:'Dela Gothic One',sans-serif;font-size:16px;color:var(--gold);">📜 賞状コレクション</span>
+    <button class="cert-close-btn" onclick="closeCertColl()" style="padding:6px 14px;">✕</button>
+  </div>
+  <div class="cert-coll-grid" id="certCollGrid"></div>
+  <p style="text-align:center;font-size:11px;color:rgba(255,255,255,0.35);margin-top:14px;">タップで賞状を再表示できます</p>
 </div>
 
 </body>

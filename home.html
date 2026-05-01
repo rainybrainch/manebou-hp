@@ -25,6 +25,9 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   position:fixed;top:0;left:0;right:0;z-index:200;
   background:rgba(26,26,46,0.97);backdrop-filter:blur(16px);
   border-bottom:3px solid var(--gold);
+}
+.nav-inner{
+  max-width:720px;margin:0 auto;
   padding:10px 20px;display:flex;align-items:center;gap:10px;
 }
 .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;}
@@ -155,14 +158,14 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   box-shadow:0 4px 20px rgba(91,200,232,0.07);
 }
 .app-card-todo:hover{box-shadow:0 8px 28px rgba(91,200,232,0.15);}
-.app-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.app-card-icon{font-size:30px;flex-shrink:0;line-height:1;}
+.app-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+.app-card-icon{font-size:30px;flex-shrink:0;line-height:1;margin-top:2px;}
 .app-card-label{flex:1;min-width:0;}
 .app-card-name{font-family:'Dela Gothic One',sans-serif;font-size:16px;color:var(--white);}
-.app-card-type{font-size:10px;color:rgba(255,255,255,0.38);margin-top:2px;letter-spacing:0.5px;}
+.app-card-type{font-size:11px;color:rgba(255,255,255,0.52);margin-top:3px;letter-spacing:0.3px;line-height:1.5;word-break:break-word;}
 .app-card-tag{
   flex-shrink:0;font-size:9px;font-weight:700;padding:3px 9px;
-  border-radius:20px;letter-spacing:1px;
+  border-radius:20px;letter-spacing:1px;margin-top:2px;
 }
 .tag-game{background:rgba(245,200,66,0.14);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
 .tag-todo{background:rgba(91,200,232,0.12);color:var(--sky);border:1px solid rgba(91,200,232,0.28);}
@@ -387,6 +390,63 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .hof-rank-badge{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:700;flex-shrink:0;}
 .hof-empty{color:rgba(255,255,255,0.3);font-size:12px;text-align:center;padding:20px;}
 
+/* ─── HOF enhancements ─── */
+.hof-sort-tabs{display:flex;gap:5px;margin-bottom:12px;}
+.hof-sort-tab{
+  flex:1;padding:7px 4px;background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);border-radius:10px;
+  color:rgba(255,255,255,0.4);font-size:11px;font-weight:700;
+  font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;
+  transition:background 0.2s,color 0.2s,border-color 0.2s;
+}
+.hof-sort-tab.active{background:rgba(245,200,66,0.15);color:var(--gold);border-color:rgba(245,200,66,0.4);}
+.hof-podium{display:flex;align-items:flex-end;gap:6px;margin-bottom:12px;}
+.hof-podium-item{
+  flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
+  border-radius:14px;padding:12px 6px 10px;border:2px solid;
+  text-align:center;overflow:hidden;
+}
+.hof-podium-item.rank1{
+  background:linear-gradient(160deg,rgba(245,200,66,0.14) 0%,rgba(26,26,46,0.4) 100%);
+  border-color:rgba(245,200,66,0.5);order:2;
+  box-shadow:0 6px 20px rgba(245,200,66,0.15);padding-top:18px;padding-bottom:14px;
+}
+.hof-podium-item.rank2{
+  background:linear-gradient(160deg,rgba(200,200,200,0.08) 0%,rgba(26,26,46,0.4) 100%);
+  border-color:rgba(200,200,200,0.28);order:1;
+}
+.hof-podium-item.rank3{
+  background:linear-gradient(160deg,rgba(205,127,50,0.08) 0%,rgba(26,26,46,0.4) 100%);
+  border-color:rgba(205,127,50,0.28);order:3;
+}
+.hof-podium-medal{font-size:18px;margin-bottom:5px;line-height:1;}
+.rank1 .hof-podium-medal{font-size:24px;}
+.hof-podium-av{width:40px;height:40px;border-radius:50%;object-fit:cover;margin-bottom:6px;border:2px solid rgba(255,255,255,0.2);}
+.rank1 .hof-podium-av{width:50px;height:50px;border-color:var(--gold);}
+.rank2 .hof-podium-av{border-color:#ccc;}
+.rank3 .hof-podium-av{border-color:#cd7f32;}
+.hof-podium-name{font-size:10px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;margin-bottom:3px;}
+.rank1 .hof-podium-name{font-size:11px;}
+.hof-podium-score{font-size:10px;color:var(--gold);font-weight:700;}
+.hof-podium-badges{font-size:9px;color:rgba(255,255,255,0.35);margin-top:2px;}
+.hof-podium-item.hof-me .hof-podium-name{color:var(--gold);}
+.hof-row-me{border-color:rgba(245,200,66,0.3)!important;background:rgba(245,200,66,0.05)!important;}
+.hof-self{
+  margin-top:8px;background:rgba(245,200,66,0.05);
+  border:1.5px solid rgba(245,200,66,0.2);border-radius:12px;padding:12px 14px;
+}
+.hof-self-pos{font-family:'Dela Gothic One',sans-serif;font-size:12px;color:var(--gold);margin-bottom:4px;}
+.hof-self-diff{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;}
+
+/* ─── Badge app label ─── */
+.badge-app-label{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;
+  padding:3px 10px;border-radius:20px;margin-bottom:12px;
+}
+.badge-app-label-game{background:rgba(245,200,66,0.12);color:var(--gold);border:1.5px solid rgba(245,200,66,0.3);}
+.badge-app-label-todo{background:rgba(91,200,232,0.1);color:var(--sky);border:1.5px solid rgba(91,200,232,0.28);}
+
 /* ─── Badge panel ─── */
 .badge-panel{background:rgba(245,200,66,0.04);border:2px solid rgba(245,200,66,0.18);border-radius:16px;padding:14px 16px;}
 .badge-summary{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
@@ -439,7 +499,77 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .btn-copy:hover{background:rgba(245,200,66,0.22);}
 
 @media(min-width:680px){
-  .top-nav,.wrap{max-width:720px;}
+  .wrap{max-width:720px;}
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — PC
+══════════════════════════════════════════ */
+
+@media(min-width:768px){
+  .nav-inner{max-width:920px;padding:10px 32px;}
+  .wrap{max-width:900px;padding:82px 32px 36px;}
+  .hero{padding:44px 52px 40px;}
+  .hero-title{font-size:clamp(26px,5vw,44px);}
+  .hero-sub{font-size:13px;}
+  .app-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .app-divider{display:none;}
+  .section-title{font-size:14px;}
+  .bg-overlay::after{width:700px;height:700px;}
+}
+
+@media(min-width:1024px){
+  .nav-inner{max-width:1140px;padding:12px 44px;}
+  .nav-logo-text{font-size:17px;}
+  .nav-to-app{font-size:13px;padding:7px 18px;}
+  .nav-login-btn{font-size:13px;padding:7px 18px;}
+  .wrap{
+    max-width:1100px;padding:90px 44px 44px;
+    display:grid;
+    grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);
+    column-gap:28px;
+    align-items:start;
+  }
+  #heroSection,#dashboard,#guestSection{grid-column:1;}
+  #hofSection{grid-column:2;}
+  .hero{padding:48px 52px 44px;}
+  .hero-char{width:106px;height:106px;}
+  .hero-title{font-size:clamp(30px,3.8vw,50px);}
+  .hero-sub{font-size:14px;line-height:2;}
+  .section-title{font-size:15px;letter-spacing:2.5px;}
+  .app-card{padding:18px 20px;}
+  .app-card-name{font-size:18px;}
+  .app-card-icon{font-size:32px;}
+  .app-card-type{font-size:12px;}
+  .hof-sort-tabs{gap:6px;}
+  .bg-overlay::after{width:900px;height:900px;}
+}
+
+@media(min-width:1280px){
+  .nav-inner{max-width:1280px;padding:13px 56px;}
+  .nav-logo-text{font-size:18px;}
+  .wrap{max-width:1240px;padding:92px 56px 52px;column-gap:36px;}
+  .hero{padding:56px 80px 52px;}
+  .hero-char{width:116px;height:116px;}
+  .hero-title{font-size:clamp(34px,3.2vw,58px);}
+  .hero-sub{font-size:15px;}
+  .my-name{font-size:19px;}
+  .app-card{padding:22px 24px;}
+  .app-card-name{font-size:19px;}
+  .app-card-icon{font-size:36px;}
+  .app-cards{gap:18px;}
+  .hof-podium-av{width:46px;height:46px;}
+  .rank1 .hof-podium-av{width:58px;height:58px;}
+  .hof-podium-name{font-size:11px;}
+  .rank1 .hof-podium-name{font-size:13px;}
+  .bg-overlay::after{width:1100px;height:1100px;}
+}
+
+@media(min-width:1440px){
+  .nav-inner{max-width:1440px;padding:14px 72px;}
+  .wrap{max-width:1400px;padding:94px 72px 60px;column-gap:44px;}
+  .hero{padding:64px 100px 60px;}
+  .hero-title{font-size:clamp(38px,3vw,64px);}
 }
 
 /* ─── Email Auth ─── */
@@ -613,19 +743,21 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 </div>
 
 <nav class="top-nav">
+  <div class="nav-inner">
   <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <img src="images/img5.webp" alt="おーる局長">
     <div><span class="nav-logo-text">マネぼうアプリ</span><span class="nav-logo-sub">ログイン</span></div>
   </div>
   <div class="nav-right">
-    <a class="nav-to-app nav-todo-btn" href="https://rainybrainch.github.io/manebou-todo/manebou-todo.html">📋 TODO</a>
+    <a class="nav-to-app nav-todo-btn" href="https://rainybrainch.github.io/manebou-pin/manebou-pin.html">📋 TODO</a>
     <a class="nav-to-app" id="navGoToApp" href="calc.html" style="display:none">💰 アプリへ</a>
     <button class="nav-login-btn" id="navLoginBtn" onclick="signIn()">☁️ ログイン</button>
-    <img class="nav-avatar" id="navAvatar" src="" alt="" onclick="toggleLogoutMenu()">
+    <img class="nav-avatar" id="navAvatar" src="" alt="プロフィール画像" onclick="toggleLogoutMenu(event)">
     <div class="logout-menu" id="logoutMenu" style="display:none">
       <div class="logout-name" id="logoutName"></div>
       <button class="logout-btn" onclick="signOut()">ログアウト</button>
     </div>
+  </div>
   </div>
 </nav>
 
@@ -674,7 +806,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
     <div class="section" style="animation-delay:0.05s">
       <div class="my-card" id="myCard">
         <button class="btn-edit-profile" onclick="openProfileModal()" title="プロフィール編集">✏️</button>
-        <img class="my-avatar" id="myAvatar" src="" alt="" onclick="openProfileModal()" style="cursor:pointer" title="プロフィール編集">
+        <img class="my-avatar" id="myAvatar" src="" alt="プロフィール画像" onclick="openProfileModal()" style="cursor:pointer" title="プロフィール編集">
         <div class="my-info">
           <div class="my-name" id="myName">--</div>
           <div class="my-edit-hint">タップしてプロフィール編集</div>
@@ -706,11 +838,11 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 
         <div class="app-divider">or</div>
 
-        <a href="https://rainybrainch.github.io/manebou-todo/manebou-todo.html" class="app-card app-card-todo">
+        <a href="https://rainybrainch.github.io/manebou-pin/manebou-pin.html" class="app-card app-card-todo" target="_blank" rel="noopener">
           <div class="app-card-head">
             <span class="app-card-icon">📋</span>
             <div class="app-card-label">
-              <div class="app-card-name">マネぼうTODO</div>
+              <div class="app-card-name">マネぼうPin</div>
               <div class="app-card-type">タスク管理・生産性向上アプリ</div>
             </div>
             <span class="app-card-tag tag-todo">タスク管理</span>
@@ -765,10 +897,13 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       </div>
     </div>
 
-    <!-- バッジ -->
+    <!-- バッジ (統合セクション) -->
     <div class="section" style="animation-delay:0.12s">
       <div class="section-title">🏅 獲得バッジ</div>
+
+      <!-- マネぼうアプリ バッジ -->
       <div class="badge-panel">
+        <div class="badge-app-label badge-app-label-game">💰 マネぼうアプリ</div>
         <div class="badge-summary">
           <span><span class="badge-count-num" id="badgeCountNum">─</span><span class="badge-count-sub">/ 40 バッジ獲得</span></span>
           <span style="font-size:10px;color:rgba(255,255,255,0.25)">詳細はアプリ内で</span>
@@ -777,17 +912,16 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
           <div class="loading-dots"><span></span><span></span><span></span></div>
         </div>
       </div>
-    </div>
 
-    <!-- TODOバッジ -->
-    <div class="section" id="todoBadgeSection" style="display:none;animation-delay:0.15s">
-      <div class="section-title">📋 TODOバッジ</div>
-      <div class="badge-panel-todo">
-        <div class="badge-summary-todo">
-          <span><span class="badge-count-num-todo" id="todoBadgeCountNum">─</span><span class="badge-count-sub-todo">/ 13 バッジ獲得</span></span>
-          <span style="font-size:10px;color:rgba(255,255,255,0.25)">詳細はTODOアプリ内で</span>
-        </div>
-        <div class="badge-grid" id="todoBadgeGrid">
+      <!-- マネぼうPin バッジ -->
+      <div id="todoBadgeSection" style="display:none;margin-top:12px">
+        <div class="badge-panel-todo">
+          <div class="badge-app-label badge-app-label-todo">📋 マネぼうPin</div>
+          <div class="badge-summary-todo">
+            <span><span class="badge-count-num-todo" id="todoBadgeCountNum">─</span><span class="badge-count-sub-todo">/ <span id="todoBadgeTotal">13</span> バッジ獲得</span></span>
+            <span style="font-size:10px;color:rgba(255,255,255,0.25)">詳細はTODOアプリ内で</span>
+          </div>
+          <div class="badge-grid" id="todoBadgeGrid"></div>
         </div>
       </div>
     </div>
@@ -825,6 +959,11 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   <!-- HALL OF FAME (全員に公開) -->
   <div class="section" id="hofSection" style="animation-delay:0.15s">
     <div class="section-title">🏆 殿堂入り記録</div>
+    <div class="hof-sort-tabs">
+      <button class="hof-sort-tab active" onclick="setHofSort('assets',this)">💰 総資産</button>
+      <button class="hof-sort-tab" onclick="setHofSort('badges',this)">🏅 バッジ数</button>
+      <button class="hof-sort-tab" onclick="setHofSort('year',this)">📅 ゲーム年代</button>
+    </div>
     <div class="hof-list" id="hofList">
       <div class="loading-dots"><span></span><span></span><span></span></div>
     </div>
@@ -853,6 +992,16 @@ try {
 let _user = null, _groupId = null, _role = null, _memberUnsub = null, _registering = false;
 
 function fmt(n) { return Math.round(n||0).toLocaleString('ja-JP'); }
+function fmtScore(n) {
+  if (n >= 1_000_000_000_000) return `${(n/1_000_000_000_000).toFixed(1)}兆`;
+  if (n >= 100_000_000_000)   return `${Math.round(n/1_000_000_000)}億`;
+  if (n >= 10_000_000_000)    return `${(n/1_000_000_000).toFixed(1)}億`;
+  if (n >= 1_000_000_000)     return `約${Math.round(n/100_000_000)}億`;
+  if (n >= 100_000_000)       return `約${(n/100_000_000).toFixed(1)}億`;
+  if (n >= 10_000_000)        return `約${Math.round(n/10_000_000)}千万`;
+  if (n >= 1_000_000)         return `約${Math.round(n/1_000_000)}百万`;
+  return `${Math.round(n||0).toLocaleString('ja-JP')}`;
+}
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ─── Auth ────────────────────────────────────────────────
@@ -1005,6 +1154,7 @@ function previewEditAvatar(input) {
   const file = input.files[0]; if (!file) return;
   _editAvatarFile = file;
   const reader = new FileReader();
+  reader.onerror = () => showToast('⚠️ 画像の読み込みに失敗しました');
   reader.onload = e => {
     const img = document.getElementById('editAvatarImg');
     img.src = e.target.result; img.style.display = 'block';
@@ -1055,7 +1205,8 @@ document.addEventListener('click', e => {
   if (m && m.classList.contains('open') && e.target === m) closeProfileModal();
 });
 
-function toggleLogoutMenu() {
+function toggleLogoutMenu(e) {
+  if (e) e.stopPropagation();
   const m = document.getElementById('logoutMenu');
   m.style.display = m.style.display === 'none' ? 'block' : 'none';
 }
@@ -1114,6 +1265,7 @@ function showDashboard(user) {
   loadProfile(user);
   loadBadges(user);
   loadTodoData(user);
+  loadHallOfFame();
 }
 
 // ─── Load my save data ────────────────────────────────────
@@ -1223,6 +1375,7 @@ async function joinGroup() {
   if (!_user || !_db) return;
   const code = document.getElementById('joinCodeInput').value.trim().toUpperCase();
   if (code.length < 4) { showToast('コードを入力してください'); return; }
+  if (code.length !== 6) { showToast('コードは6文字で入力してください'); return; }
   try {
     const snap = await _db.collection('groups').doc(code).get();
     if (!snap.exists) { showToast('グループが見つかりません'); return; }
@@ -1238,7 +1391,8 @@ async function createGroup() {
   if (!_user || !_db) return;
   const name = document.getElementById('createNameInput').value.trim();
   if (!name) { showToast('グループ名を入力してください'); return; }
-  const code = Math.random().toString(36).substr(2,6).toUpperCase();
+  const SAFE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const code = Array.from({length:6},()=>SAFE_CHARS[Math.floor(Math.random()*SAFE_CHARS.length)]).join('');
   try {
     await _db.collection('groups').doc(code).set({
       name, code, instructorId: _user.uid,
@@ -1257,6 +1411,7 @@ async function createGroup() {
 
 async function leaveGroup() {
   if (!_user || !_db) return;
+  if (!confirm('グループから退出しますか？')) return;
   try {
     await _db.collection('users').doc(_user.uid).update({ groupId: null, role: 'player' });
     if (_memberUnsub) { _memberUnsub(); _memberUnsub = null; }
@@ -1325,6 +1480,8 @@ async function loadTodoData(user) {
     const unlocked = new Set(s.unlockedAchievements || []);
     const earned = TODO_ACHIEVEMENTS_MINI.filter(a => unlocked.has(a.id));
     document.getElementById('todoBadgeCountNum').textContent = earned.length;
+    const totalEl = document.getElementById('todoBadgeTotal');
+    if (totalEl) totalEl.textContent = TODO_ACHIEVEMENTS_MINI.length;
     const grid = document.getElementById('todoBadgeGrid');
     if (earned.length === 0) {
       grid.innerHTML = '<div class="badge-empty-msg">まだバッジがありません<br>TODOアプリを使って獲得しよう！</div>';
@@ -1334,6 +1491,12 @@ async function loadTodoData(user) {
       ).join('');
     }
     document.getElementById('todoBadgeSection').style.display = '';
+    // Save TODO badge count to leaderboard for HOF display
+    if (_db) {
+      _db.collection('leaderboard').doc(user.uid).set(
+        { todoBadgeCount: earned.length }, { merge: true }
+      ).catch(() => {});
+    }
   } catch(e) {}
 }
 
@@ -1411,38 +1574,119 @@ function renderBadges(unlocked) {
 }
 
 // ─── Hall of Fame ─────────────────────────────────────────
-async function loadHallOfFame() {
-  if (!_db) {
-    document.getElementById('hofList').innerHTML = '<p class="hof-empty">データを読み込めませんでした</p>';
-    return;
-  }
+let _hofSort = 'assets';
+
+async function loadHallOfFame(sort) {
+  sort = sort || _hofSort;
+  const el = document.getElementById('hofList');
+  el.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+  if (!_db) { el.innerHTML = '<p class="hof-empty">データを読み込めませんでした</p>'; return; }
   try {
-    const snap = await _db.collection('leaderboard')
-      .orderBy('totalAssets', 'desc').limit(20).get();
-    if (snap.empty) {
-      document.getElementById('hofList').innerHTML = '<p class="hof-empty">まだ記録がありません<br>ゲームをプレイして記録を残そう！</p>';
+    let snap;
+    if (sort === 'year') {
+      snap = await _db.collection('leaderboard').orderBy('year', 'desc').limit(20).get();
+    } else if (sort === 'badges') {
+      snap = await _db.collection('leaderboard').orderBy('totalAssets', 'desc').limit(60).get();
+    } else {
+      snap = await _db.collection('leaderboard').orderBy('totalAssets', 'desc').limit(20).get();
+    }
+    let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    if (sort === 'badges') {
+      docs.sort((a, b) => {
+        const ba = (a.gameBadgeCount||0) + (a.todoBadgeCount||0);
+        const bb = (b.gameBadgeCount||0) + (b.todoBadgeCount||0);
+        return bb - ba;
+      });
+      docs = docs.slice(0, 20);
+    }
+    if (!docs.length) {
+      el.innerHTML = '<p class="hof-empty">まだ記録がありません<br>ゲームをプレイして記録を残そう！</p>';
       return;
     }
-    const rankIcons = ['🥇','🥈','🥉'];
-    const rankCls   = ['g','s','b'];
-    document.getElementById('hofList').innerHTML = snap.docs.map((d, i) => {
-      const m = d.data();
-      const rank = i < 3 ? `<span class="hof-rank ${rankCls[i]}">${rankIcons[i]}</span>` : `<span class="hof-rank">${i+1}</span>`;
+    const medals = ['🥇','🥈','🥉'];
+    const rankCls = ['rank1','rank2','rank3'];
+    const top3 = docs.slice(0, 3);
+    const rest = docs.slice(3);
+    let html = '';
+
+    // Podium (top3) — CSS order property: rank2=left, rank1=center, rank3=right
+    html += '<div class="hof-podium">';
+    top3.forEach((m, i) => {
+      const isMe = _user && m.id === _user.uid;
+      const score = sort === 'badges'
+        ? `${(m.gameBadgeCount||0)+(m.todoBadgeCount||0)}個`
+        : sort === 'year'
+        ? `${m.year||'---'}年代`
+        : fmtScore(m.totalAssets||0);
+      const gc = m.gameBadgeCount != null ? m.gameBadgeCount : '?';
+      const tc = m.todoBadgeCount != null ? m.todoBadgeCount : '?';
+      html += `<div class="hof-podium-item ${rankCls[i]}${isMe?' hof-me':''}">
+        <div class="hof-podium-medal">${medals[i]}</div>
+        ${avatarImgSrc(m.id, m.photoURL, 'hof-podium-av')}
+        <div class="hof-podium-name">${esc(m.name||'プレイヤー')}</div>
+        <div class="hof-podium-score">${score}</div>
+        <div class="hof-podium-badges">🏅 ${gc}+${tc}</div>
+      </div>`;
+    });
+    html += '</div>';
+
+    // Rows (4th+)
+    rest.forEach((m, i) => {
       const assetRank = getAssetRank(m.totalAssets||0);
-      return `<div class="hof-row">
-        ${rank}
-        ${avatarImgSrc(d.id, m.photoURL, 'hof-avatar')}
+      const scoreStr = fmtScore(m.totalAssets||0);
+      const gc = m.gameBadgeCount != null ? m.gameBadgeCount : '?';
+      const tc = m.todoBadgeCount != null ? m.todoBadgeCount : '?';
+      const isMe = _user && m.id === _user.uid;
+      html += `<div class="hof-row${isMe?' hof-row-me':''}">
+        <span class="hof-rank">${i+4}</span>
+        ${avatarImgSrc(m.id, m.photoURL, 'hof-avatar')}
         <div class="hof-info">
-          <div class="hof-name">${esc(m.name||'プレイヤー')}</div>
-          <div class="hof-assets">💰 ${fmt(m.totalAssets)}円</div>
-          <div class="hof-meta">📅 ${esc(m.year||'---')}年 到達</div>
+          <div class="hof-name">${isMe?'<span style="color:var(--gold)">★ </span>':''}${esc(m.name||'プレイヤー')}</div>
+          <div class="hof-assets">💰 スコア ${scoreStr}</div>
+          <div class="hof-meta">🏅 アプリ ${gc}個 · TODO ${tc}個</div>
         </div>
         <span class="hof-rank-badge" style="${assetRank.style}">${assetRank.label}</span>
       </div>`;
-    }).join('');
+    });
+
+    // Self-diff (assets sort only, requires logged-in user)
+    if (_user && sort === 'assets') {
+      const myIdx = docs.findIndex(d => d.id === _user.uid);
+      if (myIdx > 0) {
+        const diff = (docs[myIdx-1].totalAssets||0) - (docs[myIdx].totalAssets||0);
+        if (diff > 0) {
+          html += `<div class="hof-self">
+            <div class="hof-self-pos">あなたは ${myIdx+1}位</div>
+            <div class="hof-self-diff">あと ${fmtScore(diff)} で ${myIdx}位 ${esc(docs[myIdx-1].name||'プレイヤー')} に追いつけます</div>
+          </div>`;
+        }
+      } else if (myIdx < 0) {
+        try {
+          const myLb = await _db.collection('leaderboard').doc(_user.uid).get();
+          if (myLb.exists) {
+            const myAssets = myLb.data().totalAssets || 0;
+            const diff = (docs[docs.length-1].totalAssets||0) - myAssets;
+            const msg = diff > 0 ? `あと ${fmtScore(diff)} でトップ${docs.length}に入れます` : 'まもなくランキング圏内！';
+            html += `<div class="hof-self">
+              <div class="hof-self-pos">ランキング圏外</div>
+              <div class="hof-self-diff">${msg}</div>
+            </div>`;
+          }
+        } catch(e2) {}
+      }
+    }
+
+    el.innerHTML = html;
   } catch(e) {
-    document.getElementById('hofList').innerHTML = '<p class="hof-empty">記録の読み込みに失敗しました</p>';
+    el.innerHTML = '<p class="hof-empty">記録の読み込みに失敗しました</p>';
   }
+}
+
+function setHofSort(sort, btn) {
+  _hofSort = sort;
+  document.querySelectorAll('.hof-sort-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadHallOfFame(sort);
 }
 
 function getAssetRank(assets) {
@@ -1490,6 +1734,7 @@ function previewAvatar(input) {
   const file = input.files[0]; if (!file) return;
   _selectedAvatarFile = file;
   const reader = new FileReader();
+  reader.onerror = () => showToast('⚠️ 画像の読み込みに失敗しました');
   reader.onload = e => {
     const img = document.getElementById('avatarPreview');
     img.src = e.target.result; img.style.display = 'block';
@@ -1502,6 +1747,7 @@ function previewNickAvatar(input) {
   const file = input.files[0]; if (!file) return;
   _selectedNickAvatarFile = file;
   const reader = new FileReader();
+  reader.onerror = () => showToast('⚠️ 画像の読み込みに失敗しました');
   reader.onload = e => {
     const img = document.getElementById('nickAvatarPreview');
     img.src = e.target.result; img.style.display = 'block';
@@ -1560,7 +1806,7 @@ function makeEmojiDataUrl(emoji) {
   ctx.font = '36px serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(emoji, 32, 36);
+  ctx.fillText(emoji, 32, 33);
   return (_emojiCache[emoji] = c.toDataURL('image/png'));
 }
 
@@ -1600,6 +1846,14 @@ function renderBgScroll(players) {
     rows.appendChild(row);
   }
 }
+
+// ─── Escape key ───────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('groupModal')?.classList.contains('open')) closeGroupModal();
+  if (document.getElementById('profileModal')?.classList.contains('open')) closeProfileModal();
+  if (document.getElementById('nicknameModal')?.classList.contains('open')) document.getElementById('nicknameModal').classList.remove('open');
+});
 
 // ─── Init ─────────────────────────────────────────────────
 loadHallOfFame();
