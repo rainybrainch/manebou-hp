@@ -68,6 +68,7 @@ body {
 .step-enter { animation: stepFadeIn  0.22s ease forwards; }
 
 /* ─── Nav ────────────────────────────────────────────────── */
+@keyframes navBorderShift { 0%,100%{border-bottom-color:var(--gold)} 50%{border-bottom-color:#ffee8a} }
 .top-nav {
   position: fixed;
   top: 0;
@@ -84,6 +85,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
+  animation: navBorderShift 4s ease-in-out infinite;
 }
 
 .nav-back {
@@ -309,6 +311,8 @@ body {
 
 #dispTotal { color: var(--sky); }
 #dispDiv   { color: var(--green); }
+@keyframes numPop { 0%{transform:scale(0.88);opacity:0.5} 65%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+.value-block-num.popping { animation: numPop 0.35s cubic-bezier(0.34,1.56,0.64,1); }
 
 /* ─── Step Selector ──────────────────────────────────────── */
 .step-section {
@@ -348,17 +352,20 @@ body {
   transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s;
   background: transparent;
   -webkit-tap-highlight-color: transparent;
+  position: relative; overflow: hidden;
 }
+.step-btn::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 50%, rgba(255,255,255,0.35) 0%, transparent 70%); opacity:0; transform:scale(0.3); transition:opacity 0.4s ease, transform 0.4s ease; pointer-events:none; }
+.step-btn:active::after { opacity:1; transform:scale(1); transition:none; }
 
 .step-btn.plus              { color: var(--gold); border-color: rgba(245,200,66,0.3); box-shadow: 0 3px 0 rgba(212,160,23,0.35); }
 .step-btn.plus:hover        { background: rgba(245,200,66,0.1); transform: translateY(-2px); box-shadow: 0 5px 0 rgba(212,160,23,0.4); }
 .step-btn.plus:active       { transform: translateY(3px); box-shadow: 0 0 0 rgba(212,160,23,0.3); }
-.step-btn.plus.active       { background: var(--gold); color: var(--dark); border-color: var(--gold); transform: translateY(4px); box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 4px rgba(0,0,0,0.18); }
+.step-btn.plus.active       { background: var(--gold); color: var(--dark); border-color: var(--gold); transform: translateY(4px); box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 4px rgba(0,0,0,0.18), 0 0 16px rgba(245,200,66,0.3); }
 
 .step-btn.minus             { color: #ff9999; border-color: rgba(232,53,74,0.3); box-shadow: 0 3px 0 rgba(140,0,0,0.4); }
 .step-btn.minus:hover       { background: rgba(232,53,74,0.1); transform: translateY(-2px); box-shadow: 0 5px 0 rgba(140,0,0,0.45); }
 .step-btn.minus:active      { transform: translateY(3px); box-shadow: 0 0 0 rgba(140,0,0,0.4); }
-.step-btn.minus.active      { background: var(--red); color: #fff; border-color: var(--red); transform: translateY(4px); box-shadow: 0 0 0 #900, inset 0 2px 4px rgba(0,0,0,0.22); }
+.step-btn.minus.active      { background: var(--red); color: #fff; border-color: var(--red); transform: translateY(4px); box-shadow: 0 0 0 #900, inset 0 2px 4px rgba(0,0,0,0.22), 0 0 16px rgba(232,53,74,0.3); }
 
 /* ─── Asset Buttons ──────────────────────────────────────── */
 .asset-grid {
@@ -384,7 +391,7 @@ body {
   display: flex;
   flex-direction: column;
 }
-.asset-btn:hover          { transform: translateY(-3px); box-shadow: 0 9px 0 var(--as, rgba(0,0,0,0.35)); }
+.asset-btn:hover          { transform: translateY(-3px) scale(1.015); box-shadow: 0 9px 0 var(--as, rgba(0,0,0,0.35)); }
 .asset-btn:active         { transform: translateY(5px);  box-shadow: 0 1px 0 var(--as, rgba(0,0,0,0.45)); }
 .asset-btn:disabled       { opacity: 0.42; cursor: not-allowed; filter: grayscale(0.5); box-shadow: none; }
 .asset-btn:disabled:hover { transform: none; box-shadow: none; }
@@ -431,6 +438,7 @@ body {
   line-height: 1;
   flex-shrink: 0;
 }
+.a-qty-owned { color: var(--green) !important; }
 .a-price-lbl {
   font-family: 'Dela Gothic One', sans-serif;
   font-size: clamp(14px, 3.5vw, 18px);
@@ -465,7 +473,10 @@ body {
   opacity: 0.42;
   filter: grayscale(0.5);
   cursor: not-allowed;
+  position: relative;
 }
+.btn-bond-locked::after { content:'🔒 条件未達成'; position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:rgba(26,26,46,0.97); color:rgba(255,255,255,0.75); font-size:10px; font-weight:700; padding:5px 12px; border-radius:8px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity 0.2s; border:1px solid rgba(255,255,255,0.12); z-index:10; }
+.btn-bond-locked:hover::after { opacity:1; }
 
 /* Keep .a-price for any legacy usage */
 .a-price {
@@ -487,6 +498,7 @@ body {
   letter-spacing: 0.2px;
   white-space: nowrap;
 }
+.a-yield { font-size:9px; color:rgba(76,175,125,0.8); font-weight:700; letter-spacing:0.5px; display:block; margin-top:1px; }
 
 /* Ticker bar */
 @keyframes ticker-slide {
@@ -596,6 +608,7 @@ body {
   cursor: pointer;
   line-height: 1;
 }
+.cart-toggle-count { display:inline-block; background:var(--gold); color:var(--dark); border-radius:20px; padding:0 5px; font-size:10px; font-weight:700; margin-left:4px; min-width:16px; text-align:center; }
 .cart-summary {
   font-size: 12px;
   font-weight: 700;
@@ -845,6 +858,8 @@ body {
   gap: 10px;
   border-bottom: 2px solid;
 }
+.tm-head-buy  { background: linear-gradient(90deg, rgba(245,200,66,0.18) 0%, transparent 100%); }
+.tm-head-sell { background: linear-gradient(90deg, rgba(91,200,232,0.18) 0%, transparent 100%); }
 .tm-emoji { font-size: 22px; }
 .tm-name  { font-family:'Dela Gothic One',sans-serif; font-size:16px; }
 .tm-body  { padding: 14px 18px; display:flex; flex-direction:column; gap:9px; }
@@ -932,6 +947,8 @@ body {
   white-space: nowrap;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast-ok  { background:rgba(76,175,125,0.97)!important; border-color:#2d8a58!important; }
+.toast-bad { background:rgba(232,53,74,0.97)!important;  border-color:#a0001f!important; }
 
 /* ─── Purchase Popup ─────────────────────────────────────── */
 #purchasePopup {
@@ -1078,6 +1095,7 @@ body {
 .compare-tbl .pos { color: #27ae60; }
 .compare-tbl .neg { color: #c0392b; }
 .compare-tbl tr:last-child td { border-bottom: none; }
+.compare-tbl tbody tr:nth-child(even) td { background: rgba(0,0,0,0.035); }
 
 
 
@@ -1132,7 +1150,9 @@ body {
   animation: titleShimmer 4s ease-in-out infinite;
   pointer-events: none;
 }
-.title-item.locked   { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); opacity: 0.65; }
+.title-item.locked   { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1); opacity: 0.65; cursor: default; }
+.title-item.locked:hover { transform: none; }
+.title-item.unlocked:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(245,200,66,0.25); }
 .title-item.s1 { border-top-color: var(--green) !important; }
 .title-item.s2 { border-top-color: var(--sky)   !important; }
 .title-item.s3 { border-top-color: var(--gold)  !important; }
@@ -1216,6 +1236,8 @@ body {
   min-height: 44px;
   border-left: 3px solid var(--sky);
 }
+@keyframes simResultPop { 0%{transform:scale(0.9);opacity:0} 60%{transform:scale(1.04)} 100%{transform:scale(1);opacity:1} }
+.sim-result-popping { animation: simResultPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
 
 /* ─── Sim qty presets ──────────────────────────────────── */
 .sim-qty-presets {
@@ -2456,24 +2478,52 @@ html.light .member-year { color: rgba(26,26,46,0.42); }
 html.light .instructor-panel { background: rgba(91,200,232,0.05); }
 html.light .nav-auth-btn { color: var(--gold-dark); border-color: rgba(212,160,23,0.5); }
 html.light .nav-auth-btn:hover { background: rgba(212,160,23,0.1); }
+/* ライトモード追加カバー */
+html.light .cart-items { color: rgba(26,26,46,0.8); }
+html.light .cart-toggle-btn { color: rgba(26,26,46,0.55); border-color: rgba(26,26,46,0.2); }
+html.light .lo-msg { color: rgba(26,26,46,0.55); }
+html.light .calc-subtabs { background: rgba(26,26,46,0.07); }
+html.light .cst-btn { color: rgba(26,26,46,0.5); }
+html.light .cst-btn.active { background: rgba(26,26,46,0.1); color: #1a1a2e; }
+html.light .wh-label-input { background: rgba(26,26,46,0.05); color: rgba(26,26,46,0.8); border-color: rgba(26,26,46,0.15); }
+html.light .wh-input-row input { background: rgba(26,26,46,0.05); color: #1a1a2e; border-color: rgba(26,26,46,0.15); }
+html.light .ad-text { color: rgba(26,26,46,0.72); }
+html.light .acv2-desc { color: rgba(26,26,46,0.6); }
+html.light .speech-bubble { background: rgba(26,26,46,0.05); border-color: rgba(26,26,46,0.12); color: rgba(26,26,46,0.75); }
+html.light .graph-card { background: rgba(26,26,46,0.04); border-color: rgba(26,26,46,0.1); }
+html.light .graph-card-title { color: rgba(26,26,46,0.55); }
+html.light .graph-card-head { border-color: rgba(26,26,46,0.08); }
+html.light .graph-card-select { background: #fff; color: #1a1a2e; border-color: rgba(26,26,46,0.2); }
+html.light .graph-card-select option { background: #fff; color: #1a1a2e; }
+html.light .graph-stat-strip { border-color: rgba(26,26,46,0.08); }
+html.light .gss-item { border-color: rgba(26,26,46,0.1); }
+html.light .gss-label { color: rgba(26,26,46,0.35); }
+html.light .gss-val { color: #1a1a2e; }
+html.light .rules-tip { color: rgba(26,26,46,0.65); background: rgba(91,200,232,0.08); border-color: rgba(91,200,232,0.3); }
+html.light .title-item.unlocked .title-stars { color: rgba(26,26,46,0.65) !important; }
+html.light .sim-fields select,
+html.light .sim-fields input { background: #fff; color: #1a1a2e; border-color: rgba(26,26,46,0.2); }
+html.light .graph-header select { background: #fff; color: #1a1a2e; border-color: rgba(26,26,46,0.2); }
+html.light .graph-header select option { background: #fff; color: #1a1a2e; }
 
 /* ===== 賞状モーダル ===== */
-.cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.35s;backdrop-filter:blur(4px);}
 .cert-backdrop.open{opacity:1;pointer-events:all;}
-.cert-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.88);z-index:2001;background:#0a0a1e;border:3px solid var(--gold);border-radius:20px;padding:16px;width:min(90vw,760px);pointer-events:none;opacity:0;transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1),opacity 0.25s;box-shadow:0 20px 60px rgba(0,0,0,0.8);}
+.cert-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-54%) scale(0.9);z-index:2001;background:#06060f;border:2px solid rgba(245,200,66,0.6);border-radius:18px;padding:18px 18px 14px;width:min(92vw,820px);pointer-events:none;opacity:0;transition:transform 0.35s cubic-bezier(0.22,1.2,0.5,1),opacity 0.28s;box-shadow:0 0 0 1px rgba(245,200,66,0.15),0 24px 80px rgba(0,0,0,0.9),0 0 40px rgba(245,200,66,0.08);}
 .cert-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
-.cert-canvas{width:100%;height:auto;border-radius:10px;display:block;}
+.cert-canvas{width:100%;height:auto;border-radius:10px;display:block;box-shadow:0 4px 24px rgba(0,0,0,0.6);}
 .cert-actions{display:flex;gap:10px;margin-top:14px;justify-content:center;}
-.cert-dl-btn{flex:1;max-width:200px;padding:12px 20px;background:var(--gold);color:var(--dark);border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.15s;}
-.cert-dl-btn:hover{opacity:0.85;}
-.cert-close-btn{padding:12px 20px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;}
-.cert-close-btn:hover{background:rgba(255,255,255,0.14);color:#fff;}
+.cert-dl-btn{flex:1;max-width:220px;padding:13px 20px;background:linear-gradient(135deg,#f5c842,#d4a017);color:#1a0a00;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.15s,transform 0.1s;box-shadow:0 4px 16px rgba(245,200,66,0.3);}
+.cert-dl-btn:hover{opacity:0.9;transform:translateY(-1px);}
+.cert-dl-btn:active{transform:translateY(0);}
+.cert-close-btn{padding:13px 22px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.cert-close-btn:hover{background:rgba(255,255,255,0.11);color:#fff;}
 /* 賞状コレクション一覧 */
-.cert-coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:4px 0;}
-.cert-coll-item{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.18s;}
-.cert-coll-item:hover{border-color:rgba(245,200,66,0.4);transform:translateY(-2px);}
-.cert-coll-thumb{width:100%;height:80px;object-fit:cover;display:block;}
-.cert-coll-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.7);padding:6px 8px;text-align:center;}
+.cert-coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;padding:4px 0;}
+.cert-coll-item{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s;}
+.cert-coll-item:hover{border-color:rgba(245,200,66,0.5);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.4);}
+.cert-coll-thumb{width:100%;height:84px;object-fit:cover;display:block;}
+.cert-coll-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.65);padding:7px 8px;text-align:center;}
 
 </style>
 </head>
@@ -3137,6 +3187,14 @@ html.light .nav-auth-btn:hover { background: rgba(212,160,23,0.1); }
       </div>
     </div>
     <div class="titles-summary" id="titlesSummary"></div>
+    <button onclick="openCertCollection()" style="display:flex;align-items:center;gap:10px;width:100%;background:rgba(245,200,66,0.08);border:1.5px solid rgba(245,200,66,0.35);border-radius:14px;padding:14px 18px;color:var(--gold);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:16px;transition:background 0.15s;">
+      <span style="font-size:22px;">📜</span>
+      <div style="text-align:left;">
+        <div>賞状コレクション</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:400;margin-top:2px;">獲得した賞状を確認・ダウンロード</div>
+      </div>
+      <span style="margin-left:auto;opacity:0.5;">›</span>
+    </button>
     <div id="titlesGrid" class="titles-grid"></div>
   </div><!-- /tab-titles -->
 
@@ -4362,7 +4420,7 @@ function showTradeModal(id) {
   const nameEl = document.getElementById('tmName');
   if (nameEl) { nameEl.textContent = displayLabel; nameEl.style.color = a.color; }
   const head = document.getElementById('tmHead');
-  if (head) { head.style.borderBottomColor = a.color; head.style.background = a.color + '18'; }
+  if (head) { head.style.borderBottomColor = a.color; head.style.background = a.color + '18'; head.classList.toggle('tm-head-buy', isBuy); head.classList.toggle('tm-head-sell', !isBuy); }
   _set('tmAction', isBuy ? '🟢 購入' : (isRealEstateSell ? '⏳ 売り注文' : '🔴 売却'));
   _set('tmQty', qty + '個');
   _set('tmUnitPrice', fmt(price) + '円/個');
@@ -4469,6 +4527,18 @@ function updateCartBar() {
   const items = Object.entries(pendingCart);
   if (items.length === 0) { bar.style.display = 'none'; return; }
   bar.style.display = 'flex';
+
+  // カートアイテム数バッジ更新
+  const toggleBtn = document.getElementById('cartToggleBtn');
+  if (toggleBtn) {
+    const count = items.length;
+    const existingBadge = toggleBtn.querySelector('.cart-toggle-count');
+    if (existingBadge) existingBadge.remove();
+    const badge = document.createElement('span');
+    badge.className = 'cart-toggle-count';
+    badge.textContent = count;
+    toggleBtn.appendChild(badge);
+  }
 
   // 新アイテム追加時は自動展開
   if (!_cartBodyOpen) {
@@ -4804,6 +4874,10 @@ function updateDisplay() {
   });
   document.getElementById('dispTotal').textContent = fmt(total);
   document.getElementById('dispDiv').textContent   = fmt(divT);
+  ['dispTotal','dispDiv'].forEach(id => {
+    const el = document.getElementById(id)?.closest('.value-block-num');
+    if (el) { el.classList.remove('popping'); requestAnimationFrame(() => el.classList.add('popping')); }
+  });
   const divYrEl = document.getElementById('dispDivYear');
   if (divYrEl) divYrEl.textContent = divT > 0 ? '年間 ' + fmt(divT * 4) + '円' : '年間 ─';
 
@@ -4842,7 +4916,7 @@ function updateDisplay() {
     const divPerUnit = divRaw !== 0 ? calcDiv(divRaw, 1) : 0;
     const divYield = (divRaw !== 0 && price > 0) ? ((divPerUnit * 4) / price * 100).toFixed(1) : null;
     const divLine = divRaw !== 0
-      ? `<span class="a-div">💰 +${fmt(divPerUnit)}円${divYield ? ' · ' + divYield + '%' : ''}</span>`
+      ? `<span class="a-div">💰 +${fmt(divPerUnit)}円${divYield ? ' · ' + divYield + '%' : ''}</span>${divYield ? `<span class="a-yield">年利 ${divYield}%</span>` : ''}`
       : '';
     const spark = ok ? makeSparkline(a.id, a.color) : '';
     const cartBadge = cartEntry
@@ -4854,7 +4928,7 @@ function updateDisplay() {
     btn.classList.toggle('asset-btn-cart-buy',  !!(cartEntry && cartEntry.dir > 0));
     btn.classList.toggle('asset-btn-cart-sell', !!(cartEntry && cartEntry.dir < 0));
     const holdBadge = ownedQty > 0
-      ? `<div class="a-hold-wrap"><span class="a-hold-lbl">保有</span><span class="a-qty-num" style="color:var(--green)">${ownedQty}個</span></div>`
+      ? `<div class="a-hold-wrap"><span class="a-hold-lbl">保有</span><span class="a-qty-num a-qty-owned" style="color:var(--green)">${ownedQty}個</span></div>`
       : `<span class="a-qty-num" style="color:rgba(0,0,0,0.18)">─</span>`;
     btn.innerHTML = `<div class="a-card-top">
       <span class="a-name-lbl">${a.emoji} ${displayLabel}</span>
@@ -4905,8 +4979,11 @@ function doSim() {
   const divAmt  = calcDiv(divRaw3, qty);
   const perUnitRate = divRaw3 > 0 ? divRaw3 : (divRaw3 < 0 ? 1000 / (-divRaw3) : 0);
   const yPct    = (price > 0 && divRaw3 !== 0) ? ((perUnitRate * 4 / price) * 100).toFixed(2) : '—';
-  document.getElementById('simResult').textContent =
+  const simEl = document.getElementById('simResult');
+  simEl.textContent =
     `購入コスト  : ${fmt(cost)} 円\n配当(1ターン): ${fmt(divAmt)} 円\n配当(年間)  : ${fmt(divAmt * 4)} 円\n利回り目安  : ${yPct} %`;
+  simEl.classList.remove('sim-result-popping');
+  requestAnimationFrame(() => simEl.classList.add('sim-result-popping'));
 
   const btn    = document.getElementById('simBuyBtn');
   const status = document.getElementById('simCashStatus');
@@ -4968,19 +5045,32 @@ function calcToSim() {
 
 // ════ 賞状システム ════
 const CERT_MILESTONES = {
-  tutorial: { bgIdx:1,  title:'チュートリアル完了',   sub:'投資の第一歩を踏み出した' },
-  '1974':   { bgIdx:2,  title:'1974年の壁を突破',      sub:'石油ショック時代を乗り越えた' },
-  '1979':   { bgIdx:3,  title:'1979年の壁を突破',      sub:'第二次石油危機を生き抜いた' },
-  '1984':   { bgIdx:4,  title:'1984年の壁を突破',      sub:'バブル前夜の波に乗った' },
-  '1989':   { bgIdx:5,  title:'1989年の壁を突破',      sub:'バブル絶頂期を制した' },
-  '1994':   { bgIdx:6,  title:'1994年の壁を突破',      sub:'バブル崩壊後を生き残った' },
-  '1999':   { bgIdx:7,  title:'1999年の壁を突破',      sub:'ITバブルの波を乗りこなした' },
-  '2004':   { bgIdx:8,  title:'2004年の壁を突破',      sub:'ITバブル崩壊から立ち直った' },
-  '2009':   { bgIdx:9,  title:'2009年の壁を突破',      sub:'リーマンショックを乗り越えた' },
-  '2014':   { bgIdx:10, title:'2014年の壁を突破',      sub:'アベノミクス時代に挑んだ' },
-  '2019':   { bgIdx:11, title:'2019年の壁を突破',      sub:'コロナ前夜を経験した' },
-  '2024':   { bgIdx:12, title:'2024年の壁を突破',      sub:'令和の投資家になった' },
-  '2025':   { bgIdx:13, title:'全課程修了',             sub:'マネぼう塾を完全制覇した' },
+  tutorial: { bgIdx:1,  title:'チュートリアル完了',  sub:'投資の第一歩を踏み出した',
+    period:'ゲーム開始', era:'現金管理とリスクの本質を体験。\n投資の基礎をここで学んだ。' },
+  '1974':   { bgIdx:2,  title:'1974年の壁を突破',    sub:'石油ショック時代を乗り越えた',
+    period:'1970〜1974年', era:'石油ショックが世界を揺るがした激動期。\nエネルギー危機と高インフレに翻弄された。' },
+  '1979':   { bgIdx:3,  title:'1979年の壁を突破',    sub:'第二次石油危機を生き抜いた',
+    period:'1975〜1979年', era:'第二次石油危機でスタグフレーションが深刻化。\n適応力と忍耐が問われた5年間。' },
+  '1984':   { bgIdx:4,  title:'1984年の壁を突破',    sub:'バブル前夜の波に乗った',
+    period:'1980〜1984年', era:'日本経済が復活し株価・地価が上昇へ。\nバブル前夜の恩恵を受けた黄金期。' },
+  '1989':   { bgIdx:5,  title:'1989年の壁を突破',    sub:'バブル絶頂期を制した',
+    period:'1985〜1989年', era:'バブル経済の絶頂。資産価格が歴史的高値。\nプラザ合意後の円高・株高が同時進行。' },
+  '1994':   { bgIdx:6,  title:'1994年の壁を突破',    sub:'バブル崩壊後を生き残った',
+    period:'1990〜1994年', era:'バブル崩壊と「失われた10年」の始まり。\n忍耐と分散投資が生存の鍵となった。' },
+  '1999':   { bgIdx:7,  title:'1999年の壁を突破',    sub:'ITバブルの波を乗りこなした',
+    period:'1995〜1999年', era:'ITバブルの熱狂とゼロ金利政策の時代。\nテクノロジー株が急騰した。' },
+  '2004':   { bgIdx:8,  title:'2004年の壁を突破',    sub:'ITバブル崩壊から立ち直った',
+    period:'2000〜2004年', era:'ITバブル崩壊と911テロの衝撃の時代。\n堅実な投資姿勢が光った。' },
+  '2009':   { bgIdx:9,  title:'2009年の壁を突破',    sub:'リーマンショックを乗り越えた',
+    period:'2005〜2009年', era:'リーマンショックで世界金融危機が勃発。\n史上最大級の暴落を生き延びた。' },
+  '2014':   { bgIdx:10, title:'2014年の壁を突破',    sub:'アベノミクス時代に挑んだ',
+    period:'2010〜2014年', era:'アベノミクスと量的緩和で株価が急回復。\n円安・株高の追い風に乗った。' },
+  '2019':   { bgIdx:11, title:'2019年の壁を突破',    sub:'コロナ前夜を経験した',
+    period:'2015〜2019年', era:'米中貿易戦争と低金利の安定成長期。\nコロナ直前の最後の平和な時代。' },
+  '2024':   { bgIdx:12, title:'2024年の壁を突破',    sub:'令和の投資家になった',
+    period:'2020〜2024年', era:'コロナショックと歴史的回復、インフレの時代。\n日銀利上げと円安が同時進行した。' },
+  '2025':   { bgIdx:13, title:'全課程修了',           sub:'マネぼう塾を完全制覇した',
+    period:'1970〜2025年（全55年）', era:'55年の投資人生をついに完走。\n激動の時代を共に歩み抜いた。' },
 };
 
 function _isCertMilestone(prevRow) {
@@ -4999,16 +5089,11 @@ function _isCertMilestone(prevRow) {
 
 function _certRoundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.arcTo(x + w, y, x + w, y + r, r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
-  ctx.lineTo(x + r, y + h);
-  ctx.arcTo(x, y + h, x, y + h - r, r);
-  ctx.lineTo(x, y + r);
-  ctx.arcTo(x, y, x + r, y, r);
-  ctx.closePath();
+  ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+  ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r);
+  ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h);
+  ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r);
+  ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
 }
 
 async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
@@ -5016,96 +5101,159 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   if (!m) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
-
-  // solid dark base
-  ctx.fillStyle = '#0e0a1e';
-  ctx.fillRect(0, 0, W, H);
-
-  // background image — very low opacity so text/numbers are invisible, only color/texture remains
-  await new Promise(resolve => {
+  ctx.clearRect(0, 0, W, H);
+  const loadImg = src => new Promise(resolve => {
     const img = new Image();
-    img.onload  = () => {
-      ctx.globalAlpha = 0.18;
-      ctx.drawImage(img, 0, 0, W, H);
-      ctx.globalAlpha = 1.0;
-      resolve();
-    };
-    img.onerror = () => resolve();
-    img.src = `images/cert/cert-${m.bgIdx}.png`;
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = src;
   });
 
-  // center panel
-  const pw = 560, ph = 340, px = (W - pw) / 2, py = (H - ph) / 2;
-  ctx.fillStyle = 'rgba(255,250,230,0.92)';
-  _certRoundRect(ctx, px, py, pw, ph, 18);
-  ctx.fill();
-  ctx.strokeStyle = '#b8860b';
-  ctx.lineWidth = 3;
-  _certRoundRect(ctx, px + 6, py + 6, pw - 12, ph - 12, 14);
-  ctx.stroke();
+  // 1. background image (full bleed)
+  const bgImg = await loadImg('images/cert/cert-' + m.bgIdx + '.png');
+  if (bgImg) {
+    ctx.drawImage(bgImg, 0, 0, W, H);
+  } else {
+    const fb = ctx.createLinearGradient(0,0,W,H);
+    fb.addColorStop(0,'#1a0a2e'); fb.addColorStop(1,'#0a1020');
+    ctx.fillStyle = fb; ctx.fillRect(0,0,W,H);
+  }
 
-  // game title header
-  ctx.fillStyle = '#7a5200';
-  ctx.font = 'bold 13px sans-serif';
+  // 2. directional overlay: darker left for text readability
+  const hg = ctx.createLinearGradient(0,0,W,0);
+  hg.addColorStop(0,'rgba(0,0,0,0.72)');
+  hg.addColorStop(0.52,'rgba(0,0,0,0.5)');
+  hg.addColorStop(1,'rgba(0,0,0,0.15)');
+  ctx.fillStyle = hg; ctx.fillRect(0,0,W,H);
+  const tg = ctx.createLinearGradient(0,0,0,H*0.22);
+  tg.addColorStop(0,'rgba(0,0,0,0.55)'); tg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle = tg; ctx.fillRect(0,0,W,H*0.22);
+  const bg2 = ctx.createLinearGradient(0,H*0.78,0,H);
+  bg2.addColorStop(0,'rgba(0,0,0,0)'); bg2.addColorStop(1,'rgba(0,0,0,0.6)');
+  ctx.fillStyle = bg2; ctx.fillRect(0,H*0.78,W,H*0.22);
+
+  // 3. character image (right side, bottom-anchored)
+  const charImg = await loadImg('images/img5.webp');
+  if (charImg) {
+    const ch = H * 0.88;
+    const cw = charImg.naturalWidth * (ch / charImg.naturalHeight);
+    ctx.save();
+    ctx.globalAlpha = 0.9;
+    ctx.drawImage(charImg, W - cw * 0.62, H - ch, cw, ch);
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+
+  // 4. gold double border + corner diamonds
+  const bm = 14;
+  ctx.strokeStyle = 'rgba(245,200,66,0.9)'; ctx.lineWidth = 2;
+  ctx.strokeRect(bm,bm,W-bm*2,H-bm*2);
+  ctx.strokeStyle = 'rgba(245,200,66,0.3)'; ctx.lineWidth = 1;
+  ctx.strokeRect(bm+8,bm+8,W-(bm+8)*2,H-(bm+8)*2);
+  ctx.fillStyle = '#f5c842';
+  [[bm,bm],[W-bm,bm],[bm,H-bm],[W-bm,H-bm]].forEach(([cx,cy]) => {
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(Math.PI/4);
+    ctx.fillRect(-5,-5,10,10); ctx.restore();
+  });
+
+  const TX = W * 0.39;
+  const JP = '"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif';
   ctx.textAlign = 'center';
-  ctx.fillText('マネぼう塾', W / 2, py + 32);
 
-  // seal stamp decoration
-  ctx.fillStyle = 'rgba(180,0,0,0.12)';
-  ctx.beginPath();
-  ctx.arc(W / 2, py + ph / 2 + 30, 70, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(180,0,0,0.25)';
-  ctx.lineWidth = 2;
-  ctx.stroke();
+  // 5. top label
+  ctx.fillStyle = 'rgba(245,200,66,0.6)';
+  ctx.font = '600 10px sans-serif';
+  ctx.fillText('M A N E B O U  J U K U', TX, bm+24);
 
-  // 賞状 label
-  ctx.fillStyle = '#8b0000';
-  ctx.font = 'bold 22px "Hiragino Mincho ProN", "Yu Mincho", serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('賞　状', W / 2, py + 70);
+  // 6. 賞状 + flanking lines
+  const ry = bm + 48;
+  ctx.strokeStyle = 'rgba(245,200,66,0.5)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(TX-105,ry); ctx.lineTo(TX-24,ry); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX+24,ry); ctx.lineTo(TX+105,ry); ctx.stroke();
+  ctx.fillStyle = '#f5c842';
+  ctx.font = 'bold 16px ' + JP;
+  ctx.fillText('賞　状', TX, ry+5);
 
-  // main title
-  ctx.fillStyle = '#1a0a00';
-  ctx.font = `bold 28px "Hiragino Mincho ProN", "Yu Mincho", serif`;
-  ctx.textAlign = 'center';
-  ctx.fillText(m.title, W / 2, py + 120);
+  // 7. period badge
+  const pbw = 200, pbh = 22;
+  ctx.fillStyle = 'rgba(245,200,66,0.12)';
+  ctx.fillRect(TX-pbw/2, ry+16, pbw, pbh);
+  ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
+  ctx.strokeRect(TX-pbw/2, ry+16, pbw, pbh);
+  ctx.fillStyle = 'rgba(245,200,66,0.9)';
+  ctx.font = 'bold 11px sans-serif';
+  ctx.fillText('達成期間  ' + m.period, TX, ry+31);
 
-  // sub title
-  ctx.fillStyle = '#5a3800';
-  ctx.font = `16px "Hiragino Mincho ProN", "Yu Mincho", serif`;
-  ctx.fillText(m.sub, W / 2, py + 152);
+  // 8. main title with glow
+  ctx.shadowColor = 'rgba(245,200,66,0.55)'; ctx.shadowBlur = 14;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 26px ' + JP;
+  ctx.fillText(m.title, TX, ry+76);
+  ctx.shadowBlur = 0;
 
-  // divider line
-  ctx.strokeStyle = '#b8860b';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(px + 40, py + 168);
-  ctx.lineTo(px + pw - 40, py + 168);
-  ctx.stroke();
+  // 9. era summary (2 lines)
+  const eraLines = m.era.split('\n');
+  ctx.fillStyle = 'rgba(255,255,255,0.62)';
+  ctx.font = '12px ' + JP;
+  eraLines.forEach(function(line, i) { ctx.fillText(line, TX, ry+100+i*18); });
 
-  // player name
-  ctx.fillStyle = '#1a0a00';
-  ctx.font = `bold 20px "Hiragino Mincho ProN", "Yu Mincho", serif`;
-  ctx.textAlign = 'center';
-  ctx.fillText(playerName || 'プレイヤー', W / 2, py + 205);
+  // 10. ornament divider
+  const dy = ry + 142;
+  ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(TX-140,dy); ctx.lineTo(TX-10,dy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX+10,dy); ctx.lineTo(TX+140,dy); ctx.stroke();
+  ctx.fillStyle = 'rgba(245,200,66,0.7)';
+  ctx.save(); ctx.translate(TX,dy); ctx.rotate(Math.PI/4); ctx.fillRect(-4,-4,8,8); ctx.restore();
 
-  // assets
-  const assetsStr = '総資産 ' + (assets != null ? Number(assets).toLocaleString() + '円' : '---');
-  ctx.fillStyle = '#5a3800';
-  ctx.font = `14px "Hiragino Mincho ProN", "Yu Mincho", serif`;
-  ctx.fillText(assetsStr, W / 2, py + 233);
+  // 11. player name
+  ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 8;
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 20px ' + JP;
+  ctx.fillText(playerName || 'プレイヤー', TX, dy+34);
+  ctx.shadowBlur = 0;
 
-  // date
-  ctx.fillStyle = '#888060';
-  ctx.font = '12px sans-serif';
-  ctx.fillText(dateStr, W / 2, py + 262);
+  // 12. assets
+  if (assets != null) {
+    ctx.fillStyle = 'rgba(245,200,66,0.92)';
+    ctx.font = '13px ' + JP;
+    ctx.fillText('総資産  ' + Number(assets).toLocaleString() + '円', TX, dy+56);
+  }
 
-  // footer watermark
-  ctx.fillStyle = 'rgba(90,56,0,0.35)';
-  ctx.font = '11px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('by RAINY BRAIN', W / 2, py + ph - 14);
+  // 13. date
+  ctx.fillStyle = 'rgba(255,255,255,0.38)';
+  ctx.font = '10px sans-serif';
+  ctx.fillText(dateStr, TX, dy+74);
+
+  // 14. mini asset bar chart (bottom left)
+  const CERT_ORDER = ['tutorial','1974','1979','1984','1989','1994','1999','2004','2009','2014','2019','2024','2025'];
+  const earned = CERT_ORDER.filter(function(k){ return earnedCerts[k]; });
+  if (earned.length >= 1) {
+    const cx0 = bm+16, cy0 = H-bm-68, cw0 = W*0.66, ch0 = 46;
+    ctx.fillStyle = 'rgba(245,200,66,0.45)';
+    ctx.font = '9px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('資産の推移', cx0, cy0-6);
+    ctx.strokeStyle = 'rgba(245,200,66,0.2)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx0,cy0+ch0); ctx.lineTo(cx0+cw0,cy0+ch0); ctx.stroke();
+    const vals = earned.map(function(k){ return earnedCerts[k].assets||0; });
+    const maxV = Math.max.apply(null, vals.concat([1]));
+    const bw = Math.max(5, Math.floor(cw0/(CERT_ORDER.length+1))-2);
+    earned.forEach(function(k,i) {
+      const v = earnedCerts[k].assets||0;
+      const bh = Math.max(3,(v/maxV)*ch0);
+      const bx = cx0+i*(bw+3), by = cy0+ch0-bh;
+      ctx.fillStyle = k===certKey ? 'rgba(245,200,66,0.9)' : 'rgba(255,255,255,0.28)';
+      ctx.fillRect(bx,by,bw,bh);
+      const lbl = k==='tutorial'?'ST':k.slice(2);
+      ctx.fillStyle = k===certKey?'rgba(245,200,66,0.8)':'rgba(255,255,255,0.3)';
+      ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(lbl, bx+bw/2, cy0+ch0+9);
+    });
+  }
+
+  // 15. watermark
+  ctx.fillStyle = 'rgba(245,200,66,0.25)';
+  ctx.font = '600 9px sans-serif'; ctx.textAlign = 'right';
+  ctx.fillText('by RAINY BRAIN', W-bm-10, H-bm-6);
 }
 
 let _certCurrentKey = null;
@@ -5901,6 +6049,12 @@ function drawGraph() {
     `<text x="2" y="${PY + 3}" fill="rgba(255,255,255,0.35)" font-size="6" font-family="sans-serif">${fmtJP(maxP)}</text>` +
     `<text x="2" y="${H - PY + 1}" fill="rgba(255,255,255,0.35)" font-size="6" font-family="sans-serif">${fmtJP(minP)}</text>`;
 
+  // Horizontal grid lines at 25%, 50%, 75%
+  [0.25, 0.5, 0.75].forEach(frac => {
+    const gy = (PY + frac * (H - 2 * PY)).toFixed(1);
+    svgContent += `<line x1="${PX}" y1="${gy}" x2="${W - PX}" y2="${gy}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  });
+
   // イベントマーカー
   GRAPH_EVENTS.forEach(ev => {
     const evStart = masterData.findIndex(r => r.年 === ev.年);
@@ -6012,7 +6166,10 @@ let _toastTimer = null;
 function showToast(msg, duration) {
   const el = document.getElementById('toast');
   el.textContent = msg;
+  el.classList.remove('toast-ok','toast-bad');
   el.classList.add('show');
+  if (msg.charAt(0) === '✅') el.classList.add('toast-ok');
+  else if (msg.charAt(0) === '❌') el.classList.add('toast-bad');
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => el.classList.remove('show'), duration || 3000);
 }
@@ -6873,7 +7030,7 @@ function closeEnding() {
 <!-- ════ 賞状モーダル ════ -->
 <div class="cert-backdrop" id="certBackdrop" onclick="closeCert()"></div>
 <div class="cert-modal" id="certModal">
-  <canvas class="cert-canvas" id="certCanvas" width="800" height="500"></canvas>
+  <canvas class="cert-canvas" id="certCanvas" width="920" height="540"></canvas>
   <div class="cert-actions">
     <button class="cert-dl-btn" onclick="downloadCert()">💾 画像を保存</button>
     <button class="cert-close-btn" onclick="closeCert()">✕ 閉じる</button>

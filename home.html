@@ -26,6 +26,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   background:rgba(26,26,46,0.97);backdrop-filter:blur(16px);
   border-bottom:3px solid var(--gold);
 }
+.top-nav.scrolled { box-shadow: 0 6px 32px rgba(0,0,0,0.6); }
 .nav-inner{
   max-width:720px;margin:0 auto;
   padding:10px 20px;display:flex;align-items:center;gap:10px;
@@ -93,9 +94,12 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   padding:14px 24px;font-size:14px;font-weight:700;cursor:pointer;
   box-shadow:0 4px 18px rgba(0,0,0,0.25);transition:transform 0.15s,box-shadow 0.15s;
   font-family:'Zen Maru Gothic',sans-serif;
+  position: relative; overflow: hidden;
 }
 .btn-google-big:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.35);}
 .btn-google-big img{width:22px;height:22px;}
+.btn-google-big::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 120%, rgba(0,0,0,0.12) 0%, transparent 65%); opacity:0; transition:opacity 0.4s; }
+.btn-google-big:active::after { opacity:1; transition:none; }
 .hero-note{font-size:10px;color:rgba(255,255,255,0.3);margin-top:12px;}
 
 /* ─── Guest section ─── */
@@ -126,14 +130,15 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   color:var(--sky);letter-spacing:2px;margin-bottom:12px;
   display:flex;align-items:center;gap:8px;
 }
-.section-title::after{content:'';flex:1;height:1px;background:rgba(91,200,232,0.2);}
+.section-title::after{content:'';flex:1;height:1px;background: linear-gradient(90deg, rgba(91,200,232,0.35), transparent);}
 
 /* ─── My card (profile only) ─── */
 .my-card{
   background:rgba(245,200,66,0.06);border:2px solid rgba(245,200,66,0.22);
   border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center;
 }
-.my-avatar{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
+.my-avatar{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;transition: transform 0.2s ease, box-shadow 0.2s ease;}
+.my-avatar:hover { transform: scale(1.07); }
 .my-info{flex:1;min-width:0;}
 .my-name{font-family:'Dela Gothic One',sans-serif;font-size:16px;margin-bottom:3px;}
 .my-edit-hint{font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;}
@@ -237,6 +242,8 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 /* CTA arrow bounce on hover */
 .app-card-cta{transition:letter-spacing 0.25s,opacity 0.2s;}
 .app-card:hover .app-card-cta{letter-spacing:1px;}
+.app-card-cta::after { content: ' →'; display: inline-block; transition: transform 0.22s ease; }
+.app-card:hover .app-card-cta::after { transform: translateX(5px); }
 
 /* Or divider pulse */
 @keyframes dividerPulse{
@@ -258,6 +265,14 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   100%{opacity:1;transform:scale(1) translateY(0);}
 }
 .badge-chip{animation:chipPop 0.38s cubic-bezier(0.34,1.56,0.64,1) both;}
+.badge-chip:nth-child(1){animation-delay:0.05s}
+.badge-chip:nth-child(2){animation-delay:0.1s}
+.badge-chip:nth-child(3){animation-delay:0.15s}
+.badge-chip:nth-child(4){animation-delay:0.2s}
+.badge-chip:nth-child(5){animation-delay:0.25s}
+.badge-chip:nth-child(6){animation-delay:0.3s}
+.badge-chip:nth-child(7){animation-delay:0.35s}
+.badge-chip:nth-child(8){animation-delay:0.4s}
 .badge-chip-todo{
   display:inline-flex;align-items:center;gap:4px;
   background:rgba(91,200,232,0.09);border:1.5px solid rgba(91,200,232,0.28);
@@ -367,6 +382,9 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .member-assets{font-size:11px;color:var(--gold);}
 .member-sub{font-size:10px;color:rgba(255,255,255,0.35);}
 .member-me{border-color:rgba(245,200,66,0.35);background:rgba(245,200,66,0.05);}
+.member-row.rank-top1 { border-left: 3px solid var(--gold) !important; }
+.member-row.rank-top2 { border-left: 3px solid #ccc !important; }
+.member-row.rank-top3 { border-left: 3px solid #cd7f32 !important; }
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;animation:blink 2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
@@ -376,8 +394,11 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   display:flex;align-items:center;gap:10px;
   background:rgba(255,255,255,0.03);border-radius:10px;padding:10px 12px;
   border:1px solid rgba(255,255,255,0.05);transition:background 0.15s;
+  position: relative;
 }
 .hof-row:hover{background:rgba(255,255,255,0.06);}
+.hof-row::after { content:'›'; position:absolute; right:10px; top:50%; transform:translateY(-50%) translateX(-4px); color:rgba(255,255,255,0.15); font-size:18px; transition:transform 0.2s,color 0.2s; pointer-events:none; }
+.hof-row:hover::after { transform:translateY(-50%) translateX(0); color:rgba(255,255,255,0.4); }
 .hof-rank{font-family:'Dela Gothic One',sans-serif;font-size:14px;color:rgba(255,255,255,0.25);width:24px;text-align:center;flex-shrink:0;}
 .hof-rank.g{color:var(--gold);}
 .hof-rank.s{color:#ccc;}
@@ -410,14 +431,17 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   background:linear-gradient(160deg,rgba(245,200,66,0.14) 0%,rgba(26,26,46,0.4) 100%);
   border-color:rgba(245,200,66,0.5);order:2;
   box-shadow:0 6px 20px rgba(245,200,66,0.15);padding-top:18px;padding-bottom:14px;
+  min-height: 170px;
 }
 .hof-podium-item.rank2{
   background:linear-gradient(160deg,rgba(200,200,200,0.08) 0%,rgba(26,26,46,0.4) 100%);
   border-color:rgba(200,200,200,0.28);order:1;
+  min-height: 140px;
 }
 .hof-podium-item.rank3{
   background:linear-gradient(160deg,rgba(205,127,50,0.08) 0%,rgba(26,26,46,0.4) 100%);
   border-color:rgba(205,127,50,0.28);order:3;
+  min-height: 120px;
 }
 .hof-podium-medal{font-size:18px;margin-bottom:5px;line-height:1;}
 .rank1 .hof-podium-medal{font-size:24px;}
@@ -473,6 +497,9 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 /* ─── Toast ─── */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(26,26,46,0.97);border:1.5px solid var(--gold);border-radius:12px;padding:10px 20px;font-size:12px;font-weight:700;color:var(--gold);z-index:900;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),opacity 0.3s;opacity:0;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast-ok  { background:rgba(76,175,125,0.97); border-color:#2d8a58; color:#fff; box-shadow:4px 4px 0 #2d8a58; }
+.toast-bad { background:rgba(232,53,74,0.97);  border-color:#a0001f; color:#fff; box-shadow:4px 4px 0 #a0001f; }
+.toast-info{ background:rgba(91,200,232,0.97); border-color:#2aa0c0; color:var(--dark); box-shadow:4px 4px 0 #2aa0c0; }
 
 /* ─── Modal ─── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;}
@@ -993,14 +1020,7 @@ let _user = null, _groupId = null, _role = null, _memberUnsub = null, _registeri
 
 function fmt(n) { return Math.round(n||0).toLocaleString('ja-JP'); }
 function fmtScore(n) {
-  if (n >= 1_000_000_000_000) return `${(n/1_000_000_000_000).toFixed(1)}兆`;
-  if (n >= 100_000_000_000)   return `${Math.round(n/1_000_000_000)}億`;
-  if (n >= 10_000_000_000)    return `${(n/1_000_000_000).toFixed(1)}億`;
-  if (n >= 1_000_000_000)     return `約${Math.round(n/100_000_000)}億`;
-  if (n >= 100_000_000)       return `約${(n/100_000_000).toFixed(1)}億`;
-  if (n >= 10_000_000)        return `約${Math.round(n/10_000_000)}千万`;
-  if (n >= 1_000_000)         return `約${Math.round(n/1_000_000)}百万`;
-  return `${Math.round(n||0).toLocaleString('ja-JP')}`;
+  return Math.round(n||0).toLocaleString('ja-JP');
 }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -1357,7 +1377,8 @@ function renderMembers(members) {
     const rankCls = i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
     const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1);
     const isMe = _user && m.uid === _user.uid;
-    return `<div class="member-row${isMe?' member-me':''}">
+    const rankTopCls = i < 3 ? ` rank-top${i+1}` : '';
+    return `<div class="member-row${isMe?' member-me':''}${rankTopCls}">
       <div class="member-rank ${rankCls}">${rankIcon}</div>
       ${avatarImgSrc(m.uid, m.photoURL, 'member-avatar')}
       <div class="member-info">
@@ -1722,7 +1743,12 @@ document.addEventListener('click', e => {
 let _toastTimer;
 function showToast(msg, dur) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
+  t.textContent = msg;
+  t.classList.remove('toast-ok','toast-bad','toast-info');
+  t.classList.add('show');
+  if (msg.startsWith('✅')) t.classList.add('toast-ok');
+  else if (msg.startsWith('❌')) t.classList.add('toast-bad');
+  else if (msg.startsWith('ℹ️')) t.classList.add('toast-info');
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(()=>t.classList.remove('show'), dur||3000);
 }
@@ -1858,6 +1884,8 @@ document.addEventListener('keydown', e => {
 // ─── Init ─────────────────────────────────────────────────
 loadHallOfFame();
 loadBgPlayers();
+
+window.addEventListener('scroll', () => { document.querySelector('.top-nav')?.classList.toggle('scrolled', window.scrollY > 8); }, {passive:true});
 </script>
 </body>
 </html>
