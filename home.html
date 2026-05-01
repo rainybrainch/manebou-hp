@@ -255,6 +255,19 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   100%{opacity:1;transform:scale(1) translateY(0);}
 }
 .badge-chip{animation:chipPop 0.38s cubic-bezier(0.34,1.56,0.64,1) both;}
+.badge-chip-todo{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(91,200,232,0.09);border:1.5px solid rgba(91,200,232,0.28);
+  border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;
+  color:rgba(255,255,255,0.85);animation:chipPop 0.38s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.badge-panel-todo{
+  background:rgba(91,200,232,0.04);border:2px solid rgba(91,200,232,0.18);
+  border-radius:16px;padding:14px 16px;
+}
+.badge-summary-todo{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.badge-count-num-todo{font-family:'Dela Gothic One',sans-serif;font-size:20px;color:var(--sky);}
+.badge-count-sub-todo{font-size:10px;color:rgba(255,255,255,0.3);margin-left:4px;}
 
 /* Stats strong highlight flicker on load */
 @keyframes statPop{
@@ -766,6 +779,19 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       </div>
     </div>
 
+    <!-- TODOバッジ -->
+    <div class="section" id="todoBadgeSection" style="display:none;animation-delay:0.15s">
+      <div class="section-title">📋 TODOバッジ</div>
+      <div class="badge-panel-todo">
+        <div class="badge-summary-todo">
+          <span><span class="badge-count-num-todo" id="todoBadgeCountNum">─</span><span class="badge-count-sub-todo">/ 13 バッジ獲得</span></span>
+          <span style="font-size:10px;color:rgba(255,255,255,0.25)">詳細はTODOアプリ内で</span>
+        </div>
+        <div class="badge-grid" id="todoBadgeGrid">
+        </div>
+      </div>
+    </div>
+
     <!-- ログアウト -->
     <div class="section" style="animation-delay:0.17s;text-align:center">
       <button class="btn-logout-dash" onclick="signOut()">← ログアウト</button>
@@ -1250,11 +1276,27 @@ function copyCode() {
 
 // ─── TODO Data ───────────────────────────────────────────
 const TODO_LEVELS = [
-  {lv:1,icon:'🌱'},{lv:2,icon:'💰',xp:100},{lv:3,icon:'🏦',xp:250},
+  {lv:1,icon:'🌱',xp:0},{lv:2,icon:'💰',xp:100},{lv:3,icon:'🏦',xp:250},
   {lv:4,icon:'📊',xp:450},{lv:5,icon:'📈',xp:700},{lv:6,icon:'💎',xp:1000},
   {lv:7,icon:'🎯',xp:1400},{lv:8,icon:'⚡',xp:1900},{lv:9,icon:'🌟',xp:2500},
   {lv:10,icon:'👑',xp:3200}
 ];
+const TODO_ACHIEVEMENTS_MINI = [
+  {id:'first',   emoji:'🌱', name:'最初の一歩'   },
+  {id:'five',    emoji:'⭐', name:'5タスク達成'  },
+  {id:'twenty',  emoji:'🌟', name:'20タスク達成' },
+  {id:'hundred', emoji:'💯', name:'100タスク達成'},
+  {id:'streak3', emoji:'🔥', name:'3日連続'      },
+  {id:'streak7', emoji:'🌈', name:'7日連続'      },
+  {id:'streak14',emoji:'🌙', name:'2週間連続'    },
+  {id:'streak30',emoji:'👑', name:'1ヶ月連続'    },
+  {id:'highpri', emoji:'⚡', name:'高優先マスター'},
+  {id:'invest',  emoji:'📈', name:'投資家の本能' },
+  {id:'allchar', emoji:'🎭', name:'全キャラ制覇' },
+  {id:'lv5',     emoji:'🎖', name:'レベル5達成'  },
+  {id:'lv10',    emoji:'🏆', name:'マネぼうマスター'},
+];
+
 function _todoLevel(xp) {
   for (let i = TODO_LEVELS.length - 1; i >= 0; i--)
     if ((xp || 0) >= (TODO_LEVELS[i].xp || 0)) return TODO_LEVELS[i];
@@ -1269,6 +1311,8 @@ async function loadTodoData(user) {
     const raw = snap.data().state;
     const s = raw ? JSON.parse(raw) : null;
     if (!s) return;
+
+    // ── Stats ──
     const lv = _todoLevel(s.xp);
     document.getElementById('todoLevel').textContent     = `Lv.${lv.lv} ${lv.icon}`;
     document.getElementById('todoCompleted').textContent = (s.totalCompleted || 0).toLocaleString();
@@ -1276,6 +1320,20 @@ async function loadTodoData(user) {
     document.getElementById('todoPoms').textContent      = s.pomodoroSessions || 0;
     document.getElementById('todoStats').style.display  = '';
     document.getElementById('todoChips').style.display  = 'none';
+
+    // ── Badges ──
+    const unlocked = new Set(s.unlockedAchievements || []);
+    const earned = TODO_ACHIEVEMENTS_MINI.filter(a => unlocked.has(a.id));
+    document.getElementById('todoBadgeCountNum').textContent = earned.length;
+    const grid = document.getElementById('todoBadgeGrid');
+    if (earned.length === 0) {
+      grid.innerHTML = '<div class="badge-empty-msg">まだバッジがありません<br>TODOアプリを使って獲得しよう！</div>';
+    } else {
+      grid.innerHTML = earned.map((a, i) =>
+        `<span class="badge-chip-todo" style="animation-delay:${(i*0.05).toFixed(2)}s">${a.emoji} ${esc(a.name)}</span>`
+      ).join('');
+    }
+    document.getElementById('todoBadgeSection').style.display = '';
   } catch(e) {}
 }
 
