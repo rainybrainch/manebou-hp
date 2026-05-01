@@ -187,6 +187,82 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 }
 .app-divider::before,.app-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
 
+/* ══════════════════════════════════════════
+   EFFECTS
+══════════════════════════════════════════ */
+
+/* Border glow pulse */
+@keyframes goldGlowPulse{
+  0%,100%{box-shadow:0 4px 20px rgba(245,200,66,0.07);border-color:rgba(245,200,66,0.38);}
+  50%    {box-shadow:0 8px 36px rgba(245,200,66,0.28),0 0 0 1px rgba(245,200,66,0.18);border-color:rgba(245,200,66,0.65);}
+}
+@keyframes skyGlowPulse{
+  0%,100%{box-shadow:0 4px 20px rgba(91,200,232,0.07);border-color:rgba(91,200,232,0.38);}
+  50%    {box-shadow:0 8px 36px rgba(91,200,232,0.28),0 0 0 1px rgba(91,200,232,0.18);border-color:rgba(91,200,232,0.65);}
+}
+.app-card-game{animation:goldGlowPulse 4s ease-in-out infinite;}
+.app-card-todo{animation:skyGlowPulse 4s ease-in-out 2s infinite;}
+
+/* Hover override */
+.app-card-game:hover{animation:none;box-shadow:0 10px 40px rgba(245,200,66,0.32);border-color:rgba(245,200,66,0.8);transform:translateY(-3px);}
+.app-card-todo:hover{animation:none;box-shadow:0 10px 40px rgba(91,200,232,0.32);border-color:rgba(91,200,232,0.8);transform:translateY(-3px);}
+
+/* Shimmer sweep (::before) */
+.app-card{position:relative;overflow:hidden;}
+.app-card::before{
+  content:'';position:absolute;top:0;left:-80%;width:45%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);
+  transform:skewX(-18deg);
+  animation:cardSweep 5s ease-in-out infinite;
+  pointer-events:none;
+}
+.app-card-todo::before{animation-delay:2.5s;}
+@keyframes cardSweep{
+  0%,65%,100%{left:-80%;}
+  32%        {left:160%;}
+}
+
+/* Icon float */
+@keyframes iconFloat{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  45%    {transform:translateY(-6px) rotate(4deg);}
+}
+.app-card-icon{display:inline-block;animation:iconFloat 3.5s ease-in-out infinite;}
+.app-card-todo .app-card-icon{animation-delay:1.2s;}
+
+/* CTA arrow bounce on hover */
+.app-card-cta{transition:letter-spacing 0.25s,opacity 0.2s;}
+.app-card:hover .app-card-cta{letter-spacing:1px;}
+
+/* Or divider pulse */
+@keyframes dividerPulse{
+  0%,100%{opacity:0.18;}50%{opacity:0.5;}
+}
+.app-divider{animation:dividerPulse 3s ease-in-out infinite;}
+
+/* Avatar ring pulse */
+@keyframes avatarRing{
+  0%,100%{box-shadow:0 0 0 0 rgba(245,200,66,0.55),0 0 12px rgba(245,200,66,0.18);}
+  55%    {box-shadow:0 0 0 7px rgba(245,200,66,0),0 0 28px rgba(245,200,66,0.38);}
+}
+.my-avatar{animation:avatarRing 3s ease-in-out 0.8s infinite;}
+
+/* Badge chip pop-in */
+@keyframes chipPop{
+  0%  {opacity:0;transform:scale(0.55) translateY(6px);}
+  70% {transform:scale(1.07) translateY(-2px);}
+  100%{opacity:1;transform:scale(1) translateY(0);}
+}
+.badge-chip{animation:chipPop 0.38s cubic-bezier(0.34,1.56,0.64,1) both;}
+
+/* Stats strong highlight flicker on load */
+@keyframes statPop{
+  0%  {color:rgba(255,255,255,0.2);}
+  60% {color:var(--gold);filter:brightness(1.4);}
+  100%{color:var(--gold);filter:brightness(1);}
+}
+.app-card-stat strong{animation:statPop 0.6s ease both;}
+
 /* ─── btn-play (legacy, keep for guest) ─── */
 .btn-play{
   background:var(--gold);color:var(--dark);border:none;border-radius:12px;
@@ -1020,6 +1096,11 @@ async function loadMyData(user) {
     const lb = await _db.collection('leaderboard').doc(user.uid).get();
     if (lb.exists) {
       const d = lb.data();
+      // retrigger statPop animation
+      document.querySelectorAll('.app-card-stat strong').forEach(el => {
+        el.style.animation = 'none'; void el.offsetWidth;
+        el.style.animation = '';
+      });
       document.getElementById('myAssets').textContent = fmt(d.totalAssets || 0);
       document.getElementById('myCash').textContent   = fmt(d.cashBalance || 0);
       document.getElementById('myYear').textContent   = d.year || '---';
@@ -1226,9 +1307,9 @@ function renderBadges(unlocked) {
     return;
   }
   const stars = n => '⭐'.repeat(n);
-  grid.innerHTML = earned.map(t => {
+  grid.innerHTML = earned.map((t, i) => {
     const cls = t.stars === 3 ? 'badge-chip s3' : t.stars === 2 ? 'badge-chip s2' : 'badge-chip';
-    return `<span class="${cls}"><span class="badge-stars">${stars(t.stars)}</span>${esc(t.name)}</span>`;
+    return `<span class="${cls}" style="animation-delay:${(i * 0.05).toFixed(2)}s"><span class="badge-stars">${stars(t.stars)}</span>${esc(t.name)}</span>`;
   }).join('');
 }
 
