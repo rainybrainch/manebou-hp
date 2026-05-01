@@ -169,6 +169,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .app-card-stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;}
 .app-card-stat{font-size:11px;color:rgba(255,255,255,0.4);}
 .app-card-stat strong{color:var(--gold);font-size:12px;}
+.todo-stat strong{color:var(--sky);}
 .app-card-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
 .app-chip{
   font-size:10px;padding:3px 9px;border-radius:12px;
@@ -701,7 +702,13 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
             </div>
             <span class="app-card-tag tag-todo">タスク管理</span>
           </div>
-          <div class="app-card-chips">
+          <div class="app-card-stats todo-stats" id="todoStats" style="display:none">
+            <div class="app-card-stat todo-stat">レベル <strong id="todoLevel">──</strong></div>
+            <div class="app-card-stat todo-stat">完了 <strong id="todoCompleted">──</strong>件</div>
+            <div class="app-card-stat todo-stat">🔥 <strong id="todoStreak">──</strong>日連続</div>
+            <div class="app-card-stat todo-stat">🍅 <strong id="todoPoms">──</strong>回</div>
+          </div>
+          <div class="app-card-chips" id="todoChips">
             <span class="app-chip">🍅 ポモドーロ</span>
             <span class="app-chip">🗺️ 冒険マップ</span>
             <span class="app-chip">⭐ XP・レベル</span>
@@ -1080,6 +1087,7 @@ function showDashboard(user) {
   loadMyData(user);
   loadProfile(user);
   loadBadges(user);
+  loadTodoData(user);
 }
 
 // ─── Load my save data ────────────────────────────────────
@@ -1238,6 +1246,37 @@ function copyGroupCode() {
 function copyCode() {
   const code = document.getElementById('modalCodeText').textContent;
   navigator.clipboard.writeText(code).then(()=>showToast('コピーしました: '+code));
+}
+
+// ─── TODO Data ───────────────────────────────────────────
+const TODO_LEVELS = [
+  {lv:1,icon:'🌱'},{lv:2,icon:'💰',xp:100},{lv:3,icon:'🏦',xp:250},
+  {lv:4,icon:'📊',xp:450},{lv:5,icon:'📈',xp:700},{lv:6,icon:'💎',xp:1000},
+  {lv:7,icon:'🎯',xp:1400},{lv:8,icon:'⚡',xp:1900},{lv:9,icon:'🌟',xp:2500},
+  {lv:10,icon:'👑',xp:3200}
+];
+function _todoLevel(xp) {
+  for (let i = TODO_LEVELS.length - 1; i >= 0; i--)
+    if ((xp || 0) >= (TODO_LEVELS[i].xp || 0)) return TODO_LEVELS[i];
+  return TODO_LEVELS[0];
+}
+
+async function loadTodoData(user) {
+  if (!_db) return;
+  try {
+    const snap = await _db.collection('todo_saves').doc(user.uid).get();
+    if (!snap.exists) return;
+    const raw = snap.data().state;
+    const s = raw ? JSON.parse(raw) : null;
+    if (!s) return;
+    const lv = _todoLevel(s.xp);
+    document.getElementById('todoLevel').textContent     = `Lv.${lv.lv} ${lv.icon}`;
+    document.getElementById('todoCompleted').textContent = (s.totalCompleted || 0).toLocaleString();
+    document.getElementById('todoStreak').textContent    = s.streak || 0;
+    document.getElementById('todoPoms').textContent      = s.pomodoroSessions || 0;
+    document.getElementById('todoStats').style.display  = '';
+    document.getElementById('todoChips').style.display  = 'none';
+  } catch(e) {}
 }
 
 // ─── Badges ──────────────────────────────────────────────
