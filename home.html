@@ -39,6 +39,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   transition:opacity 0.2s;
 }
 .nav-to-app:hover{opacity:0.85;}
+.nav-todo-btn{background:rgba(91,200,232,0.13);color:var(--sky);border:1.5px solid rgba(91,200,232,0.35);}
 .nav-login-btn{
   background:none;border:1.5px solid rgba(245,200,66,0.5);border-radius:20px;
   padding:5px 14px;color:var(--gold);font-size:12px;font-family:'Zen Maru Gothic',sans-serif;
@@ -124,17 +125,69 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 }
 .section-title::after{content:'';flex:1;height:1px;background:rgba(91,200,232,0.2);}
 
-/* ─── My card ─── */
+/* ─── My card (profile only) ─── */
 .my-card{
-  background:rgba(245,200,66,0.06);border:2px solid rgba(245,200,66,0.3);
-  border-radius:16px;padding:16px;display:flex;gap:14px;align-items:center;
+  background:rgba(245,200,66,0.06);border:2px solid rgba(245,200,66,0.22);
+  border-radius:16px;padding:14px 16px;display:flex;gap:14px;align-items:center;
 }
 .my-avatar{width:52px;height:52px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;flex-shrink:0;}
 .my-info{flex:1;min-width:0;}
-.my-name{font-family:'Dela Gothic One',sans-serif;font-size:16px;margin-bottom:4px;}
-.my-stats{display:flex;gap:10px;flex-wrap:wrap;}
-.my-stat{font-size:11px;color:rgba(255,255,255,0.5);}
-.my-stat strong{color:var(--gold);font-size:13px;}
+.my-name{font-family:'Dela Gothic One',sans-serif;font-size:16px;margin-bottom:3px;}
+.my-edit-hint{font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.5px;}
+
+/* ─── App Cards ─── */
+.app-cards{display:flex;flex-direction:column;gap:12px;}
+.app-card{
+  display:block;text-decoration:none;
+  border-radius:18px;padding:16px 18px;border:2px solid;
+  transition:transform 0.15s,box-shadow 0.15s;
+}
+.app-card:hover{transform:translateY(-2px);}
+.app-card-game{
+  background:linear-gradient(135deg,rgba(245,200,66,0.1) 0%,rgba(26,26,46,0.35) 100%);
+  border-color:rgba(245,200,66,0.38);
+  box-shadow:0 4px 20px rgba(245,200,66,0.07);
+}
+.app-card-game:hover{box-shadow:0 8px 28px rgba(245,200,66,0.15);}
+.app-card-todo{
+  background:linear-gradient(135deg,rgba(91,200,232,0.1) 0%,rgba(26,26,46,0.35) 100%);
+  border-color:rgba(91,200,232,0.38);
+  box-shadow:0 4px 20px rgba(91,200,232,0.07);
+}
+.app-card-todo:hover{box-shadow:0 8px 28px rgba(91,200,232,0.15);}
+.app-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.app-card-icon{font-size:30px;flex-shrink:0;line-height:1;}
+.app-card-label{flex:1;min-width:0;}
+.app-card-name{font-family:'Dela Gothic One',sans-serif;font-size:16px;color:var(--white);}
+.app-card-type{font-size:10px;color:rgba(255,255,255,0.38);margin-top:2px;letter-spacing:0.5px;}
+.app-card-tag{
+  flex-shrink:0;font-size:9px;font-weight:700;padding:3px 9px;
+  border-radius:20px;letter-spacing:1px;
+}
+.tag-game{background:rgba(245,200,66,0.14);color:var(--gold);border:1px solid rgba(245,200,66,0.3);}
+.tag-todo{background:rgba(91,200,232,0.12);color:var(--sky);border:1px solid rgba(91,200,232,0.28);}
+.app-card-stats{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;}
+.app-card-stat{font-size:11px;color:rgba(255,255,255,0.4);}
+.app-card-stat strong{color:var(--gold);font-size:12px;}
+.app-card-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.app-chip{
+  font-size:10px;padding:3px 9px;border-radius:12px;
+  background:rgba(91,200,232,0.08);border:1px solid rgba(91,200,232,0.2);
+  color:rgba(255,255,255,0.5);
+}
+.app-card-cta{
+  font-family:'Dela Gothic One',sans-serif;font-size:12px;
+  text-align:right;
+}
+.app-card-game .app-card-cta{color:var(--gold);}
+.app-card-todo .app-card-cta{color:var(--sky);}
+.app-divider{
+  display:flex;align-items:center;gap:10px;margin:2px 0;
+  font-size:9px;color:rgba(255,255,255,0.18);letter-spacing:2px;
+}
+.app-divider::before,.app-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
+
+/* ─── btn-play (legacy, keep for guest) ─── */
 .btn-play{
   background:var(--gold);color:var(--dark);border:none;border-radius:12px;
   padding:10px 20px;font-family:'Dela Gothic One',sans-serif;font-size:13px;
@@ -475,8 +528,8 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
     <div><span class="nav-logo-text">マネぼうアプリ</span><span class="nav-logo-sub">ログイン</span></div>
   </div>
   <div class="nav-right">
-    <a class="nav-to-app" href="https://rainybrainch.github.io/manebou-todo/manebou-todo.html" style="background:rgba(91,200,232,0.15);color:var(--sky);border:1.5px solid rgba(91,200,232,0.4);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;text-decoration:none;white-space:nowrap;">📋 TODO</a>
-    <a class="nav-to-app" id="navGoToApp" href="calc.html" style="display:none">▶ アプリへ</a>
+    <a class="nav-to-app nav-todo-btn" href="https://rainybrainch.github.io/manebou-todo/manebou-todo.html">📋 TODO</a>
+    <a class="nav-to-app" id="navGoToApp" href="calc.html" style="display:none">💰 アプリへ</a>
     <button class="nav-login-btn" id="navLoginBtn" onclick="signIn()">☁️ ログイン</button>
     <img class="nav-avatar" id="navAvatar" src="" alt="" onclick="toggleLogoutMenu()">
     <div class="logout-menu" id="logoutMenu" style="display:none">
@@ -527,20 +580,60 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
   <!-- DASHBOARD (ログイン後) -->
   <div id="dashboard" style="display:none">
 
-    <!-- 自分のカード -->
+    <!-- プロフィールカード -->
     <div class="section" style="animation-delay:0.05s">
       <div class="my-card" id="myCard">
         <button class="btn-edit-profile" onclick="openProfileModal()" title="プロフィール編集">✏️</button>
         <img class="my-avatar" id="myAvatar" src="" alt="" onclick="openProfileModal()" style="cursor:pointer" title="プロフィール編集">
         <div class="my-info">
           <div class="my-name" id="myName">--</div>
-          <div class="my-stats">
-            <div class="my-stat">総資産 <strong id="myAssets">---</strong>円</div>
-            <div class="my-stat">現金 <strong id="myCash">---</strong>円</div>
-            <div class="my-stat">年 <strong id="myYear">---</strong></div>
-          </div>
+          <div class="my-edit-hint">タップしてプロフィール編集</div>
         </div>
-        <a href="calc.html" class="btn-play">▶ ゲームへ</a>
+      </div>
+    </div>
+
+    <!-- マイアプリ -->
+    <div class="section" style="animation-delay:0.07s">
+      <div class="section-title">📱 マイアプリ</div>
+      <div class="app-cards">
+
+        <a href="calc.html" class="app-card app-card-game">
+          <div class="app-card-head">
+            <span class="app-card-icon">💰</span>
+            <div class="app-card-label">
+              <div class="app-card-name">マネぼうアプリ</div>
+              <div class="app-card-type">1970〜2025 日本経済ボードゲーム補助</div>
+            </div>
+            <span class="app-card-tag tag-game">経済シム</span>
+          </div>
+          <div class="app-card-stats">
+            <div class="app-card-stat">総資産 <strong id="myAssets">──</strong>円</div>
+            <div class="app-card-stat">現金 <strong id="myCash">──</strong>円</div>
+            <div class="app-card-stat">年代 <strong id="myYear">──</strong></div>
+          </div>
+          <div class="app-card-cta">▶ ゲームをはじめる →</div>
+        </a>
+
+        <div class="app-divider">or</div>
+
+        <a href="https://rainybrainch.github.io/manebou-todo/manebou-todo.html" class="app-card app-card-todo">
+          <div class="app-card-head">
+            <span class="app-card-icon">📋</span>
+            <div class="app-card-label">
+              <div class="app-card-name">マネぼうTODO</div>
+              <div class="app-card-type">タスク管理・生産性向上アプリ</div>
+            </div>
+            <span class="app-card-tag tag-todo">タスク管理</span>
+          </div>
+          <div class="app-card-chips">
+            <span class="app-chip">🍅 ポモドーロ</span>
+            <span class="app-chip">🗺️ 冒険マップ</span>
+            <span class="app-chip">⭐ XP・レベル</span>
+            <span class="app-chip">🏆 実績</span>
+          </div>
+          <div class="app-card-cta">▶ TODOを開く →</div>
+        </a>
+
       </div>
     </div>
 
@@ -588,18 +681,6 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
           <div class="loading-dots"><span></span><span></span><span></span></div>
         </div>
       </div>
-    </div>
-
-    <!-- TODOへ -->
-    <div class="section" style="animation-delay:0.15s">
-      <a href="https://rainybrainch.github.io/manebou-todo/manebou-todo.html" style="display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(91,200,232,0.1),rgba(245,200,66,0.07));border:2px solid rgba(91,200,232,0.35);border-radius:18px;padding:16px 18px;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
-        <span style="font-size:36px;line-height:1;">📋</span>
-        <div style="flex:1;">
-          <div style="font-family:'Dela Gothic One',sans-serif;font-size:15px;color:#5BC8E8;margin-bottom:4px;">マネぼうTODO を開始する！</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:700;">タスク管理・ポモドーロ・冒険マップ</div>
-        </div>
-        <span style="font-size:20px;color:rgba(91,200,232,0.6);">→</span>
-      </a>
     </div>
 
     <!-- ログアウト -->
