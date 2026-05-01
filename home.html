@@ -244,6 +244,22 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .hof-rank-badge{font-size:11px;padding:2px 8px;border-radius:8px;font-weight:700;flex-shrink:0;}
 .hof-empty{color:rgba(255,255,255,0.3);font-size:12px;text-align:center;padding:20px;}
 
+/* ─── Badge panel ─── */
+.badge-panel{background:rgba(245,200,66,0.04);border:2px solid rgba(245,200,66,0.18);border-radius:16px;padding:14px 16px;}
+.badge-summary{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.badge-count-num{font-family:'Dela Gothic One',sans-serif;font-size:20px;color:var(--gold);}
+.badge-count-sub{font-size:10px;color:rgba(255,255,255,0.3);margin-left:4px;}
+.badge-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.badge-chip{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(245,200,66,0.09);border:1.5px solid rgba(245,200,66,0.28);
+  border-radius:20px;padding:5px 10px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.85);
+}
+.badge-chip.s2{border-color:rgba(91,200,232,0.4);background:rgba(91,200,232,0.08);color:var(--sky);}
+.badge-chip.s3{border-color:rgba(232,53,74,0.45);background:rgba(232,53,74,0.08);color:#ff7090;}
+.badge-stars{font-size:9px;letter-spacing:-1px;}
+.badge-empty-msg{font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:16px 0;}
+
 /* ─── Loading ─── */
 .loading-dots{display:flex;gap:5px;justify-content:center;padding:20px;}
 .loading-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);animation:ld 1.2s ease-in-out infinite;}
@@ -332,6 +348,51 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .avatar-pick:hover{border-color:var(--gold);background:rgba(245,200,66,0.07);transform:scale(1.06);}
 .avatar-pick img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;display:none;}
 .avatar-pick-hint{font-size:10px;color:rgba(255,255,255,0.28);margin-top:6px;}
+
+/* ─── Profile Edit ─── */
+.btn-edit-profile{
+  position:absolute;top:10px;right:10px;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+  border-radius:50%;width:30px;height:30px;color:rgba(255,255,255,0.45);
+  font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s,color 0.2s;
+}
+.btn-edit-profile:hover{background:rgba(245,200,66,0.15);color:var(--gold);}
+.my-card{position:relative;}
+.edit-avatar-wrap{text-align:center;margin-bottom:18px;}
+.edit-avatar-pick{
+  width:84px;height:84px;border-radius:50%;
+  border:3px dashed rgba(245,200,66,0.5);background:rgba(255,255,255,0.05);
+  margin:0 auto;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:28px;position:relative;overflow:hidden;
+  transition:border-color 0.2s,background 0.2s,transform 0.15s;
+}
+.edit-avatar-pick:hover{border-color:var(--gold);background:rgba(245,200,66,0.08);transform:scale(1.05);}
+.edit-avatar-pick img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.edit-avatar-hint{font-size:10px;color:rgba(255,255,255,0.3);margin-top:6px;}
+.profile-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:2000;align-items:center;justify-content:center;}
+.profile-modal.open{display:flex;}
+.profile-box{
+  background:#1a1a2e;border:2px solid rgba(245,200,66,0.4);border-radius:22px;
+  padding:28px 22px 24px;width:90%;max-width:340px;text-align:center;
+  box-shadow:0 24px 64px rgba(0,0,0,0.7);position:relative;
+}
+.profile-box h2{font-family:'Dela Gothic One',sans-serif;font-size:17px;color:var(--gold);margin-bottom:18px;}
+.profile-input{
+  width:100%;background:rgba(255,255,255,0.07);border:2px solid rgba(255,255,255,0.15);
+  border-radius:12px;padding:12px 14px;color:#fff;font-size:15px;
+  font-family:'Zen Maru Gothic',sans-serif;text-align:center;margin-bottom:14px;
+}
+.profile-input:focus{outline:none;border-color:var(--gold);background:rgba(245,200,66,0.04);}
+.btn-profile-save{
+  width:100%;background:var(--gold);color:var(--dark);border:none;border-radius:12px;
+  padding:13px;font-size:15px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;
+  cursor:pointer;box-shadow:0 4px 0 rgba(100,70,0,0.4);
+  transition:opacity 0.15s,transform 0.1s,box-shadow 0.1s;
+}
+.btn-profile-save:hover{opacity:0.9;transform:translateY(-1px);}
+.btn-profile-save:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(100,70,0,0.4);}
+.btn-profile-save:disabled{opacity:0.5;cursor:default;transform:none;}
 </style>
 </head>
 <body>
@@ -359,6 +420,24 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
     <input class="nick-input" type="text" id="nicknameInput" placeholder="ニックネーム" maxlength="20" autocomplete="nickname">
     <p class="nick-hint">省略するとメールアドレスの名前が使われます</p>
     <button class="btn-nick-save" id="nickSaveBtn" onclick="saveNickname()">設定してはじめる</button>
+  </div>
+</div>
+
+<!-- Profile Edit Modal -->
+<div class="profile-modal" id="profileModal">
+  <div class="profile-box">
+    <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
+    <h2>✏️ プロフィール編集</h2>
+    <div class="edit-avatar-wrap">
+      <div class="edit-avatar-pick" id="editAvatarPick" onclick="document.getElementById('editAvatarInput').click()">
+        <span id="editAvatarIcon">📷</span>
+        <img id="editAvatarImg" src="" alt="" style="display:none">
+      </div>
+      <p class="edit-avatar-hint">タップして画像を変更</p>
+      <input type="file" id="editAvatarInput" accept="image/*" style="display:none" onchange="previewEditAvatar(this)">
+    </div>
+    <input class="profile-input" type="text" id="editNickInput" placeholder="ニックネーム" maxlength="20" autocomplete="nickname">
+    <button class="btn-profile-save" id="profileSaveBtn" onclick="saveProfile()">保存する</button>
   </div>
 </div>
 
@@ -450,7 +529,8 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
     <!-- 自分のカード -->
     <div class="section" style="animation-delay:0.05s">
       <div class="my-card" id="myCard">
-        <img class="my-avatar" id="myAvatar" src="" alt="">
+        <button class="btn-edit-profile" onclick="openProfileModal()" title="プロフィール編集">✏️</button>
+        <img class="my-avatar" id="myAvatar" src="" alt="" onclick="openProfileModal()" style="cursor:pointer" title="プロフィール編集">
         <div class="my-info">
           <div class="my-name" id="myName">--</div>
           <div class="my-stats">
@@ -495,8 +575,22 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       </div>
     </div>
 
+    <!-- バッジ -->
+    <div class="section" style="animation-delay:0.12s">
+      <div class="section-title">🏅 獲得バッジ</div>
+      <div class="badge-panel">
+        <div class="badge-summary">
+          <span><span class="badge-count-num" id="badgeCountNum">─</span><span class="badge-count-sub">/ 40 バッジ獲得</span></span>
+          <span style="font-size:10px;color:rgba(255,255,255,0.25)">詳細はアプリ内で</span>
+        </div>
+        <div class="badge-grid" id="badgeGrid">
+          <div class="loading-dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ログアウト -->
-    <div class="section" style="animation-delay:0.15s;text-align:center">
+    <div class="section" style="animation-delay:0.17s;text-align:center">
       <button class="btn-logout-dash" onclick="signOut()">← ログアウト</button>
     </div>
 
@@ -684,6 +778,80 @@ function showLoginForm() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ─── Profile Edit Modal ───────────────────────────────────
+let _editAvatarFile = null;
+
+function openProfileModal() {
+  const user = _auth && _auth.currentUser;
+  if (!user) return;
+  _editAvatarFile = null;
+  document.getElementById('editNickInput').value = user.displayName || '';
+  const img = document.getElementById('editAvatarImg');
+  const icon = document.getElementById('editAvatarIcon');
+  const src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
+  img.src = src; img.style.display = 'block'; icon.style.display = 'none';
+  document.getElementById('editAvatarInput').value = '';
+  document.getElementById('profileModal').classList.add('open');
+}
+
+function closeProfileModal() {
+  document.getElementById('profileModal').classList.remove('open');
+}
+
+function previewEditAvatar(input) {
+  const file = input.files[0]; if (!file) return;
+  _editAvatarFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('editAvatarImg');
+    img.src = e.target.result; img.style.display = 'block';
+    document.getElementById('editAvatarIcon').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveProfile() {
+  const user = _auth && _auth.currentUser;
+  if (!user) return;
+  const name = document.getElementById('editNickInput').value.trim() || user.displayName || user.email.split('@')[0];
+  const btn = document.getElementById('profileSaveBtn');
+  btn.disabled = true; btn.textContent = '保存中...';
+  try {
+    let photoURL = user.photoURL || '';
+    if (_editAvatarFile) {
+      const uploaded = await uploadAvatar(user.uid, _editAvatarFile);
+      if (uploaded) {
+        photoURL = uploaded;
+      } else {
+        showToast('⚠️ 画像のアップロードに失敗しました', 4000);
+      }
+    }
+    await user.updateProfile({ displayName: name, photoURL: photoURL || null });
+    if (_db) {
+      await _db.collection('users').doc(user.uid).set(
+        { name, photoURL }, { merge: true }
+      );
+    }
+    // Update displayed info
+    document.getElementById('myName').textContent = name;
+    const newSrc = photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
+    document.getElementById('myAvatar').src = newSrc;
+    document.getElementById('navAvatar').src = newSrc;
+    document.getElementById('logoutName').textContent = name;
+    closeProfileModal();
+    showToast('✅ プロフィールを更新しました');
+  } catch(e) {
+    showToast('保存に失敗しました: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = '保存する';
+  }
+}
+
+document.addEventListener('click', e => {
+  const m = document.getElementById('profileModal');
+  if (m && m.classList.contains('open') && e.target === m) closeProfileModal();
+});
+
 function toggleLogoutMenu() {
   const m = document.getElementById('logoutMenu');
   m.style.display = m.style.display === 'none' ? 'block' : 'none';
@@ -741,6 +909,7 @@ function showDashboard(user) {
   myAv.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
   loadMyData(user);
   loadProfile(user);
+  loadBadges(user);
 }
 
 // ─── Load my save data ────────────────────────────────────
@@ -894,6 +1063,79 @@ function copyGroupCode() {
 function copyCode() {
   const code = document.getElementById('modalCodeText').textContent;
   navigator.clipboard.writeText(code).then(()=>showToast('コピーしました: '+code));
+}
+
+// ─── Badges ──────────────────────────────────────────────
+const TITLES_MINI = [
+  { id:'first_buy',     name:'初投資家',           stars:1 },
+  { id:'first_move',    name:'最初の一手',         stars:1 },
+  { id:'millionaire',   name:'百万長者',           stars:1 },
+  { id:'safe_first',    name:'安全第一',           stars:1 },
+  { id:'diversified',   name:'分散投資家',         stars:1 },
+  { id:'steady_hand',   name:'コツコツ貯める',     stars:1 },
+  { id:'oil_gold',      name:'オイルショック乗り越え', stars:1 },
+  { id:'ten_mil',       name:'千万長者',           stars:1 },
+  { id:'tamezou_life',  name:'ためぞう流の生き方', stars:1 },
+  { id:'five_pillar',   name:'5大資産の柱',        stars:1 },
+  { id:'tamezou_god',   name:'ためぞうの神髄',     stars:2 },
+  { id:'showa_leg',     name:'昭和の伝説',         stars:1 },
+  { id:'ouru_foresight',name:'局長の先見の明',     stars:3 },
+  { id:'black_mon',     name:'ブラックマンデー生存者', stars:2 },
+  { id:'bubble_land',   name:'バブル紳士',         stars:2 },
+  { id:'kausshi_glory', name:'かうっしーの栄光',   stars:2 },
+  { id:'s3_bub90',      name:'★★★ バブル崩壊',    stars:3 },
+  { id:'hundred_mil',   name:'億り人',             stars:2 },
+  { id:'full_port',     name:'全資産家',           stars:2 },
+  { id:'dividend',      name:'配当生活者',         stars:2 },
+  { id:'triple',        name:'トリプルクラウン',   stars:2 },
+  { id:'enda_tears',    name:'えんだの涙',         stars:2 },
+  { id:'stock_100',     name:'株式王',             stars:2 },
+  { id:'gold_bug',      name:'金の亡者',           stars:2 },
+  { id:'ouru_pupil',    name:'おーる局長の弟子',   stars:2 },
+  { id:'gambler',       name:'ギャンブラー',       stars:2 },
+  { id:'kausshi_all',   name:'かうっしーの欲望',   stars:3 },
+  { id:'bil',           name:'十億長者',           stars:3 },
+  { id:'lehman',        name:'リーマン生存者',     stars:2 },
+  { id:'s3_lem08',      name:'★★★ リーマンショック', stars:3 },
+  { id:'big_div',       name:'配当王',             stars:3 },
+  { id:'abenomics',     name:'アベノミクス乗り',   stars:1 },
+  { id:'crypto',        name:'仮想通貨民',         stars:1 },
+  { id:'btc_dawn',      name:'？？？黎明期',       stars:1 },
+  { id:'crypto_moon',   name:'MOON🚀',             stars:3 },
+  { id:'corona_buy',    name:'コロナ禍投資家',     stars:1 },
+  { id:'s3_cov20',      name:'★★★ コロナ底値',    stars:3 },
+  { id:'nikkei_ath',    name:'史上最高値の時代',   stars:2 },
+  { id:'ouru_cert',     name:'局長認定投資家',     stars:3 },
+  { id:'manebou_finish',name:'マネぼうを完走した！', stars:3 },
+];
+
+async function loadBadges(user) {
+  const grid = document.getElementById('badgeGrid');
+  const numEl = document.getElementById('badgeCountNum');
+  if (!_db) { grid.innerHTML = ''; numEl.textContent = '─'; return; }
+  try {
+    const snap = await _db.collection('saves').doc(user.uid).get();
+    const unlocked = snap.exists ? (snap.data().unlockedTitles || []) : [];
+    renderBadges(unlocked);
+  } catch(e) {
+    grid.innerHTML = '<div class="badge-empty-msg">読み込めませんでした</div>';
+  }
+}
+
+function renderBadges(unlocked) {
+  const set = new Set(unlocked);
+  document.getElementById('badgeCountNum').textContent = unlocked.length;
+  const earned = TITLES_MINI.filter(t => set.has(t.id));
+  const grid = document.getElementById('badgeGrid');
+  if (earned.length === 0) {
+    grid.innerHTML = '<div class="badge-empty-msg">まだバッジがありません<br>ゲームを進めて獲得しよう！</div>';
+    return;
+  }
+  const stars = n => '⭐'.repeat(n);
+  grid.innerHTML = earned.map(t => {
+    const cls = t.stars === 3 ? 'badge-chip s3' : t.stars === 2 ? 'badge-chip s2' : 'badge-chip';
+    return `<span class="${cls}"><span class="badge-stars">${stars(t.stars)}</span>${esc(t.name)}</span>`;
+  }).join('');
 }
 
 // ─── Hall of Fame ─────────────────────────────────────────
