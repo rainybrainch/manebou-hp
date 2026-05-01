@@ -2196,36 +2196,63 @@ body {
 }
 .btn-google:hover { background: #f0f0f0; }
 .btn-google img { width: 20px; height: 20px; }
-.auth-cancel, .modal-close { color: rgba(255,255,255,0.4); font-size: 12px; cursor: pointer; }
-.auth-cancel:hover, .modal-close:hover { color: #fff; }
-.modal-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+.btn-login-link {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; background: rgba(91,200,232,0.1); color: var(--sky);
+  border: 1.5px solid rgba(91,200,232,0.3); border-radius: 10px;
+  padding: 11px 16px; font-size: 13px; font-weight: 700;
+  margin-bottom: 12px; text-decoration: none; text-align: center;
+  transition: background 0.2s;
+}
+.btn-login-link:hover { background: rgba(91,200,232,0.2); }
+.auth-cancel {
+  background: none; border: none;
+  color: rgba(255,255,255,0.35); font-size: 12px; cursor: pointer;
+  padding: 6px 12px; margin-top: 2px; font-family: 'Zen Maru Gothic', sans-serif;
+}
+.auth-cancel:hover { color: #fff; }
+.modal-close-btn {
+  position: absolute; top: 12px; right: 14px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 50%; width: 30px; height: 30px;
+  color: rgba(255,255,255,0.5); font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+.modal-close-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+.modal-box { position: relative; }
+.modal-tabs { display: flex; gap: 6px; margin-bottom: 18px; background: rgba(255,255,255,0.05); border-radius: 10px; padding: 4px; }
 .modal-tab {
-  flex: 1; padding: 8px;
-  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.15);
-  border-radius: 8px; color: rgba(255,255,255,0.6); font-size: 12px; font-weight: 700;
-  cursor: pointer; font-family: 'Zen Maru Gothic', sans-serif;
+  flex: 1; padding: 8px 6px;
+  background: none; border: none;
+  border-radius: 7px; color: rgba(255,255,255,0.45); font-size: 12px; font-weight: 700;
+  cursor: pointer; font-family: 'Zen Maru Gothic', sans-serif; transition: background 0.2s, color 0.2s;
 }
-.modal-tab.active { background: rgba(91,200,232,0.15); border-color: var(--sky); color: var(--sky); }
+.modal-tab.active { background: rgba(91,200,232,0.2); color: var(--sky); }
 .modal-input {
-  width: 100%; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 10px; padding: 10px 14px; color: #fff; font-size: 15px;
-  font-family: 'Zen Maru Gothic', sans-serif; text-align: center; letter-spacing: 4px; margin-bottom: 14px;
+  width: 100%; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 12px; padding: 13px 14px; color: #fff; font-size: 22px;
+  font-family: 'Dela Gothic One', sans-serif; text-align: center; letter-spacing: 8px; margin-bottom: 14px;
+  transition: border-color 0.2s;
 }
-.modal-input:focus { outline: none; border-color: var(--sky); }
-.modal-input.no-track { letter-spacing: 0; }
+.modal-input:focus { outline: none; border-color: var(--sky); background: rgba(91,200,232,0.06); }
+.modal-input.no-track { letter-spacing: 0; font-size: 15px; font-family: 'Zen Maru Gothic', sans-serif; }
 .btn-modal-action {
-  width: 100%; background: var(--sky); color: var(--dark); border: none; border-radius: 10px;
-  padding: 12px; font-size: 14px; font-weight: 700; font-family: 'Zen Maru Gothic', sans-serif;
-  cursor: pointer; margin-bottom: 10px;
+  width: 100%; background: var(--sky); color: var(--dark); border: none; border-radius: 12px;
+  padding: 13px; font-size: 15px; font-weight: 700; font-family: 'Zen Maru Gothic', sans-serif;
+  cursor: pointer; margin-bottom: 0; box-shadow: 0 4px 0 rgba(10,70,100,0.5);
+  transition: opacity 0.15s, transform 0.1s, box-shadow 0.1s;
 }
-.btn-modal-action:hover { opacity: 0.88; }
+.btn-modal-action:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 5px 0 rgba(10,70,100,0.5); }
+.btn-modal-action:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(10,70,100,0.5); }
 .modal-group-code {
-  font-family: 'Dela Gothic One', sans-serif; font-size: 28px; color: var(--gold);
-  letter-spacing: 6px; margin: 12px 0;
-  background: rgba(245,200,66,0.08); border: 2px dashed var(--gold);
-  border-radius: 10px; padding: 12px;
+  font-family: 'Dela Gothic One', sans-serif; font-size: 32px; color: var(--gold);
+  letter-spacing: 8px; margin: 14px 0;
+  background: rgba(245,200,66,0.07); border: 2px dashed rgba(245,200,66,0.5);
+  border-radius: 12px; padding: 14px; text-align: center;
 }
-.modal-group-code-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+.modal-group-code-label { font-size: 11px; color: rgba(255,255,255,0.35); margin-bottom: 4px; text-align: center; }
+.modal-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0; }
 .user-menu {
   display: none; position: fixed; top: 55px; right: calc(50% - 330px);
   background: #1a1a2e; border: 2px solid var(--gold); border-radius: 12px;
@@ -2269,40 +2296,56 @@ body {
 <!-- ════ LOGIN OVERLAY ════ -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
-    <h2>☁️ クラウドセーブ</h2>
-    <p>Googleアカウントでログインすると<br>データのクラウド保存・グループ参加ができます</p>
+    <h2>🔐 ログイン</h2>
+    <p>ログインするとクラウドセーブ・<br>グループ参加ができます</p>
     <button class="btn-google" onclick="signInWithGoogle()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
       Googleでログイン
     </button>
-    <button class="auth-cancel" onclick="closeAuthOverlay()">キャンセル</button>
+    <a class="btn-login-link" href="home.html?noredirect">📧 メールで登録・ログイン</a>
+    <button class="auth-cancel" onclick="closeAuthOverlay()">今はしない</button>
+  </div>
+</div>
+
+<!-- ════ CLOUD CONFIRM ════ -->
+<div class="auth-overlay" id="cloudConfirmOverlay">
+  <div class="auth-box">
+    <h2>☁️ クラウドデータ</h2>
+    <p>クラウドにセーブデータが<br>見つかりました。読み込みますか？</p>
+    <button class="btn-google" style="background:var(--sky);color:var(--dark);margin-bottom:10px" onclick="confirmCloudLoad()">
+      ✅ 読み込む
+    </button>
+    <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1.5px solid rgba(255,255,255,0.15)" onclick="skipCloudLoad()">
+      🆕 新規ゲームをはじめる
+    </button>
   </div>
 </div>
 
 <!-- ════ GROUP MODAL ════ -->
 <div class="modal-overlay" id="groupModal">
   <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeGroupModal()">✕</button>
     <h2>👥 グループ</h2>
-    <p>講師がグループを作成し<br>プレイヤーはコードで参加できます</p>
+    <p>コードで参加 / 講師はグループを作成</p>
     <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchGroupTab('join',this)">参加する</button>
-      <button class="modal-tab" onclick="switchGroupTab('create',this)">作成する（講師）</button>
+      <button class="modal-tab active" onclick="switchGroupTab('join',this)">🎮 参加する</button>
+      <button class="modal-tab" onclick="switchGroupTab('create',this)">👑 作成する</button>
     </div>
     <div id="groupTabJoin">
-      <input class="modal-input" id="groupCodeInput" placeholder="XXXXXX" maxlength="6"
+      <input class="modal-input" id="groupCodeInput" placeholder="コードを入力" maxlength="6"
         oninput="this.value=this.value.toUpperCase()" autocomplete="off" spellcheck="false">
-      <button class="btn-modal-action" onclick="joinGroup()">グループに参加</button>
+      <button class="btn-modal-action" onclick="joinGroup()">グループに参加する</button>
     </div>
     <div id="groupTabCreate" style="display:none">
-      <input class="modal-input no-track" id="groupNameInput" placeholder="グループ名" maxlength="20">
-      <button class="btn-modal-action" onclick="createGroup()">グループを作成</button>
+      <input class="modal-input no-track" id="groupNameInput" placeholder="グループ名を入力" maxlength="20">
+      <button class="btn-modal-action" onclick="createGroup()">グループを作成する</button>
       <div id="groupCreatedInfo" style="display:none">
-        <div class="modal-group-code-label">グループコード（プレイヤーに共有）</div>
+        <div class="modal-divider"></div>
+        <div class="modal-group-code-label">プレイヤーに共有するコード</div>
         <div class="modal-group-code" id="createdGroupCode">------</div>
-        <button class="btn-modal-action" style="background:rgba(245,200,66,0.15);color:var(--gold);border:1.5px solid var(--gold);margin-top:4px" onclick="copyGroupCode()">📋 コードをコピー</button>
+        <button class="btn-modal-action" style="background:rgba(245,200,66,0.12);color:var(--gold);border:1.5px solid rgba(245,200,66,0.4);box-shadow:none;margin-top:8px" onclick="copyGroupCode()">📋 コードをコピー</button>
       </div>
     </div>
-    <button class="modal-close" onclick="closeGroupModal()">閉じる</button>
   </div>
 </div>
 
@@ -2319,7 +2362,7 @@ body {
 
 <nav class="top-nav">
   <span class="nav-spacer"></span>
-  <a class="nav-brand" href="home.html" style="text-decoration:none;">
+  <a class="nav-brand" href="home.html?noredirect" style="text-decoration:none;">
     <img class="nav-char" src="images/img5.webp" alt="">
     <span class="nav-title" id="navTitle">マネぼうアプリ</span>
   </a>
@@ -2580,19 +2623,19 @@ body {
       <div class="rules-board-legend">
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#f5c842;color:#333;flex-shrink:0">①</span>
-          <div><div class="rbl-item-title">イベントパネル</div><div class="rbl-item-desc">盤の4隅にある大型マス。止まると経済イベントが発表され、各資産の価格が更新される。年の初め（E1）には余剰金が自動で加算される</div></div>
+          <div><div class="rbl-item-title">イベントパネル</div><div class="rbl-item-desc">4隅の大型マス。止まると経済イベントが発表され資産価格が更新。年初に余剰金が自動加算</div></div>
         </div>
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#e8354a;flex-shrink:0">②</span>
-          <div><div class="rbl-item-title">チャンスカード</div><div class="rbl-item-desc">止まるとカードを引いて全プレイヤーに同じ出来事が発生。臨時収入やボーナスもあれば、損失や出費になることも。上辺・右辺・左辺の3か所に配置</div></div>
+          <div><div class="rbl-item-title">チャンスカード</div><div class="rbl-item-desc">全員に同じ出来事が発生。臨時収入やボーナスもあれば損失になることも。3か所に配置</div></div>
         </div>
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#4caf50;flex-shrink:0">③</span>
-          <div><div class="rbl-item-title">配当マス</div><div class="rbl-item-desc">止まると保有資産から配当を受け取れる。銀行預金（利息）・国債（利子）・株式（配当金）・不動産（家賃収入）が対象。上辺・左辺・右辺の3か所に配置</div></div>
+          <div><div class="rbl-item-title">配当マス</div><div class="rbl-item-desc">保有資産から配当を受取。銀行利息・国債利子・株配当・家賃収入が対象。3か所に配置</div></div>
         </div>
         <div class="rbl-item">
           <span class="rbl-badge" style="background:#1ebdb0;flex-shrink:0">④</span>
-          <div><div class="rbl-item-title">ネクストヒント</div><div class="rbl-item-desc">次の年代への入口マス。止まると翌年・翌イベントの経済状況がヒントとして表示される。1970年から55年の旅を終えると2025年ゴール！</div></div>
+          <div><div class="rbl-item-title">ネクストヒント</div><div class="rbl-item-desc">次の時代への入口マス。翌イベントの経済状況がヒントとして表示。55年の旅を終えると2025年ゴール！</div></div>
         </div>
       </div>
       <div class="rules-block" style="margin-top:10px">
@@ -2708,7 +2751,7 @@ body {
             <div class="acv2-head">
               <span class="acv2-icon">🪙</span>
               <div class="acv2-title">
-                <span class="acv2-name">？？？？？</span>
+                <span class="acv2-name" id="cryptoAssetNameDisplay">？？？？？</span>
                 <span class="acv2-badge secret">秘密</span>
               </div>
             </div>
@@ -2752,8 +2795,14 @@ body {
             onclick="openAuthOverlay()">ログイン</button>
         </div>
         <div class="setting-row">
-          <span>ログイン画面</span>
-          <button class="setting-btn" onclick="location.href='home.html?noredirect'">↩ 戻る</button>
+          <span>アカウントページ</span>
+          <button class="setting-btn" onclick="goToAccount()"
+            style="background:rgba(91,200,232,0.1);color:var(--sky);border-color:rgba(91,200,232,0.3)">↩ セーブして戻る</button>
+        </div>
+        <div class="setting-row" id="settingLogoutRow" style="display:none">
+          <span>ログアウト</span>
+          <button class="setting-btn" onclick="signOutUser()"
+            style="background:rgba(232,53,74,0.1);color:var(--red);border-color:rgba(232,53,74,0.3)">→ ログアウト</button>
         </div>
       </div>
     </div>
@@ -3299,6 +3348,7 @@ const ASSET_KEYS = [
   { id:'不動産',     label:'不動産',     emoji:'🏠', color:'#9c27b0', shadow:'#6a1b9a', divKey:'配当不動産収入' },
   { id:'？？？？？', label:'？？？？？', emoji:'❓', color:'#9e9e9e', shadow:'#616161', divKey: null },
 ];
+const CASH_KEY = { id: '_cash', label: '現金', emoji: '💴', color: '#26a69a' };
 
 // ============================================================
 // CHARACTERS & ERA COMMENTS
@@ -3941,6 +3991,7 @@ function buildGraphSelect() {
   ASSET_KEYS.forEach(a => {
     const o = document.createElement('option');
     o.value = a.id;
+    if (a.id === '？？？？？') o.id = 'cryptoGraphOption';
     o.textContent = a.emoji + ' ' + a.label;
     sel.appendChild(o);
   });
@@ -3990,6 +4041,7 @@ function buildSimSelect() {
   ASSET_KEYS.forEach(a => {
     const o = document.createElement('option');
     o.value = a.id;
+    if (a.id === '？？？？？') o.id = 'cryptoSimOption';
     o.textContent = a.emoji + ' ' + a.label;
     sel.appendChild(o);
   });
@@ -4223,7 +4275,7 @@ function updateCartBar() {
     const p = row ? (row[id] || 0) : 0;
     const color = dir > 0 ? '#ffd966' : '#7ef7ae';
     return `<div class="cart-item-row">
-      <span>${a ? a.emoji : ''} ${a ? a.label : id}</span>
+      <span>${a ? a.emoji : ''} ${a ? (a.id === '？？？？？' ? getCryptoLabel(row) : a.label) : id}</span>
       <span style="color:${color};font-weight:700">${dir > 0 ? '+' : '-'}${qty}個</span>
       <span style="color:rgba(255,255,255,0.45);font-size:11px">${fmt(p)}円×${qty}</span>
     </div>`;
@@ -4395,7 +4447,9 @@ function recordPortfolio() {
     qtys[a.id] = q;
     total += val;
   });
-  portfolioHistory.push({ 年: row.年, イベント: row.イベント, total, values, qtys });
+  const cash = cashBalance;
+  total += cash;
+  portfolioHistory.push({ 年: row.年, イベント: row.イベント, total, values, qtys, cash });
   if (portfolioHistory.length > 220) portfolioHistory.shift();
 }
 
@@ -4502,6 +4556,15 @@ function fmtShort(n) {
 function updateDisplay() {
   const row = masterData[currentIndex];
   if (!row) return;
+
+  // Dynamic ？？？？？ / 仮想通貨 label
+  const _cryptoLabel = getCryptoLabel(row);
+  const _cryptoSpan = document.getElementById('cryptoAssetNameDisplay');
+  if (_cryptoSpan) _cryptoSpan.textContent = _cryptoLabel;
+  const _cryptoGraphOpt = document.getElementById('cryptoGraphOption');
+  if (_cryptoGraphOpt) _cryptoGraphOpt.textContent = '❓ ' + _cryptoLabel;
+  const _cryptoSimOpt = document.getElementById('cryptoSimOption');
+  if (_cryptoSimOpt) _cryptoSimOpt.textContent = '❓ ' + _cryptoLabel;
 
   const evKey = `${row.年}-${row.イベント}`;
   const ev = EVENT_NAMES[evKey];
@@ -4656,12 +4719,13 @@ function simBuy() {
   const cost  = qty * price;
   if (cashBalance < cost) { showToast(`💸 現金が足りません（残高: ${fmt(cashBalance)}円）`); return; }
   const a     = ASSET_KEYS.find(x => x.id === id);
-  const label = (a ? a.label : id) + ' ×' + qty + ' 購入（シミュ）';
+  const _dl = a ? (a.id === '？？？？？' ? getCryptoLabel(row) : a.label) : id;
+  const label = _dl + ' ×' + qty + ' 購入（シミュ）';
   pushHistory();
   addCash(-cost, label);
   executeTrade(id, qty, 1);
   updateDisplay();
-  showToast(`✅ ${a ? a.label : id} ×${qty} 購入！ -${fmt(cost)}円`);
+  showToast(`✅ ${_dl} ×${qty} 購入！ -${fmt(cost)}円`);
   doSim();
 }
 // ============================================================
@@ -4908,21 +4972,24 @@ function drawPortfolioGraph() {
   const toY = v => PY + (1 - v / maxY) * (H - 2 * PY);
 
   const assetsWithValue = ASSET_KEYS.filter(a => hist.some(h => h.values[a.id] > 0));
+  const hasCash = hist.some(h => (h.cash || 0) > 0);
+  const layerKeys = hasCash ? [CASH_KEY, ...assetsWithValue] : assetsWithValue;
+  const getLayerVal = (h, lk) => lk.id === '_cash' ? (h.cash || 0) : (h.values[lk.id] || 0);
   let svgContent = '';
 
-  for (let ai = assetsWithValue.length - 1; ai >= 0; ai--) {
+  for (let ai = layerKeys.length - 1; ai >= 0; ai--) {
     const pts = [];
     for (let i = 0; i < n; i++) {
       let cum = 0;
-      for (let j = 0; j <= ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
+      for (let j = 0; j <= ai; j++) cum += getLayerVal(hist[i], layerKeys[j]);
       pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
     }
     for (let i = n - 1; i >= 0; i--) {
       let cum = 0;
-      for (let j = 0; j < ai; j++) cum += hist[i].values[assetsWithValue[j].id] || 0;
+      for (let j = 0; j < ai; j++) cum += getLayerVal(hist[i], layerKeys[j]);
       pts.push(`${toX(i).toFixed(1)},${toY(cum).toFixed(1)}`);
     }
-    svgContent += `<polygon points="${pts.join(' ')}" fill="${assetsWithValue[ai].color}" opacity="0.75"/>`;
+    svgContent += `<polygon points="${pts.join(' ')}" fill="${layerKeys[ai].color}" opacity="0.75"/>`;
   }
 
   const topPts = hist.map((h, i) => `${toX(i).toFixed(1)},${toY(h.total).toFixed(1)}`).join(' ');
@@ -4959,13 +5026,32 @@ function drawPortfolioGraph() {
   const viewSav    = savMap[viewH.年] || 0;
   const prevH      = viewIdx > 0 ? hist[viewIdx - 1] : null;
 
-  if (viewAssets.length === 0) {
+  const viewCash = viewH.cash || 0;
+  const prevCash = prevH ? (prevH.cash || 0) : null;
+
+  const cashDiff = prevCash !== null ? viewCash - prevCash : null;
+  const cashDiffHTML = cashDiff === null ? '<div class="pl-diff" style="color:rgba(26,26,46,0.3)">─</div>'
+    : cashDiff > 0 ? `<div class="pl-diff" style="color:var(--green)">+${fmtShort(cashDiff)}</div>`
+    : cashDiff < 0 ? `<div class="pl-diff" style="color:var(--red)">${fmtShort(cashDiff)}</div>`
+    : '<div class="pl-diff" style="color:rgba(26,26,46,0.3)">±0</div>';
+  const cashPct = viewTotal > 0 ? (viewCash / viewTotal * 100) : 0;
+  const cashRowHTML = `<div class="pl-row">
+    <div class="pl-dot" style="background:${CASH_KEY.color}"></div>
+    <div class="pl-name">${CASH_KEY.emoji} ${CASH_KEY.label}</div>
+    <div class="pl-qty">─</div>
+    <div class="pl-val">¥${fmtShort(viewCash)}</div>
+    ${cashDiffHTML}
+    <div class="pl-pct">${cashPct.toFixed(1)}%</div>
+    <div class="pl-bar-wrap"><div class="pl-bar-bg"><div class="pl-bar-fill" style="width:${Math.round(cashPct)}%;background:${CASH_KEY.color}"></div></div></div>
+  </div>`;
+
+  if (viewAssets.length === 0 && viewCash === 0) {
     legend.innerHTML = '<div style="font-size:11px;color:rgba(26,26,46,0.45);padding:8px 6px">この時点では資産がありません</div>';
   } else {
     const savDiff = viewTotal - viewSav;
     const savDiffColor = savDiff >= 0 ? '#1a7a40' : '#b00020';
     const savDiffLabel = savDiff >= 0 ? `📈 貯金より +${fmt(savDiff)}円` : `📉 貯金より ${fmt(Math.abs(savDiff))}円`;
-    legend.innerHTML = viewAssets.map(a => {
+    legend.innerHTML = cashRowHTML + viewAssets.map(a => {
       const val = viewH.values[a.id] || 0;
       const qty = viewH.qtys ? (viewH.qtys[a.id] || 0) : '─';
       const pct = viewTotal > 0 ? ((val / viewTotal) * 100) : 0;
@@ -4983,7 +5069,7 @@ function drawPortfolioGraph() {
       }
       return `<div class="pl-row">
         <div class="pl-dot" style="background:${a.color}"></div>
-        <div class="pl-name">${a.emoji} ${a.label}</div>
+        <div class="pl-name">${a.emoji} ${a.id === '？？？？？' ? getCryptoLabel(viewH) : a.label}</div>
         <div class="pl-qty">${qty}個</div>
         <div class="pl-val">¥${fmtShort(val)}</div>
         ${diffHTML}
@@ -5264,7 +5350,7 @@ function drawAllAssetsGraph() {
     const pctCls = pct >= 0 ? 'hist-tx-cash-in' : 'hist-tx-cash-out';
     return `<div class="pl-row">
       <div class="pl-dot" style="background:${a.color}"></div>
-      <div class="pl-name">${a.emoji} ${a.label}</div>
+      <div class="pl-name">${a.emoji} ${a.id === '？？？？？' ? getCryptoLabel(curRow) : a.label}</div>
       <div class="pl-val" style="color:${a.color}">${fmt(p)}円</div>
       <div class="pl-pct" style="width:52px;color:inherit"><span class="${pctCls}">${pct >= 0 ? '+' : ''}${pct}%</span></div>
     </div>`;
@@ -5475,7 +5561,7 @@ function showPurchasePopup(items, row, buyTotal, sellTotal) {
   let listHTML = '';
   items.forEach(([id, {qty, dir}]) => {
     const a = ASSET_KEYS.find(x => x.id === id);
-    const name = a ? `${a.emoji} ${a.label}` : id;
+    const name = a ? `${a.emoji} ${a.id === '？？？？？' ? getCryptoLabel(row) : a.label}` : id;
     const price = row ? (row[id] || 0) : 0;
     if (dir < 0 && id === '不動産') {
       listHTML += `<div class="pp-item">
@@ -5814,17 +5900,46 @@ let _groupId = null;
 let _role = null;
 let _instructorUnsub = null;
 
+const EMOJI_AVATARS = ['💰','💵','💎','🪙','💴','💶','💷','💳'];
+const _emojiCache = {};
+function getEmojiAvatar(uid) {
+  let h = 0;
+  for (let i = 0; i < (uid||'').length; i++) h = (h * 31 + uid.charCodeAt(i)) & 0xffffffff;
+  return EMOJI_AVATARS[Math.abs(h) % EMOJI_AVATARS.length];
+}
+function makeEmojiDataUrl(emoji) {
+  if (_emojiCache[emoji]) return _emojiCache[emoji];
+  const c = document.createElement('canvas');
+  c.width = c.height = 64;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#13132a';
+  ctx.fillRect(0, 0, 64, 64);
+  ctx.font = '36px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, 32, 36);
+  return (_emojiCache[emoji] = c.toDataURL('image/png'));
+}
+
 if (_auth) _auth.onAuthStateChanged(async user => {
   _fbUser = user;
   if (user) {
+    const isEmailUser = user.providerData.some(p => p.providerId === 'password');
+    if (isEmailUser && !user.displayName) {
+      location.href = 'home.html?noredirect';
+      return;
+    }
     document.getElementById('navAuthBtn').style.display = 'none';
     const av = document.getElementById('navUserAvatar');
-    av.src = user.photoURL || 'images/icon-192.png';
+    av.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
+    av.onerror = () => { av.src = makeEmojiDataUrl(getEmojiAvatar(user.uid)); av.onerror = null; };
     av.style.display = '';
     document.getElementById('userMenuName').textContent  = user.displayName || 'ユーザー';
     document.getElementById('userMenuEmail').textContent = user.email || '';
     const btn = document.getElementById('cloudSaveSettingBtn');
     if (btn) { btn.textContent = '保存'; }
+    const lr = document.getElementById('settingLogoutRow');
+    if (lr) lr.style.display = '';
     await _loadUserProfile(user);
     await cloudLoad();
   } else {
@@ -5835,6 +5950,8 @@ if (_auth) _auth.onAuthStateChanged(async user => {
     if (_instructorUnsub) { _instructorUnsub(); _instructorUnsub = null; }
     const btn = document.getElementById('cloudSaveSettingBtn');
     if (btn) { btn.textContent = 'ログイン'; }
+    const lr = document.getElementById('settingLogoutRow');
+    if (lr) lr.style.display = 'none';
   }
 });
 
@@ -5898,6 +6015,11 @@ async function leaveGroup() {
 }
 
 // --- Google Sign In / Out ---
+async function goToAccount() {
+  if (_fbUser) await cloudSaveNow(true);
+  location.href = 'home.html?noredirect';
+}
+
 function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   _auth.signInWithPopup(provider)
@@ -5932,7 +6054,8 @@ function _calcTotalAssets() {
 }
 
 async function cloudSaveNow(silent) {
-  if (!_fbUser || !_db) { if (!silent) showToast('ログインが必要です'); return; }
+  if (!_fbUser) { if (!silent) showToast('ログインが必要です'); return; }
+  if (!_db) { if (!silent) showToast('⚠️ クラウドに接続できません。ネット接続を確認してください'); return; }
   try {
     const row = masterData[currentIndex];
     const year = row ? (row.年 === 0 ? 'チュートリアル' : String(row.年)) : '---';
@@ -5962,6 +6085,8 @@ async function cloudSaveNow(silent) {
   } catch(e) { if (!silent) showToast('保存失敗: ' + e.message, 4000); }
 }
 
+let _pendingCloudData = null;
+
 async function cloudLoad() {
   if (!_fbUser || !_db) return;
   try {
@@ -5973,10 +6098,24 @@ async function cloudLoad() {
     const cloudMs  = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
     const localMs  = local && local._cloudTs ? local._cloudTs : 0;
     if (!local || cloudMs > localMs) {
-      _applyCloudData(d);
-      showToast('☁️ クラウドからデータを読み込みました', 3000);
+      _pendingCloudData = d;
+      document.getElementById('cloudConfirmOverlay').classList.add('open');
     }
   } catch(e) {}
+}
+
+function confirmCloudLoad() {
+  document.getElementById('cloudConfirmOverlay').classList.remove('open');
+  if (_pendingCloudData) {
+    _applyCloudData(_pendingCloudData);
+    _pendingCloudData = null;
+    showToast('☁️ クラウドからデータを読み込みました', 3000);
+  }
+}
+
+function skipCloudLoad() {
+  document.getElementById('cloudConfirmOverlay').classList.remove('open');
+  _pendingCloudData = null;
 }
 
 function _applyCloudData(d) {
@@ -6031,6 +6170,7 @@ async function createGroup() {
     await _db.collection('users').doc(_fbUser.uid).update({ groupId: code, role: 'instructor' });
     _groupId = code; _role = 'instructor';
     _updateGroupLabel();
+    document.getElementById('groupNameInput').value = '';
     document.getElementById('createdGroupCode').textContent = code;
     document.getElementById('groupCreatedInfo').style.display = '';
     _startInstructorListener();
@@ -6088,15 +6228,22 @@ function _renderInstructorPanel(members) {
     el.innerHTML = '<div style="color:rgba(255,255,255,0.4);font-size:12px;text-align:center">まだメンバーがいません</div>';
     return;
   }
-  el.innerHTML = members.map((m, i) =>
-    '<div class="member-card">' +
-    '<img src="' + (m.photoURL || 'images/icon-192.png') + '" alt="" onerror="this.src=\'images/icon-192.png\'">' +
-    '<div class="member-info">' +
-    '<div class="member-name">' + (i+1) + '. ' + _esc(m.name || 'ユーザー') + '</div>' +
-    '<div class="member-cash">💰 総資産 ' + fmt(m.totalAssets || 0) + '円</div>' +
-    '<div class="member-year">📅 ' + (m.year || '---') + '年 / 💵 現金 ' + fmt(m.cashBalance || 0) + '円</div>' +
-    '</div></div>'
-  ).join('');
+  el.innerHTML = members.map((m, i) => {
+    const uid = m.uid || ('member_' + i);
+    const avatarSrc = m.photoURL
+      ? _esc(m.photoURL)
+      : makeEmojiDataUrl(getEmojiAvatar(uid));
+    const onerror = m.photoURL
+      ? ` onerror="this.src=makeEmojiDataUrl(getEmojiAvatar('${_esc(uid)}'));this.onerror=null"`
+      : '';
+    return '<div class="member-card">' +
+      '<img src="' + avatarSrc + '" alt=""' + onerror + '>' +
+      '<div class="member-info">' +
+      '<div class="member-name">' + (i+1) + '. ' + _esc(m.name || 'ユーザー') + '</div>' +
+      '<div class="member-cash">💰 総資産 ' + fmt(m.totalAssets || 0) + '円</div>' +
+      '<div class="member-year">📅 ' + _esc(String(m.year || '---')) + '年 / 💵 現金 ' + fmt(m.cashBalance || 0) + '円</div>' +
+      '</div></div>';
+  }).join('');
 }
 
 function _esc(s) {
@@ -6128,13 +6275,15 @@ document.addEventListener('click', e => {
     menu.classList.remove('open');
   const ao = document.getElementById('authOverlay');
   if (ao && ao.classList.contains('open') && e.target === ao) closeAuthOverlay();
+  const cc = document.getElementById('cloudConfirmOverlay');
+  if (cc && cc.classList.contains('open') && e.target === cc) skipCloudLoad();
   const gm = document.getElementById('groupModal');
   if (gm && gm.classList.contains('open') && e.target === gm) closeGroupModal();
 });
 
 window.addEventListener('DOMContentLoaded', function() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+    navigator.serviceWorker.register('./sw.js').catch(e => console.warn('SW registration failed:', e));
   }
   init();
   setTimeout(function() {

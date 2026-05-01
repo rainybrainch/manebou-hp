@@ -32,6 +32,13 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .nav-logo-text{font-family:'Dela Gothic One',sans-serif;font-size:15px;color:var(--sky);}
 .nav-logo-sub{font-size:9px;color:rgba(255,255,255,0.4);display:block;font-family:'Zen Maru Gothic',sans-serif;}
 .nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nav-to-app{
+  background:var(--sky);color:var(--dark);border:none;border-radius:20px;
+  padding:5px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;
+  font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap;
+  transition:opacity 0.2s;
+}
+.nav-to-app:hover{opacity:0.85;}
 .nav-login-btn{
   background:none;border:1.5px solid rgba(245,200,66,0.5);border-radius:20px;
   padding:5px 14px;color:var(--gold);font-size:12px;font-family:'Zen Maru Gothic',sans-serif;
@@ -46,6 +53,18 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 
 /* ─── Layout ─── */
 .wrap{max-width:680px;margin:0 auto;padding:72px 16px 20px;position:relative;z-index:1;}
+#guestSection{
+  background:rgba(10,10,30,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,0.08);border-radius:24px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.06);
+  padding:8px 0;overflow:hidden;animation:fadeUp 0.5s ease both;
+}
+#dashboard{
+  background:rgba(10,10,30,0.68);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,0.07);border-radius:24px;
+  box-shadow:0 24px 64px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.05);
+  padding:8px 0;overflow:hidden;animation:fadeUp 0.5s ease both;
+}
 
 /* ─── Hero ─── */
 .hero{
@@ -74,6 +93,27 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .btn-google-big:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.35);}
 .btn-google-big img{width:22px;height:22px;}
 .hero-note{font-size:10px;color:rgba(255,255,255,0.3);margin-top:12px;}
+
+/* ─── Guest section ─── */
+.guest-benefit{
+  font-size:12px;color:rgba(255,255,255,0.6);
+  padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex;align-items:center;gap:8px;
+}
+.guest-benefit:last-of-type{border-bottom:none;}
+.btn-guest-login{
+  width:100%;background:var(--sky);color:var(--dark);border:none;border-radius:10px;
+  padding:12px;font-size:14px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;
+  cursor:pointer;margin-top:14px;transition:opacity 0.15s;
+}
+.btn-guest-login:hover{opacity:0.85;}
+.btn-logout-dash{
+  background:none;border:1.5px solid rgba(232,53,74,0.35);border-radius:10px;
+  color:rgba(232,53,74,0.7);font-size:12px;font-weight:700;
+  font-family:'Zen Maru Gothic',sans-serif;padding:9px 24px;cursor:pointer;
+  transition:background 0.2s,color 0.2s;
+}
+.btn-logout-dash:hover{background:rgba(232,53,74,0.1);color:#e8354a;}
 
 /* ─── Section ─── */
 .section{margin-bottom:20px;animation:fadeUp 0.5s ease both;}
@@ -218,22 +258,26 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 /* ─── Modal ─── */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
-.modal-box{background:#1a1a2e;border:3px solid var(--sky);border-radius:20px;padding:28px 22px;width:90%;max-width:360px;text-align:center;}
+.modal-box{position:relative;background:#1a1a2e;border:2px solid rgba(91,200,232,0.35);border-radius:22px;padding:28px 22px 24px;width:90%;max-width:360px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.7);}
 .modal-box h2{font-family:'Dela Gothic One',sans-serif;font-size:17px;color:var(--sky);margin-bottom:6px;}
-.modal-box p{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:16px;}
-.modal-tabs{display:flex;gap:6px;margin-bottom:14px;}
-.modal-tab{flex:1;padding:8px;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:8px;color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;}
-.modal-tab.active{background:rgba(91,200,232,0.15);border-color:var(--sky);color:var(--sky);}
-.modal-input{width:100%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 14px;color:#fff;font-size:15px;font-family:'Zen Maru Gothic',sans-serif;text-align:center;letter-spacing:4px;margin-bottom:12px;}
-.modal-input.no-track{letter-spacing:0;}
-.modal-input:focus{outline:none;border-color:var(--sky);}
-.btn-modal{width:100%;background:var(--sky);color:var(--dark);border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;margin-bottom:10px;}
-.btn-modal:hover{opacity:0.88;}
-.btn-close-modal{color:rgba(255,255,255,0.4);font-size:12px;cursor:pointer;background:none;border:none;font-family:'Zen Maru Gothic',sans-serif;}
-.btn-close-modal:hover{color:#fff;}
-.modal-code-box{margin-top:10px;display:none;}
-.modal-code-label{font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:4px;}
-.modal-code{font-family:'Dela Gothic One',sans-serif;font-size:28px;color:var(--gold);letter-spacing:6px;background:rgba(245,200,66,0.08);border:2px dashed var(--gold);border-radius:10px;padding:10px;margin-bottom:8px;}
+.modal-box p{font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:16px;}
+.modal-close-btn{position:absolute;top:12px;right:14px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:50%;width:30px;height:30px;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;}
+.modal-close-btn:hover{background:rgba(255,255,255,0.14);color:#fff;}
+.modal-tabs{display:flex;gap:4px;margin-bottom:18px;background:rgba(255,255,255,0.05);border-radius:10px;padding:4px;}
+.modal-tab{flex:1;padding:8px 6px;background:none;border:none;border-radius:7px;color:rgba(255,255,255,0.45);font-size:12px;font-weight:700;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;transition:background 0.2s,color 0.2s;}
+.modal-tab.active{background:rgba(91,200,232,0.2);color:var(--sky);}
+.modal-input{width:100%;background:rgba(255,255,255,0.06);border:2px solid rgba(255,255,255,0.15);border-radius:12px;padding:13px 14px;color:#fff;font-size:22px;font-family:'Dela Gothic One',sans-serif;text-align:center;letter-spacing:8px;margin-bottom:14px;transition:border-color 0.2s;}
+.modal-input.no-track{letter-spacing:0;font-size:15px;font-family:'Zen Maru Gothic',sans-serif;}
+.modal-input:focus{outline:none;border-color:var(--sky);background:rgba(91,200,232,0.05);}
+.btn-modal{width:100%;background:var(--sky);color:var(--dark);border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;margin-bottom:0;box-shadow:0 4px 0 rgba(10,70,100,0.5);transition:opacity 0.15s,transform 0.1s,box-shadow 0.1s;}
+.btn-modal:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 5px 0 rgba(10,70,100,0.5);}
+.btn-modal:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(10,70,100,0.5);}
+.modal-divider{height:1px;background:rgba(255,255,255,0.08);margin:16px 0;}
+.modal-code-box{margin-top:14px;display:none;}
+.modal-code-label{font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:6px;}
+.modal-code{font-family:'Dela Gothic One',sans-serif;font-size:32px;color:var(--gold);letter-spacing:8px;background:rgba(245,200,66,0.07);border:2px dashed rgba(245,200,66,0.5);border-radius:12px;padding:14px;margin-bottom:10px;}
+.btn-copy{width:100%;background:rgba(245,200,66,0.12);color:var(--gold);border:1.5px solid rgba(245,200,66,0.4);border-radius:12px;padding:10px;font-size:13px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;transition:background 0.2s;}
+.btn-copy:hover{background:rgba(245,200,66,0.22);}
 
 @media(min-width:680px){
   .top-nav,.wrap{max-width:720px;}
@@ -268,19 +312,19 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 
 /* ─── BG Scroll ─── */
 .bg-scroll{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-.bg-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(8,8,24,0.86) 0%,rgba(12,8,28,0.90) 100%);}
-.bg-overlay::after{content:'';position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(91,200,232,0.045) 0%,transparent 65%);animation:glowPulse 5s ease-in-out infinite;pointer-events:none;}
+.bg-overlay{position:absolute;inset:0;background:linear-gradient(160deg,rgba(6,6,20,0.95) 0%,rgba(10,6,24,0.97) 100%);}
+.bg-overlay::after{content:'';position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(91,200,232,0.025) 0%,transparent 65%);animation:glowPulse 5s ease-in-out infinite;pointer-events:none;}
 .bg-rows{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:14px 0;}
-.bg-row{display:flex;gap:12px;animation:bgScrollL 45s linear infinite;will-change:transform;opacity:0.7;}
-.bg-row:nth-child(2){animation:bgScrollR 38s linear infinite;opacity:0.85;}
-.bg-row:nth-child(3){animation:bgScrollL 60s linear infinite;opacity:0.5;}
+.bg-row{display:flex;gap:12px;animation:bgScrollL 45s linear infinite;will-change:transform;opacity:0.28;}
+.bg-row:nth-child(2){animation:bgScrollR 38s linear infinite;opacity:0.35;}
+.bg-row:nth-child(3){animation:bgScrollL 60s linear infinite;opacity:0.18;}
 @keyframes bgScrollL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes bgScrollR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
-.bg-card{flex-shrink:0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:8px 14px;}
-.bg-card-av{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.1);}
-.bg-card-av-def{display:flex;align-items:center;justify-content:center;background:rgba(91,200,232,0.12);font-size:15px;font-family:'Dela Gothic One',sans-serif;color:rgba(91,200,232,0.6);}
-.bg-card-name{font-size:12px;font-weight:700;color:rgba(255,255,255,0.45);white-space:nowrap;}
-.bg-card-val{font-size:10px;color:rgba(245,200,66,0.45);white-space:nowrap;margin-top:1px;}
+.bg-card{flex-shrink:0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.018);border:1px solid rgba(255,255,255,0.04);border-radius:14px;padding:8px 14px;}
+.bg-card-av{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,0.08);}
+.bg-card-av-def{display:flex;align-items:center;justify-content:center;background:rgba(91,200,232,0.08);font-size:15px;font-family:'Dela Gothic One',sans-serif;color:rgba(91,200,232,0.4);}
+.bg-card-name{font-size:12px;font-weight:700;color:rgba(255,255,255,0.28);white-space:nowrap;}
+.bg-card-val{font-size:10px;color:rgba(245,200,66,0.28);white-space:nowrap;margin-top:1px;}
 
 /* ─── Avatar Picker ─── */
 .avatar-pick-wrap{display:none;text-align:center;margin-bottom:16px;}
@@ -321,27 +365,28 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 <!-- Group Modal -->
 <div class="modal-overlay" id="groupModal">
   <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeGroupModal()">✕</button>
     <h2>👥 グループ</h2>
-    <p>講師がグループを作成し<br>プレイヤーはコードで参加</p>
+    <p>コードで参加 / 講師はグループを作成</p>
     <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchTab('join',this)">参加する</button>
-      <button class="modal-tab" onclick="switchTab('create',this)">作成する（講師）</button>
+      <button class="modal-tab active" onclick="switchTab('join',this)">🎮 参加する</button>
+      <button class="modal-tab" onclick="switchTab('create',this)">👑 作成する</button>
     </div>
     <div id="tabJoin">
-      <input class="modal-input" id="joinCodeInput" placeholder="XXXXXX" maxlength="6"
+      <input class="modal-input" id="joinCodeInput" placeholder="コードを入力" maxlength="6"
         oninput="this.value=this.value.toUpperCase()" autocomplete="off">
-      <button class="btn-modal" onclick="joinGroup()">参加する</button>
+      <button class="btn-modal" onclick="joinGroup()">グループに参加する</button>
     </div>
     <div id="tabCreate" style="display:none">
-      <input class="modal-input no-track" id="createNameInput" placeholder="グループ名" maxlength="20">
-      <button class="btn-modal" onclick="createGroup()">グループを作成</button>
+      <input class="modal-input no-track" id="createNameInput" placeholder="グループ名を入力" maxlength="20">
+      <button class="btn-modal" onclick="createGroup()">グループを作成する</button>
       <div class="modal-code-box" id="modalCodeBox">
-        <div class="modal-code-label">グループコード（プレイヤーに共有）</div>
+        <div class="modal-divider"></div>
+        <div class="modal-code-label">プレイヤーに共有するコード</div>
         <div class="modal-code" id="modalCodeText">------</div>
-        <button class="btn-copy" onclick="copyCode()" style="margin-bottom:0">📋 コピー</button>
+        <button class="btn-copy" onclick="copyCode()">📋 コードをコピー</button>
       </div>
     </div>
-    <button class="btn-close-modal" onclick="closeGroupModal()">閉じる</button>
   </div>
 </div>
 
@@ -351,6 +396,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
     <div><span class="nav-logo-text">マネぼうアプリ</span><span class="nav-logo-sub">ログイン</span></div>
   </div>
   <div class="nav-right">
+    <a class="nav-to-app" id="navGoToApp" href="calc.html" style="display:none">▶ アプリへ</a>
     <button class="nav-login-btn" id="navLoginBtn" onclick="signIn()">☁️ ログイン</button>
     <img class="nav-avatar" id="navAvatar" src="" alt="" onclick="toggleLogoutMenu()">
     <div class="logout-menu" id="logoutMenu" style="display:none">
@@ -394,7 +440,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 
     <p class="hero-note" style="margin-top:16px">ログインなしでもゲームは遊べます</p>
     <div style="margin-top:12px">
-      <a href="calc.html" style="color:rgba(255,255,255,0.35);font-size:12px;text-decoration:none;">▶ ゲームをはじめる（ログインなし）</a>
+      <a href="home.html?noredirect" style="color:rgba(255,255,255,0.35);font-size:12px;text-decoration:none;">▶ ゲームをはじめる（ログインなし）</a>
     </div>
   </div>
 
@@ -449,7 +495,35 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       </div>
     </div>
 
+    <!-- ログアウト -->
+    <div class="section" style="animation-delay:0.15s;text-align:center">
+      <button class="btn-logout-dash" onclick="signOut()">← ログアウト</button>
+    </div>
+
   </div><!-- /dashboard -->
+
+  <!-- GUEST ACCOUNT (未ログイン + ?noredirect) -->
+  <div id="guestSection" style="display:none">
+    <div class="section" style="animation-delay:0.05s">
+      <div class="my-card" style="border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.03)">
+        <div style="width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">👤</div>
+        <div class="my-info">
+          <div class="my-name" style="color:rgba(255,255,255,0.5)">ゲスト</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:4px">ログインなしでプレイ中</div>
+        </div>
+        <a href="calc.html" class="btn-play" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.65)">▶ ゲームへ</a>
+      </div>
+    </div>
+    <div class="section" style="animation-delay:0.1s">
+      <div class="section-title">🔐 ログインするとできること</div>
+      <div style="background:rgba(91,200,232,0.05);border:2px solid rgba(91,200,232,0.2);border-radius:16px;padding:16px">
+        <div class="guest-benefit">☁️ クラウドセーブ（データを安全に保管）</div>
+        <div class="guest-benefit">👥 グループ参加（友達と記録をリアルタイム共有）</div>
+        <div class="guest-benefit">🏆 ランキング掲載（殿堂入りを目指せる）</div>
+        <button class="btn-guest-login" onclick="showLoginForm()">ログイン・新規登録へ</button>
+      </div>
+    </div>
+  </div>
 
   <!-- HALL OF FAME (全員に公開) -->
   <div class="section" id="hofSection" style="animation-delay:0.15s">
@@ -538,6 +612,7 @@ async function submitEmailAuth() {
       let photoURL = '';
       if (_selectedAvatarFile) {
         photoURL = (await uploadAvatar(cred.user.uid, _selectedAvatarFile)) || '';
+        if (!photoURL) showToast('⚠️ 画像のアップロードに失敗しました（登録は完了）', 4000);
       }
       await cred.user.updateProfile({ displayName: name, photoURL: photoURL || null });
       if (_db) {
@@ -547,7 +622,7 @@ async function submitEmailAuth() {
         });
       }
       _registering = false;
-      location.href = 'calc.html';
+      location.href = 'home.html?noredirect';
       return;
     }
   } catch(e) {
@@ -582,7 +657,12 @@ async function saveNickname() {
   try {
     let photoURL = user.photoURL || '';
     if (_selectedNickAvatarFile) {
-      photoURL = (await uploadAvatar(user.uid, _selectedNickAvatarFile)) || photoURL;
+      const uploaded = await uploadAvatar(user.uid, _selectedNickAvatarFile);
+      if (uploaded) {
+        photoURL = uploaded;
+      } else {
+        showToast('⚠️ 画像のアップロードに失敗しました（保存は完了）', 4000);
+      }
     }
     await user.updateProfile({ displayName: name, photoURL: photoURL || null });
     if (_db) {
@@ -591,11 +671,17 @@ async function saveNickname() {
         { merge: true }
       );
     }
-    location.href = 'calc.html';
+    location.href = 'home.html?noredirect';
   } catch(e) {
     showToast('保存に失敗しました');
     btn.disabled = false; btn.textContent = '設定してはじめる';
   }
+}
+
+function showLoginForm() {
+  document.getElementById('guestSection').style.display = 'none';
+  document.getElementById('heroSection').style.display  = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function toggleLogoutMenu() {
@@ -624,13 +710,17 @@ if (_auth) _auth.onAuthStateChanged(async user => {
       showDashboard(user);
       return;
     }
-    location.href = 'calc.html';
+    location.href = 'home.html?noredirect';
     return;
   } else {
-    document.getElementById('heroSection').style.display = '';
+    const noRedirect = new URLSearchParams(location.search).has('noredirect');
+    document.getElementById('heroSection').style.display  = noRedirect ? 'none' : '';
+    document.getElementById('guestSection').style.display = noRedirect ? ''     : 'none';
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('navLoginBtn').style.display = '';
     document.getElementById('navAvatar').style.display = 'none';
+    document.getElementById('navGoToApp').style.display = 'none';
+    document.querySelector('.nav-logo-sub').textContent = 'ログイン';
     if (_memberUnsub) { _memberUnsub(); _memberUnsub = null; }
     _groupId = null; _role = null;
   }
@@ -640,6 +730,8 @@ function showDashboard(user) {
   document.getElementById('heroSection').style.display = 'none';
   document.getElementById('dashboard').style.display = '';
   document.getElementById('navLoginBtn').style.display = 'none';
+  document.getElementById('navGoToApp').style.display = '';
+  document.querySelector('.nav-logo-sub').textContent = 'アカウント';
   const av = document.getElementById('navAvatar');
   av.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
   av.style.display = '';
@@ -777,6 +869,7 @@ async function createGroup() {
     });
     await _db.collection('users').doc(_user.uid).update({ groupId: code, role: 'instructor' });
     _groupId = code; _role = 'instructor';
+    document.getElementById('createNameInput').value = '';
     document.getElementById('modalCodeText').textContent = code;
     document.getElementById('modalCodeBox').style.display = 'block';
     await showGroup();
