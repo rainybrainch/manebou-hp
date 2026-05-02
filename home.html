@@ -535,6 +535,25 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .btn-copy{width:100%;background:rgba(245,200,66,0.12);color:var(--gold);border:1.5px solid rgba(245,200,66,0.4);border-radius:12px;padding:10px;font-size:13px;font-weight:700;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;transition:background 0.2s;}
 .btn-copy:hover{background:rgba(245,200,66,0.22);}
 
+/* ─── Member Detail Modal ─── */
+.member-row { cursor: pointer; transition: background 0.15s; }
+.member-row:hover { background: rgba(255,255,255,0.07); border-radius: 10px; }
+.member-tap-hint { font-size: 9px; color: var(--sky); opacity: 0.7; margin-top: 1px; }
+.member-detail-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; text-align:left; }
+.member-detail-avatar { width:52px; height:52px; border-radius:50%; border:2px solid var(--gold); object-fit:cover; flex-shrink:0; }
+.member-detail-name { font-size:15px; font-weight:700; }
+.member-detail-sub { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; }
+.member-detail-divider { border:none; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0; }
+.member-detail-stat { display:flex; justify-content:space-between; font-size:12px; padding:3px 0; }
+.member-detail-stat .lbl { color:rgba(255,255,255,0.55); }
+.member-detail-stat .val { font-weight:700; color:var(--gold); }
+.member-portfolio-title { font-size:11px; color:var(--sky); margin:10px 0 6px; font-weight:700; letter-spacing:0.5px; }
+.member-asset-row { display:flex; align-items:center; gap:8px; font-size:11px; padding:5px 8px; border-radius:7px; background:rgba(255,255,255,0.04); margin-bottom:4px; }
+.member-asset-row .a-emoji { font-size:14px; flex-shrink:0; }
+.member-asset-row .a-name { flex:1; }
+.member-asset-row .a-qty { color:rgba(255,255,255,0.5); }
+.member-asset-row .a-val { color:var(--gold); font-weight:700; }
+
 @media(min-width:680px){
   .wrap{max-width:720px;}
 }
@@ -794,6 +813,14 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
         <button class="btn-copy" onclick="copyCode()">📋 コードをコピー</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Member Detail Modal -->
+<div class="modal-overlay" id="memberDetailModal" onclick="if(event.target===this)closeMemberDetail()">
+  <div class="modal-box" style="max-width:380px;max-height:82vh;overflow-y:auto;text-align:left">
+    <button class="modal-close-btn" onclick="closeMemberDetail()">✕</button>
+    <div id="memberDetailContent"></div>
   </div>
 </div>
 
@@ -1419,7 +1446,20 @@ function startMemberListener() {
     }, () => {});
 }
 
+let _membersCache = [];
+const HOME_ASSET_KEYS = [
+  { id:'銀行預金', label:'銀行預金', emoji:'🏦' },
+  { id:'株式',     label:'株式',     emoji:'📈' },
+  { id:'金',       label:'金',       emoji:'✨' },
+  { id:'投資信託', label:'投資信託', emoji:'📊' },
+  { id:'国債',     label:'国債',     emoji:'🏛️' },
+  { id:'ドル',     label:'ドル',     emoji:'💵' },
+  { id:'不動産',   label:'不動産',   emoji:'🏠' },
+  { id:'？？？？？',label:'仮想通貨', emoji:'❓' },
+];
+
 function renderMembers(members) {
+  _membersCache = members;
   const el = document.getElementById('membersBoard');
   if (!members.length) {
     el.innerHTML = '<p style="font-size:12px;color:rgba(255,255,255,0.3);text-align:center;padding:12px">まだメンバーがいません</p>';
@@ -1430,17 +1470,58 @@ function renderMembers(members) {
     const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1);
     const isMe = _user && m.uid === _user.uid;
     const rankTopCls = i < 3 ? ` rank-top${i+1}` : '';
-    return `<div class="member-row${isMe?' member-me':''}${rankTopCls}">
+    const safeUid = (m.uid || '').replace(/'/g, '');
+    const hasHoldings = m.holdings && Object.keys(m.holdings).length > 0;
+    return `<div class="member-row${isMe?' member-me':''}${rankTopCls}" onclick="openMemberDetail('${safeUid}')">
       <div class="member-rank ${rankCls}">${rankIcon}</div>
       ${avatarImgSrc(m.uid, m.photoURL, 'member-avatar')}
       <div class="member-info">
         <div class="member-name">${isMe?'<span style="color:var(--gold)">★ </span>':''}${esc(m.name||'ユーザー')}</div>
         <div class="member-assets">💰 ${fmt(m.totalAssets)}円</div>
         <div class="member-sub">📅 ${esc(m.year||'---')}年 / 💵 ${fmt(m.cashBalance)}円</div>
+        ${hasHoldings ? '<div class="member-tap-hint">▶ タップで詳細を表示</div>' : ''}
       </div>
       <span class="live-dot"></span>
     </div>`;
   }).join('');
+}
+
+function openMemberDetail(uid) {
+  const m = _membersCache.find(x => (x.uid || '') === uid);
+  if (!m) return;
+  const h = m.holdings || {};
+  const avatarSrc = m.photoURL ? esc(m.photoURL) : '';
+  const avatarTag = avatarSrc
+    ? `<img class="member-detail-avatar" src="${avatarSrc}" alt="" onerror="this.style.display='none'">`
+    : `<div class="member-detail-avatar" style="background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:22px">👤</div>`;
+  let portfolioRows = '';
+  HOME_ASSET_KEYS.forEach(a => {
+    const qty = h[a.id] || 0;
+    if (qty <= 0) return;
+    portfolioRows += `<div class="member-asset-row">
+      <span class="a-emoji">${a.emoji}</span>
+      <span class="a-name">${esc(a.label)}</span>
+      <span class="a-qty">${qty}口</span>
+    </div>`;
+  });
+  const hasPortfolio = portfolioRows !== '';
+  const badgeStr = m.badgeCount != null ? `🏅 称号 ${m.badgeCount}個` : '';
+  document.getElementById('memberDetailContent').innerHTML =
+    `<div class="member-detail-header">${avatarTag}
+    <div><div class="member-detail-name">${esc(m.name||'ユーザー')}</div>
+    <div class="member-detail-sub">📅 ${esc(String(m.year||'---'))}年${badgeStr ? ' · '+badgeStr : ''}</div>
+    </div></div>
+    <hr class="member-detail-divider">
+    <div class="member-detail-stat"><span class="lbl">💴 現金</span><span class="val">${fmt(m.cashBalance||0)} 円</span></div>
+    <div class="member-detail-stat"><span class="lbl">💰 総資産</span><span class="val">${fmt(m.totalAssets||0)} 円</span></div>
+    ${hasPortfolio
+      ? `<div class="member-portfolio-title">📊 ポートフォリオ</div>${portfolioRows}`
+      : '<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">保有資産データなし（次回ゲーム保存後に反映）</div>'}`;
+  document.getElementById('memberDetailModal').classList.add('open');
+}
+
+function closeMemberDetail() {
+  document.getElementById('memberDetailModal').classList.remove('open');
 }
 
 // ─── Group join/create ────────────────────────────────────
