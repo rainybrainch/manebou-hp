@@ -6682,6 +6682,7 @@ function clearSave() {
     updateEventOptions();
     updateDisplay();
     saveGame();
+    cloudSaveNow(true);
 
     const gameBtn = document.querySelector('.tab-btn[onclick*="game"]');
     showTab('game', gameBtn);

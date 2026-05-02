@@ -1433,7 +1433,23 @@ async function showGroup() {
     const gSnap = await _db.collection('groups').doc(_groupId).get();
     if (gSnap.exists) document.getElementById('groupNameLabel').textContent = gSnap.data().name || _groupId;
   } catch(e) {}
+  _syncMemberEntry();
   startMemberListener();
+}
+
+async function _syncMemberEntry() {
+  if (!_user || !_db || !_groupId) return;
+  try {
+    const ref = _db.collection('groups').doc(_groupId)
+      .collection('members').doc(_user.uid);
+    const snap = await ref.get();
+    const base = { name: _user.displayName || 'ユーザー', photoURL: _user.photoURL || '', updatedAt: new Date() };
+    if (!snap.exists) {
+      await ref.set({ ...base, totalAssets: 0, cashBalance: 0, year: 'チュートリアル', badgeCount: 0, holdings: {} });
+    } else {
+      await ref.update(base);
+    }
+  } catch(e) {}
 }
 
 function startMemberListener() {
