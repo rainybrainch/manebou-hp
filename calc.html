@@ -190,7 +190,7 @@ body {
   border-radius: 10px;
   padding: 8px 10px;
   font-family: 'Zen Maru Gothic', sans-serif;
-  font-size: 14px;
+  font-size: clamp(12px, 3.5vw, 14px);
   font-weight: 700;
 }
 .date-bar select option { background: #1a1a2e; color: #fff; }
@@ -350,7 +350,7 @@ body {
   border-radius: 10px;
   padding: 10px 4px;
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 13px;
+  font-size: clamp(11px, 3vw, 13px);
   cursor: pointer;
   text-align: center;
   transform: translateY(0);
@@ -664,6 +664,7 @@ body {
 .action-row {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 12px;
   animation: fadeUp 0.7s ease 0.28s both;
 }
@@ -758,7 +759,7 @@ body {
   justify-content: space-between;
   align-items: center;
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 15px;
+  font-size: clamp(12px, 3.5vw, 15px);
   color: var(--dark);
   transition: background 0.2s;
   user-select: none;
@@ -865,8 +866,8 @@ body {
 }
 .tm-head-buy  { background: linear-gradient(90deg, rgba(245,200,66,0.18) 0%, transparent 100%); }
 .tm-head-sell { background: linear-gradient(90deg, rgba(91,200,232,0.18) 0%, transparent 100%); }
-.tm-emoji { font-size: 22px; }
-.tm-name  { font-family:'Dela Gothic One',sans-serif; font-size:16px; }
+.tm-emoji { font-size: 22px; flex-shrink: 0; }
+.tm-name  { font-family:'Dela Gothic One',sans-serif; font-size:clamp(12px,4vw,16px); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .tm-body  { padding: 14px 18px; display:flex; flex-direction:column; gap:9px; }
 .tm-row {
   display: flex;
@@ -882,7 +883,7 @@ body {
   border-top: 1px solid rgba(255,255,255,0.12);
   font-size: 14px;
 }
-.tm-total span:last-child { font-size: 20px; }
+.tm-total span:last-child { font-size: clamp(14px, 4vw, 20px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tm-div-info {
   font-size: 10px;
   color: #4caf7d;
@@ -979,12 +980,13 @@ body {
 }
 .pp-title {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 15px;
+  font-size: clamp(12px, 3.5vw, 15px);
   color: var(--dark);
   text-align: center;
   margin-bottom: 14px;
   padding-bottom: 10px;
   border-bottom: 2px solid rgba(0,0,0,0.1);
+  overflow-wrap: break-word;
 }
 .pp-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 .pp-item {
@@ -1051,7 +1053,7 @@ body {
 }
 .lo-label {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 20px;
+  font-size: clamp(14px, 4.5vw, 20px);
   color: var(--gold);
   letter-spacing: 3px;
 }
@@ -1307,21 +1309,21 @@ body {
   flex: 1; min-width: 0;
   background: rgba(255,255,255,0.06); color: #fff;
   border: 1px solid rgba(255,255,255,0.12); border-radius: 7px;
-  padding: 5px 8px; font-size: 14px;
+  padding: 5px 8px; font-size: clamp(12px, 3.5vw, 14px);
   font-family: 'Dela Gothic One',sans-serif; text-align: right;
 }
 .wh-input-row input::placeholder { color: rgba(255,255,255,0.18); font-size: 11px; font-family: 'Zen Maru Gothic',sans-serif; }
 .wh-input-row input:focus { outline: none; border-color: var(--gold); }
 .wh-op-btn {
   width: 32px; height: 32px; border-radius: 7px; border: 1px solid;
-  font-size: 16px; font-weight: 900; cursor: pointer;
+  font-size: clamp(13px, 4vw, 16px); font-weight: 900; cursor: pointer;
   transition: all 0.12s; flex-shrink: 0;
 }
 .wh-op-btn.plus  { background: rgba(46,204,113,0.12); color: #2ecc71; border-color: rgba(46,204,113,0.35); }
 .wh-op-btn.minus { background: rgba(232,53,74,0.10);  color: #e8354a; border-color: rgba(232,53,74,0.30); }
 .wh-op-btn:active { transform: scale(0.88); }
-.wh-apply-btn { width: auto; padding: 0 10px; height: 32px; font-size: 12px; white-space: nowrap; font-family: 'Zen Maru Gothic',sans-serif; font-weight: 700; }
-.wh-sign-toggle { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid; font-size: 17px; font-weight: 900; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.15s; }
+.wh-apply-btn { width: auto; padding: 0 8px; height: 32px; font-size: clamp(11px, 3vw, 12px); white-space: nowrap; font-family: 'Zen Maru Gothic',sans-serif; font-weight: 700; }
+.wh-sign-toggle { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid; font-size: clamp(14px, 4vw, 17px); font-weight: 900; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.15s; }
 .wh-sign-toggle.is-plus  { background: rgba(46,204,113,0.15); color: #2ecc71; border-color: rgba(46,204,113,0.45); }
 .wh-sign-toggle.is-minus { background: rgba(232,53,74,0.12);  color: #e8354a; border-color: rgba(232,53,74,0.4); }
 .wh-sign-toggle:active { transform: scale(0.82); }
@@ -1485,7 +1487,7 @@ body {
   border: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   padding: 14px 4px;
-  font-size: 16px;
+  font-size: clamp(13px, 4vw, 16px);
   cursor: pointer;
   text-align: center;
   font-family: 'Zen Maru Gothic', sans-serif;
@@ -1716,11 +1718,11 @@ body {
 .ba-start  { background: #1ebdb0; color: #fff; --pc: rgba(30,189,176,0.65); }
 .ba-cw { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .ba-cw-icon { font-size: 48px; color: #fff; line-height: 1; text-shadow: 0 0 12px rgba(0,0,0,1), 0 0 6px rgba(0,0,0,1), 0 2px 4px rgba(0,0,0,1); }
-.ba-cw-label { color: #fff; font-size: 10px; font-family: 'Dela Gothic One',sans-serif; white-space: nowrap; text-shadow: 0 0 8px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,1); letter-spacing: .3px; }
+.ba-cw-label { color: #fff; font-size: 10px; font-family: 'Dela Gothic One',sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-shadow: 0 0 8px rgba(0,0,0,1), 0 1px 3px rgba(0,0,0,1); letter-spacing: .3px; }
 /* clockwise path arrow */
 .ba-cw-arrow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
 .board-cw-note { display: flex; align-items: center; justify-content: center; gap: 5px; margin: 4px auto 10px; color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.55); border-radius: 20px; padding: 4px 14px; font-size: 11px; font-family: 'Dela Gothic One',sans-serif; width: fit-content; letter-spacing: .3px; }
-.rules-catch { font-size: 15px; font-weight: 800; color: var(--sky); text-align: center; margin-bottom: 8px; letter-spacing: .5px; }
+.rules-catch { font-size: clamp(12px, 3.5vw, 15px); font-weight: 800; color: var(--sky); text-align: center; margin-bottom: 8px; letter-spacing: .5px; overflow-wrap: break-word; }
 
 /* ─── Character Banner ───────────────────────────────────── */
 .char-banner {
@@ -1853,7 +1855,7 @@ body {
 .titles-player-info { flex: 1; min-width: 0; }
 .titles-player-name {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 15px; color: var(--white);
+  font-size: clamp(12px, 3.5vw, 15px); color: var(--white);
   margin-bottom: 5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
@@ -1875,7 +1877,7 @@ body {
 }
 .titles-badge-num span {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 26px; color: var(--gold); display: block; line-height: 1;
+  font-size: clamp(18px, 6vw, 26px); color: var(--gold); display: block; line-height: 1;
 }
 .titles-badge-num small {
   font-size: 9px; color: rgba(255,255,255,0.3);
@@ -2322,12 +2324,12 @@ body {
   animation: ending-pop 0.5s cubic-bezier(.34,1.56,.64,1) both;
 }
 @keyframes ending-pop { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.ending-label { font-size: 11px; letter-spacing: 4px; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
-.ending-title { font-family: 'Dela Gothic One', sans-serif; font-size: 20px; color: #fff; line-height: 1.4; margin-bottom: 16px; }
+.ending-label { font-size: 11px; letter-spacing: clamp(1px, 2vw, 4px); color: var(--gold); font-weight: 700; margin-bottom: 8px; overflow: hidden; }
+.ending-title { font-family: 'Dela Gothic One', sans-serif; font-size: clamp(14px, 4.5vw, 20px); color: #fff; line-height: 1.4; margin-bottom: 16px; overflow-wrap: break-word; }
 .ending-char img { width: 72px; height: 72px; border-radius: 50%; border: 3px solid var(--gold); object-fit: cover; object-position: top; margin-bottom: 16px; }
 .ending-rank-wrap { margin-bottom: 20px; }
 .ending-rank-label { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 2px; margin-bottom: 4px; }
-.ending-rank { font-family: 'Dela Gothic One', sans-serif; font-size: 28px; }
+.ending-rank { font-family: 'Dela Gothic One', sans-serif; font-size: clamp(18px, 6vw, 28px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ending-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 24px; }
 .ending-stat { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 6px; }
 .ending-stat-label { font-size: 9px; color: rgba(255,255,255,0.45); margin-bottom: 4px; }
@@ -2335,7 +2337,7 @@ body {
 .ending-btn-primary {
   width: 100%; padding: 14px; background: var(--gold); color: var(--dark);
   border: none; border-radius: 12px; font-family: 'Dela Gothic One', sans-serif;
-  font-size: 15px; cursor: pointer; margin-bottom: 10px;
+  font-size: clamp(13px, 3.5vw, 15px); cursor: pointer; margin-bottom: 10px;
   box-shadow: 0 4px 0 var(--gold-dark); transition: transform 0.08s, box-shadow 0.08s;
 }
 .ending-btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--gold-dark); }
@@ -2390,8 +2392,8 @@ body {
 }
 .auth-box { border: 3px solid var(--gold); }
 .modal-box { border: 3px solid var(--sky); }
-.auth-box h2 { font-family: 'Dela Gothic One', sans-serif; font-size: 18px; color: var(--gold); margin-bottom: 8px; }
-.modal-box h2 { font-family: 'Dela Gothic One', sans-serif; font-size: 17px; color: var(--sky); margin-bottom: 6px; }
+.auth-box h2 { font-family: 'Dela Gothic One', sans-serif; font-size: clamp(14px, 4.5vw, 18px); color: var(--gold); margin-bottom: 8px; overflow-wrap: break-word; }
+.modal-box h2 { font-family: 'Dela Gothic One', sans-serif; font-size: clamp(13px, 4vw, 17px); color: var(--sky); margin-bottom: 6px; overflow-wrap: break-word; }
 .auth-box p, .modal-box p { font-size: 12px; color: rgba(255,255,255,0.55); margin-bottom: 20px; }
 .btn-google {
   display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -2436,8 +2438,8 @@ body {
 .modal-tab.active { background: rgba(91,200,232,0.2); color: var(--sky); }
 .modal-input {
   width: 100%; background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.15);
-  border-radius: 12px; padding: 13px 14px; color: #fff; font-size: 22px;
-  font-family: 'Dela Gothic One', sans-serif; text-align: center; letter-spacing: 8px; margin-bottom: 14px;
+  border-radius: 12px; padding: 13px 14px; color: #fff; font-size: clamp(16px, 5vw, 22px);
+  font-family: 'Dela Gothic One', sans-serif; text-align: center; letter-spacing: clamp(3px, 2vw, 8px); margin-bottom: 14px;
   transition: border-color 0.2s;
 }
 .modal-input:focus { outline: none; border-color: var(--sky); background: rgba(91,200,232,0.06); }
@@ -2451,10 +2453,11 @@ body {
 .btn-modal-action:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 5px 0 rgba(10,70,100,0.5); }
 .btn-modal-action:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(10,70,100,0.5); }
 .modal-group-code {
-  font-family: 'Dela Gothic One', sans-serif; font-size: 32px; color: var(--gold);
-  letter-spacing: 8px; margin: 14px 0;
+  font-family: 'Dela Gothic One', sans-serif; font-size: clamp(20px, 7vw, 32px); color: var(--gold);
+  letter-spacing: clamp(4px, 2vw, 8px); margin: 14px 0;
   background: rgba(245,200,66,0.07); border: 2px dashed rgba(245,200,66,0.5);
   border-radius: 12px; padding: 14px; text-align: center;
+  overflow-wrap: break-word; overflow: hidden;
 }
 .modal-group-code-label { font-size: 11px; color: rgba(255,255,255,0.35); margin-bottom: 4px; text-align: center; }
 .modal-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 16px 0; }
@@ -2623,7 +2626,7 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 .welcome-go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--gold-dark);}
 .welcome-sub{font-size:10px;color:rgba(255,255,255,0.3);}
 
-/* ===== 賞状モーダル ===== */
+/* ===== 約束手形モーダル ===== */
 .cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.35s;backdrop-filter:blur(4px);}
 .cert-backdrop.open{opacity:1;pointer-events:all;}
 .cert-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-54%) scale(0.9);z-index:2001;background:#06060f;border:2px solid rgba(245,200,66,0.6);border-radius:18px;padding:18px 18px 14px;width:min(92vw,820px);max-height:92vh;overflow-y:auto;pointer-events:none;opacity:0;transition:transform 0.35s cubic-bezier(0.22,1.2,0.5,1),opacity 0.28s;box-shadow:0 0 0 1px rgba(245,200,66,0.15),0 24px 80px rgba(0,0,0,0.9),0 0 40px rgba(245,200,66,0.08);}
@@ -2635,7 +2638,7 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 .cert-dl-btn:active{transform:translateY(0);}
 .cert-close-btn{padding:13px 22px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;}
 .cert-close-btn:hover{background:rgba(255,255,255,0.11);color:#fff;}
-/* 賞状コレクション一覧 */
+/* 約束手形コレクション一覧 */
 .cert-coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;padding:4px 0;}
 .cert-coll-item{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s;}
 .cert-coll-item:hover{border-color:rgba(245,200,66,0.5);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.4);}
@@ -2685,25 +2688,11 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 
 <!-- ════ NEXT CONFIRM ════ -->
 <div class="auth-overlay" id="nextConfirmOverlay">
-  <div class="auth-box" style="text-align:left;max-width:340px">
-    <h2 style="font-size:18px;margin-bottom:6px;text-align:center">⏩ 次へ進む</h2>
-    <p id="nextConfirmMsg" style="font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:14px;line-height:1.6;text-align:center"></p>
-    <div class="next-warn-box">
-      <div class="next-warn-title">⚠️ 進む前に確認してください</div>
-      <label class="next-chk-row">
-        <input type="checkbox" id="nxtChk1" onchange="updateNextBtn()">
-        <span class="next-chk-text">📋 カートの取引を確認・実行した（またはカートを空にした）</span>
-      </label>
-      <label class="next-chk-row">
-        <input type="checkbox" id="nxtChk2" onchange="updateNextBtn()">
-        <span class="next-chk-text">📅 今の年のイベント・テキストを確認した</span>
-      </label>
-      <label class="next-chk-row">
-        <input type="checkbox" id="nxtChk3" onchange="updateNextBtn()">
-        <span class="next-chk-text">⚠️ 「次へ」は取り消しできないことを理解した</span>
-      </label>
-    </div>
-    <button id="confirmNextBtn" class="btn-google" style="background:rgba(245,200,66,0.3);color:rgba(255,255,255,0.35);margin-bottom:10px;font-weight:700;cursor:not-allowed;transition:all 0.2s" onclick="confirmNext()" disabled>✅ 進む（全項目にチェックを入れてください）</button>
+  <div class="auth-box" style="text-align:center;max-width:320px">
+    <h2 style="margin-bottom:10px">⏩ 次の時代へ進む</h2>
+    <p id="nextConfirmMsg" style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;line-height:1.7"></p>
+    <p style="font-size:12px;color:rgba(255,200,66,0.75);margin-bottom:20px;line-height:1.5">⚠️ この操作は取り消せません</p>
+    <button id="confirmNextBtn" class="btn-google" style="background:var(--gold);color:var(--dark);margin-bottom:10px;font-weight:700" onclick="confirmNext()">✅ 進む</button>
     <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.15)" onclick="cancelNext()">✕ キャンセル</button>
   </div>
 </div>
@@ -2758,7 +2747,7 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   <a class="user-menu-btn" href="https://rainybrainch.github.io/manebou-todo/manebou-pin.html" target="_blank" rel="noopener">📋 マネぼうPinへ</a>
   <button class="user-menu-btn" onclick="openGroupModal()">👥 グループ管理</button>
   <button class="user-menu-btn" onclick="cloudSaveNow()">☁️ 今すぐ保存</button>
-  <button class="user-menu-btn" onclick="closeUserMenu();openCertCollection()">📜 賞状コレクション</button>
+  <button class="user-menu-btn" onclick="closeUserMenu();openCertCollection()">📜 約束手形コレクション</button>
   <button class="user-menu-btn danger" id="leaveGroupBtn" style="display:none" onclick="leaveGroup()">🚪 グループを抜ける</button>
   <button class="user-menu-btn danger" onclick="signOutUser()">🚪 ログアウト</button>
 </div>
@@ -3355,8 +3344,8 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
     <button onclick="openCertCollection()" style="display:flex;align-items:center;gap:10px;width:100%;background:rgba(245,200,66,0.08);border:1.5px solid rgba(245,200,66,0.35);border-radius:14px;padding:14px 18px;color:var(--gold);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:16px;transition:background 0.15s;">
       <span style="font-size:22px;">📜</span>
       <div style="text-align:left;">
-        <div>賞状コレクション</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:400;margin-top:2px;">獲得した賞状を確認・ダウンロード</div>
+        <div>約束手形コレクション</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:400;margin-top:2px;">獲得した約束手形を確認・ダウンロード</div>
       </div>
       <span style="margin-left:auto;opacity:0.5;">›</span>
     </button>
@@ -4964,7 +4953,7 @@ function stepTime(dir) {
     updateEventOptions();
     if (row.イベント > 0) document.getElementById('selE').value = row.イベント;
     updateDisplay();
-    // 賞状チェック
+    // 約束手形チェック
     if (dir === 1) {
       const certKey = _isCertMilestone(prevRow);
       if (certKey) {
@@ -5005,41 +4994,10 @@ function askConfirmNext() {
     msg = `<strong style="color:var(--gold)">${label}</strong> へ進みます`;
   }
   document.getElementById('nextConfirmMsg').innerHTML = msg;
-  ['nxtChk1','nxtChk2','nxtChk3'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.checked = false;
-  });
-  const btn = document.getElementById('confirmNextBtn');
-  if (btn) {
-    btn.disabled = true;
-    btn.style.background = 'rgba(245,200,66,0.3)';
-    btn.style.color = 'rgba(255,255,255,0.35)';
-    btn.style.cursor = 'not-allowed';
-    btn.textContent = '✅ 進む（全項目にチェックを入れてください）';
-  }
   document.getElementById('nextConfirmOverlay').classList.add('open');
 }
 
-function updateNextBtn() {
-  const allChecked = ['nxtChk1','nxtChk2','nxtChk3'].every(id => {
-    const el = document.getElementById(id);
-    return el && el.checked;
-  });
-  const btn = document.getElementById('confirmNextBtn');
-  if (!btn) return;
-  btn.disabled = !allChecked;
-  if (allChecked) {
-    btn.style.background = 'var(--gold)';
-    btn.style.color = 'var(--dark)';
-    btn.style.cursor = 'pointer';
-    btn.textContent = '✅ 進む';
-  } else {
-    btn.style.background = 'rgba(245,200,66,0.3)';
-    btn.style.color = 'rgba(255,255,255,0.35)';
-    btn.style.cursor = 'not-allowed';
-    btn.textContent = '✅ 進む（全項目にチェックを入れてください）';
-  }
-}
+function updateNextBtn() {}
 
 function playCuckoo() {
   try {
@@ -5321,7 +5279,7 @@ function calcToSim() {
   }
 }
 
-// ════ 賞状システム ════
+// ════ 約束手形システム ════
 const CERT_MILESTONES = {
   tutorial: { bgIdx:1,
     charFiles:['images/cert/char-kau-0.png','images/cert/char-tam-0.png','images/cert/char-oru-1.png','images/cert/char-end-1.png'],
@@ -5470,14 +5428,14 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   ctx.font = '600 10px sans-serif';
   ctx.fillText('M A N E B O U  J U K U', TX, bm + 24);
 
-  // 6. 賞状 + flanking lines
+  // 6. 約束手形 + flanking lines
   const ry = bm + 48;
   ctx.strokeStyle = 'rgba(245,200,66,0.5)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(TX - 105, ry); ctx.lineTo(TX - 24, ry); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(TX + 24, ry); ctx.lineTo(TX + 105, ry); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX - 115, ry); ctx.lineTo(TX - 40, ry); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX + 40, ry); ctx.lineTo(TX + 115, ry); ctx.stroke();
   ctx.fillStyle = '#f5c842';
-  ctx.font = 'bold 16px ' + JP;
-  ctx.fillText('賞　状', TX, ry + 5);
+  ctx.font = 'bold 15px ' + JP;
+  ctx.fillText('約束手形', TX, ry + 5);
 
   // 7. period badge
   const pbw = 200, pbh = 22;
@@ -5517,17 +5475,30 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   ctx.fillText(playerName || 'プレイヤー', TX, dy + 34);
   ctx.shadowBlur = 0;
 
-  // 12. total assets
+  // 12. total assets — 金〇〇円也 format
   if (assets != null) {
     ctx.fillStyle = 'rgba(245,200,66,0.92)';
-    ctx.font = '13px ' + JP;
-    ctx.fillText('総資産  ' + Number(assets).toLocaleString() + '円', TX, dy + 56);
+    ctx.font = 'bold 14px ' + JP;
+    ctx.fillText('金  ' + Number(assets).toLocaleString() + ' 円也', TX, dy + 56);
   }
 
   // 13. date
   ctx.fillStyle = 'rgba(255,255,255,0.38)';
   ctx.font = '10px sans-serif';
   ctx.fillText(dateStr, TX, dy + 74);
+
+  // 13.5. red inkan seal
+  const sealX = TX + 136, sealY = dy + 30;
+  ctx.save();
+  ctx.strokeStyle = 'rgba(210,45,45,0.82)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(sealX, sealY, 20, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(sealX, sealY, 15, 0, Math.PI * 2); ctx.stroke();
+  ctx.fillStyle = 'rgba(210,45,45,0.82)';
+  ctx.font = 'bold 13px ' + JP;
+  ctx.textAlign = 'center';
+  ctx.fillText('証', sealX, sealY + 5);
+  ctx.restore();
+  ctx.textAlign = 'center';
 
   // ─── 14. 保有資産テーブル ────────────────────────────────────
   const snap         = earnedCerts[certKey];
@@ -5698,7 +5669,7 @@ function downloadCert() {
     const url = URL.createObjectURL(blob);
     const a   = document.createElement('a');
     a.href = url;
-    a.download = `マネぼう賞状_${key}.png`;
+    a.download = `マネぼう約束手形_${key}.png`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 3000);
   }, 'image/png');
@@ -5709,7 +5680,7 @@ async function openCertCollection() {
   grid.innerHTML = '';
   const earned = Object.keys(earnedCerts);
   if (earned.length === 0) {
-    grid.innerHTML = '<p style="color:rgba(255,255,255,0.45);font-size:13px;text-align:center;padding:20px 0;grid-column:1/-1;">まだ賞状を獲得していません</p>';
+    grid.innerHTML = '<p style="color:rgba(255,255,255,0.45);font-size:13px;text-align:center;padding:20px 0;grid-column:1/-1;">まだ約束手形を獲得していません</p>';
   } else {
     const playerName = (auth && auth.currentUser)
       ? (auth.currentUser.displayName || auth.currentUser.email || 'プレイヤー')
@@ -5744,7 +5715,7 @@ function closeCertColl() {
   document.getElementById('certCollBackdrop').classList.remove('open');
   document.getElementById('certCollModal').classList.remove('open');
 }
-// ════ 賞状システム END ════
+// ════ 約束手形システム END ════
 
 let cashBalance = 0;
 const cashHistLog = [];
@@ -5967,7 +5938,8 @@ function calcFromCash() {
 function showHistTab(name, btn) {
   document.querySelectorAll('.hmt-panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.hmt-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('hmt-' + name).classList.add('active');
+  const hmtEl = document.getElementById('hmt-' + name);
+  if (hmtEl) hmtEl.classList.add('active');
   if (btn) btn.classList.add('active');
 }
 
@@ -5977,13 +5949,15 @@ function drawPortfolioGraph() {
   const svg    = document.getElementById('portfolioSvg');
   const legend = document.getElementById('portfolioLegend');
   const labels = document.getElementById('portfolioLabels');
+  if (!svg || !legend || !labels) return;
   const W = 600, H = 200, PX = 8, PY = 10;
 
   const hist = portfolioHistory;
   if (hist.length < 2) {
     svg.innerHTML = `<text x="300" y="90" text-anchor="middle" fill="rgba(255,255,255,0.45)" font-size="14" font-family="'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます</text><text x="300" y="112" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="'Zen Maru Gothic',sans-serif">次へ ▶ で1970年へ進もう</text>`;
     legend.innerHTML = ''; labels.innerHTML = '';
-    document.getElementById('portfolioTotal').textContent = '─';
+    const ptEl = document.getElementById('portfolioTotal');
+    if (ptEl) ptEl.textContent = '─';
     return;
   }
 
@@ -6061,7 +6035,8 @@ function drawPortfolioGraph() {
 
   const sH = hist[0], eH = hist[n - 1], mH = hist[Math.floor(n / 2)];
   labels.innerHTML = `<span>${sH.年}年</span><span>${mH.年}年</span><span>${eH.年}年</span>`;
-  document.getElementById('portfolioTotal').textContent = fmt(eH.total) + '円';
+  const ptEl2 = document.getElementById('portfolioTotal');
+  if (ptEl2) ptEl2.textContent = fmt(eH.total) + '円';
 
   // 表示する時点を決定（portfolioViewIdx: -1=現在, 0..n-1=過去）
   const navLabel = document.getElementById('portNavLabel');
@@ -6547,10 +6522,13 @@ function getGrade(total) {
 // COMPARE
 // ============================================================
 function renderCompare() {
-  if (!document.getElementById('tab-graph').classList.contains('active')) return;
+  const tabGraph = document.getElementById('tab-graph');
+  if (!tabGraph || !tabGraph.classList.contains('active')) return;
+  const cmpTable = document.getElementById('compareTable');
+  if (!cmpTable) return;
   const row = masterData[currentIndex];
   if (!row || currentIndex === 0) {
-    document.getElementById('compareTable').innerHTML =
+    cmpTable.innerHTML =
       `<div style="text-align:center;padding:24px 0;color:rgba(255,255,255,0.4);font-size:13px;font-family:'Zen Maru Gothic',sans-serif">ゲームを進めると表示されます<br><span style="font-size:11px;opacity:0.6">次へ ▶ で1970年へ進もう</span></div>`;
     return;
   }
@@ -6585,7 +6563,7 @@ function renderCompare() {
     </tr>`;
   });
 
-  document.getElementById('compareTable').innerHTML =
+  cmpTable.innerHTML =
     `<table class="compare-tbl">
       <thead><tr><th>資産</th><th>現在価格</th><th>1970比</th><th>配当利回り</th></tr></thead>
       <tbody>${rows}</tbody>
@@ -6746,13 +6724,15 @@ function renderTitles() {
     });
   }
 
-  document.getElementById('titlesGrid').innerHTML = html;
+  const tGrid = document.getElementById('titlesGrid');
+  if (tGrid) tGrid.innerHTML = html;
 }
 
 function showCalcTab(name, btn) {
   document.querySelectorAll('.calc-subpanel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.cst-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('csp-' + name).classList.add('active');
+  const cspEl = document.getElementById('csp-' + name);
+  if (cspEl) cspEl.classList.add('active');
   if (btn) btn.classList.add('active');
 }
 
@@ -7124,6 +7104,19 @@ function signInWithGoogle() {
   _auth.signInWithPopup(provider)
     .then(() => { closeAuthOverlay(); showToast('ログインしました！', 3000); })
     .catch(e => { showToast('ログイン失敗: ' + e.message, 4000); });
+}
+
+function signInWithTwitter() {
+  const provider = new firebase.auth.TwitterAuthProvider();
+  _auth.signInWithPopup(provider)
+    .then(() => { closeAuthOverlay(); showToast('ログインしました！', 3000); })
+    .catch(e => { showToast('X（Twitter）ログイン失敗: ' + e.message, 4000); });
+}
+
+function signInAsGuest() {
+  _auth.signInAnonymously()
+    .then(() => { closeAuthOverlay(); showToast('👤 ゲストとして遊んでいます', 3000); })
+    .catch(e => { showToast('ゲストログイン失敗: ' + e.message, 4000); });
 }
 
 function signOutUser() {
@@ -7506,7 +7499,7 @@ function showEnding() {
   document.getElementById('endBadges').textContent = badges + ' / ' + TITLES.length + ' 個';
   document.getElementById('endCash').textContent  = fmt(cashBalance) + '円';
 
-  // 2025完走賞状（_isCertMilestone では発火しないためここで発火）
+  // 2025完走約束手形（_isCertMilestone では発火しないためここで発火）
   if (!earnedCerts['2025']) {
     triggerCertificate('2025', total);
     setTimeout(() => el.classList.add('show'), 3000);
@@ -7536,7 +7529,7 @@ function closeWelcome() {
     <div class="welcome-points">
       <div class="welcome-pt">🎲 1970〜2025年の日本経済史をボードゲームで体験</div>
       <div class="welcome-pt">💴 100万円からスタートして資産を育てよう</div>
-      <div class="welcome-pt">📈 ゲームを進めるとバッジや賞状がもらえる！</div>
+      <div class="welcome-pt">📈 ゲームを進めるとバッジや約束手形がもらえる！</div>
     </div>
     <button class="welcome-go" onclick="closeWelcome()">はじめる →</button>
     <p class="welcome-sub">⚙️ ルールの詳細は「設定」タブにあります</p>
@@ -7572,7 +7565,7 @@ function closeWelcome() {
   </div>
 </div>
 
-<!-- ════ 賞状モーダル ════ -->
+<!-- ════ 約束手形モーダル ════ -->
 <div class="cert-backdrop" id="certBackdrop" onclick="closeCert()"></div>
 <div class="cert-modal" id="certModal">
   <canvas class="cert-canvas" id="certCanvas" width="920" height="540"></canvas>
@@ -7582,15 +7575,15 @@ function closeWelcome() {
   </div>
 </div>
 
-<!-- ════ 賞状コレクションモーダル ════ -->
+<!-- ════ 約束手形コレクションモーダル ════ -->
 <div class="cert-backdrop" id="certCollBackdrop" onclick="closeCertColl()"></div>
 <div class="cert-modal" id="certCollModal" style="max-height:85vh;overflow-y:auto;">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-    <span style="font-family:'Dela Gothic One',sans-serif;font-size:16px;color:var(--gold);">📜 賞状コレクション</span>
+    <span style="font-family:'Dela Gothic One',sans-serif;font-size:16px;color:var(--gold);">📜 約束手形コレクション</span>
     <button class="cert-close-btn" onclick="closeCertColl()" style="padding:6px 14px;">✕</button>
   </div>
   <div class="cert-coll-grid" id="certCollGrid"></div>
-  <p style="text-align:center;font-size:11px;color:rgba(255,255,255,0.35);margin-top:14px;">タップで賞状を再表示できます</p>
+  <p style="text-align:center;font-size:11px;color:rgba(255,255,255,0.35);margin-top:14px;">タップで約束手形を再表示できます</p>
 </div>
 
 <script>
