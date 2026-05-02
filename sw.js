@@ -1,4 +1,4 @@
-const CACHE = 'manebou-v15';
+const CACHE = 'manebou-v16';
 const STATIC = [
   './calc.html',
   './home.html',

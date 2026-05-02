@@ -6804,8 +6804,8 @@ async function cloudLoad() {
     const cloudMs  = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
     const localMs  = local && local._cloudTs ? local._cloudTs : 0;
     if (!local || cloudMs > localMs) {
-      _pendingCloudData = d;
-      document.getElementById('cloudConfirmOverlay').classList.add('open');
+      _applyCloudData(d);
+      showToast('☁️ クラウドからデータを読み込みました', 2000);
     }
   } catch(e) {}
 }
