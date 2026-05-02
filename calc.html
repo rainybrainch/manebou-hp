@@ -2056,7 +2056,7 @@ body {
            overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pl-qty  { flex-shrink: 0; width: 34px; text-align: right; font-size: 10px;
            color: rgba(26,26,46,0.5); overflow: hidden; white-space: nowrap; }
-.pl-val  { flex-shrink: 0; width: 72px; text-align: right; font-size: 10px;
+.pl-val  { flex-shrink: 0; width: 84px; text-align: right; font-size: clamp(9px,2.2vw,10px);
            color: var(--gold-dark); font-family: 'Dela Gothic One',sans-serif;
            overflow: hidden; white-space: nowrap; }
 .pl-pct  { flex-shrink: 0; width: 32px; text-align: right; font-size: 10px;
@@ -2074,9 +2074,9 @@ body {
 .pl-saving-diff    { text-align: right; padding: 2px 6px 6px; font-family: 'Dela Gothic One',sans-serif; font-size: 12px; }
 .pl-diff {
   flex-shrink: 0;
-  width: 62px;
+  width: 64px;
   text-align: right;
-  font-size: 10px;
+  font-size: clamp(9px,2.2vw,10px);
   font-family: 'Dela Gothic One', sans-serif;
   overflow: hidden;
   white-space: nowrap;
@@ -2084,9 +2084,13 @@ body {
 @media (max-width: 520px) {
   .pl-bar-wrap { display: none; }
   .pl-pct { display: none; }
-  .pl-val { width: 66px; }
+  .pl-val { width: 76px; }
   .pl-qty { width: 30px; }
-  .pl-diff { width: 58px; }
+  .pl-diff { width: 60px; }
+}
+@media (max-width: 380px) {
+  .pl-diff { display: none; }
+  .pl-val  { width: 72px; }
 }
 
 
@@ -2242,6 +2246,63 @@ body {
   .game-step-area { padding: 0 4px; }
   /* タブを均等に広げる（max-width 制限を解除） */
   .tab-btn { max-width: none; }
+  /* PC: ポートフォリオ凡例を広げる */
+  .pl-val  { width: 96px; font-size: 11px; }
+  .pl-diff { width: 72px; font-size: 11px; }
+  .pl-qty  { width: 38px; font-size: 11px; }
+  .pl-row  { font-size: 12px; padding: 7px 10px; }
+}
+
+/* ── Tiny screen (≤360px) ────────────────────────────── */
+@media (max-width: 360px) {
+  .wrap { padding-left: 10px; padding-right: 10px; }
+  .asset-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .a-name-lbl  { font-size: 11px; }
+  .a-qty-num   { font-size: clamp(15px,4vw,20px); }
+  .a-price-lbl { font-size: clamp(11px,3vw,14px); }
+  .value-block-num { font-size: clamp(14px,4vw,20px); }
+  .tab-btn { font-size: 9px; }
+  .step-btn { font-size: 12px; padding: 8px 4px; }
+}
+
+/* ── Global text safety ───────────────────────────────── */
+/* すべてのテキストがコンテナをはみ出さないようにする */
+.tab-section-title,
+.char-speech-text,
+.event-text,
+.date-bar-text,
+.speech-text-inner,
+.modal-box p,
+.toast-msg,
+.tab-btn span,
+.title-name,
+.title-desc,
+.member-name,
+.member-cash,
+.member-year,
+.member-detail-name,
+.member-detail-sub,
+.next-chk-text,
+.a-div {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+}
+/* 数値表示: はみ出す場合は縮小 */
+.value-block-num,
+.pts-val,
+.a-qty-num,
+.a-price-lbl {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* カードタイトルのテキスト折返し */
+.a-name-lbl {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 /* ─── Ending Screen ─────────────────────────────────────── */
@@ -4806,7 +4867,6 @@ function assetReset() {
   pendingSell = 0;
   showToast('資産をリセットしました');
   updateDisplay();
-  saveGame();
   cloudSaveNow(true);
 }
 
@@ -5168,7 +5228,6 @@ function updateDisplay() {
   renderTitles();
   updateCharSpeech(row.年, row.イベント);
   saveGame();
-  cloudSaveNow(true);
   // 2025年イベント4 = ゲーム完走
   if (currentIndex >= masterData.length - 1) {
     setTimeout(showEnding, 1200);
@@ -5262,31 +5321,33 @@ function calcToSim() {
 
 // ════ 賞状システム ════
 const CERT_MILESTONES = {
-  tutorial: { bgIdx:1,  charFile:'images/cert/char-oru-1.png', title:'チュートリアル完了',  sub:'投資の第一歩を踏み出した',
+  tutorial: { bgIdx:1,
+    charFiles:['images/cert/char-kau-0.png','images/cert/char-tam-0.png','images/cert/char-oru-1.png','images/cert/char-end-1.png'],
+    title:'チュートリアル完了',  sub:'投資の第一歩を踏み出した',
     period:'ゲーム開始', era:'現金管理とリスクの本質を体験。\n投資の基礎をここで学んだ。' },
-  '1974':   { bgIdx:2,  charFile:'images/cert/char-end-1.png', title:'1974年の壁を突破',    sub:'石油ショック時代を乗り越えた',
+  '1974':   { bgIdx:2,  charFile:'images/cert/char-oru-1.png', title:'1974年の壁を突破',    sub:'石油ショック時代を乗り越えた',
     period:'1970〜1974年', era:'石油ショックが世界を揺るがした激動期。\nエネルギー危機と高インフレに翻弄された。' },
-  '1979':   { bgIdx:3,  charFile:'images/cert/char-oru-2.png', title:'1979年の壁を突破',    sub:'第二次石油危機を生き抜いた',
+  '1979':   { bgIdx:3,  charFile:'images/cert/char-end-1.png', title:'1979年の壁を突破',    sub:'第二次石油危機を生き抜いた',
     period:'1975〜1979年', era:'第二次石油危機でスタグフレーションが深刻化。\n適応力と忍耐が問われた5年間。' },
-  '1984':   { bgIdx:4,  charFile:'images/cert/char-end-2.png', title:'1984年の壁を突破',    sub:'バブル前夜の波に乗った',
+  '1984':   { bgIdx:4,  charFile:'images/cert/char-oru-2.png', title:'1984年の壁を突破',    sub:'バブル前夜の波に乗った',
     period:'1980〜1984年', era:'日本経済が復活し株価・地価が上昇へ。\nバブル前夜の恩恵を受けた黄金期。' },
-  '1989':   { bgIdx:5,  charFile:'images/cert/char-oru-3.png', title:'1989年の壁を突破',    sub:'バブル絶頂期を制した',
+  '1989':   { bgIdx:5,  charFile:'images/cert/char-end-2.png', title:'1989年の壁を突破',    sub:'バブル絶頂期を制した',
     period:'1985〜1989年', era:'バブル経済の絶頂。資産価格が歴史的高値。\nプラザ合意後の円高・株高が同時進行。' },
-  '1994':   { bgIdx:6,  charFile:'images/cert/char-end-3.png', title:'1994年の壁を突破',    sub:'バブル崩壊後を生き残った',
+  '1994':   { bgIdx:6,  charFile:'images/cert/char-oru-3.png', title:'1994年の壁を突破',    sub:'バブル崩壊後を生き残った',
     period:'1990〜1994年', era:'バブル崩壊と「失われた10年」の始まり。\n忍耐と分散投資が生存の鍵となった。' },
-  '1999':   { bgIdx:7,  charFile:'images/cert/char-oru-4.png', title:'1999年の壁を突破',    sub:'ITバブルの波を乗りこなした',
+  '1999':   { bgIdx:7,  charFile:'images/cert/char-end-3.png', title:'1999年の壁を突破',    sub:'ITバブルの波を乗りこなした',
     period:'1995〜1999年', era:'ITバブルの熱狂とゼロ金利政策の時代。\nテクノロジー株が急騰した。' },
-  '2004':   { bgIdx:8,  charFile:'images/cert/char-end-4.png', title:'2004年の壁を突破',    sub:'ITバブル崩壊から立ち直った',
+  '2004':   { bgIdx:8,  charFile:'images/cert/char-oru-4.png', title:'2004年の壁を突破',    sub:'ITバブル崩壊から立ち直った',
     period:'2000〜2004年', era:'ITバブル崩壊と911テロの衝撃の時代。\n堅実な投資姿勢が光った。' },
-  '2009':   { bgIdx:9,  charFile:'images/cert/char-oru-5.png', title:'2009年の壁を突破',    sub:'リーマンショックを乗り越えた',
+  '2009':   { bgIdx:9,  charFile:'images/cert/char-end-4.png', title:'2009年の壁を突破',    sub:'リーマンショックを乗り越えた',
     period:'2005〜2009年', era:'リーマンショックで世界金融危機が勃発。\n史上最大級の暴落を生き延びた。' },
-  '2014':   { bgIdx:10, charFile:'images/cert/char-end-5.png', title:'2014年の壁を突破',    sub:'アベノミクス時代に挑んだ',
+  '2014':   { bgIdx:10, charFile:'images/cert/char-oru-5.png', title:'2014年の壁を突破',    sub:'アベノミクス時代に挑んだ',
     period:'2010〜2014年', era:'アベノミクスと量的緩和で株価が急回復。\n円安・株高の追い風に乗った。' },
-  '2019':   { bgIdx:11, charFile:'images/cert/char-oru-6.png', title:'2019年の壁を突破',    sub:'コロナ前夜を経験した',
+  '2019':   { bgIdx:11, charFile:'images/cert/char-end-5.png', title:'2019年の壁を突破',    sub:'コロナ前夜を経験した',
     period:'2015〜2019年', era:'米中貿易戦争と低金利の安定成長期。\nコロナ直前の最後の平和な時代。' },
-  '2024':   { bgIdx:12, charFile:'images/cert/char-end-6.png', title:'2024年の壁を突破',    sub:'令和の投資家になった',
+  '2024':   { bgIdx:12, charFile:'images/cert/char-oru-6.png', title:'2024年の壁を突破',    sub:'令和の投資家になった',
     period:'2020〜2024年', era:'コロナショックと歴史的回復、インフレの時代。\n日銀利上げと円安が同時進行した。' },
-  '2025':   { bgIdx:13, charFile:'images/cert/char-oru-7.png', title:'全課程修了',           sub:'マネぼう塾を完全制覇した',
+  '2025':   { bgIdx:13, charFile:'images/cert/char-end-6.png', title:'全課程修了',           sub:'マネぼう塾を完全制覇した',
     period:'1970〜2025年（全55年）', era:'55年の投資人生をついに完走。\n激動の時代を共に歩み抜いた。' },
 };
 
@@ -5349,38 +5410,53 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   bg2.addColorStop(0,'rgba(0,0,0,0)'); bg2.addColorStop(1,'rgba(0,0,0,0.6)');
   ctx.fillStyle = bg2; ctx.fillRect(0,H*0.78,W,H*0.22);
 
-  // 3. character image (right side, bottom-anchored, clipped to right 45%)
-  const charSrc = m.charFile || 'images/img5.webp';
-  const charImg = await loadImg(charSrc);
-  if (charImg) {
-    const maxCharH = H * 0.92;
-    const aspectRatio = charImg.naturalWidth / charImg.naturalHeight;
-    let finalH = maxCharH;
-    let finalW = finalH * aspectRatio;
-    const maxCharW = W * 0.44;
-    if (finalW > maxCharW) { finalW = maxCharW; finalH = finalW / aspectRatio; }
-    const cx = W - finalW;
-    const cy = H - finalH;
+  // 3. character image(s) — right side (x > W*0.52)
+  if (m.charFiles && m.charFiles.length > 1) {
+    // Tutorial: 2×2 grid of 4 characters
+    const charImgs = await Promise.all(m.charFiles.map(loadImg));
+    const charAreaX = W * 0.52, charAreaW = W * 0.48;
+    const cellW = charAreaW / 2, cellH = H / 2;
     ctx.save();
-    ctx.beginPath();
-    ctx.rect(W * 0.52, 0, W * 0.48, H);
-    ctx.clip();
-    ctx.globalAlpha = 0.95;
-    ctx.drawImage(charImg, cx, cy, finalW, finalH);
+    ctx.beginPath(); ctx.rect(charAreaX, 0, charAreaW, H); ctx.clip();
+    charImgs.forEach((img, i) => {
+      if (!img) return;
+      const col = i % 2, row = Math.floor(i / 2);
+      const cx0 = charAreaX + col * cellW, cy0 = row * cellH;
+      const aspect = img.naturalWidth / img.naturalHeight;
+      let dh = cellH * 0.88, dw = dh * aspect;
+      if (dw > cellW * 0.92) { dw = cellW * 0.92; dh = dw / aspect; }
+      ctx.globalAlpha = 0.90;
+      ctx.drawImage(img, cx0 + (cellW - dw) / 2, cy0 + cellH - dh, dw, dh);
+    });
     ctx.globalAlpha = 1;
     ctx.restore();
+  } else {
+    const charSrc = (m.charFiles && m.charFiles[0]) || m.charFile || 'images/img5.webp';
+    const charImg = await loadImg(charSrc);
+    if (charImg) {
+      const maxCharH = H * 0.92;
+      const aspect = charImg.naturalWidth / charImg.naturalHeight;
+      let finalH = maxCharH, finalW = finalH * aspect;
+      if (finalW > W * 0.44) { finalW = W * 0.44; finalH = finalW / aspect; }
+      ctx.save();
+      ctx.beginPath(); ctx.rect(W * 0.52, 0, W * 0.48, H); ctx.clip();
+      ctx.globalAlpha = 0.95;
+      ctx.drawImage(charImg, W - finalW, H - finalH, finalW, finalH);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
   }
 
   // 4. gold double border + corner diamonds
   const bm = 14;
   ctx.strokeStyle = 'rgba(245,200,66,0.9)'; ctx.lineWidth = 2;
-  ctx.strokeRect(bm,bm,W-bm*2,H-bm*2);
+  ctx.strokeRect(bm, bm, W - bm * 2, H - bm * 2);
   ctx.strokeStyle = 'rgba(245,200,66,0.3)'; ctx.lineWidth = 1;
-  ctx.strokeRect(bm+8,bm+8,W-(bm+8)*2,H-(bm+8)*2);
+  ctx.strokeRect(bm + 8, bm + 8, W - (bm + 8) * 2, H - (bm + 8) * 2);
   ctx.fillStyle = '#f5c842';
-  [[bm,bm],[W-bm,bm],[bm,H-bm],[W-bm,H-bm]].forEach(([cx,cy]) => {
-    ctx.save(); ctx.translate(cx,cy); ctx.rotate(Math.PI/4);
-    ctx.fillRect(-5,-5,10,10); ctx.restore();
+  [[bm, bm], [W - bm, bm], [bm, H - bm], [W - bm, H - bm]].forEach(([cx, cy]) => {
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(Math.PI / 4);
+    ctx.fillRect(-5, -5, 10, 10); ctx.restore();
   });
 
   const TX = W * 0.39;
@@ -5390,104 +5466,208 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   // 5. top label
   ctx.fillStyle = 'rgba(245,200,66,0.6)';
   ctx.font = '600 10px sans-serif';
-  ctx.fillText('M A N E B O U  J U K U', TX, bm+24);
+  ctx.fillText('M A N E B O U  J U K U', TX, bm + 24);
 
   // 6. 賞状 + flanking lines
   const ry = bm + 48;
   ctx.strokeStyle = 'rgba(245,200,66,0.5)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(TX-105,ry); ctx.lineTo(TX-24,ry); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(TX+24,ry); ctx.lineTo(TX+105,ry); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX - 105, ry); ctx.lineTo(TX - 24, ry); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX + 24, ry); ctx.lineTo(TX + 105, ry); ctx.stroke();
   ctx.fillStyle = '#f5c842';
   ctx.font = 'bold 16px ' + JP;
-  ctx.fillText('賞　状', TX, ry+5);
+  ctx.fillText('賞　状', TX, ry + 5);
 
   // 7. period badge
   const pbw = 200, pbh = 22;
   ctx.fillStyle = 'rgba(245,200,66,0.12)';
-  ctx.fillRect(TX-pbw/2, ry+16, pbw, pbh);
+  ctx.fillRect(TX - pbw / 2, ry + 16, pbw, pbh);
   ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
-  ctx.strokeRect(TX-pbw/2, ry+16, pbw, pbh);
+  ctx.strokeRect(TX - pbw / 2, ry + 16, pbw, pbh);
   ctx.fillStyle = 'rgba(245,200,66,0.9)';
   ctx.font = 'bold 11px sans-serif';
-  ctx.fillText('達成期間  ' + m.period, TX, ry+31);
+  ctx.fillText('達成期間  ' + m.period, TX, ry + 31);
 
   // 8. main title with glow
   ctx.shadowColor = 'rgba(245,200,66,0.55)'; ctx.shadowBlur = 14;
   ctx.fillStyle = '#ffffff';
   ctx.font = 'bold 26px ' + JP;
-  ctx.fillText(m.title, TX, ry+76);
+  ctx.fillText(m.title, TX, ry + 76);
   ctx.shadowBlur = 0;
 
   // 9. era summary (2 lines)
   const eraLines = m.era.split('\n');
   ctx.fillStyle = 'rgba(255,255,255,0.62)';
   ctx.font = '12px ' + JP;
-  eraLines.forEach(function(line, i) { ctx.fillText(line, TX, ry+100+i*18); });
+  eraLines.forEach((line, i) => { ctx.fillText(line, TX, ry + 100 + i * 18); });
 
   // 10. ornament divider
   const dy = ry + 142;
   ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(TX-140,dy); ctx.lineTo(TX-10,dy); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(TX+10,dy); ctx.lineTo(TX+140,dy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX - 140, dy); ctx.lineTo(TX - 10, dy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX + 10, dy); ctx.lineTo(TX + 140, dy); ctx.stroke();
   ctx.fillStyle = 'rgba(245,200,66,0.7)';
-  ctx.save(); ctx.translate(TX,dy); ctx.rotate(Math.PI/4); ctx.fillRect(-4,-4,8,8); ctx.restore();
+  ctx.save(); ctx.translate(TX, dy); ctx.rotate(Math.PI / 4); ctx.fillRect(-4, -4, 8, 8); ctx.restore();
 
   // 11. player name
   ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 8;
   ctx.fillStyle = '#fff';
   ctx.font = 'bold 20px ' + JP;
-  ctx.fillText(playerName || 'プレイヤー', TX, dy+34);
+  ctx.fillText(playerName || 'プレイヤー', TX, dy + 34);
   ctx.shadowBlur = 0;
 
-  // 12. assets
+  // 12. total assets
   if (assets != null) {
     ctx.fillStyle = 'rgba(245,200,66,0.92)';
     ctx.font = '13px ' + JP;
-    ctx.fillText('総資産  ' + Number(assets).toLocaleString() + '円', TX, dy+56);
+    ctx.fillText('総資産  ' + Number(assets).toLocaleString() + '円', TX, dy + 56);
   }
 
   // 13. date
   ctx.fillStyle = 'rgba(255,255,255,0.38)';
   ctx.font = '10px sans-serif';
-  ctx.fillText(dateStr, TX, dy+74);
+  ctx.fillText(dateStr, TX, dy + 74);
 
-  // 14. mini asset bar chart (bottom left)
-  const CERT_ORDER = ['tutorial','1974','1979','1984','1989','1994','1999','2004','2009','2014','2019','2024','2025'];
-  const earned = CERT_ORDER.filter(function(k){ return earnedCerts[k]; });
-  if (earned.length >= 1) {
-    const cx0 = bm+16, cy0 = H-bm-68, cw0 = W*0.66, ch0 = 46;
-    ctx.fillStyle = 'rgba(245,200,66,0.45)';
-    ctx.font = '9px sans-serif'; ctx.textAlign = 'left';
-    ctx.fillText('資産の推移', cx0, cy0-6);
-    ctx.strokeStyle = 'rgba(245,200,66,0.2)'; ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(cx0,cy0+ch0); ctx.lineTo(cx0+cw0,cy0+ch0); ctx.stroke();
-    const vals = earned.map(function(k){ return earnedCerts[k].assets||0; });
-    const maxV = Math.max.apply(null, vals.concat([1]));
-    const bw = Math.max(5, Math.floor(cw0/(CERT_ORDER.length+1))-2);
-    earned.forEach(function(k,i) {
-      const v = earnedCerts[k].assets||0;
-      const bh = Math.max(3,(v/maxV)*ch0);
-      const bx = cx0+i*(bw+3), by = cy0+ch0-bh;
-      ctx.fillStyle = k===certKey ? 'rgba(245,200,66,0.9)' : 'rgba(255,255,255,0.28)';
-      ctx.fillRect(bx,by,bw,bh);
-      const lbl = k==='tutorial'?'ST':k.slice(2);
-      ctx.fillStyle = k===certKey?'rgba(245,200,66,0.8)':'rgba(255,255,255,0.3)';
-      ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
-      ctx.fillText(lbl, bx+bw/2, cy0+ch0+9);
+  // ─── 14. 保有資産テーブル ────────────────────────────────────
+  const snap         = earnedCerts[certKey];
+  const snapHoldings = (snap && snap.holdingsSnap) ? snap.holdingsSnap
+                     : (typeof holdings !== 'undefined' ? holdings : {});
+  const snapCash     = (snap && snap.holdingsSnap && snap.holdingsSnap._cash != null)
+                     ? snap.holdingsSnap._cash
+                     : (typeof cashBalance !== 'undefined' ? cashBalance : 0);
+
+  const aLeft  = bm + 18;
+  const aRight = W * 0.51 - 10;
+  const aWidth = aRight - aLeft;
+  const aColW  = aWidth / 2;
+  const AY     = dy + 94;
+
+  // セクション区切り線 + ラベル
+  ctx.strokeStyle = 'rgba(245,200,66,0.25)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(aLeft, AY); ctx.lineTo(aRight, AY); ctx.stroke();
+  ctx.fillStyle = 'rgba(245,200,66,0.55)';
+  ctx.font = 'bold 9px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('◆ 保有資産', aLeft, AY + 12);
+
+  // 8資産を 2列×4行
+  ASSET_KEYS.forEach((a, i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const ax = aLeft + col * aColW;
+    const ay = AY + 24 + row * 17;
+    const qty = (snapHoldings[a.id] || 0);
+    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.02)';
+    _certRoundRect(ctx, ax, ay - 11, aColW - 4, 14, 3);
+    ctx.fill();
+    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.25)';
+    ctx.font = '9.5px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(a.emoji + ' ' + a.label, ax + 4, ay);
+    ctx.fillStyle = qty > 0 ? '#f5c842' : 'rgba(255,255,255,0.2)';
+    ctx.textAlign = 'right';
+    ctx.fillText('\xd7' + qty.toLocaleString(), ax + aColW - 5, ay);
+  });
+
+  // 現金行（全幅）
+  const cashY = AY + 24 + 4 * 17;
+  ctx.fillStyle = 'rgba(255,255,255,0.05)';
+  _certRoundRect(ctx, aLeft, cashY - 11, aWidth, 14, 3);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.62)';
+  ctx.font = '9.5px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('💴 現金', aLeft + 4, cashY);
+  ctx.fillStyle = '#f5c842';
+  ctx.textAlign = 'right';
+  ctx.fillText(Math.floor(snapCash).toLocaleString() + '円', aRight - 5, cashY);
+  ctx.textAlign = 'center';
+
+  // ─── 15. 資産推移グラフ ─────────────────────────────────────
+  const snapHistory = (snap && snap.historySnap && snap.historySnap.length >= 2)
+    ? snap.historySnap
+    : (typeof portfolioHistory !== 'undefined' ? portfolioHistory : []);
+
+  const chartX  = aLeft;
+  const chartY  = cashY + 18;
+  const chartW  = aWidth;
+  const chartHt = 52;
+  const yBase   = chartY + 16;
+
+  ctx.strokeStyle = 'rgba(91,200,232,0.25)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(chartX, chartY); ctx.lineTo(chartX + chartW, chartY); ctx.stroke();
+  ctx.fillStyle = 'rgba(91,200,232,0.55)';
+  ctx.font = 'bold 9px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('◆ 資産推移グラフ', chartX, chartY + 11);
+
+  if (snapHistory.length >= 2) {
+    const vals = snapHistory.map(h => h.total || 0);
+    const maxV = Math.max(...vals, 1);
+    const minV = Math.min(...vals, 0);
+    const range = maxV - minV || 1;
+
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(chartX, yBase, chartW, chartHt);
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+    [1, 2].forEach(g => {
+      const gy = yBase + (g / 3) * chartHt;
+      ctx.beginPath(); ctx.moveTo(chartX, gy); ctx.lineTo(chartX + chartW, gy); ctx.stroke();
     });
+
+    const toXY = (v, i) => ({
+      x: chartX + (i / (vals.length - 1)) * chartW,
+      y: yBase + chartHt - ((v - minV) / range) * chartHt * 0.88 - 2,
+    });
+
+    ctx.beginPath();
+    vals.forEach((v, i) => { const p = toXY(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
+    ctx.lineTo(chartX + chartW, yBase + chartHt);
+    ctx.lineTo(chartX, yBase + chartHt);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(91,200,232,0.1)';
+    ctx.fill();
+
+    ctx.strokeStyle = '#5bc8e8'; ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    vals.forEach((v, i) => { const p = toXY(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
+    ctx.stroke();
+
+    const peakIdx = vals.indexOf(maxV);
+    const peak = toXY(maxV, peakIdx);
+    ctx.fillStyle = 'rgba(245,200,66,0.8)';
+    ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(Math.floor(maxV / 10000) + '万', peak.x, peak.y - 3);
+
+    if (snapHistory[0] && snapHistory[0]['年']) {
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.font = '8px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(String(snapHistory[0]['年']), chartX + 2, yBase + chartHt + 10);
+      ctx.textAlign = 'right';
+      ctx.fillText(String(snapHistory[snapHistory.length - 1]['年']), chartX + chartW - 2, yBase + chartHt + 10);
+    }
+  } else {
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('データなし', chartX + chartW / 2, chartY + 36);
   }
 
-  // 15. watermark
-  ctx.fillStyle = 'rgba(245,200,66,0.25)';
-  ctx.font = '600 9px sans-serif'; ctx.textAlign = 'right';
-  ctx.fillText('by RAINY BRAIN', W-bm-10, H-bm-6);
+  // 16. watermark
+  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  ctx.font = '600 8px sans-serif'; ctx.textAlign = 'right';
+  ctx.fillText('by RAINY BRAIN', W - bm - 10, H - bm - 6);
 }
 
 let _certCurrentKey = null;
 
 function triggerCertificate(certKey, assets) {
   if (!CERT_MILESTONES[certKey]) return;
-  earnedCerts[certKey] = { assets, date: new Date().toLocaleDateString('ja-JP') };
+  earnedCerts[certKey] = {
+    assets,
+    date: new Date().toLocaleDateString('ja-JP'),
+    holdingsSnap: { ...holdings, _cash: (typeof cashBalance !== 'undefined' ? cashBalance : 0) },
+    historySnap:  (typeof portfolioHistory !== 'undefined' ? portfolioHistory.slice(-60) : []),
+  };
   saveGame();
   const playerName = _fbUser
     ? (_fbUser.displayName || _fbUser.email || 'プレイヤー')
@@ -7030,7 +7210,8 @@ async function cloudLoad() {
 }
 
 function confirmCloudLoad() {
-  document.getElementById('cloudConfirmOverlay').classList.remove('open');
+  const cc = document.getElementById('cloudConfirmOverlay');
+  if (cc) cc.classList.remove('open');
   if (_pendingCloudData) {
     _applyCloudData(_pendingCloudData);
     _pendingCloudData = null;
@@ -7039,7 +7220,8 @@ function confirmCloudLoad() {
 }
 
 function skipCloudLoad() {
-  document.getElementById('cloudConfirmOverlay').classList.remove('open');
+  const cc = document.getElementById('cloudConfirmOverlay');
+  if (cc) cc.classList.remove('open');
   _pendingCloudData = null;
 }
 
