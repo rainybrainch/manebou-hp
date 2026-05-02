@@ -5414,34 +5414,48 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
     img.src = src;
   });
 
-  // 1. background image (full bleed) — use bg-N.png from 現金/背景
-  const bgImg = await loadImg('images/cert/bg-' + m.bgIdx + '.png');
+  const JP     = '"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif';
+  const bm     = 14;
+  const splitX = Math.floor(W * 0.52);
+  const TX     = splitX / 2;
+
+  // ─── 1. 約束手形 background image ───────────────────────────────
+  const bgImg = await loadImg('images/cert/yakusoku-bg.png');
   if (bgImg) {
     ctx.drawImage(bgImg, 0, 0, W, H);
   } else {
-    const fb = ctx.createLinearGradient(0,0,W,H);
-    fb.addColorStop(0,'#1a0a2e'); fb.addColorStop(1,'#0a1020');
-    ctx.fillStyle = fb; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = '#f5eedb'; ctx.fillRect(0, 0, W, H);
   }
 
-  // 2. directional overlay: darker left for text readability
-  const hg = ctx.createLinearGradient(0,0,W,0);
-  hg.addColorStop(0,'rgba(0,0,0,0.72)');
-  hg.addColorStop(0.52,'rgba(0,0,0,0.5)');
-  hg.addColorStop(1,'rgba(0,0,0,0.15)');
-  ctx.fillStyle = hg; ctx.fillRect(0,0,W,H);
-  const tg = ctx.createLinearGradient(0,0,0,H*0.22);
-  tg.addColorStop(0,'rgba(0,0,0,0.55)'); tg.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle = tg; ctx.fillRect(0,0,W,H*0.22);
-  const bg2 = ctx.createLinearGradient(0,H*0.78,0,H);
-  bg2.addColorStop(0,'rgba(0,0,0,0)'); bg2.addColorStop(1,'rgba(0,0,0,0.6)');
-  ctx.fillStyle = bg2; ctx.fillRect(0,H*0.78,W,H*0.22);
+  // 2. subtle overlay: faint warm tint on left column for text lift
+  const ltOv = ctx.createLinearGradient(0, 0, splitX, 0);
+  ltOv.addColorStop(0,   'rgba(252,246,224,0.28)');
+  ltOv.addColorStop(0.7, 'rgba(252,246,224,0.14)');
+  ltOv.addColorStop(1,   'rgba(252,246,224,0)');
+  ctx.fillStyle = ltOv; ctx.fillRect(0, 0, splitX, H);
 
-  // 3. character image(s) — right side (x > W*0.52)
+  // slight vignette top + bottom for depth
+  const vigT = ctx.createLinearGradient(0, 0, 0, H * 0.18);
+  vigT.addColorStop(0, 'rgba(80,50,10,0.12)'); vigT.addColorStop(1, 'rgba(80,50,10,0)');
+  ctx.fillStyle = vigT; ctx.fillRect(0, 0, W, H * 0.18);
+  const vigB = ctx.createLinearGradient(0, H * 0.82, 0, H);
+  vigB.addColorStop(0, 'rgba(80,50,10,0)'); vigB.addColorStop(1, 'rgba(80,50,10,0.14)');
+  ctx.fillStyle = vigB; ctx.fillRect(0, H * 0.82, W, H * 0.18);
+
+  // subtle vertical divider (text | char)
+  ctx.strokeStyle = 'rgba(100,65,18,0.22)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(splitX, 28); ctx.lineTo(splitX, H - 28); ctx.stroke();
+
+  // horizontal form lines in text column
+  ctx.strokeStyle = 'rgba(100,65,18,0.08)'; ctx.lineWidth = 1;
+  for (let y = 72; y < H - 24; y += 20) {
+    ctx.beginPath(); ctx.moveTo(28, y); ctx.lineTo(splitX - 16, y); ctx.stroke();
+  }
+
+  // 3. character image (right column, full height)
   if (m.charFiles && m.charFiles.length > 1) {
-    // Tutorial: 2×2 grid of 4 characters
     const charImgs = await Promise.all(m.charFiles.map(loadImg));
-    const charAreaX = W * 0.52, charAreaW = W * 0.48;
+    const charAreaX = splitX, charAreaW = W - splitX;
     const cellW = charAreaW / 2, cellH = H / 2;
     ctx.save();
     ctx.beginPath(); ctx.rect(charAreaX, 0, charAreaW, H); ctx.clip();
@@ -5450,124 +5464,106 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
       const col = i % 2, row = Math.floor(i / 2);
       const cx0 = charAreaX + col * cellW, cy0 = row * cellH;
       const aspect = img.naturalWidth / img.naturalHeight;
-      let dh = cellH * 0.88, dw = dh * aspect;
-      if (dw > cellW * 0.92) { dw = cellW * 0.92; dh = dw / aspect; }
+      let dh = cellH * 0.92, dw = dh * aspect;
+      if (dw > cellW * 0.94) { dw = cellW * 0.94; dh = dw / aspect; }
       ctx.globalAlpha = 0.90;
       ctx.drawImage(img, cx0 + (cellW - dw) / 2, cy0 + cellH - dh, dw, dh);
     });
-    ctx.globalAlpha = 1;
-    ctx.restore();
+    ctx.globalAlpha = 1; ctx.restore();
   } else {
     const charSrc = (m.charFiles && m.charFiles[0]) || m.charFile || 'images/img5.webp';
     const charImg = await loadImg(charSrc);
     if (charImg) {
-      const maxCharH = H * 0.92;
+      const maxCharH = H * 0.95;
       const aspect = charImg.naturalWidth / charImg.naturalHeight;
       let finalH = maxCharH, finalW = finalH * aspect;
-      if (finalW > W * 0.44) { finalW = W * 0.44; finalH = finalW / aspect; }
+      if (finalW > (W - splitX) * 0.94) { finalW = (W - splitX) * 0.94; finalH = finalW / aspect; }
       ctx.save();
-      ctx.beginPath(); ctx.rect(W * 0.52, 0, W * 0.48, H); ctx.clip();
-      ctx.globalAlpha = 0.95;
+      ctx.beginPath(); ctx.rect(splitX, 0, W - splitX, H); ctx.clip();
+      ctx.globalAlpha = 0.93;
       ctx.drawImage(charImg, W - finalW, H - finalH, finalW, finalH);
-      ctx.globalAlpha = 1;
-      ctx.restore();
+      ctx.globalAlpha = 1; ctx.restore();
     }
   }
 
-  // 4. gold double border + corner diamonds
-  const bm = 14;
-  ctx.strokeStyle = 'rgba(245,200,66,0.9)'; ctx.lineWidth = 2;
-  ctx.strokeRect(bm, bm, W - bm * 2, H - bm * 2);
-  ctx.strokeStyle = 'rgba(245,200,66,0.3)'; ctx.lineWidth = 1;
-  ctx.strokeRect(bm + 8, bm + 8, W - (bm + 8) * 2, H - (bm + 8) * 2);
-  ctx.fillStyle = '#f5c842';
-  [[bm, bm], [W - bm, bm], [bm, H - bm], [W - bm, H - bm]].forEach(([cx, cy]) => {
-    ctx.save(); ctx.translate(cx, cy); ctx.rotate(Math.PI / 4);
-    ctx.fillRect(-5, -5, 10, 10); ctx.restore();
-  });
-
-  const TX = W * 0.39;
-  const JP = '"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif';
   ctx.textAlign = 'center';
 
-  // 5. top label
-  ctx.fillStyle = 'rgba(245,200,66,0.6)';
-  ctx.font = '600 10px sans-serif';
-  ctx.fillText('M A N E B O U  J U K U', TX, bm + 24);
+  // ─── 4. HEADER (float over top ornate border of bg image) ───────
+  // small label
+  ctx.fillStyle = 'rgba(100,65,18,0.52)';
+  ctx.font = '600 8px sans-serif';
+  ctx.fillText('M A N E B O U  J U K U', TX, 20);
+  // flanking lines
+  ctx.strokeStyle = 'rgba(100,65,18,0.4)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(TX - 116, 31); ctx.lineTo(TX - 46, 31); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX + 46, 31); ctx.lineTo(TX + 116, 31); ctx.stroke();
+  // title
+  ctx.fillStyle = '#3c1e06';
+  ctx.font = 'bold 20px ' + JP;
+  ctx.fillText('約束手形', TX, 46);
+  // thin separator below title
+  ctx.strokeStyle = 'rgba(100,65,18,0.28)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(28, 56); ctx.lineTo(splitX - 16, 56); ctx.stroke();
 
-  // 6. 約束手形 + flanking lines
-  const ry = bm + 48;
-  ctx.strokeStyle = 'rgba(245,200,66,0.5)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(TX - 115, ry); ctx.lineTo(TX - 40, ry); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(TX + 40, ry); ctx.lineTo(TX + 115, ry); ctx.stroke();
-  ctx.fillStyle = '#f5c842';
-  ctx.font = 'bold 15px ' + JP;
-  ctx.fillText('約束手形', TX, ry + 5);
+  // ─── 5. BODY ───────────────────────────────────────────────────
+  const bodyY = 62;
+  const pbw = splitX - bm * 2 - 18;
+  ctx.fillStyle = 'rgba(90,55,10,0.07)';
+  ctx.fillRect(bm + 9, bodyY, pbw, 18);
+  ctx.strokeStyle = 'rgba(90,55,10,0.22)'; ctx.lineWidth = 1;
+  ctx.strokeRect(bm + 9, bodyY, pbw, 18);
+  ctx.fillStyle = 'rgba(70,40,8,0.72)';
+  ctx.font = '10px sans-serif';
+  ctx.fillText('達成期間:  ' + m.period, TX, bodyY + 13);
 
-  // 7. period badge
-  const pbw = 200, pbh = 22;
-  ctx.fillStyle = 'rgba(245,200,66,0.12)';
-  ctx.fillRect(TX - pbw / 2, ry + 16, pbw, pbh);
-  ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
-  ctx.strokeRect(TX - pbw / 2, ry + 16, pbw, pbh);
-  ctx.fillStyle = 'rgba(245,200,66,0.9)';
-  ctx.font = 'bold 11px sans-serif';
-  ctx.fillText('達成期間  ' + m.period, TX, ry + 31);
-
-  // 8. main title with glow
-  ctx.shadowColor = 'rgba(245,200,66,0.55)'; ctx.shadowBlur = 14;
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 26px ' + JP;
-  ctx.fillText(m.title, TX, ry + 76);
+  ctx.shadowColor = 'rgba(80,45,8,0.18)'; ctx.shadowBlur = 4;
+  ctx.fillStyle = '#2e1408';
+  ctx.font = 'bold 22px ' + JP;
+  ctx.fillText(m.title, TX, bodyY + 48);
   ctx.shadowBlur = 0;
 
-  // 9. era summary (2 lines)
-  const eraLines = m.era.split('\n');
-  ctx.fillStyle = 'rgba(255,255,255,0.62)';
-  ctx.font = '12px ' + JP;
-  eraLines.forEach((line, i) => { ctx.fillText(line, TX, ry + 100 + i * 18); });
+  ctx.fillStyle = 'rgba(90,55,10,0.55)';
+  ctx.font = 'italic 11px ' + JP;
+  ctx.fillText(m.sub, TX, bodyY + 65);
 
-  // 10. ornament divider
-  const dy = ry + 142;
-  ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(TX - 140, dy); ctx.lineTo(TX - 10, dy); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(TX + 10, dy); ctx.lineTo(TX + 140, dy); ctx.stroke();
-  ctx.fillStyle = 'rgba(245,200,66,0.7)';
+  const eraLines = m.era.split('\n');
+  ctx.fillStyle = 'rgba(35,18,4,0.52)';
+  ctx.font = '11px ' + JP;
+  eraLines.forEach((line, i) => { ctx.fillText(line, TX, bodyY + 83 + i * 16); });
+
+  const dy = bodyY + 118;
+  ctx.strokeStyle = 'rgba(90,55,10,0.28)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(bm + 16, dy); ctx.lineTo(TX - 10, dy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX + 10, dy); ctx.lineTo(splitX - 16, dy); ctx.stroke();
+  ctx.fillStyle = 'rgba(90,55,10,0.42)';
   ctx.save(); ctx.translate(TX, dy); ctx.rotate(Math.PI / 4); ctx.fillRect(-4, -4, 8, 8); ctx.restore();
 
-  // 11. player name
-  ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 8;
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 20px ' + JP;
-  ctx.fillText(playerName || 'プレイヤー', TX, dy + 34);
-  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#2e1408';
+  ctx.font = 'bold 17px ' + JP;
+  ctx.fillText(playerName || 'プレイヤー', TX, dy + 26);
 
-  // 12. total assets — 金〇〇円也 format
   if (assets != null) {
-    ctx.fillStyle = 'rgba(245,200,66,0.92)';
+    ctx.fillStyle = '#8a3515';
     ctx.font = 'bold 14px ' + JP;
-    ctx.fillText('金  ' + Number(assets).toLocaleString() + ' 円也', TX, dy + 56);
+    ctx.fillText('金  ' + Number(assets).toLocaleString() + ' 円也', TX, dy + 46);
   }
 
-  // 13. date
-  ctx.fillStyle = 'rgba(255,255,255,0.38)';
+  ctx.fillStyle = 'rgba(55,35,8,0.4)';
   ctx.font = '10px sans-serif';
-  ctx.fillText(dateStr, TX, dy + 74);
+  ctx.fillText(dateStr, TX, dy + 62);
 
-  // 13.5. red inkan seal
-  const sealX = TX + 136, sealY = dy + 30;
+  const sealX = TX + 128, sealY = dy + 34;
   ctx.save();
-  ctx.strokeStyle = 'rgba(210,45,45,0.82)'; ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(195,38,38,0.82)'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(sealX, sealY, 20, 0, Math.PI * 2); ctx.stroke();
   ctx.beginPath(); ctx.arc(sealX, sealY, 15, 0, Math.PI * 2); ctx.stroke();
-  ctx.fillStyle = 'rgba(210,45,45,0.82)';
+  ctx.fillStyle = 'rgba(195,38,38,0.82)';
   ctx.font = 'bold 13px ' + JP;
   ctx.textAlign = 'center';
   ctx.fillText('証', sealX, sealY + 5);
-  ctx.restore();
-  ctx.textAlign = 'center';
+  ctx.restore(); ctx.textAlign = 'center';
 
-  // ─── 14. 保有資産テーブル ────────────────────────────────────
+  // ─── 5. 保有資産テーブル ──────────────────────────────────────
   const snap         = earnedCerts[certKey];
   const snapHoldings = (snap && snap.holdingsSnap) ? snap.holdingsSnap
                      : (typeof holdings !== 'undefined' ? holdings : {});
@@ -5575,127 +5571,103 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
                      ? snap.holdingsSnap._cash
                      : (typeof cashBalance !== 'undefined' ? cashBalance : 0);
 
-  const aLeft  = bm + 18;
-  const aRight = W * 0.51 - 10;
+  const aLeft  = bm + 10;
+  const aRight = splitX - 10;
   const aWidth = aRight - aLeft;
   const aColW  = aWidth / 2;
-  const AY     = dy + 94;
+  const AY     = dy + 76;
 
-  // セクション区切り線 + ラベル
-  ctx.strokeStyle = 'rgba(245,200,66,0.25)'; ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(90,55,10,0.18)'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(aLeft, AY); ctx.lineTo(aRight, AY); ctx.stroke();
-  ctx.fillStyle = 'rgba(245,200,66,0.55)';
-  ctx.font = 'bold 9px sans-serif';
-  ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(90,55,10,0.58)';
+  ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
   ctx.fillText('◆ 保有資産', aLeft, AY + 12);
 
-  // 8資産を 2列×4行
   ASSET_KEYS.forEach((a, i) => {
     const col = i % 2, row = Math.floor(i / 2);
-    const ax = aLeft + col * aColW;
-    const ay = AY + 24 + row * 17;
+    const ax = aLeft + col * aColW, ay = AY + 24 + row * 17;
     const qty = (snapHoldings[a.id] || 0);
-    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.02)';
-    _certRoundRect(ctx, ax, ay - 11, aColW - 4, 14, 3);
-    ctx.fill();
-    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.25)';
-    ctx.font = '9.5px sans-serif';
-    ctx.textAlign = 'left';
+    ctx.fillStyle = qty > 0 ? 'rgba(90,55,10,0.07)' : 'rgba(90,55,10,0.03)';
+    _certRoundRect(ctx, ax, ay - 11, aColW - 4, 14, 3); ctx.fill();
+    ctx.fillStyle = qty > 0 ? 'rgba(28,14,4,0.82)' : 'rgba(28,14,4,0.25)';
+    ctx.font = '9.5px sans-serif'; ctx.textAlign = 'left';
     ctx.fillText(a.emoji + ' ' + a.label, ax + 4, ay);
-    ctx.fillStyle = qty > 0 ? '#f5c842' : 'rgba(255,255,255,0.2)';
+    ctx.fillStyle = qty > 0 ? '#7a3010' : 'rgba(28,14,4,0.2)';
     ctx.textAlign = 'right';
     ctx.fillText('\xd7' + qty.toLocaleString(), ax + aColW - 5, ay);
   });
 
-  // 現金行（全幅）
   const cashY = AY + 24 + 4 * 17;
-  ctx.fillStyle = 'rgba(255,255,255,0.05)';
-  _certRoundRect(ctx, aLeft, cashY - 11, aWidth, 14, 3);
-  ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.62)';
-  ctx.font = '9.5px sans-serif';
-  ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(90,55,10,0.07)';
+  _certRoundRect(ctx, aLeft, cashY - 11, aWidth, 14, 3); ctx.fill();
+  ctx.fillStyle = 'rgba(28,14,4,0.65)';
+  ctx.font = '9.5px sans-serif'; ctx.textAlign = 'left';
   ctx.fillText('💴 現金', aLeft + 4, cashY);
-  ctx.fillStyle = '#f5c842';
-  ctx.textAlign = 'right';
+  ctx.fillStyle = '#7a3010'; ctx.textAlign = 'right';
   ctx.fillText(Math.floor(snapCash || 0).toLocaleString() + '円', aRight - 5, cashY);
   ctx.textAlign = 'center';
 
-  // ─── 15. 資産推移グラフ ─────────────────────────────────────
+  // ─── 6. 資産推移グラフ ─────────────────────────────────────────
   const snapHistory = (snap && snap.historySnap && snap.historySnap.length >= 2)
     ? snap.historySnap
     : (typeof portfolioHistory !== 'undefined' ? portfolioHistory : []);
 
-  const chartX  = aLeft;
-  const chartY  = cashY + 18;
-  const chartW  = aWidth;
-  const chartHt = 52;
+  const chartX  = aLeft, chartY  = cashY + 18;
+  const chartW  = aWidth, chartHt = 52;
   const yBase   = chartY + 16;
 
-  ctx.strokeStyle = 'rgba(91,200,232,0.25)'; ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(90,55,10,0.18)'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(chartX, chartY); ctx.lineTo(chartX + chartW, chartY); ctx.stroke();
-  ctx.fillStyle = 'rgba(91,200,232,0.55)';
-  ctx.font = 'bold 9px sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('◆ 資産推移グラフ', chartX, chartY + 11);
+  ctx.fillStyle = 'rgba(90,55,10,0.55)';
+  ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('◆ 資産推移', chartX, chartY + 11);
 
   if (snapHistory.length >= 2) {
     const vals = snapHistory.map(h => h.total || 0);
     const maxV = Math.max(...vals, 1);
     const minV = Math.min(...vals, 0);
     const range = maxV - minV || 1;
-
-    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillStyle = 'rgba(155,115,55,0.07)';
     ctx.fillRect(chartX, yBase, chartW, chartHt);
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(155,115,55,0.15)'; ctx.lineWidth = 1;
     [1, 2].forEach(g => {
       const gy = yBase + (g / 3) * chartHt;
       ctx.beginPath(); ctx.moveTo(chartX, gy); ctx.lineTo(chartX + chartW, gy); ctx.stroke();
     });
-
     const toXY = (v, i) => ({
       x: chartX + (i / (vals.length - 1)) * chartW,
       y: yBase + chartHt - ((v - minV) / range) * chartHt * 0.88 - 2,
     });
-
     ctx.beginPath();
     vals.forEach((v, i) => { const p = toXY(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
-    ctx.lineTo(chartX + chartW, yBase + chartHt);
-    ctx.lineTo(chartX, yBase + chartHt);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(91,200,232,0.1)';
-    ctx.fill();
-
-    ctx.strokeStyle = '#5bc8e8'; ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
+    ctx.lineTo(chartX + chartW, yBase + chartHt); ctx.lineTo(chartX, yBase + chartHt);
+    ctx.closePath(); ctx.fillStyle = 'rgba(120,80,20,0.1)'; ctx.fill();
+    ctx.strokeStyle = '#7a4e10'; ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
     ctx.beginPath();
     vals.forEach((v, i) => { const p = toXY(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
     ctx.stroke();
-
     const peakIdx = vals.indexOf(maxV);
     const peak = toXY(maxV, peakIdx);
-    ctx.fillStyle = 'rgba(245,200,66,0.8)';
-    ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#c05010'; ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText(Math.floor(maxV / 10000) + '万', peak.x, Math.max(yBase + 10, peak.y - 3));
-
     if (snapHistory[0] && snapHistory[0]['年']) {
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
-      ctx.font = '8px sans-serif';
+      ctx.fillStyle = 'rgba(55,35,8,0.4)'; ctx.font = '8px sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(String(snapHistory[0]['年']), chartX + 2, yBase + chartHt + 10);
       ctx.textAlign = 'right';
       ctx.fillText(String(snapHistory[snapHistory.length - 1]['年']), chartX + chartW - 2, yBase + chartHt + 10);
     }
   } else {
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(55,35,8,0.3)'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('データなし', chartX + chartW / 2, chartY + 36);
   }
 
-  // 16. watermark
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  // 7. watermark
+  ctx.fillStyle = 'rgba(55,35,8,0.18)';
   ctx.font = '600 8px sans-serif'; ctx.textAlign = 'right';
   ctx.fillText('by RAINY BRAIN', W - bm - 10, H - bm - 6);
+
+  void m.bgIdx;
 }
 
 let _certCurrentKey = null;

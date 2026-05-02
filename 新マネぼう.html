@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マネぼう - 経済学習メタゲーム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.3s;
+        }
+        
+        nav a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .hero-subtitle {
+            font-size: 24px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .hero-description {
+            font-size: 18px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 80px 20px;
+        }
+        
+        section:nth-child(odd) {
+            background: #f8f9fa;
+        }
+        
+        h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #333;
+        }
+        
+        .section-subtitle {
+            font-size: 18px;
+            text-align: center;
+            color: #666;
+            margin-bottom: 50px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .card p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            color: #666;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .feature-list li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .flow-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            min-width: 180px;
+            color: #333;
+        }
+        
+        .flow-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .flow-arrow {
+            font-size: 30px;
+            color: #667eea;
+            margin: 0 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .stat-box {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            margin-bottom: 40px;
+            padding-left: 50px;
+            position: relative;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 20px;
+            width: 4px;
+            height: 40px;
+            background: #667eea;
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+        
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .tier-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tier-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .tier-body {
+            padding: 30px 20px;
+        }
+        
+        .tier-body ul {
+            list-style: none;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .tier-body li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tier-body li:before {
+            content: "→ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .vision-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .vision-box h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .vision-box p {
+            font-size: 18px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+        
+        footer {
+            background: #222;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .highlight {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero-subtitle {
+                font-size: 18px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            nav {
+                gap: 15px;
+                font-size: 12px;
+            }
+            
+            .flow-diagram {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <header>
+        <div class="navbar">
+            <div class="logo">💰 マネぼう</div>
+            <nav>
+                <a href="#concept">コンセプト</a>
+                <a href="#features">特徴</a>
+                <a href="#gameplay">ゲーム体験</a>
+                <a href="#target">ターゲット</a>
+                <a href="#monetize">マネタイズ</a>
+                <a href="#vision">ビジョン</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ヒーロー -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>マネぼう</h1>
+            <p class="hero-subtitle">経済学習メタゲーム</p>
+            <p class="hero-description">
+                Duolingoの継続性 × RPGの成長実感 × ボードゲームの戦略性<br>
+                <span class="highlight">毎日の経済学習がゲーム内の強さに直結</span>する新しいジャンル
+            </p>
+            <button class="cta-button">構想書を読む</button>
+        </div>
+    </section>
+
+    <!-- コンセプト -->
+    <section id="concept">
+        <div class="container">
+            <h2>コンセプト</h2>
+            <p class="section-subtitle">56年の経済歴史を、キャラ配置で体験するゲーム</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>📚 Duolingo的習慣化</h3>
+                    <p>毎日15分のクイズ学習がプッシュ通知で催促される。ウィジェットに表示されたかわいいキャラが、学習を促す。</p>
+                </div>
+                <div class="card">
+                    <h3>🎮 RPG的成長</h3>
+                    <p>レベル、経験値、キャラクター、称号。プレイヤーとキャラが共に成長し、学習の成果が数値で可視化される。</p>
+                </div>
+                <div class="card">
+                    <h3>♟️ 戦略的ボードゲーム</h3>
+                    <p>224マス（56年×4出来事）にキャラを配置。配置の最適さが最終資産額を左右する。毎回プレイで結果が変わる。</p>
+                </div>
+                <div class="card">
+                    <h3>🌍 グローバル経済体験</h3>
+                    <p>日本だけでなく、アメリカ、中国、ロシア、EU...世界100超の国々の経済を同じシステムで体験できる。</p>
+                </div>
+                <div class="card">
+                    <h3>📈 永遠の更新</h3>
+                    <p>毎年1月1日、全ステージが自動更新。2027年の経済イベントが追加される。完成しないゲーム。</p>
+                </div>
+                <div class="card">
+                    <h3>🔄 学習 ↔ ゲームの完全循環</h3>
+                    <p>Duolingoで学ぶ → ボードゲームで実践 → スコアUP → 新キャラ解放 → もっと学びたくなる</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ゲーム体験フロー -->
+    <section id="gameplay">
+        <div class="container">
+            <h2>ゲーム体験フロー</h2>
+            <p class="section-subtitle">毎日のプレイサイクル</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-box">
+                    <h4>🌅 朝</h4>
+                    <p>プッシュ通知で起床</p>
+                    <p style="font-size: 12px; margin-top: 10px;">Duolingoクイズ 5問</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">
+                    <h4>☀️ 昼</h4>
+                    <p>復習学習</p>
+                    <p style="font-size: 12px; margin-top: 10px;">経験値+50</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">
+                    <h4>🌙 夜</h4>
+                    <p>追加クイズ</p>
+                    <p style="font-size: 12px; margin-top: 10px;">キャラ配置+1</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-box">
+                    <h4>🎮 週末</h4>
+                    <p>メインクエスト</p>
+                    <p style="font-size: 12px; margin-top: 10px;">ボードゲーム40分</p>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; margin-top: 60px; color: #667eea;">メインクエスト：56年のボードゲーム</h3>
+            
+            <div class="grid" style="margin-top: 40px;">
+                <div class="card" style="background: linear-gradient(135deg, #ffe5e5 0%, #fff9f9 100%);">
+                    <h3 style="color: #ff6b6b;">第1章：簡易版</h3>
+                    <p><strong>ルール：シンプル</strong></p>
+                    <ul class="feature-list">
+                        <li>税金・手数料なし</li>
+                        <li>純粋な資産推移のみ</li>
+                        <li>初心者向け</li>
+                        <li>期待スコア：150万円</li>
+                    </ul>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #fff4e5 0%, #fffaf0 100%);">
+                    <h3 style="color: #ff9f00;">第2章：中級版</h3>
+                    <p><strong>新ルール：税金・手数料追加</strong></p>
+                    <ul class="feature-list">
+                        <li>株式益20%課税</li>
+                        <li>取引手数料-1%</li>
+                        <li>NISA導入</li>
+                        <li>期待スコア：125万円</li>
+                    </ul>
+                </div>
+                <div class="card" style="background: linear-gradient(135deg, #e5f5ff 0%, #f0f9ff 100%);">
+                    <h3 style="color: #0066cc;">第3章：上級版</h3>
+                    <p><strong>新ルール：複雑な制度実装</strong></p>
+                    <ul class="feature-list">
+                        <li>累進課税・iDeCo</li>
+                        <li>インフレ調整</li>
+                        <li>信託報酬・固定資産税</li>
+                        <li>期待スコア：110万円</li>
+                    </ul>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 40px; color: #666; font-size: 16px;">
+                <strong>重要：同じ56年を3度プレイするが、ルール追加により毎回戦略が大きく変わる</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- 特徴 -->
+    <section id="features">
+        <div class="container">
+            <h2>5つの革新的特徴</h2>
+            <p class="section-subtitle">これまで世界に存在しなかったジャンル</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>🎯 224マス × 4体キャラ配置</h3>
+                    <p>56年×4出来事=224マス。各マスで最大4体のキャラを配置。配置の戦略性が最終スコアを大きく左右する。</p>
+                </div>
+                <div class="card">
+                    <h3>📊 知識が直結する</h3>
+                    <p>「オイルショック＝金が上がる」を学ぶ → ゲーム内で金のハンターを配置 → 実際に利益UP</p>
+                </div>
+                <div class="card">
+                    <h3>🌏 グローバルな多次元性</h3>
+                    <p>日本、アメリカ、中国、ロシアなど複数国をプレイ。毎年新国が追加される。完成しないプラットフォーム。</p>
+                </div>
+                <div class="card">
+                    <h3>♻️ 完全な循環メカニクス</h3>
+                    <p>学習 → キャラ獲得 → ゲーム有利化 → スコアUP → もっと学びたい → 新キャラ欲しい → ゲーム再挑戦</p>
+                </div>
+                <div class="card">
+                    <h3>🏆 多様な成長指標</h3>
+                    <p>レベル、経験値、キャラ数、称号、スコア、ランキング。成長が多角的に可視化される。</p>
+                </div>
+                <div class="card">
+                    <h3>🔔 Duolingoレベルの習慣化</h3>
+                    <p>ウィジェット、プッシュ通知、ストリーク、連続達成ボーナス。Duolingoと同等の継続性メカニクス。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- キャラシステム -->
+    <section>
+        <div class="container">
+            <h2>キャラクター・スキルシステム</h2>
+            <p class="section-subtitle">タワーディフェンスの投資版</p>
+            
+            <h3 style="text-align: center; margin-top: 40px; color: #667eea;">基本キャラ（4体）</h3>
+            <div class="grid" style="margin-top: 30px;">
+                <div class="card">
+                    <h3>🚀 高度経済成長の鬼</h3>
+                    <p><strong>効果：</strong>成長期+20%</p>
+                    <p><strong>配置回数：</strong>50回</p>
+                    <p><strong>対象：</strong>成長期イベント</p>
+                </div>
+                <div class="card">
+                    <h3>💰 金のハンター</h3>
+                    <p><strong>効果：</strong>有事資産+30%</p>
+                    <p><strong>配置回数：</strong>30回</p>
+                    <p><strong>対象：</strong>危機・有事イベント</p>
+                </div>
+                <div class="card">
+                    <h3>🏛️ 保守投資家</h3>
+                    <p><strong>効果：</strong>国債・銀行+10%</p>
+                    <p><strong>配置回数：</strong>15回</p>
+                    <p><strong>対象：</strong>全イベント対応</p>
+                </div>
+                <div class="card">
+                    <h3>💵 ドル狙い撃ち</h3>
+                    <p><strong>効果：</strong>ドル+25%</p>
+                    <p><strong>配置回数：</strong>20回</p>
+                    <p><strong>対象：</strong>為替変動イベント</p>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; margin-top: 50px; color: #667eea;">追加キャラ（段階的解放）</h3>
+            <ul class="feature-list" style="max-width: 600px; margin: 30px auto;">
+                <li><strong>税制マスター：</strong>全資産-10%税率（第2章で習得「税金」テーマ時に解放）</li>
+                <li><strong>リスク回避者：</strong>暴落時マイナス-50%カット（第2章ボス戦クリア時に解放）</li>
+                <li><strong>インフレ予見者：</strong>金+25%、インフレ資産+20%（Duolingo「インフレ」テーマ習得時）</li>
+                <li><strong>iDeCo最適化者：</strong>iDeCo効果+50%（Duolingo「iDeCo」テーマ習得時）</li>
+                <li><strong>その他：</strong>合計15体以上のキャラが段階的に解放される</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ステージ拡張 -->
+    <section>
+        <div class="container">
+            <h2>グローバルステージ拡張</h2>
+            <p class="section-subtitle">複数国の経済を同じシステムで体験</p>
+            
+            <div class="tier-grid" style="margin-top: 40px;">
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h3>🇯🇵 日本経済</h3>
+                        <p style="font-size: 14px; margin-top: 5px;">1970-2026年</p>
+                    </div>
+                    <div class="tier-body">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
+                        <ul>
+                            <li>高度経済成長</li>
+                            <li>オイルショック</li>
+                            <li>プラザ合意</li>
+                            <li>バブル崩壊</li>
+                            <li>リーマンショック</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h3>🇺🇸 アメリカ経済</h3>
+                        <p style="font-size: 14px; margin-top: 5px;">1970-2026年</p>
+                    </div>
+                    <div class="tier-body">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
+                        <ul>
+                            <li>スタグフレーション</li>
+                            <li>ブラックマンデー</li>
+                            <li>ITバブル</li>
+                            <li>リーマンショック</li>
+                            <li>利上げサイクル</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h3>🇨🇳 中国経済</h3>
+                        <p style="font-size: 14px; margin-top: 5px;">1978-2026年</p>
+                    </div>
+                    <div class="tier-body">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
+                        <ul>
+                            <li>改革開放</li>
+                            <li>高成長期</li>
+                            <li>米中貿易戦争</li>
+                            <li>不動産危機</li>
+                            <li>経済減速</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h3>🇷🇺 ロシア経済</h3>
+                        <p style="font-size: 14px; margin-top: 5px;">1970-2026年</p>
+                    </div>
+                    <div class="tier-body">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
+                        <ul>
+                            <li>冷戦経済</li>
+                            <li>ソビエト崩壊</li>
+                            <li>通貨危機</li>
+                            <li>エネルギー好況</li>
+                            <li>経済制裁</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h3>🌍 EU・その他</h3>
+                        <p style="font-size: 14px; margin-top: 5px;">2027年以降追加</p>
+                    </div>
+                    <div class="tier-body">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">拡張予定</h4>
+                        <ul>
+                            <li>EU経済ステージ</li>
+                            <li>インド経済</li>
+                            <li>ブラジル経済</li>
+                            <li>台湾経済</li>
+                            <li>他50+国</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tier-card">
+                    <div class="tier-header">
+                        <h3>♻️ 毎年自動更新</h3>
+                        <p style="font-size: 14px; margin-top: 5px;">永遠に成長</p>
+                    </div>
+                    <div class="tier-body">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">更新内容</h4>
+                        <ul>
+                            <li>全ステージ拡張</li>
+                            <li>新経済イベント</li>
+                            <li>新キャラ実装</li>
+                            <li>Duolingo新テーマ</li>
+                            <li>新国の追加</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ターゲット層 -->
+    <section id="target">
+        <div class="container">
+            <h2>ターゲット層 - 投資ニーズ段階別</h2>
+            <p class="section-subtitle">全ての経済学習段階に対応</p>
+            
+            <div class="stats-grid" style="margin-top: 40px;">
+                <div class="stat-box">
+                    <div class="stat-number">4,000万</div>
+                    <div class="stat-label">金融知識ゼロ層</div>
+                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「ゲーム感覚で金融教育」が入口</p>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">1,200万</div>
+                    <div class="stat-label">基礎知識習得層</div>
+                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「投資への第一歩」を踏み出す</p>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">600万</div>
+                    <div class="stat-label">実投資層</div>
+                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「運用の最適化」をシミュレーション</p>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">400万</div>
+                    <div class="stat-label">既投資家・プロ層</div>
+                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「戦略検証」プラットフォーム</p>
+                </div>
+            </div>
+
+            <div class="grid" style="margin-top: 50px;">
+                <div class="card">
+                    <h3>🎮 Level 0: 金融知識ゼロ層</h3>
+                    <p><strong>ニーズ：</strong>敷居の低さ、習慣化、楽しさ</p>
+                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「人生を変える金融教育の入口」</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額100-150円</p>
+                </div>
+                <div class="card">
+                    <h3>📚 Level 1: 基礎知識習得層</h3>
+                    <p><strong>ニーズ：</strong>実践的知識、不安払拭</p>
+                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「投資への第一歩」</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額3,480円</p>
+                </div>
+                <div class="card">
+                    <h3>💼 Level 2: 実投資層</h3>
+                    <p><strong>ニーズ：</strong>シミュレーション、最適化</p>
+                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「運用の最適化ツール」</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額8,000円</p>
+                </div>
+                <div class="card">
+                    <h3>🏆 Level 3-4: プロ層</h3>
+                    <p><strong>ニーズ：</strong>戦略検証、データ</p>
+                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「専門プラットフォーム」</p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額15,000円</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- マネタイズ -->
+    <section id="monetize">
+        <div class="container">
+            <h2>マネタイズ戦略</h2>
+            <p class="section-subtitle">段階的・多層的な収益化</p>
+            
+            <h3 style="text-align: center; margin-top: 40px; color: #667eea;">推定年間売上（日本国内）</h3>
+            <div class="stats-grid" style="margin-top: 30px;">
+                <div class="stat-box">
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Level 0 売上<br>（広告 + 低額課金）</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">40</div>
+                    <div class="stat-label">Level 1 売上<br>（月額980円）</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">39</div>
+                    <div class="stat-label">Level 2 売上<br>（月額2,980円）</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">66</div>
+                    <div class="stat-label">Level 3 売上<br>（月額9,980円 + B2B）</div>
+                </div>
+            </div>
+
+            <h3 style="text-align: center; margin-top: 50px; color: #667eea;">合計推定売上</h3>
+            <div class="vision-box">
+                <h3>年間 150-210億円（日本国内）</h3>
+                <p>グローバル展開時：1,500-2,100億円</p>
+            </div>
+
+            <h3 style="text-align: center; margin-top: 50px; color: #667eea;">マネタイズモデル</h3>
+            <div class="grid" style="margin-top: 30px;">
+                <div class="card">
+                    <h3>📱 アプリ内広告</h3>
+                    <p>金融サービス、証券会社の広告。Level 0のユーザーに表示。</p>
+                </div>
+                <div class="card">
+                    <h3>💳 月額課金</h3>
+                    <p>Level 1: 月額980円<br>Level 2: 月額2,980円<br>Level 3: 月額9,980円</p>
+                </div>
+                <div class="card">
+                    <h3>🎲 ガチャシステム</h3>
+                    <p>1回100円、10回800円。新キャラ獲得で配置回数UP。</p>
+                </div>
+                <div class="card">
+                    <h3>🏢 B2B提携</h3>
+                    <p>証券会社・銀行・学校向けの教育ツール販売。月額数百万円～。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ロードマップ -->
+    <section>
+        <div class="container">
+            <h2>展開ロードマップ</h2>
+            <p class="section-subtitle">段階的なグローバル展開</p>
+            
+            <div class="timeline" style="margin-top: 40px;">
+                <div class="timeline-item">
+                    <h4>フェーズ1：日本・東アジア（Year 1-2）</h4>
+                    <p>日本経済ステージ完成、韓国・台湾経済実装、アジア市場開拓</p>
+                    <p style="margin-top: 10px; color: #667eea;"><strong>売上目標：150-200億円/年</strong></p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>フェーズ2：グローバル展開（Year 2-3）</h4>
+                    <p>アメリカ、ヨーロッパ、中国市場本格展開。各国向けカスタマイズ。B2B提携加速。</p>
+                    <p style="margin-top: 10px; color: #667eea;"><strong>売上目標：1,000-1,500億円/年</strong></p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>フェーズ3：無限拡張（Year 3+）</h4>
+                    <p>100超の国々の経済ステージ実装。データセット化。機関投資家向けサービス。</p>
+                    <p style="margin-top: 10px; color: #667eea;"><strong>売上目標：3,000-5,000億円/年（+グローバル）</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ビジョン -->
+    <section id="vision" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 100px 20px;">
+        <div class="container">
+            <h2 style="color: white;">ビジョン</h2>
+            
+            <div class="vision-box" style="background: rgba(255,255,255,0.1); border: 2px solid white;">
+                <h3 style="color: white;">それは、ゲームではない</h3>
+                <p style="margin-top: 20px;">
+                    「<span class="highlight" style="color: #ffeb3b;">人類の経済活動そのもの</span>」を、<br>
+                    ゲーミフィケーションされた形で、<br>
+                    永遠に体験し続けられるプラットフォーム
+                </p>
+            </div>
+
+            <h3 style="text-align: center; margin-top: 60px; color: white;">マネぼウが実現するもの</h3>
+            <div class="grid" style="margin-top: 40px; color: #333;">
+                <div class="card">
+                    <h3 style="color: #667eea;">🎓 金融リテラシーの民主化</h3>
+                    <p>高額なセミナーやコンサル不要。すべての人が無料で金融教育を受けられる。</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: #667eea;">🌍 グローバル経済の理解</h3>
+                    <p>世界100超の国々を体験することで、複雑な経済相互関係を直感的に理解。</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: #667eea;">📈 投資文化の健全化</h3>
+                    <p>ゲーム感覚で始まった学習が、実投資への確信と知識に進化。</p>
+                </div>
+                <div class="card">
+                    <h3 style="color: #667eea;">♾️ 完成しないプラットフォーム</h3>
+                    <p>毎年新国追加、毎年ボード拡張。永遠に新しい体験ができる。</p>
+                </div>
+            </div>
+
+            <div class="vision-box" style="background: rgba(255,255,255,0.15); border: 2px solid white; margin-top: 60px;">
+                <h3 style="color: white;">最終的な位置付け</h3>
+                <p style="font-size: 20px;">
+                    Duolingoが言語学習を民主化したように、<br>
+                    <strong style="color: #ffeb3b;">マネぼうが経済・金融教育を民主化する</strong><br><br>
+                    これが完成したとき、<br>
+                    <strong>世界中の金融教育は変わる。</strong>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer>
+        <div class="container">
+            <h3>マネぼう - 経済学習メタゲーム</h3>
+            <p style="margin-top: 20px;">2024-2026年 構想</p>
+            <p style="margin-top: 20px; opacity: 0.7;">
+                Duolingo × RPG × ボードゲーム × 経済シミュレーション<br>
+                = 完全に新しいジャンルの誕生
+            </p>
+            <div style="margin-top: 40px; border-top: 1px solid #555; padding-top: 20px;">
+                <p style="opacity: 0.6;">© 2024 マネぼう構想 All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

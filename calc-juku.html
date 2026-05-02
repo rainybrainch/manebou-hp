@@ -20,10 +20,6 @@
 <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
 <link rel="icon" type="image/webp" href="images/img5.webp">
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 
 /* ─── Variables ──────────────────────────────────────────── */
@@ -80,7 +76,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  max-width: 680px;
+  max-width: 1100px;
   z-index: 200;
   background: rgba(26, 26, 46, 0.96);
   backdrop-filter: blur(16px);
@@ -122,9 +118,9 @@ body {
 
 /* ─── Layout ─────────────────────────────────────────────── */
 .wrap {
-  max-width: 680px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 72px 16px 85px;
+  padding: 72px 24px 85px;
 }
 
 /* ─── Page Header ────────────────────────────────────────── */
@@ -2669,256 +2665,28 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 .welcome-sub{font-size:10px;color:rgba(255,255,255,0.3);}
 
 /* ===== 約束手形モーダル ===== */
-.cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.3s;backdrop-filter:blur(6px);}
+.cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.35s;backdrop-filter:blur(4px);}
 .cert-backdrop.open{opacity:1;pointer-events:all;}
-.cert-modal{
-  position:fixed;top:50%;left:50%;
-  transform:translate(-50%,-56%) scale(0.88);
-  z-index:2001;
-  background:linear-gradient(160deg,#0d0d1e 0%,#06060f 100%);
-  border:2px solid rgba(245,200,66,0.7);
-  border-radius:20px;
-  padding:0 0 18px;
-  width:min(94vw,860px);
-  max-height:94vh;
-  overflow-y:auto;
-  pointer-events:none;
-  opacity:0;
-  transition:transform 0.38s cubic-bezier(0.22,1.2,0.5,1),opacity 0.28s;
-  box-shadow:0 0 0 1px rgba(245,200,66,0.18),0 30px 90px rgba(0,0,0,0.95),0 0 60px rgba(245,200,66,0.12);
-}
+.cert-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-54%) scale(0.9);z-index:2001;background:#06060f;border:2px solid rgba(245,200,66,0.6);border-radius:18px;padding:18px 18px 14px;width:min(92vw,820px);max-height:92vh;overflow-y:auto;pointer-events:none;opacity:0;transition:transform 0.35s cubic-bezier(0.22,1.2,0.5,1),opacity 0.28s;box-shadow:0 0 0 1px rgba(245,200,66,0.15),0 24px 80px rgba(0,0,0,0.9),0 0 40px rgba(245,200,66,0.08);}
 .cert-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
-/* ヘッダー */
-.cert-modal-header{
-  display:flex;align-items:center;gap:10px;
-  padding:14px 18px 12px;
-  border-bottom:1px solid rgba(245,200,66,0.2);
-  background:rgba(245,200,66,0.05);
-  border-radius:18px 18px 0 0;
-}
-.cert-modal-badge{
-  font-family:'Dela Gothic One',sans-serif;
-  font-size:13px;color:var(--gold);
-  background:rgba(245,200,66,0.12);
-  border:1px solid rgba(245,200,66,0.35);
-  border-radius:20px;padding:3px 12px;
-  white-space:nowrap;flex-shrink:0;
-}
-.cert-modal-title{
-  font-family:'Dela Gothic One',sans-serif;
-  font-size:15px;color:#fff;flex:1;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.cert-modal-x{
-  background:none;border:none;color:rgba(255,255,255,0.45);
-  font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;
-  flex-shrink:0;transition:color 0.15s;
-}
-.cert-modal-x:hover{color:#fff;}
-/* キャンバス */
-.cert-canvas{width:100%;height:auto;display:block;box-shadow:0 6px 32px rgba(0,0,0,0.7);}
-/* アクション */
-.cert-actions{display:flex;gap:12px;margin:16px 18px 0;justify-content:center;}
-.cert-dl-btn{
-  flex:1;max-width:240px;padding:14px 22px;
-  background:linear-gradient(135deg,#f5c842,#d4a017);
-  color:#1a0a00;border:none;border-radius:14px;
-  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;
-  transition:opacity 0.15s,transform 0.1s;
-  box-shadow:0 5px 20px rgba(245,200,66,0.35);
-}
-.cert-dl-btn:hover{opacity:0.92;transform:translateY(-2px);}
+.cert-canvas{width:100%;height:auto;border-radius:10px;display:block;box-shadow:0 4px 24px rgba(0,0,0,0.6);}
+.cert-actions{display:flex;gap:10px;margin-top:14px;justify-content:center;}
+.cert-dl-btn{flex:1;max-width:220px;padding:13px 20px;background:linear-gradient(135deg,#f5c842,#d4a017);color:#1a0a00;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:opacity 0.15s,transform 0.1s;box-shadow:0 4px 16px rgba(245,200,66,0.3);}
+.cert-dl-btn:hover{opacity:0.9;transform:translateY(-1px);}
 .cert-dl-btn:active{transform:translateY(0);}
-.cert-close-btn{
-  padding:14px 28px;
-  background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);
-  border:1.5px solid rgba(255,255,255,0.15);border-radius:14px;
-  font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.15s;
-}
-.cert-close-btn:hover{background:rgba(255,255,255,0.12);color:#fff;}
+.cert-close-btn{padding:13px 22px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.12);border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.15s;}
+.cert-close-btn:hover{background:rgba(255,255,255,0.11);color:#fff;}
 /* 約束手形コレクション一覧 */
-.cert-coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;padding:4px 0;}
+.cert-coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;padding:4px 0;}
 .cert-coll-item{background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s;}
-.cert-coll-item:hover{border-color:rgba(245,200,66,0.5);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.cert-coll-thumb{width:100%;height:90px;object-fit:cover;display:block;}
-.cert-coll-label{font-size:11px;font-weight:700;color:rgba(255,255,255,0.7);padding:8px;text-align:center;}
+.cert-coll-item:hover{border-color:rgba(245,200,66,0.5);transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.4);}
+.cert-coll-thumb{width:100%;height:84px;object-fit:cover;display:block;}
+.cert-coll-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.65);padding:7px 8px;text-align:center;}
 
 
 /* page loader */
 .pl-dot{width:9px;height:9px;border-radius:50%;background:#F5C842;animation:plPulse 1.1s ease-in-out infinite;}
 @keyframes plPulse{0%,80%,100%{opacity:.18;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}
-
-/* ═══════════════════════════════════════════════════════════
-   塾用 PC フルスクリーン レイアウト & デザイン オーバーライド
-═══════════════════════════════════════════════════════════ */
-
-/* PC向け幅制限解除 */
-.top-nav    { max-width: 1440px !important; }
-.wrap       { max-width: 1440px !important; padding-left: 24px; padding-right: 24px; }
-.bottom-nav { max-width: 1440px !important; }
-
-@media (min-width: 900px) {
-  .tab-page.active { min-height: calc(100vh - 130px); }
-
-  /* ── 2カラム グリッドレイアウト ── */
-  #tab-game.active {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    grid-template-rows: auto auto auto;
-    grid-template-areas:
-      "left  right"
-      "steps right"
-      "jump  jump";
-    gap: 20px;
-    align-items: start;
-  }
-  .game-col-left {
-    grid-area: left;
-    margin-bottom: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .game-col-right {
-    grid-area: right;
-    position: sticky;
-    top: 70px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 20px;
-    padding: 20px;
-  }
-  .game-step-area { grid-area: steps; }
-
-  /* ── 4列×2行 資産グリッド ── */
-  .asset-grid {
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 14px !important;
-    margin-bottom: 14px;
-  }
-
-  /* ══════════════════════════════════════════════════════
-     資産カード：マネぼうボードカード風デザイン
-  ══════════════════════════════════════════════════════ */
-  /* カード本体：白地・角丸・ドロップシャドウ */
-  .asset-btn {
-    border-radius: 14px !important;
-    padding: 0 0 10px !important;
-    border: none !important;
-    box-shadow: 0 5px 18px rgba(0,0,0,0.28), 0 2px 4px rgba(0,0,0,0.15) !important;
-    background: #fff !important;
-    overflow: hidden !important;
-    transition: transform 0.1s ease, box-shadow 0.1s ease !important;
-  }
-  .asset-btn:hover {
-    transform: translateY(-5px) scale(1.02) !important;
-    box-shadow: 0 14px 32px rgba(0,0,0,0.32), 0 4px 8px rgba(0,0,0,0.18) !important;
-  }
-  .asset-btn:active {
-    transform: translateY(3px) !important;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.28) !important;
-  }
-  .asset-btn:disabled {
-    background: rgba(180,180,200,0.12) !important;
-    box-shadow: none !important;
-    opacity: 0.42 !important;
-  }
-  /* カラーヘッダーバンド（資産カラー） */
-  .a-card-top {
-    background: var(--ac, #444) !important;
-    margin: 0 0 8px 0 !important;
-    padding: 10px 12px 8px !important;
-    border-radius: 0 !important;
-  }
-  /* 資産名ラベル（ヘッダー内・白文字） */
-  .a-name-lbl {
-    color: #fff !important;
-    font-size: 13px !important;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  }
-  /* 保有数（ヘッダー内） */
-  .a-hold-lbl { color: rgba(255,255,255,0.75) !important; }
-  .a-qty-num  { color: rgba(255,255,255,0.75) !important; }
-  .a-qty-owned { color: #fff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-  /* 価格ラベル（カード本体・濃色テキスト） */
-  .a-price-lbl {
-    font-size: clamp(13px, 1.6vw, 18px) !important;
-    color: #1a1a2e !important;
-    padding: 0 12px !important;
-    margin-bottom: 4px !important;
-  }
-  /* 配当バッジ */
-  .a-div   { font-size: 11px !important; margin-left: 12px !important; }
-  .a-yield { margin-left: 12px; font-size: 9px; }
-  /* カートバッジ */
-  .a-cart-row { margin-left: 12px !important; }
-  /* スパークライン */
-  .a-spark { padding: 0 8px !important; opacity: 0.55 !important; margin-top: 4px !important; }
-  /* 保有中カード：グリーンアウトライン */
-  .asset-btn-owned {
-    border: none !important;
-    outline: 3px solid var(--green) !important;
-    outline-offset: -1px !important;
-    box-shadow: 0 5px 18px rgba(76,175,125,0.2), 0 2px 4px rgba(0,0,0,0.15) !important;
-  }
-
-  /* ══════════════════════════════════════════════════════
-     バリューパネル：総資産を大きく
-  ══════════════════════════════════════════════════════ */
-  .value-panel {
-    background: linear-gradient(135deg, rgba(245,200,66,0.1) 0%, rgba(245,200,66,0.03) 100%) !important;
-    border: 2px solid rgba(245,200,66,0.35) !important;
-    border-radius: 16px !important;
-    padding: 16px !important;
-    box-shadow: 0 0 24px rgba(245,200,66,0.06) !important;
-  }
-  .value-block-num { font-size: clamp(22px, 2.8vw, 36px) !important; }
-  .value-block-lbl {
-    font-size: 10px !important;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: rgba(255,255,255,0.45) !important;
-  }
-
-  /* ══════════════════════════════════════════════════════
-     日付ナビ：年号をゴールドで強調
-  ══════════════════════════════════════════════════════ */
-  .date-bar {
-    background: rgba(255,255,255,0.035) !important;
-    border: 1px solid rgba(255,255,255,0.1) !important;
-    border-radius: 16px !important;
-    padding: 12px 14px !important;
-  }
-  .date-nav { gap: 10px; }
-  #timeLabel {
-    font-size: clamp(15px, 2vw, 22px) !important;
-    font-weight: 700 !important;
-    color: var(--gold) !important;
-    text-align: center;
-    flex: 1;
-    line-height: 1.3;
-  }
-  .btn-next     { padding: 12px 22px; font-size: 15px; }
-  .btn-timeslip { padding: 12px 22px; font-size: 15px; }
-
-  /* ステップボタン拡大 */
-  .step-btn { padding: 14px 8px; font-size: clamp(13px, 1.3vw, 16px) !important; }
-  .step-row { gap: 8px; }
-
-  /* 吹き出し */
-  .speech-bubble { padding: 12px 14px; }
-  #speechText    { font-size: 13px; }
-}
-
-/* 大型 PC (1400px+) */
-@media (min-width: 1400px) {
-  .top-nav, .wrap, .bottom-nav { max-width: 1600px !important; }
-  #tab-game.active { grid-template-columns: 340px 1fr; gap: 28px; }
-  .asset-grid { gap: 18px !important; }
-  .a-qty-num   { font-size: clamp(26px, 2.5vw, 36px) !important; }
-  .a-price-lbl { font-size: clamp(15px, 1.6vw, 20px) !important; }
-  .step-btn    { padding: 16px 10px; font-size: clamp(14px, 1.2vw, 18px) !important; }
-}
 
 </style>
 </head>
@@ -2932,32 +2700,6 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   </div>
 </div>
 
-<!-- ════ LOGIN OVERLAY ════ (塾用：ニックネーム認証のみ) ════ -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-box" style="max-width:360px;max-height:90vh;overflow-y:auto">
-    <h2>🔐 アカウント</h2>
-    <p style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:14px;text-align:center">ニックネームとパスワードで登録・ログイン</p>
-    <!-- ニックネーム認証タブ -->
-    <div class="auth-tab-row">
-      <button class="auth-tab-btn active" id="authTabBtnLogin" onclick="switchAuthTab('login')">ログイン</button>
-      <button class="auth-tab-btn" id="authTabBtnRegister" onclick="switchAuthTab('register')">新規登録</button>
-    </div>
-    <div class="auth-panel active" id="authPanelLogin">
-      <input class="auth-input" id="loginNickname" type="text" placeholder="ニックネーム" autocomplete="username" maxlength="20">
-      <input class="auth-input" id="loginPassword" type="password" placeholder="パスワード" autocomplete="current-password">
-      <div class="auth-err" id="loginErr"></div>
-      <button class="btn-auth-submit" onclick="doNicknameLogin()">ログイン</button>
-    </div>
-    <div class="auth-panel" id="authPanelRegister">
-      <input class="auth-input" id="regNickname" type="text" placeholder="ニックネーム（1〜20文字）" autocomplete="username" maxlength="20">
-      <input class="auth-input" id="regPassword" type="password" placeholder="パスワード（6文字以上）" autocomplete="new-password">
-      <input class="auth-input" id="regPasswordConfirm" type="password" placeholder="パスワード（確認）" autocomplete="new-password">
-      <div class="auth-err" id="regErr"></div>
-      <button class="btn-auth-submit" onclick="doNicknameRegister()">新規登録</button>
-    </div>
-    <button class="auth-cancel" onclick="closeAuthOverlay()">今はしない</button>
-  </div>
-</div>
 
 <!-- ════ TIMESLIP CONFIRM ════ -->
 <div class="auth-overlay" id="timeslipOverlay">
@@ -2972,66 +2714,26 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 <!-- ════ NEXT CONFIRM ════ -->
 <div class="auth-overlay" id="nextConfirmOverlay">
   <div class="auth-box" style="text-align:center;max-width:320px">
-    <h2 style="margin-bottom:8px">⏩ 次の時代へ進む</h2>
-    <p id="nextConfirmMsg" style="font-size:14px;color:rgba(255,255,255,0.75);margin-bottom:22px;line-height:1.8"></p>
-    <button id="confirmNextBtn" class="btn-google" style="background:var(--gold);color:var(--dark);margin-bottom:10px;font-weight:700;font-size:16px;padding:14px 28px" onclick="confirmNext()">完了</button>
-    <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);border:1.5px solid rgba(255,255,255,0.12);font-size:13px" onclick="cancelNext()">キャンセル</button>
+    <h2 style="margin-bottom:10px">⏩ 次の時代へ進む</h2>
+    <p id="nextConfirmMsg" style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:16px;line-height:1.7"></p>
+    <p style="font-size:12px;color:rgba(255,200,66,0.75);margin-bottom:20px;line-height:1.5">⚠️ この操作は取り消せません</p>
+    <button id="confirmNextBtn" class="btn-google" style="background:var(--gold);color:var(--dark);margin-bottom:10px;font-weight:700" onclick="confirmNext()">✅ 進む</button>
+    <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.15)" onclick="cancelNext()">✕ キャンセル</button>
   </div>
 </div>
 
 
-<!-- ════ GROUP MODAL ════ -->
-<div class="modal-overlay" id="groupModal">
-  <div class="modal-box">
-    <button class="modal-close-btn" onclick="closeGroupModal()">✕</button>
-    <h2>👥 グループ</h2>
-    <p>コードで参加 / 講師はグループを作成</p>
-    <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchGroupTab('join',this)">🎮 参加する</button>
-      <button class="modal-tab" onclick="switchGroupTab('create',this)">👑 作成する</button>
-    </div>
-    <div id="groupTabJoin">
-      <input type="text" class="modal-input" id="groupCodeInput" placeholder="コードを入力" maxlength="6"
-        oninput="this.value=this.value.toUpperCase()" autocomplete="off" spellcheck="false">
-      <button class="btn-modal-action" onclick="joinGroup()">グループに参加する</button>
-    </div>
-    <div id="groupTabCreate" style="display:none">
-      <input class="modal-input no-track" id="groupNameInput" placeholder="グループ名を入力" maxlength="20">
-      <button class="btn-modal-action" onclick="createGroup()">グループを作成する</button>
-      <div id="groupCreatedInfo" style="display:none">
-        <div class="modal-divider"></div>
-        <div class="modal-group-code-label">プレイヤーに共有するコード</div>
-        <div class="modal-group-code" id="createdGroupCode">------</div>
-        <button class="btn-modal-action" style="background:rgba(245,200,66,0.12);color:var(--gold);border:1.5px solid rgba(245,200,66,0.4);box-shadow:none;margin-top:8px" onclick="copyGroupCode()">📋 コードをコピー</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- ════ MEMBER DETAIL MODAL ════ -->
-<div class="modal-overlay" id="memberDetailModal" onclick="if(event.target===this)closeMemberDetail()">
-  <div class="modal-box" style="max-width:380px;max-height:82vh;overflow-y:auto;text-align:left">
-    <button class="modal-close-btn" onclick="closeMemberDetail()">✕</button>
-    <div id="memberDetailContent"></div>
-  </div>
-</div>
 
-<!-- ════ USER MENU ════ -->
-<div class="user-menu" id="userMenu">
-  <img class="user-menu-avatar" id="userMenuAvatar" src="" alt="プロフィール画像">
-  <div class="user-menu-name" id="userMenuName">--</div>
-  <div class="user-menu-email" id="userMenuEmail">--</div>
-  <div class="user-menu-save-badge">☁️ クラウド保存 ON</div>
-  <div class="user-menu-group" id="userMenuGroup"></div>
-  <hr class="user-menu-divider">
-  <a class="user-menu-btn" href="home.html">🏠 アカウントページへ</a>
-  <a class="user-menu-btn" href="textbook.html">📚 教科書を見る</a>
-  <a class="user-menu-btn" href="https://rainybrainch.github.io/manebou-todo/manebou-pin.html" target="_blank" rel="noopener">📋 マネぼうPinへ</a>
-  <button class="user-menu-btn" onclick="openGroupModal()">👥 グループ管理</button>
-  <button class="user-menu-btn" onclick="cloudSaveNow()">☁️ 今すぐ保存</button>
+<!-- ════ PLAYER NAME ════ -->
+<div class="user-menu" id="userMenu" style="min-width:220px;padding:16px;">
+  <div style="font-size:11px;color:rgba(255,255,255,0.45);margin-bottom:6px;letter-spacing:2px">プレイヤー名</div>
+  <input id="playerNameInput" type="text" maxlength="20" placeholder="名前を入力..."
+    style="width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid rgba(245,200,66,0.4);background:rgba(255,255,255,0.07);color:#fff;font-family:inherit;font-size:14px;outline:none;margin-bottom:8px;">
+  <button onclick="savePlayerName()" style="width:100%;padding:8px;background:var(--gold);color:var(--dark);border:none;border-radius:8px;font-weight:700;cursor:pointer;font-family:inherit;font-size:13px;">保存</button>
+  <hr class="user-menu-divider" style="margin:10px 0;border-color:rgba(255,255,255,0.1)">
   <button class="user-menu-btn" onclick="closeUserMenu();openCertCollection()">📜 約束手形コレクション</button>
-  <button class="user-menu-btn danger" id="leaveGroupBtn" style="display:none" onclick="leaveGroup()">🚪 グループを抜ける</button>
-  <button class="user-menu-btn danger" onclick="signOutUser()">🚪 ログアウト</button>
+  <button class="user-menu-btn danger" onclick="clearSave()">🗑 データリセット</button>
 </div>
 
 <nav class="top-nav">
@@ -3046,8 +2748,7 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   <div class="ticker-bar" id="tickerBar"></div>
   <div class="nav-auth-wrap">
     <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="ライト/ダークモード切替">☀️</button>
-    <button class="nav-auth-btn" id="navAuthBtn" onclick="openAuthOverlay()">☁️ ログイン</button>
-    <img class="nav-user-avatar" id="navUserAvatar" src="" alt="ユーザーアバター" style="display:none" onclick="toggleUserMenu()">
+    <span id="navPlayerName" style="font-size:12px;color:var(--gold);cursor:pointer;padding:4px 10px;border:1.5px solid rgba(245,200,66,0.35);border-radius:20px;" onclick="toggleUserMenu()">🎮 名前設定</span>
   </div>
 </nav>
 
@@ -3089,6 +2790,10 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
           <span class="value-block-num"><span id="dispDiv" style="color:var(--green)">0</span><span class="value-block-unit" style="color:var(--green)">円</span></span>
           <span id="dispDivYear">年間 ─</span>
         </div>
+        <div class="value-block" style="grid-column:1/-1;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
+          <span class="value-block-lbl">💰 現金残高</span>
+          <span class="value-block-num" style="font-size:clamp(14px,3.5vw,20px)"><span id="dispCashTop">0</span><span class="value-block-unit">円</span></span>
+        </div>
       </div>
     </div>
 
@@ -3128,8 +2833,25 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 
   </div><!-- /tab-game -->
 
-  <!-- ════ TAB: 計算機 ════ -->
+  <!-- ════ TAB: お財布 ════ -->
   <div id="tab-data" class="tab-page">
+
+    <!-- ── 現金バナー（スティッキー・常時表示） ── -->
+    <div class="wallet-header">
+      <div class="wh-top">
+        <div>
+          <div class="wh-label">💴 現金</div>
+          <span class="wh-balance" id="cashDisplay">¥ 0</span>
+        </div>
+        <button class="wh-reset-btn" onclick="resetCash()">リセット</button>
+      </div>
+      <div class="wh-input-row" style="margin-top:8px">
+        <button class="wh-sign-toggle is-plus" id="cashSignToggle" onclick="toggleCashSign()">＋</button>
+        <input id="cashInput" type="number" inputmode="numeric" placeholder="金額" min="0" style="max-width:90px;flex:1;min-width:0">
+        <input id="cashLabelInput" type="text" class="wh-label-input" placeholder="メモ（例：配当、給与）">
+        <button class="wh-op-btn wh-apply-btn plus" id="cashApplyBtn" onclick="applyFromInput()">追加</button>
+      </div>
+    </div>
 
     <div class="data-cols">
     <div class="data-col-left">
@@ -3171,6 +2893,10 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
         <button class="ckey ckey-wide" onclick="cIn(0)">0</button>
         <button class="ckey"           onclick="cDot()">．</button>
         <button class="ckey eq"        onclick="cSolve()">=</button>
+      </div>
+      <div class="calc-cash-row">
+        <button class="wc-to-cash-btn" onclick="calcToCash()">💴 ＋現金に加算</button>
+        <button class="wc-from-cash-btn" onclick="calcFromCash()">💸 −現金から引く</button>
       </div>
     </div>
 
@@ -3669,8 +3395,8 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   </button>
   <button class="tab-btn" onclick="showTab('data',this)">
     <span class="tab-inner">
-      <span class="tab-icon">🧮</span>
-      <span class="tab-label">計算機</span>
+      <span class="tab-icon">👛</span>
+      <span class="tab-label">お財布</span>
     </span>
   </button>
   <button class="tab-btn" onclick="showTab('calc',this)">
@@ -5115,7 +4841,6 @@ function assetReset() {
   pendingSell = 0;
   showToast('資産をリセットしました');
   updateDisplay();
-  cloudSaveNow(true);
 }
 
 function animateStep(callback) {
@@ -5215,7 +4940,7 @@ function stepTime(dir) {
       const certKey = _isCertMilestone(prevRow);
       if (certKey) {
         const ta = _calcTotalAssets();
-        setTimeout(() => triggerCertificate(certKey, ta), 350);
+        setTimeout(() => triggerCertificate(certKey, ta), 900);
       }
     }
   });
@@ -5570,11 +5295,15 @@ const CERT_MILESTONES = {
 
 function _isCertMilestone(prevRow) {
   if (!prevRow) return null;
-  const nowRow   = masterData[currentIndex];
+  const nowRow  = masterData[currentIndex];
   const prevYear = prevRow.年;
   const nowYear  = nowRow ? nowRow.年 : null;
   if ((prevYear === 0 || prevYear == null) && nowYear > 0) return 'tutorial';
-  if (nowYear !== prevYear && prevYear > 0) return String(prevYear);
+  if (nowYear !== prevYear && prevYear > 0) {
+    if (prevYear === 2025) return '2025';
+    const d = prevYear % 10;
+    if (d === 4 || d === 9) return String(prevYear);
+  }
   return null;
 }
 
@@ -5589,10 +5318,7 @@ function _certRoundRect(ctx, x, y, w, h, r) {
 
 async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   const m = CERT_MILESTONES[certKey];
-  if (!m) {
-    await _renderYearReviewCanvas(canvas, certKey, playerName, assets, dateStr);
-    return;
-  }
+  if (!m) return;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
@@ -5603,34 +5329,48 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
     img.src = src;
   });
 
-  // 1. background image (full bleed) — use bg-N.png from 現金/背景
-  const bgImg = await loadImg('images/cert/bg-' + m.bgIdx + '.png');
+  const JP     = '"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif';
+  const bm     = 14;
+  const splitX = Math.floor(W * 0.52);
+  const TX     = splitX / 2;
+
+  // ─── 1. 約束手形 background image ───────────────────────────────
+  const bgImg = await loadImg('images/cert/yakusoku-bg.png');
   if (bgImg) {
     ctx.drawImage(bgImg, 0, 0, W, H);
   } else {
-    const fb = ctx.createLinearGradient(0,0,W,H);
-    fb.addColorStop(0,'#1a0a2e'); fb.addColorStop(1,'#0a1020');
-    ctx.fillStyle = fb; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = '#f5eedb'; ctx.fillRect(0, 0, W, H);
   }
 
-  // 2. directional overlay: darker left for text readability
-  const hg = ctx.createLinearGradient(0,0,W,0);
-  hg.addColorStop(0,'rgba(0,0,0,0.72)');
-  hg.addColorStop(0.52,'rgba(0,0,0,0.5)');
-  hg.addColorStop(1,'rgba(0,0,0,0.15)');
-  ctx.fillStyle = hg; ctx.fillRect(0,0,W,H);
-  const tg = ctx.createLinearGradient(0,0,0,H*0.22);
-  tg.addColorStop(0,'rgba(0,0,0,0.55)'); tg.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle = tg; ctx.fillRect(0,0,W,H*0.22);
-  const bg2 = ctx.createLinearGradient(0,H*0.78,0,H);
-  bg2.addColorStop(0,'rgba(0,0,0,0)'); bg2.addColorStop(1,'rgba(0,0,0,0.6)');
-  ctx.fillStyle = bg2; ctx.fillRect(0,H*0.78,W,H*0.22);
+  // 2. subtle overlay: faint warm tint on left column for text lift
+  const ltOv = ctx.createLinearGradient(0, 0, splitX, 0);
+  ltOv.addColorStop(0,   'rgba(252,246,224,0.28)');
+  ltOv.addColorStop(0.7, 'rgba(252,246,224,0.14)');
+  ltOv.addColorStop(1,   'rgba(252,246,224,0)');
+  ctx.fillStyle = ltOv; ctx.fillRect(0, 0, splitX, H);
 
-  // 3. character image(s) — right side (x > W*0.52)
+  // slight vignette top + bottom for depth
+  const vigT = ctx.createLinearGradient(0, 0, 0, H * 0.18);
+  vigT.addColorStop(0, 'rgba(80,50,10,0.12)'); vigT.addColorStop(1, 'rgba(80,50,10,0)');
+  ctx.fillStyle = vigT; ctx.fillRect(0, 0, W, H * 0.18);
+  const vigB = ctx.createLinearGradient(0, H * 0.82, 0, H);
+  vigB.addColorStop(0, 'rgba(80,50,10,0)'); vigB.addColorStop(1, 'rgba(80,50,10,0.14)');
+  ctx.fillStyle = vigB; ctx.fillRect(0, H * 0.82, W, H * 0.18);
+
+  // subtle vertical divider (text | char)
+  ctx.strokeStyle = 'rgba(100,65,18,0.22)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(splitX, 28); ctx.lineTo(splitX, H - 28); ctx.stroke();
+
+  // horizontal form lines in text column
+  ctx.strokeStyle = 'rgba(100,65,18,0.08)'; ctx.lineWidth = 1;
+  for (let y = 72; y < H - 24; y += 20) {
+    ctx.beginPath(); ctx.moveTo(28, y); ctx.lineTo(splitX - 16, y); ctx.stroke();
+  }
+
+  // 3. character image (right column, full height)
   if (m.charFiles && m.charFiles.length > 1) {
-    // Tutorial: 2×2 grid of 4 characters
     const charImgs = await Promise.all(m.charFiles.map(loadImg));
-    const charAreaX = W * 0.52, charAreaW = W * 0.48;
+    const charAreaX = splitX, charAreaW = W - splitX;
     const cellW = charAreaW / 2, cellH = H / 2;
     ctx.save();
     ctx.beginPath(); ctx.rect(charAreaX, 0, charAreaW, H); ctx.clip();
@@ -5639,124 +5379,106 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
       const col = i % 2, row = Math.floor(i / 2);
       const cx0 = charAreaX + col * cellW, cy0 = row * cellH;
       const aspect = img.naturalWidth / img.naturalHeight;
-      let dh = cellH * 0.88, dw = dh * aspect;
-      if (dw > cellW * 0.92) { dw = cellW * 0.92; dh = dw / aspect; }
+      let dh = cellH * 0.92, dw = dh * aspect;
+      if (dw > cellW * 0.94) { dw = cellW * 0.94; dh = dw / aspect; }
       ctx.globalAlpha = 0.90;
       ctx.drawImage(img, cx0 + (cellW - dw) / 2, cy0 + cellH - dh, dw, dh);
     });
-    ctx.globalAlpha = 1;
-    ctx.restore();
+    ctx.globalAlpha = 1; ctx.restore();
   } else {
     const charSrc = (m.charFiles && m.charFiles[0]) || m.charFile || 'images/img5.webp';
     const charImg = await loadImg(charSrc);
     if (charImg) {
-      const maxCharH = H * 0.92;
+      const maxCharH = H * 0.95;
       const aspect = charImg.naturalWidth / charImg.naturalHeight;
       let finalH = maxCharH, finalW = finalH * aspect;
-      if (finalW > W * 0.44) { finalW = W * 0.44; finalH = finalW / aspect; }
+      if (finalW > (W - splitX) * 0.94) { finalW = (W - splitX) * 0.94; finalH = finalW / aspect; }
       ctx.save();
-      ctx.beginPath(); ctx.rect(W * 0.52, 0, W * 0.48, H); ctx.clip();
-      ctx.globalAlpha = 0.95;
+      ctx.beginPath(); ctx.rect(splitX, 0, W - splitX, H); ctx.clip();
+      ctx.globalAlpha = 0.93;
       ctx.drawImage(charImg, W - finalW, H - finalH, finalW, finalH);
-      ctx.globalAlpha = 1;
-      ctx.restore();
+      ctx.globalAlpha = 1; ctx.restore();
     }
   }
 
-  // 4. gold double border + corner diamonds
-  const bm = 14;
-  ctx.strokeStyle = 'rgba(245,200,66,0.9)'; ctx.lineWidth = 2;
-  ctx.strokeRect(bm, bm, W - bm * 2, H - bm * 2);
-  ctx.strokeStyle = 'rgba(245,200,66,0.3)'; ctx.lineWidth = 1;
-  ctx.strokeRect(bm + 8, bm + 8, W - (bm + 8) * 2, H - (bm + 8) * 2);
-  ctx.fillStyle = '#f5c842';
-  [[bm, bm], [W - bm, bm], [bm, H - bm], [W - bm, H - bm]].forEach(([cx, cy]) => {
-    ctx.save(); ctx.translate(cx, cy); ctx.rotate(Math.PI / 4);
-    ctx.fillRect(-5, -5, 10, 10); ctx.restore();
-  });
-
-  const TX = W * 0.39;
-  const JP = '"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif';
   ctx.textAlign = 'center';
 
-  // 5. top label
-  ctx.fillStyle = 'rgba(245,200,66,0.6)';
-  ctx.font = '600 10px sans-serif';
-  ctx.fillText('M A N E B O U  J U K U', TX, bm + 24);
+  // ─── 4. HEADER (float over top ornate border of bg image) ───────
+  // small label
+  ctx.fillStyle = 'rgba(100,65,18,0.52)';
+  ctx.font = '600 8px sans-serif';
+  ctx.fillText('M A N E B O U  J U K U', TX, 20);
+  // flanking lines
+  ctx.strokeStyle = 'rgba(100,65,18,0.4)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(TX - 116, 31); ctx.lineTo(TX - 46, 31); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX + 46, 31); ctx.lineTo(TX + 116, 31); ctx.stroke();
+  // title
+  ctx.fillStyle = '#3c1e06';
+  ctx.font = 'bold 20px ' + JP;
+  ctx.fillText('約束手形', TX, 46);
+  // thin separator below title
+  ctx.strokeStyle = 'rgba(100,65,18,0.28)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(28, 56); ctx.lineTo(splitX - 16, 56); ctx.stroke();
 
-  // 6. 約束手形 + flanking lines
-  const ry = bm + 48;
-  ctx.strokeStyle = 'rgba(245,200,66,0.5)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(TX - 115, ry); ctx.lineTo(TX - 40, ry); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(TX + 40, ry); ctx.lineTo(TX + 115, ry); ctx.stroke();
-  ctx.fillStyle = '#f5c842';
-  ctx.font = 'bold 15px ' + JP;
-  ctx.fillText('約束手形', TX, ry + 5);
+  // ─── 5. BODY ───────────────────────────────────────────────────
+  const bodyY = 62;
+  const pbw = splitX - bm * 2 - 18;
+  ctx.fillStyle = 'rgba(90,55,10,0.07)';
+  ctx.fillRect(bm + 9, bodyY, pbw, 18);
+  ctx.strokeStyle = 'rgba(90,55,10,0.22)'; ctx.lineWidth = 1;
+  ctx.strokeRect(bm + 9, bodyY, pbw, 18);
+  ctx.fillStyle = 'rgba(70,40,8,0.72)';
+  ctx.font = '10px sans-serif';
+  ctx.fillText('達成期間:  ' + m.period, TX, bodyY + 13);
 
-  // 7. period badge
-  const pbw = 200, pbh = 22;
-  ctx.fillStyle = 'rgba(245,200,66,0.12)';
-  ctx.fillRect(TX - pbw / 2, ry + 16, pbw, pbh);
-  ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
-  ctx.strokeRect(TX - pbw / 2, ry + 16, pbw, pbh);
-  ctx.fillStyle = 'rgba(245,200,66,0.9)';
-  ctx.font = 'bold 11px sans-serif';
-  ctx.fillText('達成期間  ' + m.period, TX, ry + 31);
-
-  // 8. main title with glow
-  ctx.shadowColor = 'rgba(245,200,66,0.55)'; ctx.shadowBlur = 14;
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 26px ' + JP;
-  ctx.fillText(m.title, TX, ry + 76);
+  ctx.shadowColor = 'rgba(80,45,8,0.18)'; ctx.shadowBlur = 4;
+  ctx.fillStyle = '#2e1408';
+  ctx.font = 'bold 22px ' + JP;
+  ctx.fillText(m.title, TX, bodyY + 48);
   ctx.shadowBlur = 0;
 
-  // 9. era summary (2 lines)
-  const eraLines = m.era.split('\n');
-  ctx.fillStyle = 'rgba(255,255,255,0.62)';
-  ctx.font = '12px ' + JP;
-  eraLines.forEach((line, i) => { ctx.fillText(line, TX, ry + 100 + i * 18); });
+  ctx.fillStyle = 'rgba(90,55,10,0.55)';
+  ctx.font = 'italic 11px ' + JP;
+  ctx.fillText(m.sub, TX, bodyY + 65);
 
-  // 10. ornament divider
-  const dy = ry + 142;
-  ctx.strokeStyle = 'rgba(245,200,66,0.4)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(TX - 140, dy); ctx.lineTo(TX - 10, dy); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(TX + 10, dy); ctx.lineTo(TX + 140, dy); ctx.stroke();
-  ctx.fillStyle = 'rgba(245,200,66,0.7)';
+  const eraLines = m.era.split('\n');
+  ctx.fillStyle = 'rgba(35,18,4,0.52)';
+  ctx.font = '11px ' + JP;
+  eraLines.forEach((line, i) => { ctx.fillText(line, TX, bodyY + 83 + i * 16); });
+
+  const dy = bodyY + 118;
+  ctx.strokeStyle = 'rgba(90,55,10,0.28)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(bm + 16, dy); ctx.lineTo(TX - 10, dy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(TX + 10, dy); ctx.lineTo(splitX - 16, dy); ctx.stroke();
+  ctx.fillStyle = 'rgba(90,55,10,0.42)';
   ctx.save(); ctx.translate(TX, dy); ctx.rotate(Math.PI / 4); ctx.fillRect(-4, -4, 8, 8); ctx.restore();
 
-  // 11. player name
-  ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 8;
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 20px ' + JP;
-  ctx.fillText(playerName || 'プレイヤー', TX, dy + 34);
-  ctx.shadowBlur = 0;
+  ctx.fillStyle = '#2e1408';
+  ctx.font = 'bold 17px ' + JP;
+  ctx.fillText(playerName || 'プレイヤー', TX, dy + 26);
 
-  // 12. total assets — 金〇〇円也 format
   if (assets != null) {
-    ctx.fillStyle = 'rgba(245,200,66,0.92)';
+    ctx.fillStyle = '#8a3515';
     ctx.font = 'bold 14px ' + JP;
-    ctx.fillText('金  ' + Number(assets).toLocaleString() + ' 円也', TX, dy + 56);
+    ctx.fillText('金  ' + Number(assets).toLocaleString() + ' 円也', TX, dy + 46);
   }
 
-  // 13. date
-  ctx.fillStyle = 'rgba(255,255,255,0.38)';
+  ctx.fillStyle = 'rgba(55,35,8,0.4)';
   ctx.font = '10px sans-serif';
-  ctx.fillText(dateStr, TX, dy + 74);
+  ctx.fillText(dateStr, TX, dy + 62);
 
-  // 13.5. red inkan seal
-  const sealX = TX + 136, sealY = dy + 30;
+  const sealX = TX + 128, sealY = dy + 34;
   ctx.save();
-  ctx.strokeStyle = 'rgba(210,45,45,0.82)'; ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(195,38,38,0.82)'; ctx.lineWidth = 2;
   ctx.beginPath(); ctx.arc(sealX, sealY, 20, 0, Math.PI * 2); ctx.stroke();
   ctx.beginPath(); ctx.arc(sealX, sealY, 15, 0, Math.PI * 2); ctx.stroke();
-  ctx.fillStyle = 'rgba(210,45,45,0.82)';
+  ctx.fillStyle = 'rgba(195,38,38,0.82)';
   ctx.font = 'bold 13px ' + JP;
   ctx.textAlign = 'center';
   ctx.fillText('証', sealX, sealY + 5);
-  ctx.restore();
-  ctx.textAlign = 'center';
+  ctx.restore(); ctx.textAlign = 'center';
 
-  // ─── 14. 保有資産テーブル ────────────────────────────────────
+  // ─── 5. 保有資産テーブル ──────────────────────────────────────
   const snap         = earnedCerts[certKey];
   const snapHoldings = (snap && snap.holdingsSnap) ? snap.holdingsSnap
                      : (typeof holdings !== 'undefined' ? holdings : {});
@@ -5764,322 +5486,109 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
                      ? snap.holdingsSnap._cash
                      : (typeof cashBalance !== 'undefined' ? cashBalance : 0);
 
-  const aLeft  = bm + 18;
-  const aRight = W * 0.51 - 10;
+  const aLeft  = bm + 10;
+  const aRight = splitX - 10;
   const aWidth = aRight - aLeft;
   const aColW  = aWidth / 2;
-  const AY     = dy + 94;
+  const AY     = dy + 76;
 
-  // セクション区切り線 + ラベル
-  ctx.strokeStyle = 'rgba(245,200,66,0.25)'; ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(90,55,10,0.18)'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(aLeft, AY); ctx.lineTo(aRight, AY); ctx.stroke();
-  ctx.fillStyle = 'rgba(245,200,66,0.55)';
-  ctx.font = 'bold 9px sans-serif';
-  ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(90,55,10,0.58)';
+  ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
   ctx.fillText('◆ 保有資産', aLeft, AY + 12);
 
-  // 8資産を 2列×4行
   ASSET_KEYS.forEach((a, i) => {
     const col = i % 2, row = Math.floor(i / 2);
-    const ax = aLeft + col * aColW;
-    const ay = AY + 24 + row * 17;
+    const ax = aLeft + col * aColW, ay = AY + 24 + row * 17;
     const qty = (snapHoldings[a.id] || 0);
-    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.02)';
-    _certRoundRect(ctx, ax, ay - 11, aColW - 4, 14, 3);
-    ctx.fill();
-    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.25)';
-    ctx.font = '9.5px sans-serif';
-    ctx.textAlign = 'left';
+    ctx.fillStyle = qty > 0 ? 'rgba(90,55,10,0.07)' : 'rgba(90,55,10,0.03)';
+    _certRoundRect(ctx, ax, ay - 11, aColW - 4, 14, 3); ctx.fill();
+    ctx.fillStyle = qty > 0 ? 'rgba(28,14,4,0.82)' : 'rgba(28,14,4,0.25)';
+    ctx.font = '9.5px sans-serif'; ctx.textAlign = 'left';
     ctx.fillText(a.emoji + ' ' + a.label, ax + 4, ay);
-    ctx.fillStyle = qty > 0 ? '#f5c842' : 'rgba(255,255,255,0.2)';
+    ctx.fillStyle = qty > 0 ? '#7a3010' : 'rgba(28,14,4,0.2)';
     ctx.textAlign = 'right';
     ctx.fillText('\xd7' + qty.toLocaleString(), ax + aColW - 5, ay);
   });
 
-  // 現金行（全幅）
   const cashY = AY + 24 + 4 * 17;
-  ctx.fillStyle = 'rgba(255,255,255,0.05)';
-  _certRoundRect(ctx, aLeft, cashY - 11, aWidth, 14, 3);
-  ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.62)';
-  ctx.font = '9.5px sans-serif';
-  ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(90,55,10,0.07)';
+  _certRoundRect(ctx, aLeft, cashY - 11, aWidth, 14, 3); ctx.fill();
+  ctx.fillStyle = 'rgba(28,14,4,0.65)';
+  ctx.font = '9.5px sans-serif'; ctx.textAlign = 'left';
   ctx.fillText('💴 現金', aLeft + 4, cashY);
-  ctx.fillStyle = '#f5c842';
-  ctx.textAlign = 'right';
+  ctx.fillStyle = '#7a3010'; ctx.textAlign = 'right';
   ctx.fillText(Math.floor(snapCash || 0).toLocaleString() + '円', aRight - 5, cashY);
   ctx.textAlign = 'center';
 
-  // ─── 15. 資産推移グラフ ─────────────────────────────────────
+  // ─── 6. 資産推移グラフ ─────────────────────────────────────────
   const snapHistory = (snap && snap.historySnap && snap.historySnap.length >= 2)
     ? snap.historySnap
     : (typeof portfolioHistory !== 'undefined' ? portfolioHistory : []);
 
-  const chartX  = aLeft;
-  const chartY  = cashY + 18;
-  const chartW  = aWidth;
-  const chartHt = 52;
+  const chartX  = aLeft, chartY  = cashY + 18;
+  const chartW  = aWidth, chartHt = 52;
   const yBase   = chartY + 16;
 
-  ctx.strokeStyle = 'rgba(91,200,232,0.25)'; ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(90,55,10,0.18)'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(chartX, chartY); ctx.lineTo(chartX + chartW, chartY); ctx.stroke();
-  ctx.fillStyle = 'rgba(91,200,232,0.55)';
-  ctx.font = 'bold 9px sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('◆ 資産推移グラフ', chartX, chartY + 11);
+  ctx.fillStyle = 'rgba(90,55,10,0.55)';
+  ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'left';
+  ctx.fillText('◆ 資産推移', chartX, chartY + 11);
 
   if (snapHistory.length >= 2) {
     const vals = snapHistory.map(h => h.total || 0);
     const maxV = Math.max(...vals, 1);
     const minV = Math.min(...vals, 0);
     const range = maxV - minV || 1;
-
-    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillStyle = 'rgba(155,115,55,0.07)';
     ctx.fillRect(chartX, yBase, chartW, chartHt);
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(155,115,55,0.15)'; ctx.lineWidth = 1;
     [1, 2].forEach(g => {
       const gy = yBase + (g / 3) * chartHt;
       ctx.beginPath(); ctx.moveTo(chartX, gy); ctx.lineTo(chartX + chartW, gy); ctx.stroke();
     });
-
     const toXY = (v, i) => ({
       x: chartX + (i / (vals.length - 1)) * chartW,
       y: yBase + chartHt - ((v - minV) / range) * chartHt * 0.88 - 2,
     });
-
     ctx.beginPath();
     vals.forEach((v, i) => { const p = toXY(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
-    ctx.lineTo(chartX + chartW, yBase + chartHt);
-    ctx.lineTo(chartX, yBase + chartHt);
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(91,200,232,0.1)';
-    ctx.fill();
-
-    ctx.strokeStyle = '#5bc8e8'; ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
+    ctx.lineTo(chartX + chartW, yBase + chartHt); ctx.lineTo(chartX, yBase + chartHt);
+    ctx.closePath(); ctx.fillStyle = 'rgba(120,80,20,0.1)'; ctx.fill();
+    ctx.strokeStyle = '#7a4e10'; ctx.lineWidth = 1.5; ctx.lineJoin = 'round';
     ctx.beginPath();
     vals.forEach((v, i) => { const p = toXY(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
     ctx.stroke();
-
     const peakIdx = vals.indexOf(maxV);
     const peak = toXY(maxV, peakIdx);
-    ctx.fillStyle = 'rgba(245,200,66,0.8)';
-    ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#c05010'; ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText(Math.floor(maxV / 10000) + '万', peak.x, Math.max(yBase + 10, peak.y - 3));
-
     if (snapHistory[0] && snapHistory[0]['年']) {
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
-      ctx.font = '8px sans-serif';
+      ctx.fillStyle = 'rgba(55,35,8,0.4)'; ctx.font = '8px sans-serif';
       ctx.textAlign = 'left';
       ctx.fillText(String(snapHistory[0]['年']), chartX + 2, yBase + chartHt + 10);
       ctx.textAlign = 'right';
       ctx.fillText(String(snapHistory[snapHistory.length - 1]['年']), chartX + chartW - 2, yBase + chartHt + 10);
     }
   } else {
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(55,35,8,0.3)'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('データなし', chartX + chartW / 2, chartY + 36);
   }
 
-  // 16. watermark
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
+  // 7. watermark
+  ctx.fillStyle = 'rgba(55,35,8,0.18)';
   ctx.font = '600 8px sans-serif'; ctx.textAlign = 'right';
   ctx.fillText('by RAINY BRAIN', W - bm - 10, H - bm - 6);
-}
 
-// ── 年次レポート形式（非マイルストーン年用） ──────────────────────
-async function _renderYearReviewCanvas(canvas, certKey, playerName, assets, dateStr) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.clearRect(0, 0, W, H);
-  const year = parseInt(certKey) || 0;
-  const JP   = '"Hiragino Mincho ProN","Yu Mincho","MS Mincho",serif';
-  const SANS = 'system-ui,sans-serif';
-
-  // 背景
-  const bgG = ctx.createLinearGradient(0, 0, W, H);
-  bgG.addColorStop(0, '#06060e'); bgG.addColorStop(1, '#0d0d22');
-  ctx.fillStyle = bgG; ctx.fillRect(0, 0, W, H);
-  const rg = ctx.createLinearGradient(W * 0.5, 0, W, 0);
-  rg.addColorStop(0, 'rgba(245,200,66,0)'); rg.addColorStop(1, 'rgba(245,200,66,0.06)');
-  ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
-
-  // 枠線
-  const bm = 14;
-  ctx.strokeStyle = 'rgba(245,200,66,0.65)'; ctx.lineWidth = 2;
-  ctx.strokeRect(bm, bm, W - bm * 2, H - bm * 2);
-  ctx.strokeStyle = 'rgba(245,200,66,0.2)'; ctx.lineWidth = 1;
-  ctx.strokeRect(bm + 7, bm + 7, W - (bm + 7) * 2, H - (bm + 7) * 2);
-
-  // 左アクセントバー
-  const lbG = ctx.createLinearGradient(0, bm, 0, H - bm);
-  lbG.addColorStop(0, 'rgba(245,200,66,0.9)'); lbG.addColorStop(1, 'rgba(245,200,66,0.2)');
-  ctx.fillStyle = lbG; ctx.fillRect(bm, bm, 5, H - bm * 2);
-
-  const LX = bm + 20, RX = 390;
-  ctx.textAlign = 'left';
-
-  // MANEBOU JUKU
-  ctx.fillStyle = 'rgba(245,200,66,0.45)';
-  ctx.font = '600 9px ' + SANS;
-  ctx.fillText('M A N E B O U  J U K U', LX, bm + 22);
-
-  // 年号（大）
-  ctx.save();
-  ctx.shadowColor = 'rgba(245,200,66,0.5)'; ctx.shadowBlur = 18;
-  ctx.fillStyle = '#f5c842';
-  ctx.font = 'bold 88px ' + JP;
-  ctx.fillText(String(year), LX - 2, 130);
-  ctx.restore();
-
-  // 年 終了レポート
-  ctx.fillStyle = 'rgba(255,255,255,0.65)';
-  ctx.font = '15px ' + JP;
-  ctx.fillText('年  終了レポート', LX, 157);
-
-  // 区切り線
-  ctx.strokeStyle = 'rgba(245,200,66,0.3)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(LX, 170); ctx.lineTo(LX + 220, 170); ctx.stroke();
-
-  // プレイヤー名
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 20px ' + JP;
-  ctx.fillText(playerName || 'プレイヤー', LX, 198);
-
-  // 総資産
-  ctx.fillStyle = 'rgba(255,255,255,0.4)';
-  ctx.font = '10px ' + SANS;
-  ctx.fillText('総資産', LX, 222);
-  ctx.save();
-  ctx.shadowColor = 'rgba(245,200,66,0.3)'; ctx.shadowBlur = 8;
-  ctx.fillStyle = '#f5c842';
-  ctx.font = 'bold 26px ' + JP;
-  ctx.fillText(assets != null ? Number(assets).toLocaleString() + ' 円' : '──', LX, 252);
-  ctx.restore();
-  ctx.fillStyle = 'rgba(255,255,255,0.28)';
-  ctx.font = '9px ' + SANS;
-  ctx.fillText(dateStr, LX, 270);
-
-  // 保有資産テーブル
-  const snap  = earnedCerts[certKey];
-  const snapH = (snap && snap.holdingsSnap) ? snap.holdingsSnap : (typeof holdings !== 'undefined' ? holdings : {});
-  ctx.strokeStyle = 'rgba(245,200,66,0.2)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(LX, 286); ctx.lineTo(LX + 340, 286); ctx.stroke();
-  ctx.fillStyle = 'rgba(245,200,66,0.5)';
-  ctx.font = 'bold 9px ' + SANS;
-  ctx.fillText('◆ 保有資産', LX, 298);
-  const aColW2 = 170;
-  ASSET_KEYS.forEach((a, i) => {
-    const col = i % 2, row2 = Math.floor(i / 2);
-    const ax = LX + col * aColW2, ay = 314 + row2 * 18;
-    if (ay > H - 28) return;
-    const qty = snapH[a.id] || 0;
-    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.02)';
-    _certRoundRect(ctx, ax, ay - 11, aColW2 - 6, 14, 3); ctx.fill();
-    ctx.fillStyle = qty > 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.22)';
-    ctx.font = '9.5px ' + SANS; ctx.textAlign = 'left';
-    ctx.fillText(a.emoji + ' ' + a.label, ax + 4, ay);
-    ctx.fillStyle = qty > 0 ? '#f5c842' : 'rgba(255,255,255,0.2)';
-    ctx.textAlign = 'right';
-    ctx.fillText('×' + qty.toLocaleString(), ax + aColW2 - 8, ay);
-  });
-
-  // 右エリア：推移グラフ（大）
-  const snapHistory = (snap && snap.historySnap && snap.historySnap.length >= 2)
-    ? snap.historySnap
-    : (typeof portfolioHistory !== 'undefined' ? portfolioHistory : []);
-  const cX = RX + 10, cY = bm + 22, cW = W - RX - bm - 20, cH = H - bm * 2 - 80;
-
-  ctx.fillStyle = 'rgba(91,200,232,0.7)';
-  ctx.font = 'bold 10px ' + SANS; ctx.textAlign = 'left';
-  ctx.fillText('◆ 資産推移グラフ', cX, cY + 12);
-
-  const chtY = cY + 22, chtH = cH - 30;
-  ctx.fillStyle = 'rgba(0,0,0,0.22)';
-  _certRoundRect(ctx, cX, chtY, cW, chtH, 6); ctx.fill();
-
-  if (snapHistory.length >= 2) {
-    const vals = snapHistory.map(h => h.total || 0);
-    const maxV = Math.max(...vals, 1), minV = Math.min(...vals, 0);
-    const range = maxV - minV || 1;
-    const pT = 20, pB = 22, pLR = 8;
-
-    ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
-    [0.25, 0.5, 0.75].forEach(pct => {
-      const gy = chtY + pT + (1 - pct) * (chtH - pT - pB);
-      ctx.beginPath(); ctx.moveTo(cX + pLR, gy); ctx.lineTo(cX + cW - pLR, gy); ctx.stroke();
-    });
-
-    const toP = (v, i) => ({
-      x: cX + pLR + (i / (vals.length - 1)) * (cW - pLR * 2),
-      y: chtY + pT + (1 - (v - minV) / range) * (chtH - pT - pB),
-    });
-
-    ctx.beginPath();
-    vals.forEach((v, i) => { const p = toP(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
-    ctx.lineTo(cX + cW - pLR, chtY + chtH - pB);
-    ctx.lineTo(cX + pLR, chtY + chtH - pB);
-    ctx.closePath();
-    const aG = ctx.createLinearGradient(0, chtY, 0, chtY + chtH);
-    aG.addColorStop(0, 'rgba(91,200,232,0.22)'); aG.addColorStop(1, 'rgba(91,200,232,0.02)');
-    ctx.fillStyle = aG; ctx.fill();
-
-    ctx.strokeStyle = '#5bc8e8'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
-    ctx.beginPath();
-    vals.forEach((v, i) => { const p = toP(v, i); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); });
-    ctx.stroke();
-
-    // 最新値ドット
-    const last = toP(vals[vals.length - 1], vals.length - 1);
-    ctx.fillStyle = '#f5c842';
-    ctx.beginPath(); ctx.arc(last.x, last.y, 4, 0, Math.PI * 2); ctx.fill();
-
-    // 最大値ラベル
-    const peakIdx = vals.indexOf(maxV);
-    const peak = toP(maxV, peakIdx);
-    ctx.fillStyle = 'rgba(245,200,66,0.85)';
-    ctx.font = 'bold 9px ' + SANS; ctx.textAlign = 'center';
-    ctx.fillText(Math.floor(maxV / 10000) + '万円', peak.x, Math.max(chtY + pT + 10, peak.y - 5));
-
-    // 年ラベル
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.font = '9px ' + SANS;
-    ctx.textAlign = 'left';
-    if (snapHistory[0] && snapHistory[0]['年']) ctx.fillText(String(snapHistory[0]['年']), cX + pLR, chtY + chtH - 4);
-    ctx.textAlign = 'right';
-    const lastH = snapHistory[snapHistory.length - 1];
-    if (lastH && lastH['年']) ctx.fillText(String(lastH['年']), cX + cW - pLR, chtY + chtH - 4);
-
-    // 変化率バー
-    const first = vals[0], lastV = vals[vals.length - 1];
-    if (first > 0) {
-      const change = ((lastV - first) / first * 100).toFixed(1);
-      const chColor = parseFloat(change) >= 0 ? '#4caf7d' : '#e74c3c';
-      ctx.fillStyle = 'rgba(0,0,0,0.3)';
-      _certRoundRect(ctx, cX, chtY + chtH + 6, cW, 18, 4); ctx.fill();
-      ctx.fillStyle = 'rgba(255,255,255,0.38)';
-      ctx.font = '9px ' + SANS; ctx.textAlign = 'left';
-      ctx.fillText('期間変化率', cX + 6, chtY + chtH + 18);
-      ctx.fillStyle = chColor;
-      ctx.font = 'bold 11px ' + SANS; ctx.textAlign = 'right';
-      const sign = parseFloat(change) >= 0 ? '▲' : '▼';
-      ctx.fillText(sign + ' ' + Math.abs(change) + '%', cX + cW - 6, chtY + chtH + 18);
-    }
-  } else {
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = '11px ' + SANS; ctx.textAlign = 'center';
-    ctx.fillText('データなし', cX + cW / 2, chtY + chtH / 2);
-  }
-
-  // ウォーターマーク
-  ctx.fillStyle = 'rgba(255,255,255,0.18)';
-  ctx.font = '600 8px sans-serif'; ctx.textAlign = 'right';
-  ctx.fillText('by RAINY BRAIN', W - bm - 8, H - bm - 6);
+  void m.bgIdx;
 }
 
 let _certCurrentKey = null;
 
 function triggerCertificate(certKey, assets) {
+  if (!CERT_MILESTONES[certKey]) return;
   earnedCerts[certKey] = {
     assets,
     date: new Date().toLocaleDateString('ja-JP'),
@@ -6097,9 +5606,6 @@ function triggerCertificate(certKey, assets) {
 async function showCertModal(certKey, assets, dateStr, playerName) {
   const canvas = document.getElementById('certCanvas');
   _certCurrentKey = certKey;
-  const m = CERT_MILESTONES[certKey];
-  const titleEl = document.getElementById('certModalTitle');
-  if (titleEl) titleEl.textContent = m ? m.title : (parseInt(certKey) > 0 ? certKey + '年 終了レポート' : certKey);
   await _renderCertCanvas(canvas, certKey, playerName, assets, dateStr);
   document.getElementById('certBackdrop').classList.add('open');
   document.getElementById('certModal').classList.add('open');
@@ -6133,14 +5639,9 @@ async function openCertCollection() {
     const playerName = (auth && auth.currentUser)
       ? (auth.currentUser.displayName || auth.currentUser.email || 'プレイヤー')
       : (playerNameStr || 'プレイヤー');
-    const sortedKeys = earned.sort((a, b) => {
-      const na = a === 'tutorial' ? 0 : (parseInt(a) || 9999);
-      const nb = b === 'tutorial' ? 0 : (parseInt(b) || 9999);
-      return na - nb;
-    });
-    for (const key of sortedKeys) {
+    for (const key of earned) {
       const m = CERT_MILESTONES[key];
-      const label = m ? m.title : (parseInt(key) > 0 ? key + '年' : key);
+      if (!m) continue;
       const thumbCanvas = document.createElement('canvas');
       thumbCanvas.width  = 200;
       thumbCanvas.height = 125;
@@ -6151,7 +5652,7 @@ async function openCertCollection() {
       thumbCanvas.style.cssText = 'width:100%;height:80px;object-fit:cover;display:block;border-radius:8px 8px 0 0;';
       const lbl = document.createElement('div');
       lbl.className = 'cert-coll-label';
-      lbl.textContent = label;
+      lbl.textContent = m.title;
       item.appendChild(lbl);
       item.onclick = () => {
         closeCertColl();
@@ -7299,10 +6800,11 @@ function cSet(v)  { cBuf = String(v); cOpr = null; cPrev = null; cNew = true; cD
 // ============================================================
 const SAVE_KEY_BASE = 'manebo_save_v1';
 function getSaveKey() {
-  return _fbUser ? SAVE_KEY_BASE + '_' + _fbUser.uid : SAVE_KEY_BASE;
+  const name = localStorage.getItem('manebou_juku_player') || 'default';
+  return 'manebou_juku_' + name.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 20);
 }
 function getStorage() {
-  return _fbUser ? localStorage : sessionStorage;
+  return localStorage;
 }
 
 function saveGame() {
@@ -7385,7 +6887,6 @@ function clearSave() {
     updateEventOptions();
     updateDisplay();
     saveGame();
-    cloudSaveNow(true);
 
     const gameBtn = document.querySelector('.tab-btn[onclick*="game"]');
     showTab('game', gameBtn);
@@ -7403,30 +6904,37 @@ function toggleCard(id) {
   arrow.classList.toggle('open', open);
 }
 
-// ============================================================
-// FIREBASE: Auth + Cloud Save + Groups
-// ============================================================
-let _auth = null, _db = null;
-try {
-  const firebaseConfig = {
-    apiKey: "AIzaSyDUqrAgL2TYCoKom3B67Go2CTXpo0HlTP4",
-    authDomain: "manebou-app-41dd3.firebaseapp.com",
-    projectId: "manebou-app-41dd3",
-    storageBucket: "manebou-app-41dd3.firebasestorage.app",
-    messagingSenderId: "185792077295",
-    appId: "1:185792077295:web:299acd59423d9706f76a1a"
-  };
-  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-  _auth = firebase.auth();
-  _db   = firebase.firestore();
-} catch(e) { console.warn('Firebase init failed:', e); }
-
+// ════ 塾用スタブ：Firebase不要 ════
 let _fbUser = null;
 let _groupId = null;
 let _role = null;
 let _instructorUnsub = null;
 
-const EMOJI_AVATARS = ['💰','💵','💎','🪙','💴','💶','💷','💳'];
+function openAuthOverlay() {}
+function closeAuthOverlay() {}
+function signInWithGoogle() {}
+function signInWithTwitter() {}
+function signInAsGuest() {}
+function signOutUser() {}
+function doNicknameRegister() {}
+function doNicknameLogin() {}
+function switchAuthTab() {}
+function openGroupModal() {}
+function closeGroupModal() {}
+function joinGroup() {}
+function createGroup() {}
+function copyGroupCode() {}
+function leaveGroup() {}
+function goToAccount() {}
+function closeMemberDetail() {}
+function showMemberDetail() {}
+function toggleUserMenu()   { document.getElementById('userMenu').classList.toggle('open'); }
+function closeUserMenu()    { document.getElementById('userMenu').classList.remove('open'); }
+function cloudSaveNow()     { return Promise.resolve(); }
+
+function _updateGroupLabel() {}
+
+const EMOJI_AVATARS = ['\u{1F4B0}','\u{1F4B5}','\u{1F48E}','\u{1FA99}','\u{1F4B4}','\u{1F4B6}','\u{1F4B7}','\u{1F4B3}'];
 const _emojiCache = {};
 function getEmojiAvatar(uid) {
   let h = 0;
@@ -7448,552 +6956,17 @@ function makeEmojiDataUrl(emoji) {
   return (_emojiCache[emoji] = c.toDataURL('image/png'));
 }
 
-if (_auth) _auth.onAuthStateChanged(async user => {
-  _fbUser = user;
-  if (user) {
-    const isEmailUser = user.providerData.some(p => p.providerId === 'password');
-    if (isEmailUser && !user.displayName) {
-      location.href = 'home.html?noredirect';
-      return;
-    }
-    document.getElementById('navAuthBtn').style.display = 'none';
-    const av = document.getElementById('navUserAvatar');
-    av.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
-    av.onerror = () => { av.src = makeEmojiDataUrl(getEmojiAvatar(user.uid)); av.onerror = null; };
-    av.style.display = '';
-    document.getElementById('userMenuName').textContent  = user.displayName || 'ユーザー';
-    document.getElementById('userMenuEmail').textContent = user.email || '';
-    const umav = document.getElementById('userMenuAvatar');
-    if (umav) {
-      umav.src = user.photoURL || makeEmojiDataUrl(getEmojiAvatar(user.uid));
-      umav.onerror = () => { umav.src = makeEmojiDataUrl(getEmojiAvatar(user.uid)); umav.onerror = null; };
-    }
-    const btn = document.getElementById('cloudSaveSettingBtn');
-    if (btn) { btn.textContent = '保存'; }
-    const lr = document.getElementById('settingLogoutRow');
-    if (lr) lr.style.display = '';
-    await _loadUserProfile(user);
-    await cloudLoad();
-  } else {
-    document.getElementById('navAuthBtn').style.display = '';
-    document.getElementById('navUserAvatar').style.display = 'none';
-    document.getElementById('userMenuGroup').textContent = '';
-    _groupId = null; _role = null;
-    if (_instructorUnsub) { _instructorUnsub(); _instructorUnsub = null; }
-    const btn = document.getElementById('cloudSaveSettingBtn');
-    if (btn) { btn.textContent = 'ログイン'; }
-    const lr = document.getElementById('settingLogoutRow');
-    if (lr) lr.style.display = 'none';
-  }
-});
-
-async function _loadUserProfile(user) {
-  try {
-    const snap = await _db.collection('users').doc(user.uid).get();
-    if (snap.exists) {
-      const d = snap.data();
-      _groupId = d.groupId || null;
-      _role    = d.role    || 'player';
-    } else {
-      await _db.collection('users').doc(user.uid).set({
-        name: user.displayName || 'ユーザー',
-        email: user.email,
-        photoURL: user.photoURL || '',
-        role: 'player',
-        groupId: null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      _groupId = null; _role = 'player';
-    }
-    _updateGroupLabel();
-    if (_role === 'instructor' && _groupId) _startInstructorListener();
-  } catch(e) {}
-}
-
-function _updateGroupLabel() {
-  const el = document.getElementById('userMenuGroup');
-  const btn = document.getElementById('leaveGroupBtn');
-  if (_groupId) {
-    el.textContent = (_role === 'instructor' ? '👑 講師 | ' : '🎮 プレイヤー | ') + 'グループ: ' + _groupId;
-    if (btn) btn.style.display = '';
-  } else {
-    el.textContent = 'グループ未参加';
-    if (btn) btn.style.display = 'none';
-  }
-}
-
-function copyGroupCode() {
-  const code = document.getElementById('createdGroupCode').textContent;
-  if (code === '------') return;
-  navigator.clipboard.writeText(code).then(() => {
-    showToast('コードをコピーしました: ' + code, 2500);
-  }).catch(() => {
-    showToast('コード: ' + code, 3000);
-  });
-}
-
-async function leaveGroup() {
-  if (!_fbUser || !_db || !_groupId) return;
+function savePlayerName() {
+  const val = (document.getElementById('playerNameInput').value || '').trim();
+  if (!val) return;
+  localStorage.setItem('manebou_juku_player', val);
+  const el = document.getElementById('navPlayerName');
+  if (el) el.textContent = '\u{1F3AE} ' + val;
   closeUserMenu();
-  try {
-    await _db.collection('users').doc(_fbUser.uid).update({ groupId: null, role: 'player' });
-    if (_instructorUnsub) { _instructorUnsub(); _instructorUnsub = null; }
-    const panel = document.getElementById('instructorPanel');
-    if (panel) panel.remove();
-    _groupId = null; _role = 'player';
-    _updateGroupLabel();
-    showToast('グループから抜けました', 3000);
-  } catch(e) { showToast('エラー: ' + e.message, 4000); }
+  showToast('名前を設定しました: ' + val);
 }
 
-// --- Google Sign In / Out ---
-async function goToAccount() {
-  if (_fbUser) await cloudSaveNow(true);
-  location.href = 'home.html?noredirect';
-}
-
-function signInWithGoogle() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  _auth.signInWithPopup(provider)
-    .then(() => { closeAuthOverlay(); showToast('ログインしました！', 3000); })
-    .catch(e => { showToast('ログイン失敗: ' + e.message, 4000); });
-}
-
-function signInWithTwitter() {
-  const provider = new firebase.auth.TwitterAuthProvider();
-  _auth.signInWithPopup(provider)
-    .then(() => { closeAuthOverlay(); showToast('ログインしました！', 3000); })
-    .catch(e => { showToast('X（Twitter）ログイン失敗: ' + e.message, 4000); });
-}
-
-function signInAsGuest() {
-  _auth.signInAnonymously()
-    .then(() => { closeAuthOverlay(); showToast('👤 ゲストとして遊んでいます', 3000); })
-    .catch(e => { showToast('ゲストログイン失敗: ' + e.message, 4000); });
-}
-
-// ── ニックネーム認証 ───────────────────────────────────────
-function switchAuthTab(tab) {
-  ['login','register'].forEach(t => {
-    document.getElementById('authPanelLogin').classList.toggle('active', t === 'login' && tab === 'login');
-    document.getElementById('authPanelRegister').classList.toggle('active', t === 'register' && tab === 'register');
-    const btn = document.getElementById('authTabBtn' + t.charAt(0).toUpperCase() + t.slice(1));
-    if (btn) btn.classList.toggle('active', t === tab);
-  });
-  document.getElementById('loginErr').textContent = '';
-  document.getElementById('regErr').textContent = '';
-}
-
-function _nickToEmail(nick) {
-  return nick.toLowerCase().replace(/[^a-z0-9_]/g, '_').slice(0, 30) + '@manebou.app';
-}
-
-async function doNicknameRegister() {
-  const nick = (document.getElementById('regNickname').value || '').trim();
-  const pw   = document.getElementById('regPassword').value || '';
-  const pw2  = document.getElementById('regPasswordConfirm').value || '';
-  const errEl = document.getElementById('regErr');
-  errEl.textContent = '';
-
-  if (!nick || nick.length < 1)       { errEl.textContent = 'ニックネームを入力してください'; return; }
-  if (nick.length > 20)               { errEl.textContent = 'ニックネームは20文字以内にしてください'; return; }
-  if (pw.length < 6)                  { errEl.textContent = 'パスワードは6文字以上にしてください'; return; }
-  if (pw !== pw2)                     { errEl.textContent = 'パスワードが一致しません'; return; }
-
-  const btn = document.querySelector('#authPanelRegister .btn-auth-submit');
-  if (btn) { btn.disabled = true; btn.textContent = '登録中…'; }
-
-  try {
-    if (!_db) throw new Error('データベース未接続');
-    // ニックネーム重複チェック
-    const snap = await _db.collection('nicknames').doc(nick).get();
-    if (snap.exists) throw new Error('このニックネームはすでに使われています');
-
-    // Firebase Auth ユーザー作成（内部メールを生成）
-    const internalEmail = _nickToEmail(nick) + '.' + Math.random().toString(36).slice(2, 6);
-    const cred = await _auth.createUserWithEmailAndPassword(internalEmail.replace('@', '_' + Date.now().toString(36) + '@'), pw);
-    await cred.user.updateProfile({ displayName: nick });
-
-    // ニックネーム → uid / email マッピングを保存
-    await _db.collection('nicknames').doc(nick).set({ uid: cred.user.uid, email: cred.user.email });
-
-    closeAuthOverlay();
-    showToast('✅ 登録しました！ようこそ ' + nick + ' さん', 4000);
-  } catch(e) {
-    errEl.textContent = e.message || '登録に失敗しました';
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '新規登録'; }
-  }
-}
-
-async function doNicknameLogin() {
-  const nick  = (document.getElementById('loginNickname').value || '').trim();
-  const pw    = document.getElementById('loginPassword').value || '';
-  const errEl = document.getElementById('loginErr');
-  errEl.textContent = '';
-
-  if (!nick) { errEl.textContent = 'ニックネームを入力してください'; return; }
-  if (!pw)   { errEl.textContent = 'パスワードを入力してください'; return; }
-
-  const btn = document.querySelector('#authPanelLogin .btn-auth-submit');
-  if (btn) { btn.disabled = true; btn.textContent = 'ログイン中…'; }
-
-  try {
-    if (!_db) throw new Error('データベース未接続');
-    const snap = await _db.collection('nicknames').doc(nick).get();
-    if (!snap.exists) throw new Error('ニックネームが見つかりません');
-
-    const { email } = snap.data();
-    await _auth.signInWithEmailAndPassword(email, pw);
-    closeAuthOverlay();
-    showToast('✅ ログインしました！', 3000);
-  } catch(e) {
-    const msg = e.code === 'auth/wrong-password' ? 'パスワードが違います'
-              : e.code === 'auth/too-many-requests' ? '試行回数が多すぎます。しばらく待ってください'
-              : e.message || 'ログインに失敗しました';
-    errEl.textContent = msg;
-  } finally {
-    if (btn) { btn.disabled = false; btn.textContent = 'ログイン'; }
-  }
-}
-
-function signOutUser() {
-  _auth.signOut().then(() => { location.href = 'home.html'; });
-}
-
-// --- Cloud Save / Load ---
-function _buildSavePayload() {
-  return {
-    currentIndex,
-    holdings: { ...holdings },
-    costBasis: { ...costBasis },
-    pendingSell,
-    unlockedTitles: [...unlockedTitles],
-    portfolioHistory: portfolioHistory.slice(-220),
-    cashBalance,
-    cashHistLog: cashHistLog.slice(0, 50),
-    earnedCerts: { ...earnedCerts },
-    savedAt: new Date()
-  };
-}
-
-function _calcTotalAssets() {
-  const row = masterData[currentIndex];
-  let total = cashBalance;
-  if (row) ASSET_KEYS.forEach(a => { total += (holdings[a.id] || 0) * (row[a.id] || 0); });
-  return total;
-}
-
-async function cloudSaveNow(silent) {
-  if (!_fbUser) { if (!silent) showToast('ログインが必要です'); return; }
-  if (!_db) { if (!silent) showToast('⚠️ クラウドに接続できません。ネット接続を確認してください'); return; }
-  try {
-    const row = masterData[currentIndex];
-    const year = row ? (row.年 === 0 ? 'チュートリアル' : String(row.年)) : '---';
-    const totalAssets = _calcTotalAssets();
-    await _db.collection('saves').doc(_fbUser.uid).set(_buildSavePayload());
-    // Write public leaderboard record
-    await _db.collection('leaderboard').doc(_fbUser.uid).set({
-      name:        _fbUser.displayName || 'ユーザー',
-      photoURL:    _fbUser.photoURL || '',
-      year,
-      cashBalance,
-      totalAssets,
-      gameBadgeCount: unlockedTitles.size,
-      updatedAt:   new Date()
-    }, { merge: true });
-    if (_groupId) {
-      const holdingsSnap = {};
-      ASSET_KEYS.forEach(a => { if ((holdings[a.id]||0) > 0) holdingsSnap[a.id] = holdings[a.id]; });
-      const histSnap = portfolioHistory.slice(-40).map(h => ({ 年: h.年, イベント: h.イベント, total: h.total }));
-      await _db.collection('groups').doc(_groupId)
-        .collection('members').doc(_fbUser.uid).set({
-          name:        _fbUser.displayName || 'ユーザー',
-          photoURL:    _fbUser.photoURL || '',
-          year,
-          cashBalance,
-          totalAssets,
-          holdings:    holdingsSnap,
-          badgeCount:  unlockedTitles.size,
-          portfolioHistory: histSnap,
-          updatedAt:   new Date()
-        }, { merge: true });
-    }
-    if (!silent) showToast('☁️ クラウドに保存しました', 2500);
-  } catch(e) { if (!silent) showToast('保存失敗: ' + e.message, 4000); }
-}
-
-let _pendingCloudData = null;
-
-async function cloudLoad() {
-  if (!_fbUser || !_db) return;
-  try {
-    const snap = await _db.collection('saves').doc(_fbUser.uid).get();
-    if (!snap.exists) return;
-    const d = snap.data();
-    const localRaw = getStorage().getItem(getSaveKey());
-    const local    = localRaw ? JSON.parse(localRaw) : null;
-    const cloudMs  = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
-    const localMs  = local && local._cloudTs ? local._cloudTs : 0;
-    if (!local || cloudMs > localMs) {
-      _applyCloudData(d);
-      showToast('☁️ クラウドからデータを読み込みました', 2000);
-    }
-  } catch(e) {}
-}
-
-function confirmCloudLoad() {
-  const cc = document.getElementById('cloudConfirmOverlay');
-  if (cc) cc.classList.remove('open');
-  if (_pendingCloudData) {
-    _applyCloudData(_pendingCloudData);
-    _pendingCloudData = null;
-    showToast('☁️ クラウドからデータを読み込みました', 3000);
-  }
-}
-
-function skipCloudLoad() {
-  const cc = document.getElementById('cloudConfirmOverlay');
-  if (cc) cc.classList.remove('open');
-  _pendingCloudData = null;
-}
-
-function _applyCloudData(d) {
-  if (d.currentIndex !== undefined) currentIndex = d.currentIndex;
-  if (d.cashBalance  !== undefined) cashBalance  = d.cashBalance;
-  if (d.holdings)  ASSET_KEYS.forEach(a => { holdings[a.id]  = (d.holdings  || {})[a.id]  || 0; });
-  if (d.costBasis) ASSET_KEYS.forEach(a => { costBasis[a.id] = (d.costBasis || {})[a.id] || 0; });
-  if (d.pendingSell !== undefined) pendingSell = d.pendingSell || 0;
-  if (d.unlockedTitles) unlockedTitles = new Set(d.unlockedTitles);
-  if (d.portfolioHistory) portfolioHistory = d.portfolioHistory;
-  if (d.cashHistLog) { cashHistLog.length = 0; d.cashHistLog.forEach(e => cashHistLog.push(e)); }
-  if (d.earnedCerts) earnedCerts = { ...d.earnedCerts };
-  const cloudMs = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
-  try {
-    const payload = _buildLocalSnapshot();
-    payload._cloudTs = cloudMs;
-    getStorage().setItem(getSaveKey(), JSON.stringify(payload));
-  } catch(e) {}
-  updateDisplay();
-  updateCashDisplay();
-  renderCashLog();
-}
-
-function _buildLocalSnapshot() {
-  return {
-    currentIndex,
-    holdings: { ...holdings },
-    costBasis: { ...costBasis },
-    pendingSell,
-    unlockedTitles: [...unlockedTitles],
-    portfolioHistory: portfolioHistory.slice(-220),
-    cashBalance,
-    cashHistLog: cashHistLog.slice(0, 50)
-  };
-}
-
-// Auto cloud save every 3 min when logged in
-setInterval(() => { if (_fbUser) cloudSaveNow(true); }, 3 * 60 * 1000);
-
-// --- Group Management ---
-async function createGroup() {
-  if (!_fbUser || !_db) return;
-  const name = document.getElementById('groupNameInput').value.trim();
-  if (!name) { showToast('グループ名を入力してください'); return; }
-  const SAFE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const code = Array.from({length:6},()=>SAFE_CHARS[Math.floor(Math.random()*SAFE_CHARS.length)]).join('');
-  try {
-    await _db.collection('groups').doc(code).set({
-      name, code,
-      instructorId:   _fbUser.uid,
-      instructorName: _fbUser.displayName || 'ユーザー',
-      createdAt:      firebase.firestore.FieldValue.serverTimestamp()
-    });
-    await _db.collection('users').doc(_fbUser.uid).update({ groupId: code, role: 'instructor' });
-    _groupId = code; _role = 'instructor';
-    _updateGroupLabel();
-    document.getElementById('groupNameInput').value = '';
-    document.getElementById('createdGroupCode').textContent = code;
-    document.getElementById('groupCreatedInfo').style.display = '';
-    _startInstructorListener();
-    showToast('グループ作成！コード: ' + code, 5000);
-  } catch(e) { showToast('作成失敗: ' + e.message, 4000); }
-}
-
-async function joinGroup() {
-  if (!_fbUser || !_db) return;
-  const code = document.getElementById('groupCodeInput').value.trim().toUpperCase();
-  if (code.length < 4) { showToast('コードを入力してください'); return; }
-  if (code.length !== 6) { showToast('コードは6文字で入力してください'); return; }
-  try {
-    const snap = await _db.collection('groups').doc(code).get();
-    if (!snap.exists) { showToast('グループが見つかりません'); return; }
-    await _db.collection('users').doc(_fbUser.uid).update({ groupId: code, role: 'player' });
-    _groupId = code; _role = 'player';
-    _updateGroupLabel();
-    closeGroupModal();
-    showToast('グループに参加しました！', 3000);
-    await cloudSaveNow();
-  } catch(e) { showToast('参加失敗: ' + e.message, 4000); }
-}
-
-// --- Instructor real-time listener ---
-function _startInstructorListener() {
-  if (_instructorUnsub) _instructorUnsub();
-  _instructorUnsub = _db.collection('groups').doc(_groupId)
-    .collection('members')
-    .orderBy('totalAssets', 'desc')
-    .onSnapshot(snap => {
-      _ensureInstructorPanel();
-      _renderInstructorPanel(snap.docs.map(d => d.data()));
-    }, () => {});
-}
-
-function _ensureInstructorPanel() {
-  if (document.getElementById('instructorPanel')) return;
-  const tab = document.getElementById('tab-settings');
-  if (!tab) return;
-  const panel = document.createElement('div');
-  panel.id = 'instructorPanel';
-  panel.className = 'tab-section';
-  panel.innerHTML =
-    '<div class="tab-section-title">👑 講師ビュー — グループメンバー</div>' +
-    '<div class="instructor-panel" id="instructorPanelInner">' +
-    '<div style="color:rgba(255,255,255,0.4);font-size:12px;text-align:center">読み込み中...</div>' +
-    '</div>';
-  tab.appendChild(panel);
-}
-
-let _memberDetails = [];
-let _groupCompareOn = false;
-
-function toggleGroupCompare() {
-  _groupCompareOn = !_groupCompareOn;
-  const btn = document.getElementById('compareToggleBtn');
-  if (btn) btn.classList.toggle('active', _groupCompareOn);
-  if (!_groupCompareOn) {
-    const cl = document.getElementById('compareLegend');
-    if (cl) cl.innerHTML = '';
-  }
-  drawPortfolioGraph();
-}
-
-function _renderInstructorPanel(members) {
-  _memberDetails = members;
-  const row = document.getElementById('compareToggleRow');
-  if (row) row.style.display = members.length > 0 ? '' : 'none';
-  const el = document.getElementById('instructorPanelInner');
-  if (!el) return;
-  if (!members.length) {
-    el.innerHTML = '<div style="color:rgba(255,255,255,0.4);font-size:12px;text-align:center">まだメンバーがいません</div>';
-    return;
-  }
-  el.innerHTML = members.map((m, i) => {
-    const uid = m.uid || ('member_' + i);
-    const safeUid = uid.replace(/'/g, '');
-    const avatarSrc = m.photoURL
-      ? _esc(m.photoURL)
-      : makeEmojiDataUrl(getEmojiAvatar(uid));
-    const onerror = m.photoURL
-      ? ` onerror="this.src=makeEmojiDataUrl(getEmojiAvatar('${_esc(uid)}'));this.onerror=null"`
-      : '';
-    const hasHoldings = m.holdings && Object.keys(m.holdings).length > 0;
-    return '<div class="member-card" onclick="openMemberDetail(\'' + safeUid + '\')">' +
-      '<img src="' + avatarSrc + '" alt=""' + onerror + '>' +
-      '<div class="member-info">' +
-      '<div class="member-name">' + (i+1) + '. ' + _esc(m.name || 'ユーザー') + '</div>' +
-      '<div class="member-cash">💰 総資産 ' + fmt(m.totalAssets || 0) + '円</div>' +
-      '<div class="member-year">📅 ' + _esc(String(m.year || '---')) + '年 / 💵 現金 ' + fmt(m.cashBalance || 0) + '円</div>' +
-      (hasHoldings ? '<div class="member-tap-hint">▶ タップで詳細を表示</div>' : '') +
-      '</div></div>';
-  }).join('');
-}
-
-function openMemberDetail(uid) {
-  const m = _memberDetails.find(x => (x.uid || '') === uid);
-  if (!m) return;
-  const row = masterData[currentIndex];
-  const avatarSrc = m.photoURL ? _esc(m.photoURL) : makeEmojiDataUrl(getEmojiAvatar(uid));
-  const onerror = m.photoURL ? ` onerror="this.src=makeEmojiDataUrl(getEmojiAvatar('${_esc(uid)}'));this.onerror=null"` : '';
-  const h = m.holdings || {};
-  let portfolioRows = '';
-  let portfolioTotal = 0;
-  ASSET_KEYS.forEach(a => {
-    const qty = h[a.id] || 0;
-    if (qty <= 0) return;
-    const price = row ? (row[a.id] || 0) : 0;
-    const val = qty * price;
-    portfolioTotal += val;
-    portfolioRows += '<div class="member-asset-row">' +
-      '<span class="a-emoji">' + a.emoji + '</span>' +
-      '<span class="a-name">' + _esc(a.label) + '</span>' +
-      '<span class="a-qty">' + qty + '口</span>' +
-      '<span class="a-val">' + fmt(val) + '円</span>' +
-      '</div>';
-  });
-  const hasPortfolio = portfolioRows !== '';
-  const badgeStr = m.badgeCount != null ? '🏅 称号 ' + m.badgeCount + '個' : '';
-  document.getElementById('memberDetailContent').innerHTML =
-    '<div class="member-detail-header">' +
-    '<img class="member-detail-avatar" src="' + avatarSrc + '" alt=""' + onerror + '>' +
-    '<div><div class="member-detail-name">' + _esc(m.name || 'ユーザー') + '</div>' +
-    '<div class="member-detail-sub">📅 ' + _esc(String(m.year || '---')) + '年' + (badgeStr ? ' · ' + badgeStr : '') + '</div>' +
-    '</div></div>' +
-    '<hr class="member-detail-divider">' +
-    '<div class="member-detail-stat"><span class="lbl">💴 現金</span><span class="val">' + fmt(m.cashBalance || 0) + ' 円</span></div>' +
-    '<div class="member-detail-stat"><span class="lbl">💰 総資産</span><span class="val">' + fmt(m.totalAssets || 0) + ' 円</span></div>' +
-    (hasPortfolio ?
-      '<div class="member-portfolio-title">📊 ポートフォリオ</div>' + portfolioRows +
-      '<hr class="member-detail-divider">' +
-      '<div class="member-detail-stat"><span class="lbl">資産合計（時価）</span><span class="val">' + fmt(portfolioTotal) + ' 円</span></div>'
-      : '<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">保有資産データなし</div>');
-  document.getElementById('memberDetailModal').classList.add('open');
-}
-
-function closeMemberDetail() {
-  document.getElementById('memberDetailModal').classList.remove('open');
-}
-
-function _esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-// --- UI helpers ---
-function openAuthOverlay() {
-  closeUserMenu();
-  if (_fbUser) { openGroupModal(); return; }
-  document.getElementById('authOverlay').classList.add('open');
-}
-function closeAuthOverlay() { document.getElementById('authOverlay').classList.remove('open'); }
-function openGroupModal()   { closeUserMenu(); document.getElementById('groupModal').classList.add('open'); }
-function closeGroupModal()  { document.getElementById('groupModal').classList.remove('open'); }
-function toggleUserMenu()   { document.getElementById('userMenu').classList.toggle('open'); }
-function closeUserMenu()    { document.getElementById('userMenu').classList.remove('open'); }
-
-function switchGroupTab(tab, btn) {
-  document.querySelectorAll('.modal-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('groupTabJoin').style.display   = tab === 'join'   ? '' : 'none';
-  document.getElementById('groupTabCreate').style.display = tab === 'create' ? '' : 'none';
-}
-
-document.addEventListener('click', e => {
-  const menu = document.getElementById('userMenu');
-  if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target.id !== 'navUserAvatar')
-    menu.classList.remove('open');
-  const ao = document.getElementById('authOverlay');
-  if (ao && ao.classList.contains('open') && e.target === ao) closeAuthOverlay();
-  const cc = document.getElementById('cloudConfirmOverlay');
-  if (cc && cc.classList.contains('open') && e.target === cc) skipCloudLoad();
-  const nc = document.getElementById('nextConfirmOverlay');
-  if (nc && nc.classList.contains('open') && e.target === nc) cancelNext();
-  const ts = document.getElementById('timeslipOverlay');
-  if (ts && ts.classList.contains('open') && e.target === ts) cancelTimeslip();
-  const gm = document.getElementById('groupModal');
-  if (gm && gm.classList.contains('open') && e.target === gm) closeGroupModal();
-});
-
-window.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(e => console.warn('SW registration failed:', e));
   }
@@ -8008,6 +6981,24 @@ window.addEventListener('DOMContentLoaded', function() {
       c.classList.add('pop');
     }
   }, 800);
+  const saved = localStorage.getItem('manebou_juku_player');
+  const el = document.getElementById('navPlayerName');
+  if (saved && el) el.textContent = '\u{1F3AE} ' + saved;
+  const inp = document.getElementById('playerNameInput');
+  if (saved && inp) inp.value = saved;
+  document.addEventListener('click', function(e) {
+    const menu = document.getElementById('userMenu');
+    if (menu && menu.classList.contains('open') && !menu.contains(e.target) && e.target.id !== 'navPlayerName')
+      menu.classList.remove('open');
+    const ao = document.getElementById('authOverlay');
+    if (ao && ao.classList.contains('open') && e.target === ao) closeAuthOverlay();
+    const cc = document.getElementById('cloudConfirmOverlay');
+    if (cc && cc.classList.contains('open') && e.target === cc) skipCloudLoad();
+    const nc = document.getElementById('nextConfirmOverlay');
+    if (nc && nc.classList.contains('open') && e.target === nc) cancelNext();
+    const ts = document.getElementById('timeslipOverlay');
+    if (ts && ts.classList.contains('open') && e.target === ts) cancelTimeslip();
+  });
 });
 // ============================================================
 // ENDING SCREEN
@@ -8044,7 +7035,6 @@ function showEnding() {
   } else {
     el.classList.add('show');
   }
-  if (_fbUser) cloudSaveNow(true);
 }
 
 function closeEnding() {
@@ -8106,15 +7096,10 @@ function closeWelcome() {
 <!-- ════ 約束手形モーダル ════ -->
 <div class="cert-backdrop" id="certBackdrop" onclick="closeCert()"></div>
 <div class="cert-modal" id="certModal">
-  <div class="cert-modal-header">
-    <span class="cert-modal-badge">📜 約束手形</span>
-    <span class="cert-modal-title" id="certModalTitle"></span>
-    <button class="cert-modal-x" onclick="closeCert()">✕</button>
-  </div>
   <canvas class="cert-canvas" id="certCanvas" width="920" height="540"></canvas>
   <div class="cert-actions">
     <button class="cert-dl-btn" onclick="downloadCert()">💾 画像を保存</button>
-    <button class="cert-close-btn" onclick="closeCert()">閉じる</button>
+    <button class="cert-close-btn" onclick="closeCert()">✕ 閉じる</button>
   </div>
 </div>
 
