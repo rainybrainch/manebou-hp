@@ -251,8 +251,8 @@ body {
   font-size: 12px;
   border-radius: 10px;
 }
-.date-nav .btn-prev {
-  box-shadow: 0 3px 0 rgba(40, 120, 155, 0.5);
+.date-nav .btn-timeslip {
+  box-shadow: 0 3px 0 rgba(180, 40, 40, 0.35);
 }
 .date-nav .btn-next {
   box-shadow: 0 3px 0 var(--gold-dark);
@@ -685,12 +685,12 @@ body {
 
 
 
-.btn-prev {
+.btn-timeslip {
   flex: 1;
-  border: 3px solid var(--sky);
+  border: 2px solid rgba(232,91,91,0.55);
   border-radius: 12px;
   background: transparent;
-  color: var(--sky);
+  color: rgba(232,91,91,0.85);
   font-family: 'Dela Gothic One', sans-serif;
   font-size: 14px;
   padding: 13px;
@@ -699,14 +699,14 @@ body {
   transform: translateY(0);
   transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s;
 }
-.btn-prev:not(:disabled):hover {
-  background: rgba(91, 200, 232, 0.1);
+.btn-timeslip:not(:disabled):hover {
+  background: rgba(232, 91, 91, 0.1);
   transform: translateY(-3px);
-  box-shadow: 0 8px 0 rgba(38, 115, 148, 0.6);
+  box-shadow: 0 8px 0 rgba(180, 40, 40, 0.4);
 }
-.btn-prev:not(:disabled):active {
+.btn-timeslip:not(:disabled):active {
   transform: translateY(5px);
-  box-shadow: 0 0 0 rgba(38, 115, 148, 0.6);
+  box-shadow: 0 0 0 rgba(180, 40, 40, 0.4);
 }
 
 .btn-next {
@@ -732,7 +732,7 @@ body {
   box-shadow: 0 0 0 var(--gold-dark);
 }
 
-.btn-prev:disabled,
+.btn-timeslip:disabled,
 .btn-next:disabled {
   opacity: 0.28;
   cursor: not-allowed;
@@ -2441,13 +2441,31 @@ body {
 .member-card {
   background: rgba(255,255,255,0.05); border-radius: 10px;
   padding: 10px 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
+  cursor: pointer; transition: background 0.15s;
 }
+.member-card:hover { background: rgba(255,255,255,0.11); }
 .member-card:last-child { margin-bottom: 0; }
 .member-card img { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--gold); object-fit: cover; flex-shrink: 0; }
 .member-info { flex: 1; min-width: 0; }
 .member-name { font-size: 12px; font-weight: 700; }
 .member-cash { font-size: 11px; color: var(--gold); }
 .member-year { font-size: 10px; color: rgba(255,255,255,0.4); }
+.member-tap-hint { font-size: 9px; color: var(--sky); opacity: 0.7; margin-top: 2px; }
+/* ─── Member Detail Modal ─── */
+.member-detail-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; text-align:left; }
+.member-detail-avatar { width:52px; height:52px; border-radius:50%; border:2px solid var(--gold); object-fit:cover; flex-shrink:0; }
+.member-detail-name { font-size:15px; font-weight:700; }
+.member-detail-sub { font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px; }
+.member-detail-divider { border:none; border-top:1px solid rgba(255,255,255,0.1); margin:10px 0; }
+.member-detail-stat { display:flex; justify-content:space-between; font-size:12px; padding:3px 0; }
+.member-detail-stat .lbl { color:rgba(255,255,255,0.55); }
+.member-detail-stat .val { font-weight:700; color:var(--gold); }
+.member-portfolio-title { font-size:11px; color:var(--sky); margin:10px 0 6px; font-weight:700; letter-spacing:0.5px; }
+.member-asset-row { display:flex; align-items:center; gap:8px; font-size:11px; padding:5px 8px; border-radius:7px; background:rgba(255,255,255,0.04); margin-bottom:4px; }
+.member-asset-row .a-emoji { font-size:14px; flex-shrink:0; }
+.member-asset-row .a-name { flex:1; }
+.member-asset-row .a-qty { color:rgba(255,255,255,0.5); }
+.member-asset-row .a-val { color:var(--gold); font-weight:700; }
 
 /* ─── Dark Toggle Button ─── */
 .dark-toggle {
@@ -2582,6 +2600,26 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   </div>
 </div>
 
+<!-- ════ TIMESLIP CONFIRM ════ -->
+<div class="auth-overlay" id="timeslipOverlay">
+  <div class="auth-box" style="text-align:center;max-width:300px">
+    <h2 style="font-size:18px;margin-bottom:8px">⏮ タイムスリップ</h2>
+    <p style="font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:20px;line-height:1.6">1つ前の状態に戻します。<br>取引・移動がすべて巻き戻ります。<br><strong style="color:#f5c842">本当に実行しますか？</strong></p>
+    <button class="btn-google" style="background:rgba(232,91,91,0.85);color:#fff;margin-bottom:10px;font-weight:700" onclick="confirmTimeslip()">⏮ タイムスリップ実行</button>
+    <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.15)" onclick="cancelTimeslip()">✕ キャンセル</button>
+  </div>
+</div>
+
+<!-- ════ NEXT CONFIRM ════ -->
+<div class="auth-overlay" id="nextConfirmOverlay">
+  <div class="auth-box" style="text-align:center;max-width:300px">
+    <h2 style="font-size:18px;margin-bottom:8px">⏩ 次へ進む</h2>
+    <p id="nextConfirmMsg" style="font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:20px;line-height:1.6">この操作は取り消せません。<br>これでいいですか？</p>
+    <button class="btn-google" style="background:var(--gold);color:var(--dark);margin-bottom:10px;font-weight:700" onclick="confirmNext()">✅ 進む</button>
+    <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.15)" onclick="cancelNext()">✕ キャンセル</button>
+  </div>
+</div>
+
 <!-- ════ CLOUD CONFIRM ════ -->
 <div class="auth-overlay" id="cloudConfirmOverlay">
   <div class="auth-box">
@@ -2621,6 +2659,14 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
         <button class="btn-modal-action" style="background:rgba(245,200,66,0.12);color:var(--gold);border:1.5px solid rgba(245,200,66,0.4);box-shadow:none;margin-top:8px" onclick="copyGroupCode()">📋 コードをコピー</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ════ MEMBER DETAIL MODAL ════ -->
+<div class="modal-overlay" id="memberDetailModal" onclick="if(event.target===this)closeMemberDetail()">
+  <div class="modal-box" style="max-width:380px;max-height:82vh;overflow-y:auto;text-align:left">
+    <button class="modal-close-btn" onclick="closeMemberDetail()">✕</button>
+    <div id="memberDetailContent"></div>
   </div>
 </div>
 
@@ -2676,9 +2722,9 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
     <!-- DATE NAV -->
     <div class="date-bar">
       <div class="date-nav">
-        <button class="btn-prev" id="btnPrev" onclick="stepTime(-1)">◀ 前へ</button>
+        <button class="btn-timeslip" id="btnPrev" onclick="askTimeslip()">⏮ タイムスリップ</button>
         <div id="timeLabel">チュートリアル</div>
-        <button class="btn-next" id="btnNext" onclick="stepTime(1)">次へ ▶</button>
+        <button class="btn-next" id="btnNext" onclick="askConfirmNext()">次へ ▶</button>
       </div>
     </div>
 
@@ -2728,8 +2774,8 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
       </div>
     </div>
 
-    <!-- JUMP TO YEAR (full-width bottom) -->
-    <div class="date-bar date-jump game-jump-bar">
+    <!-- JUMP TO YEAR (hidden) -->
+    <div class="date-bar date-jump game-jump-bar" style="display:none">
       <div class="date-row">
         <select id="selY" onchange="updateEventOptions()"></select>
         <select id="selE"></select>
@@ -4854,6 +4900,44 @@ function dateJump() {
   updateDisplay();
 }
 
+function askConfirmNext() {
+  const ni = currentIndex + 1;
+  if (ni >= masterData.length) return;
+  const nextRow = masterData[ni];
+  let msg = 'この操作は取り消せません。<br>これでいいですか？';
+  if (nextRow && nextRow.年 > 0) {
+    const label = nextRow.イベント === 1
+      ? `${nextRow.年}年 イベント1`
+      : `${nextRow.年}年 イベント${nextRow.イベント}`;
+    msg = `<strong>${label}</strong> へ進みます。<br>取り消しはできません。<br>これでいいですか？`;
+  }
+  document.getElementById('nextConfirmMsg').innerHTML = msg;
+  document.getElementById('nextConfirmOverlay').classList.add('open');
+}
+
+function confirmNext() {
+  document.getElementById('nextConfirmOverlay').classList.remove('open');
+  stepTime(1);
+}
+
+function cancelNext() {
+  document.getElementById('nextConfirmOverlay').classList.remove('open');
+}
+
+function askTimeslip() {
+  if (!history.length) { showToast('戻れる記録がありません'); return; }
+  document.getElementById('timeslipOverlay').classList.add('open');
+}
+
+function confirmTimeslip() {
+  document.getElementById('timeslipOverlay').classList.remove('open');
+  undoAction();
+}
+
+function cancelTimeslip() {
+  document.getElementById('timeslipOverlay').classList.remove('open');
+}
+
 // ============================================================
 // DISPLAY
 // ============================================================
@@ -6476,7 +6560,10 @@ function cSet(v)  { cBuf = String(v); cOpr = null; cPrev = null; cNew = true; cD
 // ============================================================
 // AUTO-SAVE
 // ============================================================
-const SAVE_KEY = 'manebo_save_v1';
+const SAVE_KEY_BASE = 'manebo_save_v1';
+function getSaveKey() {
+  return _fbUser ? SAVE_KEY_BASE + '_' + _fbUser.uid : SAVE_KEY_BASE;
+}
 
 function saveGame() {
   const data = {
@@ -6489,12 +6576,12 @@ function saveGame() {
     cashBalance,
     cashHistLog: cashHistLog.slice(0, 50),
   };
-  try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); } catch(e) {}
+  try { localStorage.setItem(getSaveKey(), JSON.stringify(data)); } catch(e) {}
 }
 
 function loadGame() {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
+    const raw = localStorage.getItem(getSaveKey());
     if (!raw) return false;
     const d = JSON.parse(raw);
     currentIndex = d.currentIndex || 0;
@@ -6524,7 +6611,7 @@ function clearSave() {
     return;
   }
   clearTimeout(_clearSaveTimer); _clearSavePending = false;
-  localStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem(getSaveKey());
 
   // ゲーム状態を完全リセット（ローディング表示前に実行）
   currentIndex      = 0;
@@ -6777,6 +6864,8 @@ async function cloudSaveNow(silent) {
       updatedAt:   new Date()
     }, { merge: true });
     if (_groupId) {
+      const holdingsSnap = {};
+      ASSET_KEYS.forEach(a => { if ((holdings[a.id]||0) > 0) holdingsSnap[a.id] = holdings[a.id]; });
       await _db.collection('groups').doc(_groupId)
         .collection('members').doc(_fbUser.uid).set({
           name:        _fbUser.displayName || 'ユーザー',
@@ -6784,6 +6873,8 @@ async function cloudSaveNow(silent) {
           year,
           cashBalance,
           totalAssets,
+          holdings:    holdingsSnap,
+          badgeCount:  unlockedTitles.size,
           updatedAt:   new Date()
         }, { merge: true });
     }
@@ -6799,7 +6890,7 @@ async function cloudLoad() {
     const snap = await _db.collection('saves').doc(_fbUser.uid).get();
     if (!snap.exists) return;
     const d = snap.data();
-    const localRaw = localStorage.getItem(SAVE_KEY);
+    const localRaw = localStorage.getItem(getSaveKey());
     const local    = localRaw ? JSON.parse(localRaw) : null;
     const cloudMs  = d.savedAt ? (d.savedAt.toMillis ? d.savedAt.toMillis() : new Date(d.savedAt).getTime()) : 0;
     const localMs  = local && local._cloudTs ? local._cloudTs : 0;
@@ -6838,7 +6929,7 @@ function _applyCloudData(d) {
   try {
     const payload = _buildLocalSnapshot();
     payload._cloudTs = cloudMs;
-    localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
+    localStorage.setItem(getSaveKey(), JSON.stringify(payload));
   } catch(e) {}
   updateDisplay();
   updateCashDisplay();
@@ -6930,7 +7021,9 @@ function _ensureInstructorPanel() {
   tab.appendChild(panel);
 }
 
+let _memberDetails = [];
 function _renderInstructorPanel(members) {
+  _memberDetails = members;
   const el = document.getElementById('instructorPanelInner');
   if (!el) return;
   if (!members.length) {
@@ -6939,20 +7032,68 @@ function _renderInstructorPanel(members) {
   }
   el.innerHTML = members.map((m, i) => {
     const uid = m.uid || ('member_' + i);
+    const safeUid = uid.replace(/'/g, '');
     const avatarSrc = m.photoURL
       ? _esc(m.photoURL)
       : makeEmojiDataUrl(getEmojiAvatar(uid));
     const onerror = m.photoURL
       ? ` onerror="this.src=makeEmojiDataUrl(getEmojiAvatar('${_esc(uid)}'));this.onerror=null"`
       : '';
-    return '<div class="member-card">' +
+    const hasHoldings = m.holdings && Object.keys(m.holdings).length > 0;
+    return '<div class="member-card" onclick="openMemberDetail(\'' + safeUid + '\')">' +
       '<img src="' + avatarSrc + '" alt=""' + onerror + '>' +
       '<div class="member-info">' +
       '<div class="member-name">' + (i+1) + '. ' + _esc(m.name || 'ユーザー') + '</div>' +
       '<div class="member-cash">💰 総資産 ' + fmt(m.totalAssets || 0) + '円</div>' +
       '<div class="member-year">📅 ' + _esc(String(m.year || '---')) + '年 / 💵 現金 ' + fmt(m.cashBalance || 0) + '円</div>' +
+      (hasHoldings ? '<div class="member-tap-hint">▶ タップで詳細を表示</div>' : '') +
       '</div></div>';
   }).join('');
+}
+
+function openMemberDetail(uid) {
+  const m = _memberDetails.find(x => (x.uid || '') === uid);
+  if (!m) return;
+  const row = masterData[currentIndex];
+  const avatarSrc = m.photoURL ? _esc(m.photoURL) : makeEmojiDataUrl(getEmojiAvatar(uid));
+  const onerror = m.photoURL ? ` onerror="this.src=makeEmojiDataUrl(getEmojiAvatar('${_esc(uid)}'));this.onerror=null"` : '';
+  const h = m.holdings || {};
+  let portfolioRows = '';
+  let portfolioTotal = 0;
+  ASSET_KEYS.forEach(a => {
+    const qty = h[a.id] || 0;
+    if (qty <= 0) return;
+    const price = row ? (row[a.id] || 0) : 0;
+    const val = qty * price;
+    portfolioTotal += val;
+    portfolioRows += '<div class="member-asset-row">' +
+      '<span class="a-emoji">' + a.emoji + '</span>' +
+      '<span class="a-name">' + _esc(a.label) + '</span>' +
+      '<span class="a-qty">' + qty + '口</span>' +
+      '<span class="a-val">' + fmt(val) + '円</span>' +
+      '</div>';
+  });
+  const hasPortfolio = portfolioRows !== '';
+  const badgeStr = m.badgeCount != null ? '🏅 称号 ' + m.badgeCount + '個' : '';
+  document.getElementById('memberDetailContent').innerHTML =
+    '<div class="member-detail-header">' +
+    '<img class="member-detail-avatar" src="' + avatarSrc + '" alt=""' + onerror + '>' +
+    '<div><div class="member-detail-name">' + _esc(m.name || 'ユーザー') + '</div>' +
+    '<div class="member-detail-sub">📅 ' + _esc(String(m.year || '---')) + '年' + (badgeStr ? ' · ' + badgeStr : '') + '</div>' +
+    '</div></div>' +
+    '<hr class="member-detail-divider">' +
+    '<div class="member-detail-stat"><span class="lbl">💴 現金</span><span class="val">' + fmt(m.cashBalance || 0) + ' 円</span></div>' +
+    '<div class="member-detail-stat"><span class="lbl">💰 総資産</span><span class="val">' + fmt(m.totalAssets || 0) + ' 円</span></div>' +
+    (hasPortfolio ?
+      '<div class="member-portfolio-title">📊 ポートフォリオ</div>' + portfolioRows +
+      '<hr class="member-detail-divider">' +
+      '<div class="member-detail-stat"><span class="lbl">資産合計（時価）</span><span class="val">' + fmt(portfolioTotal) + ' 円</span></div>'
+      : '<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:10px">保有資産データなし</div>');
+  document.getElementById('memberDetailModal').classList.add('open');
+}
+
+function closeMemberDetail() {
+  document.getElementById('memberDetailModal').classList.remove('open');
 }
 
 function _esc(s) {
@@ -6986,6 +7127,10 @@ document.addEventListener('click', e => {
   if (ao && ao.classList.contains('open') && e.target === ao) closeAuthOverlay();
   const cc = document.getElementById('cloudConfirmOverlay');
   if (cc && cc.classList.contains('open') && e.target === cc) skipCloudLoad();
+  const nc = document.getElementById('nextConfirmOverlay');
+  if (nc && nc.classList.contains('open') && e.target === nc) cancelNext();
+  const ts = document.getElementById('timeslipOverlay');
+  if (ts && ts.classList.contains('open') && e.target === ts) cancelTimeslip();
   const gm = document.getElementById('groupModal');
   if (gm && gm.classList.contains('open') && e.target === gm) closeGroupModal();
 });
