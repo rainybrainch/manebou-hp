@@ -2692,6 +2692,82 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 .pl-dot{width:9px;height:9px;border-radius:50%;background:#F5C842;animation:plPulse 1.1s ease-in-out infinite;}
 @keyframes plPulse{0%,80%,100%{opacity:.18;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}
 
+/* ═══════════════════════════════════════════════════════════
+   塾用 PC フルスクリーン レイアウト オーバーライド
+═══════════════════════════════════════════════════════════ */
+
+/* PC向け幅制限解除 */
+.top-nav  { max-width: 1440px !important; }
+.wrap     { max-width: 1440px !important; padding-left: 24px; padding-right: 24px; }
+.bottom-nav { max-width: 1440px !important; }
+
+/* PC ゲームタブ: 左パネル（情報） ＋ 右パネル（資産グリッド） */
+@media (min-width: 900px) {
+  .tab-page.active { min-height: calc(100vh - 130px); }
+
+  #tab-game.active {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "left  right"
+      "steps right"
+      "jump  jump";
+    gap: 20px;
+    align-items: start;
+  }
+  .game-col-left  { grid-area: left; margin-bottom: 0; display: flex; flex-direction: column; gap: 12px; }
+  .game-col-right {
+    grid-area: right;
+    position: sticky; top: 70px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 20px;
+  }
+  .game-step-area { grid-area: steps; }
+
+  /* ── 4列×2行 資産グリッド ── */
+  .asset-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 14px !important;
+    margin-bottom: 14px;
+  }
+
+  /* 資産ボタンを PC 向けに拡大 */
+  .asset-btn        { border-radius: 18px; padding: 16px 14px 12px; }
+  .a-name-lbl       { font-size: 14px !important; }
+  .a-qty-num        { font-size: clamp(22px, 2.8vw, 32px) !important; }
+  .a-price-lbl      { font-size: clamp(13px, 1.6vw, 18px) !important; }
+  .a-div            { font-size: 11px !important; }
+
+  /* ステップボタン拡大 */
+  .step-btn { padding: 14px 8px; font-size: clamp(13px, 1.3vw, 16px) !important; }
+  .step-row { gap: 8px; }
+
+  /* バリューパネル数値拡大 */
+  .value-block-num  { font-size: clamp(20px, 2.5vw, 32px) !important; }
+  .value-block-lbl  { font-size: 10px; }
+
+  /* 日付ナビ拡大 */
+  .btn-next, .btn-timeslip { padding: 12px 22px; font-size: 15px; }
+  #timeLabel { font-size: clamp(14px, 1.8vw, 20px); }
+
+  /* 吹き出しテキスト */
+  .speech-bubble { padding: 12px 14px; }
+  #speechText    { font-size: 13px; }
+}
+
+/* 大型 PC (1400px+) */
+@media (min-width: 1400px) {
+  .top-nav, .wrap, .bottom-nav { max-width: 1600px !important; }
+  #tab-game.active { grid-template-columns: 340px 1fr; gap: 28px; }
+  .asset-grid { gap: 18px !important; }
+  .asset-btn  { padding: 20px 16px 14px; }
+  .a-qty-num  { font-size: clamp(26px, 2.5vw, 36px) !important; }
+  .step-btn   { padding: 16px 10px; font-size: clamp(14px, 1.2vw, 18px) !important; }
+}
+
 </style>
 </head>
 <body>
@@ -2862,10 +2938,6 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
           <span class="value-block-num"><span id="dispDiv" style="color:var(--green)">0</span><span class="value-block-unit" style="color:var(--green)">円</span></span>
           <span id="dispDivYear">年間 ─</span>
         </div>
-        <div class="value-block" style="grid-column:1/-1;border-top:1px solid rgba(255,255,255,0.08);padding-top:8px;">
-          <span class="value-block-lbl">💰 現金残高</span>
-          <span class="value-block-num" style="font-size:clamp(14px,3.5vw,20px)"><span id="dispCashTop">0</span><span class="value-block-unit">円</span></span>
-        </div>
       </div>
     </div>
 
@@ -2905,25 +2977,8 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 
   </div><!-- /tab-game -->
 
-  <!-- ════ TAB: お財布 ════ -->
+  <!-- ════ TAB: 計算機 ════ -->
   <div id="tab-data" class="tab-page">
-
-    <!-- ── 現金バナー（スティッキー・常時表示） ── -->
-    <div class="wallet-header">
-      <div class="wh-top">
-        <div>
-          <div class="wh-label">💴 現金</div>
-          <span class="wh-balance" id="cashDisplay">¥ 0</span>
-        </div>
-        <button class="wh-reset-btn" onclick="resetCash()">リセット</button>
-      </div>
-      <div class="wh-input-row" style="margin-top:8px">
-        <button class="wh-sign-toggle is-plus" id="cashSignToggle" onclick="toggleCashSign()">＋</button>
-        <input id="cashInput" type="number" inputmode="numeric" placeholder="金額" min="0" style="max-width:90px;flex:1;min-width:0">
-        <input id="cashLabelInput" type="text" class="wh-label-input" placeholder="メモ（例：配当、給与）">
-        <button class="wh-op-btn wh-apply-btn plus" id="cashApplyBtn" onclick="applyFromInput()">追加</button>
-      </div>
-    </div>
 
     <div class="data-cols">
     <div class="data-col-left">
@@ -2965,10 +3020,6 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
         <button class="ckey ckey-wide" onclick="cIn(0)">0</button>
         <button class="ckey"           onclick="cDot()">．</button>
         <button class="ckey eq"        onclick="cSolve()">=</button>
-      </div>
-      <div class="calc-cash-row">
-        <button class="wc-to-cash-btn" onclick="calcToCash()">💴 ＋現金に加算</button>
-        <button class="wc-from-cash-btn" onclick="calcFromCash()">💸 −現金から引く</button>
       </div>
     </div>
 
@@ -3467,8 +3518,8 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   </button>
   <button class="tab-btn" onclick="showTab('data',this)">
     <span class="tab-inner">
-      <span class="tab-icon">👛</span>
-      <span class="tab-label">お財布</span>
+      <span class="tab-icon">🧮</span>
+      <span class="tab-label">計算機</span>
     </span>
   </button>
   <button class="tab-btn" onclick="showTab('calc',this)">
