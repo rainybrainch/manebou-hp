@@ -532,7 +532,7 @@ body {
   font-weight: 700;
   color: var(--gold);
   letter-spacing: 1px;
-  animation: ticker-slide 3.5s linear forwards;
+  animation: ticker-slide 7s linear forwards;
 }
 .asset-btn-owned { border-color: var(--green); }
 @keyframes cartBuyGlow {
@@ -2117,7 +2117,7 @@ body {
   pointer-events: none;
 }
 .nav-side-text.running {
-  animation: navBannerFlow 5s linear forwards;
+  animation: navBannerFlow 10s linear forwards;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -2518,6 +2518,20 @@ html.light .acv2-source { color: rgba(26,26,46,0.4); border-color: rgba(26,26,46
 html.light .acv2-risk { color: rgba(26,26,46,0.5); }
 html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46,0.12); }
 
+
+/* ===== ウェルカムオーバーレイ ===== */
+.welcome-overlay{position:fixed;inset:0;z-index:600;background:rgba(10,10,30,0.93);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.4s;}
+.welcome-overlay.show{opacity:1;pointer-events:all;}
+.welcome-card{background:linear-gradient(160deg,#1a1a2e 0%,#2a1a4e 100%);border:2px solid var(--gold);border-radius:24px;padding:28px 20px 22px;max-width:320px;width:92%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.7);animation:ending-pop 0.5s cubic-bezier(.34,1.56,.64,1) both;}
+.welcome-char{width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:top center;border:3px solid var(--gold);margin-bottom:10px;}
+.welcome-wlabel{font-size:10px;letter-spacing:4px;color:var(--gold);font-weight:700;margin-bottom:4px;}
+.welcome-title{font-family:'Dela Gothic One',sans-serif;font-size:20px;color:#fff;line-height:1.35;margin-bottom:14px;}
+.welcome-points{text-align:left;margin-bottom:18px;display:flex;flex-direction:column;gap:8px;}
+.welcome-pt{font-size:12px;color:rgba(255,255,255,0.82);line-height:1.55;padding:8px 10px 8px 12px;background:rgba(255,255,255,0.05);border-radius:10px;border-left:3px solid var(--gold);}
+.welcome-go{width:100%;padding:13px;background:var(--gold);color:var(--dark);border:none;border-radius:14px;font-family:'Dela Gothic One',sans-serif;font-size:16px;cursor:pointer;box-shadow:0 5px 0 var(--gold-dark);transition:transform 0.08s,box-shadow 0.08s;margin-bottom:8px;}
+.welcome-go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--gold-dark);}
+.welcome-sub{font-size:10px;color:rgba(255,255,255,0.3);}
+
 /* ===== 賞状モーダル ===== */
 .cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.35s;backdrop-filter:blur(4px);}
 .cert-backdrop.open{opacity:1;pointer-events:all;}
@@ -2537,9 +2551,22 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 .cert-coll-thumb{width:100%;height:84px;object-fit:cover;display:block;}
 .cert-coll-label{font-size:10px;font-weight:700;color:rgba(255,255,255,0.65);padding:7px 8px;text-align:center;}
 
+
+/* page loader */
+.pl-dot{width:9px;height:9px;border-radius:50%;background:#F5C842;animation:plPulse 1.1s ease-in-out infinite;}
+@keyframes plPulse{0%,80%,100%{opacity:.18;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}
+
 </style>
 </head>
 <body>
+<div id="pageLoader" style="position:fixed;inset:0;z-index:9999;background:#1A1A2E;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.35s;">
+  <img src="images/logo.webp" alt="" style="width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:top center;border:2px solid #F5C842;margin-bottom:14px;">
+  <div style="display:flex;gap:7px;">
+    <div class="pl-dot"></div>
+    <div class="pl-dot" style="animation-delay:.18s"></div>
+    <div class="pl-dot" style="animation-delay:.36s"></div>
+  </div>
+</div>
 
 <!-- ════ LOGIN OVERLAY ════ -->
 <div class="auth-overlay" id="authOverlay">
@@ -3881,7 +3908,7 @@ function updateCharSpeech(year, event) {
   }
 
   // セリフを横断幕スタイルで流す（改行を空白に変換）
-  showNavBanner(ch.name + '：' + matchText.replace(/\n/g, '　'), 5000);
+  showNavBanner(ch.name + '：' + matchText.replace(/\n/g, '　'), 10000);
 }
 
 // ============================================================
@@ -4260,6 +4287,9 @@ function init() {
     cashBalance = SALARY_DATA[0];
     cashHistLog.unshift({ amount: SALARY_DATA[0], balance: SALARY_DATA[0], label: 'ゲーム開始 初期資金' });
     updateCashDisplay();
+    if (!localStorage.getItem('manebou_welcomed')) {
+      setTimeout(() => document.getElementById('welcomeOverlay').classList.add('show'), 400);
+    }
   }
   updateDisplay();
 }
@@ -4775,7 +4805,7 @@ function stepTime(dir) {
         const sal = SALARY_DATA[row.年];
         if (sal && sal > 0) {
           addCash(sal, `${row.年}年 余剰金`);
-          showNavBanner(`💰 ${row.年}年 余剰金　＋${fmt(sal)}円　お財布に追加！`, 3500);
+          showNavBanner(`💰 ${row.年}年 余剰金　＋${fmt(sal)}円　お財布に追加！`, 10000);
         }
       } else {
         if (row.イベント >= 2 && row.イベント <= 4) {
@@ -6342,7 +6372,7 @@ function showNavBanner(text, duration) {
   el.textContent = text;
   el.classList.add('running');
   if (_bannerTimer) clearTimeout(_bannerTimer);
-  _bannerTimer = setTimeout(() => el.classList.remove('running'), duration || 5000);
+  _bannerTimer = setTimeout(() => el.classList.remove('running'), duration || 10000);
 }
 
 const TAB_BANNERS = {
@@ -7014,7 +7044,28 @@ function closeEnding() {
   const el = document.getElementById('endingOverlay');
   if (el) el.classList.remove('show');
 }
+function closeWelcome() {
+  localStorage.setItem('manebou_welcomed', '1');
+  document.getElementById('welcomeOverlay').classList.remove('show');
+}
+
 </script>
+
+<!-- ════ ウェルカムオーバーレイ（初回のみ） ════ -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-card">
+    <img class="welcome-char" src="images/img5.webp" alt="おーる局長">
+    <div class="welcome-wlabel">WELCOME</div>
+    <h2 class="welcome-title">マネぼうへ<br>ようこそ！</h2>
+    <div class="welcome-points">
+      <div class="welcome-pt">🎲 1970〜2025年の日本経済史をボードゲームで体験</div>
+      <div class="welcome-pt">💴 100万円からスタートして資産を育てよう</div>
+      <div class="welcome-pt">📈 ゲームを進めるとバッジや賞状がもらえる！</div>
+    </div>
+    <button class="welcome-go" onclick="closeWelcome()">はじめる →</button>
+    <p class="welcome-sub">⚙️ ルールの詳細は「設定」タブにあります</p>
+  </div>
+</div>
 
 <!-- ═══ ENDING OVERLAY ══════════════════════════════════════ -->
 <div id="endingOverlay" class="ending-overlay">
@@ -7066,5 +7117,37 @@ function closeEnding() {
   <p style="text-align:center;font-size:11px;color:rgba(255,255,255,0.35);margin-top:14px;">タップで賞状を再表示できます</p>
 </div>
 
+<script>
+(function(){
+  var l=document.getElementById('pageLoader');
+  function hide(){
+    if(!l||l.style.display==='none')return;
+    l.style.pointerEvents='none';   // フェード中もクリック通過させる
+    l.style.opacity='0';
+    setTimeout(function(){l.style.display='none';},380);
+  }
+  // DOMContentLoaded で早めに消す（window.load は外部スクリプト待ちで遅い）
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){setTimeout(hide,60);});
+  } else {
+    setTimeout(hide,60);
+  }
+  // 安全タイムアウト：最大2秒で強制非表示
+  setTimeout(hide,2000);
+  // 内部リンク遷移でフェードイン
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href]');
+    if(!a)return;
+    var href=a.getAttribute('href')||'';
+    // 外部・アンカー・_blank はスキップ
+    if(!href||href.charAt(0)==='#'||href.startsWith('http')||href.startsWith('//')||a.target==='_blank')return;
+    if(!l)return;
+    l.style.pointerEvents='auto';
+    l.style.display='flex';
+    l.style.opacity='0';
+    requestAnimationFrame(function(){requestAnimationFrame(function(){l.style.opacity='1';});});
+  });
+})();
+</script>
 </body>
 </html>
