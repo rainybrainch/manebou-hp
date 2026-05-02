@@ -3649,14 +3649,14 @@ const INCOME_DATA = [
 // ASSET DEFINITIONS
 // ============================================================
 const ASSET_KEYS = [
-  { id:'銀行預金',   label:'銀行預金',   emoji:'🏦', color:'#e74c3c', shadow:'#c0392b', divKey:'配当銀行預金' },
-  { id:'株式',       label:'株式',       emoji:'📈', color:'#e67e22', shadow:'#d35400', divKey:'株式配当' },
-  { id:'金',         label:'金',         emoji:'✨', color:'#f1c40f', shadow:'#c9a800', divKey: null },
-  { id:'投資信託',   label:'投資信託',   emoji:'📊', color:'#8bc34a', shadow:'#558b2f', divKey: null },
-  { id:'国債',       label:'国債',       emoji:'🏛️', color:'#2980b9', shadow:'#1a6fa8', divKey:'配当国債' },
-  { id:'ドル',       label:'ドル',       emoji:'💵', color:'#29b6f6', shadow:'#0288d1', divKey: null },
-  { id:'不動産',     label:'不動産',     emoji:'🏠', color:'#9c27b0', shadow:'#6a1b9a', divKey:'配当不動産収入' },
-  { id:'？？？？？', label:'？？？？？', emoji:'❓', color:'#9e9e9e', shadow:'#616161', divKey: null },
+  { id:'銀行預金',   label:'銀行預金',   emoji:'🏦', color:'#e74c3c', shadow:'#c0392b', divKey:'配当銀行預金',    divTimes:3 },
+  { id:'株式',       label:'株式',       emoji:'📈', color:'#e67e22', shadow:'#d35400', divKey:'株式配当',        divTimes:2 },
+  { id:'金',         label:'金',         emoji:'✨', color:'#f1c40f', shadow:'#c9a800', divKey: null,             divTimes:0 },
+  { id:'投資信託',   label:'投資信託',   emoji:'📊', color:'#8bc34a', shadow:'#558b2f', divKey: null,             divTimes:0 },
+  { id:'国債',       label:'国債',       emoji:'🏛️', color:'#2980b9', shadow:'#1a6fa8', divKey:'配当国債',        divTimes:1 },
+  { id:'ドル',       label:'ドル',       emoji:'💵', color:'#29b6f6', shadow:'#0288d1', divKey: null,             divTimes:0 },
+  { id:'不動産',     label:'不動産',     emoji:'🏠', color:'#9c27b0', shadow:'#6a1b9a', divKey:'配当不動産収入',  divTimes:3 },
+  { id:'？？？？？', label:'？？？？？', emoji:'❓', color:'#9e9e9e', shadow:'#616161', divKey: null,             divTimes:0 },
 ];
 const CASH_KEY = { id: '_cash', label: '現金', emoji: '💴', color: '#26a69a' };
 
@@ -5017,13 +5017,17 @@ function doSim() {
   const price   = row[id] || 0;
   const a       = ASSET_KEYS.find(x => x.id === id);
   const divRaw3 = (a && a.divKey) ? (row[a.divKey] || 0) : 0;
+  const divTimes = (a && a.divTimes) || 0;
   const cost    = qty * price;
   const divAmt  = calcDiv(divRaw3, qty);
+  const divYear = divAmt * divTimes;
   const perUnitRate = divRaw3 > 0 ? divRaw3 : (divRaw3 < 0 ? 1000 / (-divRaw3) : 0);
-  const yPct    = (price > 0 && divRaw3 !== 0) ? ((perUnitRate * 4 / price) * 100).toFixed(2) : '—';
+  const yPct    = (price > 0 && divTimes > 0 && divRaw3 !== 0)
+    ? ((perUnitRate * divTimes / price) * 100).toFixed(2) : '—';
+  const divTimesLabel = divTimes > 0 ? `（年${divTimes}回）` : '';
   const simEl = document.getElementById('simResult');
   simEl.textContent =
-    `購入コスト  : ${fmt(cost)} 円\n配当(1ターン): ${fmt(divAmt)} 円\n配当(年間)  : ${fmt(divAmt * 4)} 円\n利回り目安  : ${yPct} %`;
+    `購入コスト  : ${fmt(cost)} 円\n配当(1回)  : ${fmt(divAmt)} 円\n配当(年間)${divTimesLabel}: ${divTimes > 0 ? fmt(divYear) : '—'} 円\n利回り目安  : ${yPct} %`;
   simEl.classList.remove('sim-result-popping');
   requestAnimationFrame(() => simEl.classList.add('sim-result-popping'));
 
