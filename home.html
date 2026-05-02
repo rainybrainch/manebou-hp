@@ -622,6 +622,8 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
 .btn-email-login:disabled{opacity:0.5;cursor:default;}
 .auth-toggle{font-size:11px;color:rgba(255,255,255,0.4);margin-top:12px;text-align:center;}
 .auth-toggle a{color:var(--sky);cursor:pointer;text-decoration:underline;}
+.auth-forgot{font-size:11px;color:rgba(255,255,255,0.3);margin-top:6px;text-align:center;}
+.auth-forgot a{color:rgba(91,200,232,0.6);cursor:pointer;text-decoration:underline;}
 
 /* ─── Nickname Modal ─── */
 .nick-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:2000;align-items:center;justify-content:center;}
@@ -844,6 +846,7 @@ body{font-family:'Zen Maru Gothic',sans-serif;background:#0a0a1e;color:var(--whi
       <input class="auth-input" type="password" id="authPassword" placeholder="パスワード（6文字以上）" autocomplete="current-password">
       <button class="btn-email-login" id="authSubmitBtn" onclick="submitEmailAuth()">ログイン</button>
       <p class="auth-toggle" id="authToggleText">アカウントがない方は<a onclick="toggleEmailAuthMode()">新規登録</a></p>
+      <p class="auth-forgot" id="authForgotWrap"><a onclick="resetPassword()">パスワードをお忘れですか？</a></p>
     </div>
 
     <p class="hero-note" style="margin-top:16px">ログインなしでもゲームは遊べます</p>
@@ -1086,6 +1089,23 @@ function toggleEmailAuthMode() {
   document.getElementById('authToggleText').innerHTML = isReg
     ? 'すでにアカウントをお持ちの方は<a onclick="toggleEmailAuthMode()">ログイン</a>'
     : 'アカウントがない方は<a onclick="toggleEmailAuthMode()">新規登録</a>';
+  document.getElementById('authForgotWrap').style.display = isReg ? 'none' : '';
+}
+
+async function resetPassword() {
+  if (!_auth) { showToast('Firebase未接続です'); return; }
+  const email = document.getElementById('authEmail').value.trim();
+  if (!email) { showToast('メールアドレスを入力してください'); return; }
+  try {
+    await _auth.sendPasswordResetEmail(email);
+    showToast('📧 パスワード再設定メールを送信しました', 4000);
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found': 'そのメールアドレスのアカウントが見つかりません',
+      'auth/invalid-email':  'メールアドレスの形式が正しくありません',
+    };
+    showToast(msgs[e.code] || e.message);
+  }
 }
 
 async function submitEmailAuth() {
