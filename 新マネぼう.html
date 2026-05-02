@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>繝槭ロ縺ｼ縺・譁ｰ讒区Φ - 邨梧ｸ亥ｭｦ鄙偵Γ繧ｿ繧ｲ繝ｼ繝</title>
+<title>マネぼう 新構想 - 経済学習メタゲーム</title>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 /* ===== RESET & BASE ===== */
@@ -23,58 +23,41 @@ body{
   overflow-x:hidden;line-height:1.7;
 }
 ::selection{background:var(--gold);color:#000}
-
-/* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:var(--surface)}
 ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
-
-/* ===== SCROLL PROGRESS ===== */
-#scrollBar{
-  position:fixed;top:0;left:0;height:3px;
-  background:var(--grad2);z-index:9999;width:0%;
-  transition:width .1s;
-}
-
-/* ===== STARS BG ===== */
+#scrollBar{position:fixed;top:0;left:0;height:3px;background:var(--grad2);z-index:9999;width:0%;transition:width .1s}
 #stars-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
 /* ===== NAV ===== */
 .nav{
   position:sticky;top:0;z-index:1000;
-  background:rgba(5,5,8,.85);
-  backdrop-filter:blur(20px);
+  background:rgba(5,5,8,.85);backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   padding:0 24px;height:60px;
-  display:flex;align-items:center;justify-content:space-between;
-  transition:all .3s;
+  display:flex;align-items:center;justify-content:space-between;transition:all .3s;
 }
 .nav.scrolled{background:rgba(5,5,8,.97);box-shadow:0 4px 30px rgba(0,0,0,.6)}
 .nav-logo{
-  display:flex;align-items:center;gap:10px;
-  font-size:20px;font-weight:900;
+  display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;
   background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   filter:drop-shadow(0 0 8px rgba(245,200,66,.4));
 }
 .nav-logo img{width:32px;height:32px;border-radius:8px}
-.nav-links{display:flex;gap:24px;list-style:none}
-.nav-links a{
-  color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;
-  transition:all .2s;padding:4px 8px;border-radius:6px;
-}
+.nav-links{display:flex;gap:20px;list-style:none;flex-wrap:wrap}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:500;transition:all .2s;padding:4px 8px;border-radius:6px}
 .nav-links a:hover{color:var(--gold);background:rgba(245,200,66,.1)}
 .nav-cta{
-  background:var(--grad2);color:#000;
-  padding:8px 20px;border-radius:20px;font-weight:700;font-size:13px;
-  text-decoration:none;border:none;cursor:pointer;font-family:inherit;
-  transition:all .2s;box-shadow:0 0 20px rgba(245,200,66,.3);
+  background:var(--grad2);color:#000;padding:8px 20px;border-radius:20px;
+  font-weight:700;font-size:13px;text-decoration:none;border:none;cursor:pointer;
+  font-family:inherit;transition:all .2s;box-shadow:0 0 20px rgba(245,200,66,.3);
 }
 .nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,200,66,.5)}
 
 /* ===== HERO ===== */
 .hero{
-  position:relative;z-index:1;
-  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:1;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
   text-align:center;padding:80px 20px;overflow:hidden;
 }
 .hero-bg-glow{
@@ -86,9 +69,7 @@ body{
 }
 .hero-grid{
   position:absolute;inset:0;pointer-events:none;
-  background-image:
-    linear-gradient(rgba(124,58,237,.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(124,58,237,.06) 1px, transparent 1px);
+  background-image:linear-gradient(rgba(124,58,237,.06) 1px, transparent 1px),linear-gradient(90deg, rgba(124,58,237,.06) 1px, transparent 1px);
   background-size:60px 60px;
   mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
 }
@@ -96,51 +77,28 @@ body{
 .hero-tag{
   display:inline-flex;align-items:center;gap:6px;
   background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);
-  color:#c4b5fd;padding:6px 16px;border-radius:20px;font-size:13px;
-  margin-bottom:24px;font-weight:500;
+  color:#c4b5fd;padding:6px 16px;border-radius:20px;font-size:13px;margin-bottom:24px;font-weight:500;
 }
-.hero-tag::before{content:'笨ｦ';color:var(--purple);animation:spin 4s linear infinite}
+.hero-tag::before{content:'✦';color:var(--purple);animation:spin 4s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hero-chara{
-  width:140px;height:140px;margin:0 auto 20px;
-  filter:drop-shadow(0 0 30px rgba(245,200,66,.5));
-  animation:heroFloat 3s ease-in-out infinite;
-}
+.hero-chara{width:140px;height:140px;margin:0 auto 20px;filter:drop-shadow(0 0 30px rgba(245,200,66,.5));animation:heroFloat 3s ease-in-out infinite}
 @keyframes heroFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-16px) scale(1.04)}}
 .hero h1{
-  font-size:clamp(52px,10vw,96px);font-weight:900;line-height:1.1;
-  margin-bottom:8px;
+  font-size:clamp(52px,10vw,96px);font-weight:900;line-height:1.1;margin-bottom:8px;
   background:linear-gradient(135deg,#fff 0%,var(--gold) 40%,#ff9f00 70%,var(--purple) 100%);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 40px rgba(245,200,66,.3));
-  animation:titleShimmer 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 40px rgba(245,200,66,.3));animation:titleShimmer 4s ease-in-out infinite;
 }
-@keyframes titleShimmer{
-  0%,100%{filter:drop-shadow(0 0 30px rgba(245,200,66,.3))}
-  50%{filter:drop-shadow(0 0 60px rgba(245,200,66,.6))}
-}
-.hero-sub{
-  font-size:clamp(18px,3vw,26px);font-weight:700;
-  color:var(--cyan);margin-bottom:20px;letter-spacing:.05em;
-}
-.hero-desc{
-  font-size:clamp(14px,2vw,18px);color:var(--muted);
-  max-width:680px;margin:0 auto 40px;line-height:1.9;
-}
+@keyframes titleShimmer{0%,100%{filter:drop-shadow(0 0 30px rgba(245,200,66,.3))}50%{filter:drop-shadow(0 0 60px rgba(245,200,66,.6))}}
+.hero-sub{font-size:clamp(18px,3vw,26px);font-weight:700;color:var(--cyan);margin-bottom:20px;letter-spacing:.05em}
+.hero-desc{font-size:clamp(14px,2vw,18px);color:var(--muted);max-width:680px;margin:0 auto 40px;line-height:1.9}
 .hero-desc strong{color:var(--text)}
-.hero-badges{
-  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:48px;
-}
-.hero-badge{
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
-  padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;
-  transition:all .2s;
-}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:48px}
+.hero-badge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;transition:all .2s}
 .hero-badge:hover{background:rgba(245,200,66,.1);border-color:var(--gold);color:var(--gold)}
 .hero-cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 .btn-primary{
-  background:var(--grad2);color:#000;
-  padding:16px 40px;border-radius:50px;font-weight:900;font-size:16px;
+  background:var(--grad2);color:#000;padding:16px 40px;border-radius:50px;font-weight:900;font-size:16px;
   border:none;cursor:pointer;font-family:inherit;text-decoration:none;
   box-shadow:0 0 40px rgba(245,200,66,.4),0 8px 32px rgba(0,0,0,.4);
   transition:all .3s;display:inline-flex;align-items:center;gap:8px;
@@ -149,8 +107,7 @@ body{
 @keyframes pulseCTA{0%,100%{box-shadow:0 0 30px rgba(245,200,66,.4),0 8px 32px rgba(0,0,0,.4)}50%{box-shadow:0 0 60px rgba(245,200,66,.7),0 12px 40px rgba(0,0,0,.5)}}
 .btn-primary:hover{transform:translateY(-3px) scale(1.04)}
 .btn-secondary{
-  background:transparent;color:var(--text);
-  padding:16px 40px;border-radius:50px;font-weight:700;font-size:16px;
+  background:transparent;color:var(--text);padding:16px 40px;border-radius:50px;font-weight:700;font-size:16px;
   border:1px solid var(--border);cursor:pointer;font-family:inherit;text-decoration:none;
   transition:all .3s;display:inline-flex;align-items:center;gap:8px;
 }
@@ -161,31 +118,19 @@ body{
   animation:fadeInUp 1s 2s both;
 }
 .scroll-dot{width:4px;height:24px;border-radius:2px;background:var(--border);position:relative;overflow:hidden}
-.scroll-dot::after{
-  content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;
-  background:var(--gold);border-radius:2px;animation:scrollAnim 1.8s ease-in-out infinite;
-}
+.scroll-dot::after{content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--gold);border-radius:2px;animation:scrollAnim 1.8s ease-in-out infinite}
 @keyframes scrollAnim{0%{top:-100%}50%,100%{top:100%}}
 
 /* ===== SECTION BASE ===== */
 .section{position:relative;z-index:1;padding:100px 20px}
 .section-inner{max-width:1200px;margin:0 auto}
-.section-num{
-  font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--purple);
-  text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;
-}
+.section-num{font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--purple);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .section-num::before{content:'';flex:none;width:24px;height:2px;background:var(--purple)}
-.section-title{
-  font-size:clamp(28px,5vw,48px);font-weight:900;margin-bottom:16px;
-  background:linear-gradient(135deg,var(--text),rgba(232,232,244,.6));
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
-.section-title.gold{
-  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
+.section-title{font-size:clamp(28px,5vw,48px);font-weight:900;margin-bottom:16px;background:linear-gradient(135deg,var(--text),rgba(232,232,244,.6));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.section-title.gold{background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .section-sub{font-size:16px;color:var(--muted);max-width:640px;margin-bottom:60px;line-height:1.8}
 
-/* ===== REVEAL ANIMATIONS ===== */
+/* ===== REVEAL ===== */
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease, transform .7s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s ease, transform .7s ease}
@@ -197,24 +142,11 @@ body{
 
 /* ===== GLASS CARDS ===== */
 .glass-card{
-  background:rgba(17,17,42,.7);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:32px 28px;
-  backdrop-filter:blur(20px);
-  transition:all .3s;
-  position:relative;overflow:hidden;
+  background:rgba(17,17,42,.7);border:1px solid var(--border);border-radius:20px;
+  padding:32px 28px;backdrop-filter:blur(20px);transition:all .3s;position:relative;overflow:hidden;
 }
-.glass-card::before{
-  content:'';position:absolute;inset:0;border-radius:20px;
-  background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);
-  pointer-events:none;
-}
-.glass-card:hover{
-  border-color:rgba(245,200,66,.3);
-  transform:translateY(-6px);
-  box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 0 1px rgba(245,200,66,.1);
-}
+.glass-card::before{content:'';position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);pointer-events:none}
+.glass-card:hover{border-color:rgba(245,200,66,.3);transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 0 1px rgba(245,200,66,.1)}
 .glass-card .card-icon{font-size:40px;margin-bottom:16px;display:block;filter:drop-shadow(0 0 12px rgba(245,200,66,.4));transition:transform .3s}
 .glass-card:hover .card-icon{transform:scale(1.2) rotate(-5deg)}
 .glass-card h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:10px}
@@ -225,529 +157,346 @@ body{
 .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
 .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
 
-/* ===== CONCEPT SECTION ===== */
-.concept-bg{
-  position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,.08) 0%, transparent 70%);
-}
-.concept-chara{
-  position:absolute;right:5%;top:10%;
-  width:180px;opacity:.7;
-  filter:drop-shadow(0 0 40px rgba(245,200,66,.4));
-  animation:heroFloat 4s ease-in-out infinite;
-}
+/* ===== CONCEPT ===== */
+.concept-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,.08) 0%, transparent 70%)}
+.concept-chara{position:absolute;right:5%;top:10%;width:180px;opacity:.7;filter:drop-shadow(0 0 40px rgba(245,200,66,.4));animation:heroFloat 4s ease-in-out infinite}
 
-/* ===== FLOW SECTION ===== */
-.flow-wrap{
-  display:flex;align-items:stretch;gap:0;
-  background:var(--card);border:1px solid var(--border);border-radius:24px;
-  overflow:hidden;margin-bottom:60px;
-}
-.flow-step{
-  flex:1;padding:32px 24px;text-align:center;
-  border-right:1px solid var(--border);
-  position:relative;transition:all .3s;
-}
+/* ===== FLOW ===== */
+.flow-wrap{display:flex;align-items:stretch;gap:0;background:var(--card);border:1px solid var(--border);border-radius:24px;overflow:hidden;margin-bottom:60px}
+.flow-step{flex:1;padding:32px 24px;text-align:center;border-right:1px solid var(--border);position:relative;transition:all .3s}
 .flow-step:last-child{border-right:none}
 .flow-step:hover{background:rgba(245,200,66,.04)}
-.flow-step-icon{
-  font-size:36px;margin-bottom:12px;display:block;
-  filter:drop-shadow(0 0 10px rgba(245,200,66,.3));
-}
-.flow-step-time{
-  font-size:11px;font-weight:700;color:var(--gold);
-  text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;
-}
+.flow-step-icon{font-size:36px;margin-bottom:12px;display:block;filter:drop-shadow(0 0 10px rgba(245,200,66,.3))}
+.flow-step-time{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
 .flow-step h4{font-size:16px;font-weight:700;margin-bottom:6px}
 .flow-step p{font-size:12px;color:var(--muted)}
-.flow-step-xp{
-  display:inline-block;margin-top:10px;
-  background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);
-  color:var(--gold);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;
-}
-.flow-arrow-wrap{
-  display:flex;align-items:center;justify-content:center;
-  padding:0 4px;color:var(--gold);font-size:20px;flex-shrink:0;
-}
+.flow-step-xp{display:inline-block;margin-top:10px;background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);color:var(--gold);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700}
+.flow-arrow-wrap{display:flex;align-items:center;justify-content:center;padding:0 4px;color:var(--gold);font-size:20px;flex-shrink:0}
 
 /* ===== CHAPTER CARDS ===== */
-.chapter-card{
-  border-radius:20px;overflow:hidden;
-  border:1px solid var(--border);
-  transition:all .3s;position:relative;
-}
+.chapter-card{border-radius:20px;overflow:hidden;border:1px solid var(--border);transition:all .3s;position:relative}
 .chapter-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.5)}
 .chapter-header{padding:24px;position:relative}
-.chapter-header::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom, transparent 50%, rgba(5,5,8,.8));
-  pointer-events:none;
-}
-.chapter-num{
-  font-size:11px;font-weight:700;letter-spacing:.1em;opacity:.8;margin-bottom:6px;
-}
+.chapter-header::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom, transparent 50%, rgba(5,5,8,.8));pointer-events:none}
+.chapter-num{font-size:11px;font-weight:700;letter-spacing:.1em;opacity:.8;margin-bottom:6px}
 .chapter-header h3{font-size:22px;font-weight:900}
 .chapter-body{background:var(--card);padding:24px}
-.chapter-rule{
-  background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;
-  font-size:13px;color:var(--muted);margin-bottom:14px;font-weight:500;
-}
+.chapter-rule{background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--muted);margin-bottom:14px;font-weight:500}
 .chapter-list{list-style:none}
-.chapter-list li{
-  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);
-  font-size:13px;color:var(--muted);
-  display:flex;align-items:center;gap:8px;
-}
-.chapter-list li::before{content:'竊・;color:var(--gold);font-weight:700;flex-shrink:0}
+.chapter-list li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.chapter-list li::before{content:'→';color:var(--gold);font-weight:700;flex-shrink:0}
 .chapter-list li:last-child{border:none}
-.chapter-score{
-  margin-top:16px;padding:12px;border-radius:10px;
-  text-align:center;font-weight:900;font-size:20px;
-}
+.chapter-score{margin-top:16px;padding:12px;border-radius:10px;text-align:center;font-weight:900;font-size:20px}
 
-/* ===== CHARACTER CARDS ===== */
-.chara-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:20px;overflow:hidden;
-  transition:all .3s;position:relative;
-}
-.chara-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  transition:opacity .3s;
-}
+/* ===== CHARA CARDS ===== */
+.chara-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .3s;position:relative}
+.chara-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transition:opacity .3s}
 .chara-card.common::before{background:var(--muted)}
 .chara-card.rare::before{background:linear-gradient(90deg,#5bc8e8,#7c3aed)}
 .chara-card.epic::before{background:linear-gradient(90deg,#c026d3,#7c3aed)}
 .chara-card.legend::before{background:var(--grad2)}
-.chara-card:hover{
-  transform:translateY(-8px);
-  box-shadow:0 24px 60px rgba(0,0,0,.5);
-  border-color:rgba(245,200,66,.3);
-}
-.chara-portrait{
-  height:140px;display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-  background:linear-gradient(135deg, rgba(124,58,237,.1), rgba(5,5,8,.8));
-}
-.chara-portrait img{
-  height:120px;object-fit:contain;
-  filter:drop-shadow(0 0 20px rgba(245,200,66,.5));
-  transition:transform .3s;
-}
+.chara-card:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.5);border-color:rgba(245,200,66,.3)}
+.chara-portrait{height:140px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg, rgba(124,58,237,.1), rgba(5,5,8,.8))}
+.chara-portrait img{height:120px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(245,200,66,.5));transition:transform .3s}
 .chara-card:hover .chara-portrait img{transform:scale(1.1)}
 .chara-portrait-icon{font-size:70px;filter:drop-shadow(0 0 16px rgba(245,200,66,.5))}
-.chara-rarity{
-  position:absolute;top:8px;right:8px;
-  font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;
-  text-transform:uppercase;letter-spacing:.06em;
-}
+.chara-rarity{position:absolute;top:8px;right:8px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;text-transform:uppercase;letter-spacing:.06em}
 .chara-rarity.common{background:rgba(136,136,170,.2);color:var(--muted)}
 .chara-rarity.rare{background:rgba(91,200,232,.2);color:var(--cyan)}
 .chara-rarity.epic{background:rgba(192,38,211,.2);color:#c026d3}
 .chara-rarity.legend{background:rgba(245,200,66,.2);color:var(--gold)}
 .chara-body{padding:18px 20px}
 .chara-name{font-size:16px;font-weight:900;margin-bottom:6px}
-.chara-effect{
-  font-size:12px;color:var(--green);
-  background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);
-  padding:4px 10px;border-radius:6px;margin-bottom:10px;display:inline-block;
-}
+.chara-effect{font-size:12px;color:var(--green);background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);padding:4px 10px;border-radius:6px;margin-bottom:10px;display:inline-block}
 .chara-uses{font-size:12px;color:var(--muted);margin-bottom:12px}
-.chara-xp-bar{
-  background:rgba(255,255,255,.08);border-radius:4px;height:6px;overflow:hidden;
-}
+.chara-xp-bar{background:rgba(255,255,255,.08);border-radius:4px;height:6px;overflow:hidden}
 .chara-xp-fill{height:100%;border-radius:4px;background:var(--grad2);transition:width 1s ease}
 .chara-xp-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px}
-.chara-target{
-  font-size:11px;color:var(--muted);
-  background:rgba(255,255,255,.04);border-radius:6px;padding:6px 10px;
-  margin-top:10px;
-}
+.chara-target{font-size:11px;color:var(--muted);background:rgba(255,255,255,.04);border-radius:6px;padding:6px 10px;margin-top:10px}
 
 /* ===== STATS ===== */
-.stat-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:20px;margin-bottom:60px;
-}
-.stat-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:16px;padding:28px 24px;text-align:center;
-  transition:all .3s;position:relative;overflow:hidden;
-}
-.stat-card::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
-  background:var(--grad2);transform:scaleX(0);transition:transform .3s;
-}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px;margin-bottom:60px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;text-align:center;transition:all .3s;position:relative;overflow:hidden}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--grad2);transform:scaleX(0);transition:transform .3s}
 .stat-card:hover::after{transform:scaleX(1)}
 .stat-card:hover{border-color:rgba(245,200,66,.2)}
-.stat-num{
-  font-size:40px;font-weight:900;
-  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  margin-bottom:4px;
-}
+.stat-num{font-size:40px;font-weight:900;background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
 .stat-unit{font-size:18px;font-weight:700;color:var(--gold)}
 .stat-label{font-size:13px;color:var(--muted);margin-bottom:6px}
 .stat-note{font-size:11px;color:rgba(136,136,170,.7)}
 
 /* ===== LEVEL CARDS ===== */
-.level-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:20px;padding:28px;transition:all .3s;
-  position:relative;overflow:hidden;
-}
+.level-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .3s;position:relative;overflow:hidden}
 .level-card:hover{border-color:rgba(124,58,237,.4);transform:translateY(-4px)}
-.level-badge{
-  width:48px;height:48px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;font-weight:900;margin-bottom:16px;
-  background:linear-gradient(135deg,var(--purple),var(--cyan));
-  box-shadow:0 4px 20px rgba(124,58,237,.4);
-}
+.level-badge{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;margin-bottom:16px;background:linear-gradient(135deg,var(--purple),var(--cyan));box-shadow:0 4px 20px rgba(124,58,237,.4)}
 .level-card h3{font-size:16px;font-weight:900;margin-bottom:8px}
 .level-card .need{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px}
-.level-card .value{
-  font-size:13px;font-weight:700;
-  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
-.level-card .arpu{
-  margin-top:12px;font-size:12px;color:var(--muted);
-  background:rgba(255,255,255,.04);border-radius:8px;padding:8px 12px;
-}
+.level-card .value{font-size:13px;font-weight:700;background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.level-card .arpu{margin-top:12px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.04);border-radius:8px;padding:8px 12px}
 
 /* ===== MONETIZE ===== */
-.revenue-box{
-  background:var(--grad3);border-radius:24px;padding:48px;text-align:center;
-  margin:40px 0;position:relative;overflow:hidden;
-}
-.revenue-box::before{
-  content:'腸';position:absolute;font-size:200px;opacity:.05;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-}
+.revenue-box{background:var(--grad3);border-radius:24px;padding:48px;text-align:center;margin:40px 0;position:relative;overflow:hidden}
+.revenue-box::before{content:'💰';position:absolute;font-size:200px;opacity:.05;top:50%;left:50%;transform:translate(-50%,-50%)}
 .revenue-box h3{font-size:14px;font-weight:700;letter-spacing:.1em;margin-bottom:16px;opacity:.8}
-.revenue-num{
-  font-size:clamp(40px,8vw,72px);font-weight:900;
-  color:#fff;text-shadow:0 0 40px rgba(255,255,255,.5);
-  margin-bottom:8px;
-}
+.revenue-num{font-size:clamp(40px,8vw,72px);font-weight:900;color:#fff;text-shadow:0 0 40px rgba(255,255,255,.5);margin-bottom:8px}
 .revenue-sub{font-size:18px;opacity:.85}
-.monetize-card{
-  background:var(--card);border:1px solid var(--border);border-radius:16px;
-  padding:28px;transition:all .3s;
-}
+.monetize-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:all .3s}
 .monetize-card:hover{border-color:rgba(245,200,66,.2);transform:translateY(-4px)}
 .monetize-card .m-icon{font-size:36px;margin-bottom:12px;display:block}
 .monetize-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
 .monetize-card p{font-size:13px;color:var(--muted);line-height:1.7}
-.price-tag{
-  display:inline-block;margin-top:12px;
-  background:var(--grad2);color:#000;
-  padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;
-}
+.price-tag{display:inline-block;margin-top:12px;background:var(--grad2);color:#000;padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700}
 
 /* ===== TIMELINE ===== */
 .timeline{position:relative;padding-left:40px}
-.timeline::before{
-  content:'';position:absolute;left:14px;top:0;bottom:0;
-  width:2px;background:linear-gradient(to bottom,var(--purple),var(--cyan),var(--gold));
-  border-radius:2px;
-}
-.tl-item{
-  position:relative;margin-bottom:48px;
-  opacity:0;transform:translateX(-20px);
-  transition:all .6s ease;
-}
+.timeline::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--purple),var(--cyan),var(--gold));border-radius:2px}
+.tl-item{position:relative;margin-bottom:48px;opacity:0;transform:translateX(-20px);transition:all .6s ease}
 .tl-item.visible{opacity:1;transform:translateX(0)}
-.tl-dot{
-  position:absolute;left:-34px;top:6px;
-  width:20px;height:20px;border-radius:50%;
-  background:var(--surface);border:3px solid var(--purple);
-  box-shadow:0 0 0 4px rgba(124,58,237,.2),0 0 20px rgba(124,58,237,.4);
-  transition:all .3s;
-}
-.tl-item:hover .tl-dot{
-  border-color:var(--gold);
-  box-shadow:0 0 0 4px rgba(245,200,66,.2),0 0 20px rgba(245,200,66,.5);
-}
-.tl-phase{
-  font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--purple);
-  text-transform:uppercase;margin-bottom:6px;
-}
+.tl-dot{position:absolute;left:-34px;top:6px;width:20px;height:20px;border-radius:50%;background:var(--surface);border:3px solid var(--purple);box-shadow:0 0 0 4px rgba(124,58,237,.2),0 0 20px rgba(124,58,237,.4);transition:all .3s}
+.tl-item:hover .tl-dot{border-color:var(--gold);box-shadow:0 0 0 4px rgba(245,200,66,.2),0 0 20px rgba(245,200,66,.5)}
+.tl-phase{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--purple);text-transform:uppercase;margin-bottom:6px}
 .tl-item h4{font-size:20px;font-weight:900;margin-bottom:8px}
 .tl-item p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:12px}
-.tl-target{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);
-  color:var(--gold);padding:6px 14px;border-radius:10px;font-size:13px;font-weight:700;
-}
+.tl-target{display:inline-flex;align-items:center;gap:6px;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);color:var(--gold);padding:6px 14px;border-radius:10px;font-size:13px;font-weight:700}
 
 /* ===== COUNTRY CARDS ===== */
-.country-card{
-  background:var(--card);border:1px solid var(--border);border-radius:20px;
-  overflow:hidden;transition:all .3s;
-}
+.country-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .3s}
 .country-card:hover{border-color:rgba(91,200,232,.3);transform:translateY(-6px)}
-.country-header{
-  padding:20px 24px;background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(91,200,232,.1));
-  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;
-}
+.country-header{padding:20px 24px;background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(91,200,232,.1));border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
 .country-flag{font-size:32px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
 .country-name{font-size:18px;font-weight:700}
 .country-period{font-size:12px;color:var(--muted);margin-top:2px}
 .country-body{padding:20px 24px}
 .country-body h5{font-size:12px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
 .country-events{list-style:none}
-.country-events li{
-  padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);
-  font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;
-}
-.country-events li::before{content:'笆ｸ';color:var(--gold);font-size:11px;flex-shrink:0}
+.country-events li{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.country-events li::before{content:'▸';color:var(--gold);font-size:11px;flex-shrink:0}
 .country-events li:last-child{border:none}
-.country-badge{
-  display:inline-block;margin-top:12px;
-  background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.2);
-  color:var(--cyan);padding:4px 12px;border-radius:10px;font-size:11px;font-weight:700;
-}
+.country-badge{display:inline-block;margin-top:12px;background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.2);color:var(--cyan);padding:4px 12px;border-radius:10px;font-size:11px;font-weight:700}
 
-/* ===== VISION SECTION ===== */
-.vision-section{
-  position:relative;z-index:1;padding:120px 20px;overflow:hidden;
-  background:linear-gradient(135deg,rgba(124,58,237,.15) 0%,rgba(5,5,8,0) 50%,rgba(91,200,232,.1) 100%);
-}
-.vision-star{
-  position:absolute;pointer-events:none;
-  background:var(--gold);border-radius:50%;
-  animation:twinkling var(--dur) var(--delay) ease-in-out infinite alternate;
-}
+/* ===== VISION ===== */
+.vision-section{position:relative;z-index:1;padding:120px 20px;overflow:hidden;background:linear-gradient(135deg,rgba(124,58,237,.15) 0%,rgba(5,5,8,0) 50%,rgba(91,200,232,.1) 100%)}
+.vision-star{position:absolute;pointer-events:none;background:var(--gold);border-radius:50%;animation:twinkling var(--dur) var(--delay) ease-in-out infinite alternate}
 @keyframes twinkling{0%{opacity:.1;transform:scale(.8)}100%{opacity:.9;transform:scale(1.2)}}
-.vision-quote{
-  background:rgba(17,17,42,.8);border:1px solid var(--border);
-  border-left:4px solid var(--gold);border-radius:0 20px 20px 0;
-  padding:32px 36px;margin:40px 0;position:relative;
-}
-.vision-quote::before{
-  content:'"';position:absolute;top:-20px;left:24px;
-  font-size:80px;color:var(--gold);opacity:.3;line-height:1;font-family:serif;
-}
+.vision-quote{background:rgba(17,17,42,.8);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:0 20px 20px 0;padding:32px 36px;margin:40px 0;position:relative}
+.vision-quote::before{content:'"';position:absolute;top:-20px;left:24px;font-size:80px;color:var(--gold);opacity:.3;line-height:1;font-family:serif}
 .vision-quote p{font-size:20px;line-height:1.9;font-weight:500;color:var(--text)}
 .vision-quote strong{color:var(--gold)}
-.vision-chara{
-  position:absolute;right:60px;top:50%;transform:translateY(-50%);
-  width:200px;opacity:.8;
-  filter:drop-shadow(0 0 40px rgba(245,200,66,.4));
-  animation:heroFloat 5s ease-in-out infinite;
-}
-.final-box{
-  background:var(--grad3);border-radius:24px;padding:64px 40px;
-  text-align:center;position:relative;overflow:hidden;margin-top:60px;
-}
-.final-box::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 80% at 50% 100%, rgba(245,200,66,.15) 0%, transparent 70%);
-}
+.vision-chara{position:absolute;right:60px;top:50%;transform:translateY(-50%);width:200px;opacity:.8;filter:drop-shadow(0 0 40px rgba(245,200,66,.4));animation:heroFloat 5s ease-in-out infinite}
+.final-box{background:var(--grad3);border-radius:24px;padding:64px 40px;text-align:center;position:relative;overflow:hidden;margin-top:60px}
+.final-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 100%, rgba(245,200,66,.15) 0%, transparent 70%)}
 .final-box h3{font-size:clamp(22px,4vw,36px);font-weight:900;color:#fff;margin-bottom:20px;position:relative}
 .final-box p{font-size:18px;line-height:2;opacity:.9;position:relative}
 .final-box strong{color:var(--gold)}
 
+/* ===== VS-BOX (懸念点セクション) ===== */
+.vs-box{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;
+}
+.vs-left,.vs-right{padding:20px;border-radius:16px;font-size:14px;line-height:1.8}
+.vs-left{background:rgba(248,81,73,.08);border:1px solid rgba(248,81,73,.25)}
+.vs-right{background:rgba(63,185,80,.08);border:1px solid rgba(63,185,80,.25)}
+.vs-left h4{color:var(--red);margin-bottom:8px;font-size:14px;font-weight:700}
+.vs-right h4{color:var(--green);margin-bottom:8px;font-size:14px;font-weight:700}
+.vs-left p,.vs-right p{color:var(--muted);font-size:13px}
+.concern-group{margin-bottom:48px}
+.concern-group h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;padding-left:12px;border-left:3px solid var(--gold)}
+
+/* ===== DEV ROADMAP BOXES ===== */
+.dev-roadmap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:24px 0}
+.dev-box{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;
+  border-left:3px solid var(--purple);transition:all .3s;
+}
+.dev-box:hover{border-left-color:var(--gold);transform:translateY(-3px)}
+.dev-box h5{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:10px}
+.dev-box ul{list-style:none}
+.dev-box li{padding:5px 0;font-size:13px;color:var(--muted);display:flex;align-items:flex-start;gap:8px}
+.dev-box li::before{content:'✓';color:var(--purple);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* ===== COUNTER BOX ===== */
+.counter-box{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;
+  border-left:3px solid var(--cyan);margin-bottom:16px;transition:all .3s;
+}
+.counter-box:hover{border-left-color:var(--gold)}
+.counter-box h5{font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.counter-box ul{list-style:none}
+.counter-box li{padding:5px 0;font-size:13px;color:var(--muted);display:flex;gap:8px}
+.counter-box li::before{content:'▸';color:var(--gold);flex-shrink:0}
+.counter-box li strong{color:var(--text)}
+
+/* ===== AI TABLE ===== */
+.ai-table-wrap{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin:24px 0}
+.ai-table{width:100%;border-collapse:collapse;font-size:14px}
+.ai-table th{background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(91,200,232,.2));color:var(--text);padding:14px 16px;text-align:left;font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.ai-table td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--muted)}
+.ai-table tr:last-child td{border:none;background:rgba(245,200,66,.05);color:var(--gold);font-weight:700}
+.ai-table tr:hover td{background:rgba(255,255,255,.02);color:var(--text)}
+.ai-table td:first-child{color:var(--text);font-weight:600}
+
+/* ===== CHECKLIST ===== */
+.checklist-phase{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px}
+.checklist-phase h4{font-size:15px;font-weight:700;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.checklist-phase ul{list-style:none}
+.checklist-phase li{padding:8px 0;font-size:14px;color:var(--muted);display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.checklist-phase li:last-child{border:none}
+.checklist-phase li::before{content:'☐';color:var(--purple);font-size:16px;flex-shrink:0;margin-top:-1px}
+
+/* ===== STRENGTH CARDS ===== */
+.strength-card{background:var(--card);border:1px solid rgba(63,185,80,.3);border-radius:20px;padding:28px;transition:all .3s}
+.strength-card:hover{border-color:var(--green);transform:translateY(-4px)}
+.strength-card h4{font-size:16px;font-weight:700;color:var(--green);margin-bottom:12px}
+.strength-card p{font-size:13px;color:var(--muted);line-height:1.8}
+
 /* ===== FEATURE LIST ===== */
 .feat-list{list-style:none}
-.feat-list li{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);
-  font-size:14px;color:var(--muted);line-height:1.7;
-  transition:color .2s;
-}
+.feat-list li{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px;color:var(--muted);line-height:1.7;transition:color .2s}
 .feat-list li:hover{color:var(--text)}
-.feat-list li::before{
-  content:'笨・;flex-shrink:0;width:22px;height:22px;
-  background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.3);
-  color:var(--green);border-radius:6px;display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:700;margin-top:2px;
-}
+.feat-list li::before{content:'✓';flex-shrink:0;width:22px;height:22px;background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.3);color:var(--green);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:2px}
 .feat-list li strong{color:var(--text)}
 
+/* ===== MISC ===== */
+.glow-divider{height:1px;background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),transparent);margin:0;border:none;opacity:.4}
+.hl-gold{background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+.hl-cyan{color:var(--cyan);font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);color:var(--gold);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+.highlight-box{background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.3);border-left:4px solid var(--purple);padding:20px 24px;border-radius:0 16px 16px 0;margin:20px 0;font-size:15px;color:var(--muted);line-height:1.8}
+.highlight-box strong{color:var(--text)}
+
+/* ===== FLOATING CHARA ===== */
+.floating-chara{position:absolute;pointer-events:none;filter:drop-shadow(0 0 24px rgba(245,200,66,.35));opacity:.65}
+
+/* ===== COIN ===== */
+.coin{position:fixed;pointer-events:none;z-index:0;font-size:20px;opacity:0;animation:coinFall var(--dur) var(--delay) linear infinite}
+@keyframes coinFall{0%{transform:translateY(-60px) rotate(0);opacity:.7}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ===== BACK TO TOP ===== */
+#backTop{position:fixed;bottom:28px;right:28px;z-index:500;width:46px;height:46px;border-radius:50%;background:var(--grad2);color:#000;font-size:18px;border:none;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(245,200,66,.4);opacity:0;transform:scale(0);transition:all .3s}
+#backTop.show{opacity:1;transform:scale(1)}
+#backTop:hover{transform:scale(1.1)}
+
 /* ===== FOOTER ===== */
-.footer{
-  position:relative;z-index:1;
-  background:var(--surface);border-top:1px solid var(--border);
-  padding:60px 20px 40px;text-align:center;
-}
-.footer-logo{
-  font-size:28px;font-weight:900;margin-bottom:12px;
-  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
+.footer{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);padding:60px 20px 40px;text-align:center}
+.footer-logo{font-size:28px;font-weight:900;margin-bottom:12px;background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .footer-tagline{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.7}
 .footer-sep{width:60px;height:2px;background:var(--border);margin:32px auto}
 .footer-copy{font-size:12px;color:rgba(136,136,170,.5)}
 
-/* ===== FLOATING CHARA ===== */
-.floating-chara{
-  position:absolute;pointer-events:none;
-  filter:drop-shadow(0 0 24px rgba(245,200,66,.35));
-  opacity:.65;
-}
-
-/* ===== GLOW DIVIDER ===== */
-.glow-divider{
-  height:1px;background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),transparent);
-  margin:0;border:none;opacity:.4;
-}
-
-/* ===== HIGHLIGHT TEXT ===== */
-.hl-gold{
-  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  font-weight:700;
-}
-.hl-cyan{color:var(--cyan);font-weight:700}
-.hl-purple{color:#c4b5fd;font-weight:700}
-.badge{
-  display:inline-flex;align-items:center;gap:4px;
-  background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);
-  color:var(--gold);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;
-  white-space:nowrap;
-}
-
-/* ===== COINS FLOAT ===== */
-.coin{
-  position:fixed;pointer-events:none;z-index:0;
-  font-size:20px;opacity:0;
-  animation:coinFall var(--dur) var(--delay) linear infinite;
-}
-@keyframes coinFall{
-  0%{transform:translateY(-60px) rotate(0);opacity:.7}
-  100%{transform:translateY(110vh) rotate(720deg);opacity:0}
-}
-
-/* ===== BACK TO TOP ===== */
-#backTop{
-  position:fixed;bottom:28px;right:28px;z-index:500;
-  width:46px;height:46px;border-radius:50%;
-  background:var(--grad2);color:#000;font-size:18px;
-  border:none;cursor:pointer;font-family:inherit;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(245,200,66,.4);
-  opacity:0;transform:scale(0);transition:all .3s;
-}
-#backTop.show{opacity:1;transform:scale(1)}
-#backTop:hover{transform:scale(1.1)}
-
-/* ===== MEDIA ===== */
 @media(max-width:768px){
   .flow-wrap{flex-direction:column}
   .flow-step{border-right:none;border-bottom:1px solid var(--border)}
   .flow-step:last-child{border-bottom:none}
   .flow-arrow-wrap{display:none}
   .nav-links{display:none}
-  .concept-chara{display:none}
-  .vision-chara{display:none}
+  .concept-chara,.vision-chara{display:none}
   .hero h1{font-size:clamp(40px,12vw,72px)}
+  .vs-box{grid-template-columns:1fr}
 }
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
 
-<!-- SCROLL PROGRESS -->
 <div id="scrollBar"></div>
-
-<!-- STARS CANVAS -->
 <canvas id="stars-canvas"></canvas>
-
-<!-- FLOATING COINS -->
 <div id="coins-wrap"></div>
-
-<!-- BACK TO TOP -->
-<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">竊・/button>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- NAV -->
 <nav class="nav" id="mainNav">
   <div class="nav-logo">
     <img src="./images/logo.webp" alt="logo" onerror="this.style.display='none'">
-    腸 繝槭ロ縺ｼ縺・  </div>
+    💰 マネぼう
+  </div>
   <ul class="nav-links">
-    <li><a href="#concept">繧ｳ繝ｳ繧ｻ繝励ヨ</a></li>
-    <li><a href="#gameplay">繧ｲ繝ｼ繝菴馴ｨ・/a></li>
-    <li><a href="#characters">繧ｭ繝｣繝ｩ</a></li>
-    <li><a href="#world">繝ｯ繝ｼ繝ｫ繝・/a></li>
-    <li><a href="#vision">繝薙ず繝ｧ繝ｳ</a></li>
+    <li><a href="#concept">コンセプト</a></li>
+    <li><a href="#gameplay">ゲーム</a></li>
+    <li><a href="#characters">キャラ</a></li>
+    <li><a href="#world">ワールド</a></li>
+    <li><a href="#vision">ビジョン</a></li>
+    <li><a href="#concerns">懸念点</a></li>
+    <li><a href="#counter">対抗戦略</a></li>
+    <li><a href="#checklist">実行</a></li>
   </ul>
-  <button class="nav-cta" onclick="document.getElementById('gameplay').scrollIntoView({behavior:'smooth'})">莉翫☆縺蝉ｽ馴ｨ・/button>
+  <button class="nav-cta" onclick="document.getElementById('gameplay').scrollIntoView({behavior:'smooth'})">今すぐ体験</button>
 </nav>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-bg-glow"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-tag">笨ｦ 螳悟・縺ｫ譁ｰ縺励＞繧ｸ繝｣繝ｳ繝ｫ縺ｮ隱慕函</div>
+    <div class="hero-tag">✦ 完全に新しいジャンルの誕生</div>
     <img src="./images/cert/char-tam-0.png" alt="" class="hero-chara" onerror="this.style.display='none'">
-    <h1>繝槭ロ縺ｼ縺・/h1>
-    <p class="hero-sub">邨梧ｸ亥ｭｦ鄙偵Γ繧ｿ繧ｲ繝ｼ繝 譁ｰ讒区Φ</p>
+    <h1>マネぼう</h1>
+    <p class="hero-sub">経済学習メタゲーム 新構想</p>
     <p class="hero-desc">
-      <strong>Duolingo縺ｮ邯咏ｶ壽ｧ</strong> ﾃ・<strong>RPG縺ｮ謌宣聞螳滓─</strong> ﾃ・<strong>繝懊・繝峨ご繝ｼ繝縺ｮ謌ｦ逡･諤ｧ</strong><br>
-      豈取律縺ｮ邨梧ｸ亥ｭｦ鄙偵′繧ｲ繝ｼ繝蜀・・蠑ｷ縺輔↓逶ｴ邨舌☆繧九∽ｸ也阜蛻昴・繧ｸ繝｣繝ｳ繝ｫ
+      <strong>Duolingoの継続性</strong> × <strong>RPGの成長実感</strong> × <strong>ボードゲームの戦略性</strong><br>
+      毎日の経済学習がゲーム内の強さに直結する、世界初のジャンル
     </p>
     <div class="hero-badges">
-      <span class="hero-badge">式 224繝槭せ ﾃ・4菴馴・鄂ｮ</span>
-      <span class="hero-badge">答 Duolingo騾｣蜍・/span>
-      <span class="hero-badge">訣 100+繧ｫ蝗ｽ蟇ｾ蠢・/span>
-      <span class="hero-badge">笙ｾ・・豈主ｹｴ閾ｪ蜍墓峩譁ｰ</span>
+      <span class="hero-badge">🎮 224マス × 4体配置</span>
+      <span class="hero-badge">📚 Duolingo連動</span>
+      <span class="hero-badge">🌍 100+カ国対応</span>
+      <span class="hero-badge">♾️ 毎年自動更新</span>
     </div>
     <div class="hero-cta-group">
       <button class="btn-primary" onclick="document.getElementById('concept').scrollIntoView({behavior:'smooth'})">
-        噫 讒区Φ繧定ｪｭ繧
+        🚀 構想を読む
       </button>
       <button class="btn-secondary" onclick="document.getElementById('characters').scrollIntoView({behavior:'smooth'})">
-        鹿 繧ｭ繝｣繝ｩ繧定ｦ九ｋ
+        🎭 キャラを見る
       </button>
     </div>
   </div>
   <div class="hero-scroll-hint">
-    <span>繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ</span>
+    <span>スクロール</span>
     <div class="scroll-dot"></div>
   </div>
 </section>
 
 <hr class="glow-divider">
 
-<!-- ===== CONCEPT ===== -->
+<!-- CONCEPT -->
 <section class="section" id="concept">
   <div class="concept-bg"></div>
-  <img src="./images/cert/char-kau-0.png" alt="" class="floating-chara concept-chara" onerror="this.style.display='none'">
+  <img src="./images/cert/char-kau-0.png" alt="" class="floating-chara concept-chara" onerror="this.style.display='none'" style="right:5%;top:10%;width:180px">
   <div class="section-inner">
     <div class="section-num">01 &nbsp; Concept</div>
-    <h2 class="section-title reveal">繧ｳ繝ｳ繧ｻ繝励ヨ</h2>
-    <p class="section-sub reveal">56蟷ｴ縺ｮ邨梧ｸ域ｭｴ蜿ｲ繧偵√く繝｣繝ｩ驟咲ｽｮ縺ｧ菴馴ｨ薙☆繧九ご繝ｼ繝縲・br>縺薙ｌ縺ｾ縺ｧ荳也阜縺ｫ蟄伜惠縺励↑縺九▲縺溘ず繝｣繝ｳ繝ｫ縺後∽ｻ翫％縺薙↓隱慕函縺吶ｋ縲・/p>
+    <h2 class="section-title reveal">コンセプト</h2>
+    <p class="section-sub reveal">56年の経済歴史を、キャラ配置で体験するゲーム。<br>これまで世界に存在しなかったジャンルが、今ここに誕生する。</p>
 
     <div class="grid-3">
       <div class="glass-card reveal stagger-1">
-        <span class="card-icon">答</span>
-        <h3>Duolingo逧・ｿ呈・蛹・/h3>
-        <p>豈取律15蛻・・繧ｯ繧､繧ｺ蟄ｦ鄙偵′繝励ャ繧ｷ繝･騾夂衍縺ｧ蛯ｬ菫・＆繧後ｋ縲ゅえ繧｣繧ｸ繧ｧ繝・ヨ縺ｮ縺九ｏ縺・＞繧ｭ繝｣繝ｩ縺悟ｭｦ鄙偵ｒ菫・＠縲√せ繝医Μ繝ｼ繧ｯ縺檎ｶ咏ｶ壹・險ｼ縺ｫ縺ｪ繧九・/p>
+        <span class="card-icon">📚</span>
+        <h3>Duolingo型の学習</h3>
+        <p>毎日15分のクイズ学習がプッシュ通知で促される。ウィジェットのかわいいキャラが学習を促し、ストリークが継続の証になる。</p>
       </div>
       <div class="glass-card reveal stagger-2">
-        <span class="card-icon">式</span>
-        <h3>RPG逧・・髟ｷ</h3>
-        <p>繝ｬ繝吶Ν縲∫ｵ碁ｨ灘､縲√く繝｣繝ｩ繧ｯ繧ｿ繝ｼ縲∫ｧｰ蜿ｷ縲ゅ・繝ｬ繧､繝､繝ｼ縺ｨ繧ｭ繝｣繝ｩ縺悟・縺ｫ謌宣聞縺励∝ｭｦ鄙偵・謌先棡縺梧焚蛟､縺ｧ蜿ｯ隕門喧縺輔ｌ繧九・/p>
+        <span class="card-icon">🎮</span>
+        <h3>RPGの成長</h3>
+        <p>レベル、経験値、キャラクター、称号。プレイヤーとキャラが共に成長し、学習の成果が数値で可視化される。</p>
       </div>
       <div class="glass-card reveal stagger-3">
-        <span class="card-icon">笙滂ｸ・/span>
-        <h3>謌ｦ逡･逧・・繝ｼ繝峨ご繝ｼ繝</h3>
-        <p>224繝槭せ縺ｫ繧ｭ繝｣繝ｩ繧帝・鄂ｮ縲る・鄂ｮ縺ｮ譛驕ｩ縺輔′譛邨りｳ・肇鬘阪ｒ蟾ｦ蜿ｳ縺吶ｋ縲よｯ主屓繝励Ξ繧､縺ｧ逡ｰ縺ｪ繧区姶逡･縺悟撫繧上ｌ繧九・/p>
+        <span class="card-icon">🏆</span>
+        <h3>ボードゲームの戦略</h3>
+        <p>56年 × 4出来事 = 224マス。各マスにキャラを配置し、最終スコアを競う。毎回異なる配置戦略で無限にプレイできる。</p>
       </div>
       <div class="glass-card reveal stagger-4">
-        <span class="card-icon">訣</span>
-        <h3>繧ｰ繝ｭ繝ｼ繝舌Ν邨梧ｸ井ｽ馴ｨ・/h3>
-        <p>譌･譛ｬ縺縺代〒縺ｪ縺上√い繝｡繝ｪ繧ｫ繝ｻ荳ｭ蝗ｽ繝ｻ繝ｭ繧ｷ繧｢繝ｻEU窶ｦ荳也阜100雜・・蝗ｽ縲・・邨梧ｸ医ｒ蜷後§繧ｷ繧ｹ繝・Β縺ｧ菴馴ｨ薙〒縺阪ｋ縲・/p>
+        <span class="card-icon">🔄</span>
+        <h3>完全統合ループ</h3>
+        <p>学習 → キャラ獲得 → 配置回数UP → スコアUP → もっと学びたくなる → 新キャラ解放。好循環が止まらない設計。</p>
       </div>
       <div class="glass-card reveal stagger-5">
-        <span class="card-icon">嶋</span>
-        <h3>豌ｸ驕縺ｮ譖ｴ譁ｰ</h3>
-        <p>豈主ｹｴ1譛・譌･縲∝・繧ｹ繝・・繧ｸ縺瑚・蜍墓峩譁ｰ縲・027蟷ｴ縺ｮ邨梧ｸ医う繝吶Φ繝医′霑ｽ蜉縺輔ｌ繧九ょｮ梧・縺励↑縺・ご繝ｼ繝縲・/p>
+        <span class="card-icon">📈</span>
+        <h3>3段階難易度</h3>
+        <p>第1章（シンプル）→ 第2章（税金追加）→ 第3章（複雑な制度）。同じ56年を3度プレイ。複雑さが増すほど期待スコアが下がる。</p>
       </div>
       <div class="glass-card reveal stagger-6">
-        <span class="card-icon">売</span>
-        <h3>蟄ｦ鄙・竊・繧ｲ繝ｼ繝縺ｮ螳悟・蠕ｪ迺ｰ</h3>
-        <p>Duolingo縺ｧ蟄ｦ縺ｶ 竊・繧ｲ繝ｼ繝縺ｧ螳溯ｷｵ 竊・繧ｹ繧ｳ繧｢UP 竊・譁ｰ繧ｭ繝｣繝ｩ隗｣謾ｾ 竊・繧ゅ▲縺ｨ蟄ｦ縺ｳ縺溘￥縺ｪ繧九ょ･ｽ蠕ｪ迺ｰ縺梧ｭ｢縺ｾ繧峨↑縺・・/p>
+        <span class="card-icon">🌍</span>
+        <h3>グローバル展開</h3>
+        <p>日本 → アメリカ → 中国 → 100+カ国。毎年新国が追加され、完成しないプラットフォームとして永続的に成長する。</p>
       </div>
     </div>
   </div>
@@ -755,71 +504,71 @@ body{
 
 <hr class="glow-divider">
 
-<!-- ===== GAMEPLAY ===== -->
+<!-- GAMEPLAY -->
 <section class="section" id="gameplay">
   <div class="section-inner">
     <div class="section-num">02 &nbsp; Gameplay</div>
-    <h2 class="section-title gold reveal">繧ｲ繝ｼ繝菴馴ｨ薙ヵ繝ｭ繝ｼ</h2>
-    <p class="section-sub reveal">豈取律縺ｮ繝励Ξ繧､繧ｵ繧､繧ｯ繝ｫ縲よ悃縺ｮ5蛻・°繧蛾ｱ譛ｫ縺ｮ40蛻・∪縺ｧ縲√≠縺ｪ縺溘・繝壹・繧ｹ縺ｧ邨梧ｸ医ｒ蟄ｦ縺ｶ縲・/p>
+    <h2 class="section-title gold reveal">ゲーム体験フロー</h2>
+    <p class="section-sub reveal">毎日のプレイサイクル。朝の5分から週末の40分で、あなたのペースで経済を学ぶ。</p>
 
     <div class="flow-wrap reveal">
       <div class="flow-step">
-        <span class="flow-step-icon">桁</span>
+        <span class="flow-step-icon">🌅</span>
         <div class="flow-step-time">Morning</div>
-        <h4>譛昴・繧ｯ繧､繧ｺ</h4>
-        <p>繝励ャ繧ｷ繝･騾夂衍縺ｧ襍ｷ蠎・/p>
-        <p>Duolingo繧ｯ繧､繧ｺ 5蝠・/p>
+        <h4>朝のクイズ</h4>
+        <p>プッシュ通知で起動</p>
+        <p>Duolingoクイズ 5問</p>
         <span class="flow-step-xp">XP +30</span>
       </div>
-      <div class="flow-arrow-wrap">竊・/div>
+      <div class="flow-arrow-wrap">→</div>
       <div class="flow-step">
-        <span class="flow-step-icon">笘・・/span>
+        <span class="flow-step-icon">☀️</span>
         <div class="flow-step-time">Afternoon</div>
-        <h4>蠕ｩ鄙貞ｭｦ鄙・/h4>
-        <p>髢馴＆縺医◆蝠城｡後ｒ蠕ｩ鄙・/p>
-        <p>逅・ｧ｣蠎ｦ繝√ぉ繝・け</p>
+        <h4>復習学習</h4>
+        <p>間違えた問題を復習</p>
+        <p>理解度チェック</p>
         <span class="flow-step-xp">XP +50</span>
       </div>
-      <div class="flow-arrow-wrap">竊・/div>
+      <div class="flow-arrow-wrap">→</div>
       <div class="flow-step">
-        <span class="flow-step-icon">嫌</span>
+        <span class="flow-step-icon">🌙</span>
         <div class="flow-step-time">Evening</div>
-        <h4>霑ｽ蜉繧ｯ繧､繧ｺ</h4>
-        <p>譁ｰ繝・・繝槭・蟄ｦ鄙・/p>
-        <p>繧ｭ繝｣繝ｩ驟咲ｽｮ譫 +1</p>
+        <h4>追加クイズ</h4>
+        <p>新テーマを学習</p>
+        <p>キャラ配置枠 +1</p>
         <span class="flow-step-xp">XP +80</span>
       </div>
-      <div class="flow-arrow-wrap">竊・/div>
+      <div class="flow-arrow-wrap">→</div>
       <div class="flow-step">
-        <span class="flow-step-icon">式</span>
+        <span class="flow-step-icon">🎮</span>
         <div class="flow-step-time">Weekend</div>
-        <h4>繝｡繧､繝ｳ繧ｯ繧ｨ繧ｹ繝・/h4>
-        <p>繝懊・繝峨ご繝ｼ繝譛ｬ逡ｪ</p>
-        <p>56蟷ｴ縺ｮ繧ｷ繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ</p>
-        <span class="flow-step-xp">笘・繝ｩ繝ｳ繧ｭ繝ｳ繧ｰ蜿肴丐</span>
+        <h4>メインクエスト</h4>
+        <p>ボードゲーム本番</p>
+        <p>56年のシミュレーション</p>
+        <span class="flow-step-xp">🏆 ランキング反映</span>
       </div>
     </div>
 
     <h3 style="text-align:center;font-size:clamp(20px,3vw,28px);font-weight:900;margin-bottom:40px" class="reveal">
-      <span class="hl-gold">繝｡繧､繝ｳ繧ｯ繧ｨ繧ｹ繝・/span>・・6蟷ｴ縺ｮ繝懊・繝峨ご繝ｼ繝
+      <span class="hl-gold">メインクエスト</span> — 56年のボードゲーム
     </h3>
 
     <div class="grid-3">
       <div class="chapter-card reveal stagger-1" style="background:linear-gradient(135deg,rgba(248,81,73,.06),var(--card))">
         <div class="chapter-header" style="background:linear-gradient(135deg,#f85149,#c0392b)">
           <div class="chapter-num" style="color:rgba(255,255,255,.7)">CHAPTER 01</div>
-          <h3 style="color:#fff">隨ｬ1遶・夂ｰ｡譏鍋沿</h3>
+          <h3 style="color:#fff">第1章：簡易版</h3>
         </div>
         <div class="chapter-body">
-          <div class="chapter-rule">泙 繝ｫ繝ｼ繝ｫ・壹す繝ｳ繝励Ν</div>
+          <div class="chapter-rule">🟢 ルール：シンプル</div>
           <ul class="chapter-list">
-            <li>遞朱≡繝ｻ謇区焚譁吶↑縺・/li>
-            <li>邏皮ｲ九↑雉・肇謗ｨ遘ｻ縺ｮ縺ｿ</li>
-            <li>蛻晏ｿ・・髄縺大・髢</li>
-            <li>繝√Η繝ｼ繝医Μ繧｢繝ｫ莉倥″</li>
+            <li>税金・手数料なし</li>
+            <li>純粋な資産推移のみ</li>
+            <li>初心者向けの入門</li>
+            <li>チュートリアル付き</li>
           </ul>
           <div class="chapter-score" style="background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.2);color:#f85149">
-            譛溷ｾ・せ繧ｳ繧｢ <strong>150荳・・</strong>
+            期待スコア <strong>150万円</strong>
           </div>
         </div>
       </div>
@@ -827,18 +576,18 @@ body{
       <div class="chapter-card reveal stagger-2" style="background:linear-gradient(135deg,rgba(240,184,0,.06),var(--card))">
         <div class="chapter-header" style="background:linear-gradient(135deg,#f0b800,#e67e22)">
           <div class="chapter-num" style="color:rgba(255,255,255,.7)">CHAPTER 02</div>
-          <h3 style="color:#fff">隨ｬ2遶・壻ｸｭ邏夂沿</h3>
+          <h3 style="color:#fff">第2章：中級版</h3>
         </div>
         <div class="chapter-body">
-          <div class="chapter-rule">泯 譁ｰ繝ｫ繝ｼ繝ｫ・夂ｨ朱≡繝ｻ謇区焚譁呵ｿｽ蜉</div>
+          <div class="chapter-rule">🟡 新ルール：税金・手数料追加</div>
           <ul class="chapter-list">
-            <li>譬ｪ蠑冗寢20%隱ｲ遞・/li>
-            <li>蜿門ｼ墓焔謨ｰ譁・-1%</li>
-            <li>NISA蛻ｶ蠎ｦ蟆主・</li>
-            <li>驟榊ｽ馴≡繝ｻ隍・茜</li>
+            <li>株式益20%課税</li>
+            <li>取引手数料1%</li>
+            <li>NISA制度導入</li>
+            <li>配当税・褒賞</li>
           </ul>
           <div class="chapter-score" style="background:rgba(240,184,0,.1);border:1px solid rgba(240,184,0,.2);color:var(--gold)">
-            譛溷ｾ・せ繧ｳ繧｢ <strong>125荳・・</strong>
+            期待スコア <strong>125万円</strong>
           </div>
         </div>
       </div>
@@ -846,77 +595,78 @@ body{
       <div class="chapter-card reveal stagger-3" style="background:linear-gradient(135deg,rgba(91,200,232,.06),var(--card))">
         <div class="chapter-header" style="background:linear-gradient(135deg,#5bc8e8,#0066cc)">
           <div class="chapter-num" style="color:rgba(255,255,255,.7)">CHAPTER 03</div>
-          <h3 style="color:#fff">隨ｬ3遶・壻ｸ顔ｴ夂沿</h3>
+          <h3 style="color:#fff">第3章：上級版</h3>
         </div>
         <div class="chapter-body">
-          <div class="chapter-rule">鳩 譁ｰ繝ｫ繝ｼ繝ｫ・壹Μ繧｢繝ｫ蛻ｶ蠎ｦ螳悟・螳溯｣・/div>
+          <div class="chapter-rule">🔵 新ルール：リアル制度完全実装</div>
           <ul class="chapter-list">
-            <li>邏ｯ騾ｲ隱ｲ遞弱・iDeCo</li>
-            <li>繧､繝ｳ繝輔Ξ隱ｿ謨ｴ繝ｻ螳溯ｳｪ蛻ｩ蝗槭ｊ</li>
-            <li>菫｡險怜ｱ驟ｬ繝ｻ蝗ｺ螳夊ｳ・肇遞・/li>
-            <li>轤ｺ譖ｿ繝倥ャ繧ｸ繧ｳ繧ｹ繝・/li>
+            <li>累進課税・iDeCo</li>
+            <li>インフレ調整・実質利回り</li>
+            <li>信託報酬・固定資産税</li>
+            <li>為替ヘッジコスト</li>
           </ul>
           <div class="chapter-score" style="background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.2);color:var(--cyan)">
-            譛溷ｾ・せ繧ｳ繧｢ <strong>110荳・・</strong>
+            期待スコア <strong>110万円</strong>
           </div>
         </div>
       </div>
     </div>
 
     <p style="text-align:center;margin-top:32px;color:var(--muted);font-size:15px;font-weight:500" class="reveal">
-      庁 蜷後§56蟷ｴ繧・蠎ｦ繝励Ξ繧､縺吶ｋ縺後√Ν繝ｼ繝ｫ霑ｽ蜉縺ｫ繧医ｊ豈主屓謌ｦ逡･縺悟､ｧ縺阪￥螟峨ｏ繧・    </p>
+      🎯 同じ56年を3度プレイするが、ルール追加により有効戦略が大きく変わる
+    </p>
   </div>
 </section>
 
 <hr class="glow-divider">
 
-<!-- ===== FEATURES ===== -->
+<!-- FEATURES -->
 <section class="section">
   <div class="section-inner">
     <div class="section-num">03 &nbsp; Features</div>
-    <h2 class="section-title reveal">5縺､縺ｮ髱ｩ譁ｰ逧・音蠕ｴ</h2>
-    <p class="section-sub reveal">縺薙ｌ縺ｾ縺ｧ荳也阜縺ｫ蟄伜惠縺励↑縺九▲縺溘ず繝｣繝ｳ繝ｫ縲・br>蟄ｦ鄙偵・繧ｲ繝ｼ繝繝ｻ謌宣聞縺ｮ荳我ｽ堺ｸ菴薙ｒ螳溽樟縲・/p>
+    <h2 class="section-title reveal">5つの革新的機能</h2>
+    <p class="section-sub reveal">これまで世界に存在しなかったジャンル。<br>学習とゲームの融合を完全に実現。</p>
 
     <div class="grid-2">
       <div class="glass-card reveal stagger-1">
-        <span class="card-icon">識</span>
-        <h3>224繝槭せ ﾃ・4菴薙く繝｣繝ｩ驟咲ｽｮ</h3>
-        <p>56蟷ｴﾃ・蜃ｺ譚･莠・224繝槭せ縲ょ推繝槭せ縺ｧ譛螟ｧ4菴薙・繧ｭ繝｣繝ｩ繧帝・鄂ｮ縲る・鄂ｮ縺ｮ謌ｦ逡･諤ｧ縺梧怙邨ゅせ繧ｳ繧｢繧貞､ｧ縺阪￥蟾ｦ蜿ｳ縺吶ｋ縲・/p>
+        <span class="card-icon">🎯</span>
+        <h3>224マス × 4体キャラ配置</h3>
+        <p>56年 × 4出来事 = 224マス。各マスで最大4体のキャラを配置。配置の戦略性が最終スコアを大きく左右する。</p>
         <ul class="feat-list" style="margin-top:16px">
-          <li><strong>驟咲ｽｮ謨ｰ</strong>縺悟ｭｦ鄙帝㍼縺ｫ騾｣蜍・/li>
-          <li>驟咲ｽｮ繝溘せ縺ｯ蜊ｳ繧ｹ繧ｳ繧｢繝繧ｦ繝ｳ</li>
-          <li>譛驕ｩ隗｣縺ｯ辟｡髯宣壹ｊ蟄伜惠縺吶ｋ</li>
+          <li><strong>配置回数</strong>が学習量に連動</li>
+          <li>配置ミスは即スコアダウン</li>
+          <li>最適解は無限に存在する</li>
         </ul>
       </div>
       <div class="glass-card reveal stagger-2">
-        <span class="card-icon">投</span>
-        <h3>遏･隴倥′繝ｪ繧｢繝ｫ縺ｫ逶ｴ邨・/h3>
-        <p>縲後が繧､繝ｫ繧ｷ繝ｧ繝・け・晞≡縺御ｸ翫′繧九阪ｒ蟄ｦ縺ｶ 竊・繧ｲ繝ｼ繝蜀・〒驥代・繝上Φ繧ｿ繝ｼ繧帝・鄂ｮ 竊・螳滄圀縺ｫ蛻ｩ逶涯P縲ら衍隴倥′蜉帙↓縺ｪ繧狗椪髢薙′菴馴ｨ薙〒縺阪ｋ縲・/p>
+        <span class="card-icon">🏦</span>
+        <h3>歴史がリアルに直結</h3>
+        <p>「オイルショック」を学ぶ → ゲームでハンターを配置 → 現実に活用。知識がゲームの強さになり、リアルにも活きる時間が生まれる。</p>
         <ul class="feat-list" style="margin-top:16px">
-          <li><strong>蟄ｦ鄙貞・螳ｹ</strong>縺碁・鄂ｮ繝ｫ繝ｼ繝ｫ縺ｫ蜿肴丐</li>
-          <li>遏･隴倥↑縺励〒縺ｯ鬮倥せ繧ｳ繧｢荳榊庄閭ｽ</li>
-          <li>縲後↑繧九⊇縺ｩ・√阪・迸ｬ髢薙ｒ險ｭ險・/li>
+          <li><strong>学習内容</strong>が配置ルールに直結</li>
+          <li>知識なしでは高スコア不可能</li>
+          <li>「なるほど！」の瞬間を設計</li>
         </ul>
       </div>
       <div class="glass-card reveal stagger-3">
-        <span class="card-icon">笙ｻ・・/span>
-        <h3>螳悟・縺ｪ蠕ｪ迺ｰ繝｡繧ｫ繝九け繧ｹ</h3>
-        <p>蟄ｦ鄙・竊・繧ｭ繝｣繝ｩ迯ｲ蠕・竊・繧ｲ繝ｼ繝譛牙茜蛹・竊・繧ｹ繧ｳ繧｢UP 竊・繧ゅ▲縺ｨ蟄ｦ縺ｳ縺溘＞ 竊・譁ｰ繧ｭ繝｣繝ｩ谺ｲ縺励＞ 竊・繧ｲ繝ｼ繝蜀肴倦謌ｦ縲ょ･ｽ蠕ｪ迺ｰ縺梧ｭ｢縺ｾ繧峨↑縺・ｨｭ險医・/p>
+        <span class="card-icon">🔃</span>
+        <h3>完全な循環メカニクス</h3>
+        <p>学習 → キャラ獲得 → ゲーム活用 → スコアUP → もっと学びたい → 新キャラ解放 → ゲーム内強化。好循環が止まらない設計。</p>
       </div>
       <div class="glass-card reveal stagger-4">
-        <span class="card-icon">醇</span>
-        <h3>螟壽ｧ倥↑謌宣聞謖・ｨ・/h3>
-        <p>繝ｬ繝吶Ν縲∫ｵ碁ｨ灘､縲√く繝｣繝ｩ謨ｰ縲∫ｧｰ蜿ｷ縲√せ繧ｳ繧｢縲√Λ繝ｳ繧ｭ繝ｳ繧ｰ縲よ・髟ｷ縺悟､夊ｧ堤噪縺ｫ蜿ｯ隕門喧縺輔ｌ繧九ゅ←縺ｮ謖・ｨ吶〒繧ゅ御ｸ企＃縲阪ｒ諢溘§繧峨ｌ繧九・/p>
+        <span class="card-icon">📊</span>
+        <h3>多様な進捗指標</h3>
+        <p>レベル、経験値、キャラ数、称号、スコア、ランキング。成長が継続的に可視化される。どの指標でも「上手くなった」を感じられる。</p>
       </div>
       <div class="glass-card reveal stagger-5">
-        <span class="card-icon">粕</span>
-        <h3>Duolingo繝ｬ繝吶Ν縺ｮ鄙呈・蛹・/h3>
-        <p>繧ｦ繧｣繧ｸ繧ｧ繝・ヨ縲√・繝・す繝･騾夂衍縲√せ繝医Μ繝ｼ繧ｯ縲・｣邯夐＃謌舌・繝ｼ繝翫せ縲・uolingo縺ｨ蜷檎ｭ峨・鄙呈・蛹悶Γ繧ｫ繝九け繧ｹ繧堤ｵ梧ｸ亥ｭｦ鄙偵↓驕ｩ逕ｨ縲・/p>
+        <span class="card-icon">⭐</span>
+        <h3>Duolingoレベルの継続性</h3>
+        <p>ウィジェット、プッシュ通知、ストリーク、友達との競争ボーナス。Duolingoと同様の継続性メカニクスを経済学習に適用。</p>
       </div>
       <div class="glass-card reveal stagger-6">
-        <span class="card-icon">件</span>
-        <h3>繧ｰ繝ｭ繝ｼ繝舌Ν縺ｪ螟壽ｬ｡蜈・ｧ</h3>
-        <p>譌･譛ｬ縲√い繝｡繝ｪ繧ｫ縲∽ｸｭ蝗ｽ縲√Ο繧ｷ繧｢縺ｪ縺ｩ隍・焚蝗ｽ繧偵・繝ｬ繧､縲よｯ主ｹｴ譁ｰ蝗ｽ縺瑚ｿｽ蜉縺輔ｌ縲∵ｯ碑ｼ・ｵ梧ｸ亥ｭｦ縺瑚・辟ｶ縺ｫ霄ｫ縺ｫ縺､縺上・/p>
+        <span class="card-icon">🌐</span>
+        <h3>グローバルな多段展開</h3>
+        <p>日本、アメリカ、中国、ロシアなど複数国をプレイ。毎年新国が追加され、世界中の経済が無限に解放されていく。</p>
       </div>
     </div>
   </div>
@@ -924,103 +674,77 @@ body{
 
 <hr class="glow-divider">
 
-<!-- ===== CHARACTERS ===== -->
+<!-- CHARACTERS -->
 <section class="section" id="characters">
   <div class="section-inner">
     <div class="section-num">04 &nbsp; Characters</div>
-    <h2 class="section-title gold reveal">繧ｭ繝｣繝ｩ繧ｯ繧ｿ繝ｼ繝ｻ繧ｹ繧ｭ繝ｫ繧ｷ繧ｹ繝・Β</h2>
-    <p class="section-sub reveal">繧ｿ繝ｯ繝ｼ繝・ぅ繝輔ぉ繝ｳ繧ｹ縺ｮ謚戊ｳ・沿縲ゅく繝｣繝ｩ繧帝寔繧√∵怙蠑ｷ縺ｮ驟咲ｽｮ繧定ｦ九▽縺代ｍ縲・br>Duolingo縺ｮ蟄ｦ鄙偵ユ繝ｼ繝槭ｒ繧ｯ繝ｪ繧｢縺吶ｋ縺ｨ譁ｰ繧ｭ繝｣繝ｩ縺瑚ｧ｣謾ｾ縺輔ｌ繧九・/p>
+    <h2 class="section-title gold reveal">キャラクター・スキルシステム</h2>
+    <p class="section-sub reveal">タワーディフェンスの要領でキャラを配置し、最善の配置を見つけろ。<br>Duolingoの学習テーマをクリアすると新キャラが解放される。</p>
 
-    <!-- Basic Characters -->
-    <h3 style="font-size:18px;font-weight:700;color:var(--muted);margin-bottom:24px;letter-spacing:.05em;text-transform:uppercase" class="reveal">
-      蝓ｺ譛ｬ繧ｭ繝｣繝ｩ・・菴難ｼ・    </h3>
+    <h3 style="font-size:18px;font-weight:700;color:var(--muted);margin-bottom:24px;letter-spacing:.05em;text-transform:uppercase" class="reveal">基本キャラ（初期4体）</h3>
     <div class="grid-4" style="margin-bottom:48px">
       <div class="chara-card legend reveal stagger-1">
         <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(245,200,66,.2),rgba(255,159,0,.1))">
           <img src="./images/cert/char-oru-2.png" alt="" onerror="this.style.display='none'">
-          <span class="chara-portrait-icon" style="display:none">噫</span>
+          <span class="chara-portrait-icon" style="display:none">💎</span>
           <span class="chara-rarity legend">LEGEND</span>
         </div>
         <div class="chara-body">
-          <div class="chara-name">噫 鬮伜ｺｦ邨梧ｸ域・髟ｷ縺ｮ鬯ｼ</div>
-          <div class="chara-effect">+20% 謌宣聞譛溘・繝ｼ繝翫せ</div>
-          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・0蝗・・・蟇ｾ雎｡・壽・髟ｷ繧､繝吶Φ繝・/div>
+          <div class="chara-name">💎 高度経済成長の王</div>
+          <div class="chara-effect">+20% 学習最大ボーナス</div>
+          <div class="chara-uses">配置回数：10回 / 対象：長期イベント</div>
           <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:90%"></div></div>
           <div class="chara-xp-label"><span>XP 4500</span><span>Lv.MAX</span></div>
-          <div class="chara-target">套 1970蟷ｴ莉｣蜑榊濠縲懊ヰ繝悶Ν譛溘↓譛蠑ｷ</div>
+          <div class="chara-target">⭐ 1970年代前半、バブル最高に最強</div>
         </div>
       </div>
 
       <div class="chara-card epic reveal stagger-2">
         <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(92,92,255,.1))">
           <img src="./images/cert/char-oru-3.png" alt="" onerror="this.style.display='none'">
-          <span class="chara-portrait-icon" style="display:none">腸</span>
+          <span class="chara-portrait-icon" style="display:none">🦅</span>
           <span class="chara-rarity epic">EPIC</span>
         </div>
         <div class="chara-body">
-          <div class="chara-name">腸 驥代・繝上Φ繧ｿ繝ｼ</div>
-          <div class="chara-effect">+30% 譛我ｺ玖ｳ・肇繝懊・繝翫せ</div>
-          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・0蝗・・・蟇ｾ雎｡・壼些讖溘・譛我ｺ・/div>
+          <div class="chara-name">🦅 危機のハンター</div>
+          <div class="chara-effect">+30% 最安値ボーナス</div>
+          <div class="chara-uses">配置回数：10回 / 対象：最安値期</div>
           <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:75%"></div></div>
           <div class="chara-xp-label"><span>XP 3000</span><span>Lv.15</span></div>
-          <div class="chara-target">套 繧ｪ繧､繝ｫ繧ｷ繝ｧ繝・け繝ｻ繝ｪ繝ｼ繝槭Φ譎ゅ↓霈昴￥</div>
+          <div class="chara-target">⭐ オイルショック・リーマン時に強い</div>
         </div>
       </div>
 
       <div class="chara-card rare reveal stagger-3">
         <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(91,200,232,.15),rgba(0,102,204,.1))">
           <img src="./images/cert/char-oru-4.png" alt="" onerror="this.style.display='none'">
-          <span class="chara-portrait-icon" style="display:none">鋤・・/span>
+          <span class="chara-portrait-icon" style="display:none">🏦</span>
           <span class="chara-rarity rare">RARE</span>
         </div>
         <div class="chara-body">
-          <div class="chara-name">鋤・・菫晏ｮ域兜雉・ｮｶ</div>
-          <div class="chara-effect">+10% 蝗ｽ蛯ｵ繝ｻ驫陦後・繝ｼ繝翫せ</div>
-          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・5蝗・・・蟇ｾ雎｡・壼・繧､繝吶Φ繝・/div>
-          <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:55%" style="background:linear-gradient(90deg,#5bc8e8,#7c3aed)"></div></div>
+          <div class="chara-name">🏦 安定防衛官</div>
+          <div class="chara-effect">+10% 国債・配当ボーナス</div>
+          <div class="chara-uses">配置回数：15回 / 対象：低期イベント</div>
+          <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:55%"></div></div>
           <div class="chara-xp-label"><span>XP 1650</span><span>Lv.11</span></div>
-          <div class="chara-target">套 繝舌ヶ繝ｫ蟠ｩ螢翫・繝・ヵ繝ｬ譛溘・螳医ｊ逾・/div>
+          <div class="chara-target">⭐ バブル崩壊後・デフレ最高に最強</div>
         </div>
       </div>
 
       <div class="chara-card rare reveal stagger-4">
         <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(63,185,80,.15),rgba(0,180,120,.1))">
           <img src="./images/cert/char-oru-5.png" alt="" onerror="this.style.display='none'">
-          <span class="chara-portrait-icon" style="display:none">跳</span>
+          <span class="chara-portrait-icon" style="display:none">💹</span>
           <span class="chara-rarity rare">RARE</span>
         </div>
         <div class="chara-body">
-          <div class="chara-name">跳 繝峨Ν迢吶＞謦・■</div>
-          <div class="chara-effect">+25% 繝峨Ν繝懊・繝翫せ</div>
-          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・0蝗・・・蟇ｾ雎｡・夂ぜ譖ｿ螟牙虚</div>
+          <div class="chara-name">💹 ドル買い狙い</div>
+          <div class="chara-effect">+25% ドルボーナス</div>
+          <div class="chara-uses">配置回数：10回 / 対象：為替変動期</div>
           <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:60%"></div></div>
           <div class="chara-xp-label"><span>XP 2000</span><span>Lv.12</span></div>
-          <div class="chara-target">套 蜀・ｮ牙ｱ髱｢・・022縲・5蟷ｴ・峨〒螟ｧ豢ｻ霄・/div>
+          <div class="chara-target">⭐ 円安局面（2022〜25年代）で大活躍</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Unlock Characters -->
-    <h3 style="font-size:18px;font-weight:700;color:var(--muted);margin-bottom:24px;letter-spacing:.05em;text-transform:uppercase" class="reveal">
-      霑ｽ蜉繧ｭ繝｣繝ｩ・域ｮｵ髫守噪隗｣謾ｾ・・    </h3>
-    <div class="grid-3">
-      <div class="glass-card reveal stagger-1">
-        <span class="card-icon">笞厄ｸ・/span>
-        <h3>遞主宛繝槭せ繧ｿ繝ｼ</h3>
-        <p>蜈ｨ雉・肇縺ｮ遞守紫繧・10%霆ｽ貂帙・/p>
-        <div style="margin-top:12px"><span class="badge">隨ｬ2遶縲檎ｨ朱≡縲阪ユ繝ｼ繝樒ｿ貞ｾ玲凾</span></div>
-      </div>
-      <div class="glass-card reveal stagger-2">
-        <span class="card-icon">孱・・/span>
-        <h3>繝ｪ繧ｹ繧ｯ蝗樣∩閠・/h3>
-        <p>證ｴ關ｽ譎ゅ・繝槭う繝翫せ繧・0%繧ｫ繝・ヨ縲ょｮ医ｊ縺ｮ繧ｨ繝ｼ繧ｹ縲・/p>
-        <div style="margin-top:12px"><span class="badge">隨ｬ2遶繝懊せ謌ｦ繧ｯ繝ｪ繧｢譎・/span></div>
-      </div>
-      <div class="glass-card reveal stagger-3">
-        <span class="card-icon">醗</span>
-        <h3>繧､繝ｳ繝輔Ξ莠郁ｦ玖・/h3>
-        <p>驥・25%縲√う繝ｳ繝輔Ξ雉・肇+20%縲ゅう繝ｳ繝輔Ξ譎ゆｻ｣繧貞宛縺吶ｋ縲・/p>
-        <div style="margin-top:12px"><span class="badge">縲後う繝ｳ繝輔Ξ縲阪ユ繝ｼ繝樒ｿ貞ｾ玲凾</span></div>
       </div>
     </div>
   </div>
@@ -1028,137 +752,134 @@ body{
 
 <hr class="glow-divider">
 
-<!-- ===== WORLD STAGE ===== -->
+<!-- WORLD -->
 <section class="section" id="world">
   <div class="section-inner">
-    <div class="section-num">05 &nbsp; World</div>
-    <h2 class="section-title reveal">繧ｰ繝ｭ繝ｼ繝舌Ν繧ｹ繝・・繧ｸ諡｡蠑ｵ</h2>
-    <p class="section-sub reveal">譌･譛ｬ縺縺代§繧・↑縺・ゆｸ也阜100雜・・蝗ｽ縲・・邨梧ｸ医ｒ縲∝酔縺倥す繧ｹ繝・Β縺ｧ菴馴ｨ薙○繧医・/p>
+    <div class="section-num">05 &nbsp; World Stage</div>
+    <h2 class="section-title reveal">世界ステージ</h2>
+    <p class="section-sub reveal">日本から始め、全世界の経済を舞台に戦う。毎年新国が追加される、終わらないプラットフォーム。</p>
 
     <div class="grid-3">
       <div class="country-card reveal stagger-1">
         <div class="country-header">
-          <span class="country-flag">・・</span>
+          <span class="country-flag">🇯🇵</span>
           <div>
-            <div class="country-name">譌･譛ｬ邨梧ｸ・/div>
-            <div class="country-period">1970 窶・2026蟷ｴ</div>
+            <div class="country-name">日本経済</div>
+            <div class="country-period">1970 — 2026年</div>
           </div>
-          <span class="badge" style="margin-left:auto">隗｣謾ｾ貂医∩</span>
         </div>
         <div class="country-body">
-          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <h5>主要イベント</h5>
           <ul class="country-events">
-            <li>鬮伜ｺｦ邨梧ｸ域・髟ｷ繝ｻ荳・忽</li>
-            <li>繧ｪ繧､繝ｫ繧ｷ繝ｧ繝・け</li>
-            <li>繝励Λ繧ｶ蜷域э繝ｻ繝舌ヶ繝ｫ</li>
-            <li>繝舌ヶ繝ｫ蟠ｩ螢翫・螟ｱ繧上ｌ縺滓凾莉｣</li>
-            <li>繝ｪ繝ｼ繝槭Φ繝ｻ繧｢繝吶ヮ繝溘け繧ｹ</li>
+            <li>高度経済成長期</li>
+            <li>オイルショック（1973/79）</li>
+            <li>バブル経済と崩壊</li>
+            <li>リーマンショック</li>
+            <li>コロナ禍・円安</li>
           </ul>
+          <span class="country-badge">基本ステージ</span>
         </div>
       </div>
 
       <div class="country-card reveal stagger-2">
         <div class="country-header">
-          <span class="country-flag">・・</span>
+          <span class="country-flag">🇺🇸</span>
           <div>
-            <div class="country-name">繧｢繝｡繝ｪ繧ｫ邨梧ｸ・/div>
-            <div class="country-period">1970 窶・2026蟷ｴ</div>
+            <div class="country-name">アメリカ経済</div>
+            <div class="country-period">1970 — 2026年</div>
           </div>
-          <span class="badge" style="margin-left:auto">Year2 隗｣謾ｾ</span>
         </div>
         <div class="country-body">
-          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <h5>主要イベント</h5>
           <ul class="country-events">
-            <li>繧ｹ繧ｿ繧ｰ繝輔Ξ繝ｼ繧ｷ繝ｧ繝ｳ</li>
-            <li>繝ｬ繝ｼ繧ｬ繝弱Α繧ｯ繧ｹ</li>
-            <li>IT繝舌ヶ繝ｫ蟠ｩ螢・/li>
-            <li>繝ｪ繝ｼ繝槭Φ繧ｷ繝ｧ繝・け</li>
-            <li>蛻ｩ荳翫￡繧ｵ繧､繧ｯ繝ｫ</li>
+            <li>スタグフレーション</li>
+            <li>ブラックマンデー（1987）</li>
+            <li>ITバブル崩壊</li>
+            <li>サブプライム・リーマン</li>
+            <li>FRB金利サイクル</li>
           </ul>
+          <span class="country-badge">Year 2 実装</span>
         </div>
       </div>
 
       <div class="country-card reveal stagger-3">
         <div class="country-header">
-          <span class="country-flag">・・</span>
+          <span class="country-flag">🇨🇳</span>
           <div>
-            <div class="country-name">荳ｭ蝗ｽ邨梧ｸ・/div>
-            <div class="country-period">1978 窶・2026蟷ｴ</div>
+            <div class="country-name">中国経済</div>
+            <div class="country-period">1978 — 2026年</div>
           </div>
-          <span class="badge" style="margin-left:auto">Year2 隗｣謾ｾ</span>
         </div>
         <div class="country-body">
-          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <h5>主要イベント</h5>
           <ul class="country-events">
-            <li>謾ｹ髱ｩ髢区叛繝ｻ鬮俶・髟ｷ譛・/li>
-            <li>螟ｩ螳蛾摩莠倶ｻｶ</li>
-            <li>WTO蜉逶・/li>
-            <li>邀ｳ荳ｭ雋ｿ譏捺姶莠・/li>
-            <li>荳榊虚逕｣蜊ｱ讖溘・邨梧ｸ域ｸ幃・/li>
+            <li>改革開放政策</li>
+            <li>天安門事件</li>
+            <li>WTO加盟（2001）</li>
+            <li>不動産バブル・危機</li>
+            <li>米中貿易戦争</li>
           </ul>
+          <span class="country-badge">難易度：最高</span>
         </div>
       </div>
 
       <div class="country-card reveal stagger-4">
         <div class="country-header">
-          <span class="country-flag">・・</span>
+          <span class="country-flag">🇩🇪</span>
           <div>
-            <div class="country-name">繝ｭ繧ｷ繧｢邨梧ｸ・/div>
-            <div class="country-period">1970 窶・2026蟷ｴ</div>
+            <div class="country-name">ドイツ経済</div>
+            <div class="country-period">1990 — 2026年</div>
           </div>
-          <span class="badge" style="margin-left:auto">Year3 隗｣謾ｾ</span>
         </div>
         <div class="country-body">
-          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <h5>主要イベント</h5>
           <ul class="country-events">
-            <li>蜀ｷ謌ｦ邨梧ｸ医・霆肴僑</li>
-            <li>繧ｽ繝薙お繝亥ｴｩ螢・/li>
-            <li>騾夊ｲｨ蜊ｱ讖・/li>
-            <li>繧ｨ繝阪Ν繧ｮ繝ｼ螂ｽ豕∵悄</li>
-            <li>邨梧ｸ亥宛陬√・萓ｵ謾ｻ</li>
+            <li>東西統一コスト</li>
+            <li>ユーロ導入</li>
+            <li>EU債務危機</li>
+            <li>エネルギー転換</li>
           </ul>
+          <span class="country-badge">Year 3 実装</span>
         </div>
       </div>
 
       <div class="country-card reveal stagger-5">
         <div class="country-header">
-          <span class="country-flag">・・</span>
+          <span class="country-flag">🇮🇳</span>
           <div>
-            <div class="country-name">EU邨梧ｸ・/div>
-            <div class="country-period">2027蟷ｴ莉･髯崎ｿｽ蜉</div>
+            <div class="country-name">インド経済</div>
+            <div class="country-period">1991 — 2026年</div>
           </div>
-          <span class="badge" style="margin-left:auto;background:rgba(136,136,170,.1);border-color:rgba(136,136,170,.2);color:var(--muted)">霑第律蜈ｬ髢・/span>
         </div>
         <div class="country-body">
-          <h5>諡｡蠑ｵ莠亥ｮ・/h5>
+          <h5>主要イベント</h5>
           <ul class="country-events">
-            <li>EU邨ｱ蜷医・繝ｦ繝ｼ繝ｭ隱慕函</li>
-            <li>谺ｧ蟾槫し蜍吝些讖・/li>
-            <li>Brexit</li>
-            <li>繧ｨ繝阪Ν繧ｮ繝ｼ霆｢謠・/li>
-            <li>縺昴・莉・0+蝗ｽ</li>
+            <li>経済自由化</li>
+            <li>IT産業の台頭</li>
+            <li>デモネタイゼーション</li>
+            <li>高成長期突入</li>
           </ul>
-          <span class="country-badge">繧､繝ｳ繝峨・蜿ｰ貉ｾ繝ｻ繝悶Λ繧ｸ繝ｫ繧りｿｽ蜉莠亥ｮ・/span>
+          <span class="country-badge">Year 3 実装</span>
         </div>
       </div>
 
-      <div class="country-card reveal stagger-6" style="border-style:dashed;border-color:rgba(124,58,237,.3)">
-        <div class="country-header" style="background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(5,5,8,0))">
-          <span class="country-flag">笙ｾ・・/span>
+      <div class="country-card reveal stagger-6">
+        <div class="country-header">
+          <span class="country-flag">🌍</span>
           <div>
-            <div class="country-name">豈主ｹｴ閾ｪ蜍墓峩譁ｰ</div>
-            <div class="country-period">豌ｸ驕縺ｫ謌宣聞縺礼ｶ壹￠繧・/div>
+            <div class="country-name">その他の国々</div>
+            <div class="country-period">毎年2〜3国追加</div>
           </div>
         </div>
         <div class="country-body">
-          <h5>譖ｴ譁ｰ蜀・ｮｹ</h5>
+          <h5>予定国</h5>
           <ul class="country-events">
-            <li>蜈ｨ繧ｹ繝・・繧ｸ1蟷ｴ蛻・僑蠑ｵ</li>
-            <li>譁ｰ邨梧ｸ医う繝吶Φ繝郁ｿｽ蜉</li>
-            <li>譁ｰ繧ｭ繝｣繝ｩ螳溯｣・/li>
-            <li>Duolingo譁ｰ繝・・繝・/li>
-            <li>譁ｰ蝗ｽ縺ｮ霑ｽ蜉</li>
+            <li>ロシア（資源経済）</li>
+            <li>ブラジル（新興国）</li>
+            <li>韓国（半導体）</li>
+            <li>100+カ国へ拡張</li>
           </ul>
+          <span class="country-badge">永続的に追加</span>
         </div>
       </div>
     </div>
@@ -1167,64 +888,68 @@ body{
 
 <hr class="glow-divider">
 
-<!-- ===== TARGET ===== -->
+<!-- TARGET -->
 <section class="section">
   <div class="section-inner">
     <div class="section-num">06 &nbsp; Target</div>
-    <h2 class="section-title reveal">繧ｿ繝ｼ繧ｲ繝・ヨ螻､</h2>
-    <p class="section-sub reveal">謚戊ｳ・ル繝ｼ繧ｺ谿ｵ髫主挨縺ｫ縲∝・縺ｦ縺ｮ邨梧ｸ亥ｭｦ鄙呈ｮｵ髫弱↓蟇ｾ蠢懊・br>驥題檮遏･隴倥ぞ繝ｭ縺九ｉ讖滄未謚戊ｳ・ｮｶ縺ｾ縺ｧ縲・/p>
+    <h2 class="section-title reveal">ターゲット層</h2>
+    <p class="section-sub reveal">金融知識ゼロから投資家・プロまで。4段階のレベル別に価値提案が異なる。</p>
 
-    <div class="stat-grid">
-      <div class="stat-card reveal stagger-1">
-        <div class="stat-num"><span class="counter" data-target="4000">0</span><span class="stat-unit">荳・/span></div>
-        <div class="stat-label">驥題檮遏･隴倥ぞ繝ｭ螻､</div>
-        <div class="stat-note">縲後ご繝ｼ繝諢溯ｦ壹〒驥題檮謨呵ご縲阪′蜈･蜿｣</div>
+    <div class="stat-grid reveal">
+      <div class="stat-card">
+        <div class="stat-num"><span class="counter" data-target="4000">0</span></div>
+        <div class="stat-unit">万人</div>
+        <div class="stat-label">Lv0 金融知識ゼロ層</div>
+        <div class="stat-note">月額 100〜150円</div>
       </div>
-      <div class="stat-card reveal stagger-2">
-        <div class="stat-num"><span class="counter" data-target="1200">0</span><span class="stat-unit">荳・/span></div>
-        <div class="stat-label">蝓ｺ遉守衍隴倡ｿ貞ｾ怜ｱ､</div>
-        <div class="stat-note">縲梧兜雉・∈縺ｮ隨ｬ荳豁ｩ縲阪ｒ雕上∩蜃ｺ縺・/div>
+      <div class="stat-card">
+        <div class="stat-num"><span class="counter" data-target="1200">0</span></div>
+        <div class="stat-unit">万人</div>
+        <div class="stat-label">Lv1 基礎知識習得層</div>
+        <div class="stat-note">月額 3,480円</div>
       </div>
-      <div class="stat-card reveal stagger-3">
-        <div class="stat-num"><span class="counter" data-target="600">0</span><span class="stat-unit">荳・/span></div>
-        <div class="stat-label">螳滓兜雉・ｱ､</div>
-        <div class="stat-note">縲碁°逕ｨ縺ｮ譛驕ｩ蛹悶阪ｒ繧ｷ繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ</div>
+      <div class="stat-card">
+        <div class="stat-num"><span class="counter" data-target="600">0</span></div>
+        <div class="stat-unit">万人</div>
+        <div class="stat-label">Lv2 実投資層</div>
+        <div class="stat-note">月額 8,000円</div>
       </div>
-      <div class="stat-card reveal stagger-4">
-        <div class="stat-num"><span class="counter" data-target="400">0</span><span class="stat-unit">荳・/span></div>
-        <div class="stat-label">譌｢謚戊ｳ・ｮｶ繝ｻ繝励Ο螻､</div>
-        <div class="stat-note">縲梧姶逡･讀懆ｨｼ縲阪・繝ｩ繝・ヨ繝輔か繝ｼ繝</div>
+      <div class="stat-card">
+        <div class="stat-num"><span class="counter" data-target="400">0</span></div>
+        <div class="stat-unit">万人</div>
+        <div class="stat-label">Lv3 既投資家・プロ</div>
+        <div class="stat-note">月額 15,000円</div>
       </div>
     </div>
 
     <div class="grid-4">
       <div class="level-card reveal stagger-1">
         <div class="level-badge">Lv0</div>
-        <h3>驥題檮遏･隴倥ぞ繝ｭ螻､</h3>
-        <div class="need">繝九・繧ｺ・壽聞螻・・菴弱＆繝ｻ讌ｽ縺励＆</div>
-        <div class="value">縲御ｺｺ逕溘ｒ螟峨∴繧句・蜿｣縲・/div>
-        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・100縲・50蜀・/div>
+        <h3>金融知識ゼロ層</h3>
+        <div class="need">ニーズ：「面白さ・楽しさ」</div>
+        <div class="value">「人生を変える金融教育の入口」</div>
+        <div class="arpu">月額ARPU：月額 100〜150円</div>
       </div>
       <div class="level-card reveal stagger-2">
         <div class="level-badge">Lv1</div>
-        <h3>蝓ｺ遉守衍隴倡ｿ貞ｾ怜ｱ､</h3>
-        <div class="need">繝九・繧ｺ・壼ｮ溯ｷｵ逧・衍隴倥・荳榊ｮ画鴛諡ｭ</div>
-        <div class="value">縲梧兜雉・∈縺ｮ隨ｬ荳豁ｩ縲・/div>
-        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・3,480蜀・/div>
+        <h3>基礎知識習得層</h3>
+        <div class="need">ニーズ：「継続的な学習の仕組み」</div>
+        <div class="value">「投資への第一歩」</div>
+        <div class="arpu">月額ARPU：月額 3,480円</div>
       </div>
       <div class="level-card reveal stagger-3">
         <div class="level-badge">Lv2</div>
-        <h3>螳滓兜雉・ｱ､</h3>
-        <div class="need">繝九・繧ｺ・壹す繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ繝ｻ譛驕ｩ蛹・/div>
-        <div class="value">縲碁°逕ｨ縺ｮ譛驕ｩ蛹悶ヤ繝ｼ繝ｫ縲・/div>
-        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・8,000蜀・/div>
+        <h3>実投資層</h3>
+        <div class="need">ニーズ：「シミュレーション・最適化」</div>
+        <div class="value">「運用の最適化ツール」</div>
+        <div class="arpu">月額ARPU：月額 8,000円</div>
       </div>
       <div class="level-card reveal stagger-4">
         <div class="level-badge">Lv3</div>
-        <h3>繝励Ο螻､</h3>
-        <div class="need">繝九・繧ｺ・壽姶逡･讀懆ｨｼ繝ｻ繝・・繧ｿ豢ｻ逕ｨ</div>
-        <div class="value">縲悟ｰる摩繝励Λ繝・ヨ繝輔か繝ｼ繝縲・/div>
-        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・15,000蜀・/div>
+        <h3>プロ層</h3>
+        <div class="need">ニーズ：「専門検証・データ活用」</div>
+        <div class="value">「戦略検証プラットフォーム」</div>
+        <div class="arpu">月額ARPU：月額 15,000円</div>
       </div>
     </div>
   </div>
@@ -1232,43 +957,43 @@ body{
 
 <hr class="glow-divider">
 
-<!-- ===== MONETIZE ===== -->
+<!-- MONETIZE -->
 <section class="section">
   <div class="section-inner">
     <div class="section-num">07 &nbsp; Monetize</div>
-    <h2 class="section-title gold reveal">繝槭ロ繧ｿ繧､繧ｺ謌ｦ逡･</h2>
-    <p class="section-sub reveal">谿ｵ髫守噪繝ｻ螟壼ｱ､逧・↑蜿守寢蛹悶ょｺ・相縺九ｉ豕穂ｺｺ螂醍ｴ・∪縺ｧ縲∝・譁ｹ菴阪・繝槭ロ繧ｿ繧､繧ｺ險ｭ險医・/p>
+    <h2 class="section-title gold reveal">マネタイズ戦略</h2>
+    <p class="section-sub reveal">段階的・多元的な収益構造。無料から法人向けまで、全方面のマネタイズ設計。</p>
 
     <div class="revenue-box reveal">
-      <h3>譌･譛ｬ蝗ｽ蜀・謗ｨ螳壼ｹｴ髢灘｣ｲ荳奇ｼ亥粋險茨ｼ・/h3>
-      <div class="revenue-num"><span class="counter" data-target="180">0</span>縲・span class="counter" data-target="210">0</span>蜆・・</div>
-      <div class="revenue-sub">繧ｰ繝ｭ繝ｼ繝舌Ν螻暮幕譎ゑｼ・,500縲・,100蜆・・</div>
+      <h3>日本国内・普及年間収益（試算）</h3>
+      <div class="revenue-num"><span class="counter" data-target="180">0</span>〜<span class="counter" data-target="210">0</span>億円</div>
+      <div class="revenue-sub">グローバル展開時：3,500〜4,100億円</div>
     </div>
 
     <div class="grid-4">
       <div class="monetize-card reveal stagger-1">
-        <span class="m-icon">導</span>
-        <h3>繧｢繝励Μ蜀・ｺ・相</h3>
-        <p>驥題檮繧ｵ繝ｼ繝薙せ繝ｻ險ｼ蛻ｸ莨夂､ｾ縺ｮ蠎・相縲・evel 0繝ｦ繝ｼ繧ｶ繝ｼ縺ｫ驟堺ｿ｡縲・/p>
-        <span class="price-tag">謗ｨ螳・24蜆・・/蟷ｴ</span>
+        <span class="m-icon">📱</span>
+        <h3>アプリ内広告</h3>
+        <p>無料サービス・間接広告の収益。Level 0ユーザーに有効。</p>
+        <span class="price-tag">普及：24億円/年</span>
       </div>
       <div class="monetize-card reveal stagger-2">
-        <span class="m-icon">諜</span>
-        <h3>譛磯｡崎ｪｲ驥・/h3>
-        <p>Lv1: 譛磯｡・80蜀・br>Lv2: 譛磯｡・,980蜀・br>Lv3: 譛磯｡・,980蜀・/p>
-        <span class="price-tag">謗ｨ螳・79蜆・・/蟷ｴ</span>
+        <span class="m-icon">💳</span>
+        <h3>月額課金</h3>
+        <p>Lv1: 月額980円<br>Lv2: 月額3,980円<br>Lv3: 月額9,980円</p>
+        <span class="price-tag">普及：79億円/年</span>
       </div>
       <div class="monetize-card reveal stagger-3">
-        <span class="m-icon">軸</span>
-        <h3>繧ｬ繝√Ε繧ｷ繧ｹ繝・Β</h3>
-        <p>1蝗・00蜀・・0蝗・00蜀・よ眠繧ｭ繝｣繝ｩ迯ｲ蠕励〒驟咲ｽｮ蝗樊焚UP縲ゅΞ繧｢繝ｪ繝・ぅ4谿ｵ髫弱・/p>
-        <span class="price-tag">謗ｨ螳・40蜆・・/蟷ｴ</span>
+        <span class="m-icon">🎰</span>
+        <h3>ガチャシステム</h3>
+        <p>1回:100円 / 10回:900円。新キャラ獲得で配置回数UP。レアリティ4種類。</p>
+        <span class="price-tag">普及：40億円/年</span>
       </div>
       <div class="monetize-card reveal stagger-4">
-        <span class="m-icon">召</span>
-        <h3>B2B謠先声</h3>
-        <p>險ｼ蛻ｸ莨夂､ｾ繝ｻ驫陦後・蟄ｦ譬｡蜷代￠謨呵ご繝・・繝ｫ縲よ怦鬘肴焚逋ｾ荳・・縲懊・/p>
-        <span class="price-tag">謗ｨ螳・66蜆・・/蟷ｴ</span>
+        <span class="m-icon">🏢</span>
+        <h3>B2B提携</h3>
+        <p>証券会社・学校向け教育ツール。法人数増加で巨大市場。</p>
+        <span class="price-tag">普及：66億円/年</span>
       </div>
     </div>
   </div>
@@ -1276,36 +1001,36 @@ body{
 
 <hr class="glow-divider">
 
-<!-- ===== ROADMAP ===== -->
+<!-- ROADMAP -->
 <section class="section">
   <div class="section-inner">
     <div class="section-num">08 &nbsp; Roadmap</div>
-    <h2 class="section-title reveal">螻暮幕繝ｭ繝ｼ繝峨・繝・・</h2>
-    <p class="section-sub reveal">谿ｵ髫守噪縺ｪ繧ｰ繝ｭ繝ｼ繝舌Ν螻暮幕縲ゅ∪縺壹・譌･譛ｬ縺九ｉ縲∽ｸ也阜縺ｸ縲・/p>
+    <h2 class="section-title reveal">展開ロードマップ</h2>
+    <p class="section-sub reveal">段階的なグローバル展開。まずは日本から、一国ずつ。</p>
 
     <div class="timeline">
       <div class="tl-item">
         <div class="tl-dot"></div>
-        <div class="tl-phase">Phase 1 窶・Year 1縲・</div>
-        <h4>譌･譛ｬ繝ｻ譚ｱ繧｢繧ｸ繧｢</h4>
-        <p>譌･譛ｬ邨梧ｸ医せ繝・・繧ｸ螳梧・縲る沒蝗ｽ繝ｻ蜿ｰ貉ｾ邨梧ｸ医ｒ螳溯｣・＠繧｢繧ｸ繧｢蟶ょｴ繧帝幕諡薙・uolingo騾｣謳ｺ繧ｷ繧ｹ繝・Β讒狗ｯ峨・2B謠先声繧帝≡陞肴･ｭ逡後〒髢句ｧ九・/p>
-        <span class="tl-target">腸 螢ｲ荳顔岼讓呻ｼ・50縲・00蜆・・/蟷ｴ</span>
+        <div class="tl-phase">Phase 1 — Year 1</div>
+        <h4>日本・東アジア</h4>
+        <p>日本基本ステージ完成。韓国・台湾ステージを実装しアジア圏展開。Duolingo連動システム構築。B2B提携を早期後で開始。</p>
+        <span class="tl-target">💰 収益目標：150〜500億円/年</span>
       </div>
 
       <div class="tl-item">
         <div class="tl-dot"></div>
-        <div class="tl-phase">Phase 2 窶・Year 2縲・</div>
-        <h4>繧ｰ繝ｭ繝ｼ繝舌Ν螻暮幕</h4>
-        <p>繧｢繝｡繝ｪ繧ｫ繝ｻ繝ｨ繝ｼ繝ｭ繝・ヱ繝ｻ荳ｭ蝗ｽ蟶ょｴ縺ｮ譛ｬ譬ｼ螻暮幕縲ょ推蝗ｽ蜷代￠繧ｫ繧ｹ繧ｿ繝槭う繧ｺ縺ｨ螟夊ｨ隱槫ｯｾ蠢懊・2B謠先声蜉騾溘よｩ滄未謚戊ｳ・ｮｶ蜷代￠繝励Ξ繝溘い繝繝励Λ繝ｳ縲・/p>
-        <span class="tl-target">腸 螢ｲ荳顔岼讓呻ｼ・,000縲・,500蜆・・/蟷ｴ</span>
+        <div class="tl-phase">Phase 2 — Year 2</div>
+        <h4>グローバル展開</h4>
+        <p>アメリカ・ヨーロッパ・中国圏の本格展開。各国向けカスタマイズと多言語対応。B2B提携拡充。投資家向けプレミアムプラン。</p>
+        <span class="tl-target">💰 収益目標：1,000〜1,500億円/年</span>
       </div>
 
       <div class="tl-item">
         <div class="tl-dot"></div>
-        <div class="tl-phase">Phase 3 窶・Year 3+</div>
-        <h4>辟｡髯先僑蠑ｵ繝励Λ繝・ヨ繝輔か繝ｼ繝</h4>
-        <p>100雜・・蝗ｽ縲・・邨梧ｸ医せ繝・・繧ｸ螳溯｣・らｵ梧ｸ医ョ繝ｼ繧ｿ繧ｻ繝・ヨ蛹悶↓繧医ｋAPI謠蝉ｾ帙よｩ滄未謚戊ｳ・ｮｶ蜷代￠繧ｵ繝ｼ繝薙せ譛ｬ譬ｼ蛹悶ょｮ梧・縺励↑縺・・繝ｩ繝・ヨ繝輔か繝ｼ繝縺ｸ縲・/p>
-        <span class="tl-target">腸 螢ｲ荳顔岼讓呻ｼ・,000縲・,000蜆・・/蟷ｴ・・繧ｰ繝ｭ繝ｼ繝舌Ν・・/span>
+        <div class="tl-phase">Phase 3 — Year 3+</div>
+        <h4>無限拡張プラットフォーム</h4>
+        <p>100超の国、複数ステージ実装。経済データセット化によるAPI提供。投資家向けサービス本格化。完成しないプラットフォームへ。</p>
+        <span class="tl-target">💰 収益目標：3,000〜5,000億円/年（グローバル）</span>
       </div>
     </div>
   </div>
@@ -1313,68 +1038,470 @@ body{
 
 <hr class="glow-divider">
 
-<!-- ===== VISION ===== -->
+<!-- VISION -->
 <section class="vision-section" id="vision">
   <img src="./images/cert/char-end-2.png" alt="" class="floating-chara vision-chara" onerror="this.style.display='none'">
   <div class="section-inner" style="position:relative;z-index:1">
     <div class="section-num" style="color:rgba(245,200,66,.8)">09 &nbsp; Vision</div>
-    <h2 class="section-title gold reveal" style="font-size:clamp(32px,6vw,64px)">繝薙ず繝ｧ繝ｳ</h2>
+    <h2 class="section-title gold reveal" style="font-size:clamp(32px,6vw,64px)">ビジョン</h2>
 
     <div class="vision-quote reveal">
-      <p>縺昴ｌ縺ｯ縲√ご繝ｼ繝縺ｧ縺ｯ縺ｪ縺・・br><strong>縲御ｺｺ鬘槭・邨梧ｸ域ｴｻ蜍輔◎縺ｮ繧ゅ・縲・/strong>繧偵・br>繧ｲ繝ｼ繝溘ヵ繧｣繧ｱ繝ｼ繧ｷ繝ｧ繝ｳ縺輔ｌ縺溷ｽ｢縺ｧ縲・br>豌ｸ驕縺ｫ菴馴ｨ薙＠邯壹￠繧峨ｌ繧九・繝ｩ繝・ヨ繝輔か繝ｼ繝縲・/p>
+      <p>それは、ゲームではない。<br><strong>「世界の経済活動そのもの」</strong>を<br>ゲーミフィケーションされた形で、<br>世界中に届け続けられるプラットフォーム。</p>
     </div>
 
     <div class="grid-2" style="margin:48px 0">
       <div class="glass-card reveal stagger-1">
-        <span class="card-icon">雌</span>
-        <h3>驥題檮繝ｪ繝・Λ繧ｷ繝ｼ縺ｮ豌台ｸｻ蛹・/h3>
-        <p>鬮倬｡阪↑繧ｻ繝溘リ繝ｼ繧・さ繝ｳ繧ｵ繝ｫ荳崎ｦ√ゅ☆縺ｹ縺ｦ縺ｮ莠ｺ縺檎┌譁吶〒驥題檮謨呵ご繧貞女縺代ｉ繧後ｋ縲ら衍隴俶ｼ蟾ｮ繧偵ご繝ｼ繝縺ｧ蝓九ａ繧九・/p>
+        <span class="card-icon">🎓</span>
+        <h3>金融リテラシーの民主化</h3>
+        <p>高額なセミナーやコンサル不要。すべての人が無料で金融知識を受けられる。知識の壁をゲームで壊す。</p>
       </div>
       <div class="glass-card reveal stagger-2">
-        <span class="card-icon">訣</span>
-        <h3>繧ｰ繝ｭ繝ｼ繝舌Ν邨梧ｸ医・逅・ｧ｣</h3>
-        <p>荳也阜100雜・・蝗ｽ縲・ｒ菴馴ｨ薙☆繧九％縺ｨ縺ｧ縲∬､・尅縺ｪ邨梧ｸ育嶌莠帝未菫ゅｒ逶ｴ諢溽噪縺ｫ逅・ｧ｣縲ゅげ繝ｭ繝ｼ繝舌Ν蟶よｰ代ｒ閧ｲ縺ｦ繧九・/p>
+        <span class="card-icon">🌏</span>
+        <h3>グローバル経済の理解</h3>
+        <p>世界100超の国をプレイすることで、複雑な経済問題を直観的に理解。グローバル視野を広げる。</p>
       </div>
       <div class="glass-card reveal stagger-3">
-        <span class="card-icon">嶋</span>
-        <h3>謚戊ｳ・枚蛹悶・蛛･蜈ｨ蛹・/h3>
-        <p>繧ｲ繝ｼ繝諢溯ｦ壹〒蟋九∪縺｣縺溷ｭｦ鄙偵′縲∝ｮ滓兜雉・∈縺ｮ遒ｺ菫｡縺ｨ遏･隴倥↓騾ｲ蛹悶よ律譛ｬ縺ｮ謚戊ｳ・枚蛹悶ｒ螟峨∴繧九・/p>
+        <span class="card-icon">📱</span>
+        <h3>投資行動の変革</h3>
+        <p>ゲーム感覚で始まった学習が、実際の投資への確信と知識に進化。日本の投資文化を変える。</p>
       </div>
       <div class="glass-card reveal stagger-4">
-        <span class="card-icon">笙ｾ・・/span>
-        <h3>螳梧・縺励↑縺・・繝ｩ繝・ヨ繝輔か繝ｼ繝</h3>
-        <p>豈主ｹｴ譁ｰ蝗ｽ霑ｽ蜉縲∵ｯ主ｹｴ繝懊・繝画僑蠑ｵ縲よｰｸ驕縺ｫ譁ｰ縺励＞菴馴ｨ薙′縺ｧ縺阪ｋ縲よｭｴ蜿ｲ縺ｨ縺ｨ繧ゅ↓騾ｲ蛹悶☆繧九ご繝ｼ繝縲・/p>
+        <span class="card-icon">♾️</span>
+        <h3>完成しないプラットフォーム</h3>
+        <p>毎年新国追加、毎年ボード拡張。いつでも新しい体験ができる。経済とともに進化するゲーム。</p>
       </div>
     </div>
 
     <div class="final-box reveal">
-      <h3>Duolingo縺瑚ｨ隱槫ｭｦ鄙偵ｒ豌台ｸｻ蛹悶＠縺溘ｈ縺・↓縲・br><strong>繝槭ロ縺ｼ縺・′邨梧ｸ医・驥題檮謨呵ご繧呈ｰ台ｸｻ蛹悶☆繧・/strong></h3>
+      <h3>Duolingoが語学学習を民主化したように、<br><strong>マネぼうが経済の金融知識を民主化する</strong></h3>
       <p style="margin-top:24px">
-        縺薙ｌ縺悟ｮ梧・縺励◆縺ｨ縺阪・br>
-        <strong>荳也阜荳ｭ縺ｮ驥題檮謨呵ご縺ｯ螟峨ｏ繧九・/strong>
+        これが完成したとき、<br>
+        <strong>世界中の経済知識は変わる</strong>
       </p>
       <div style="margin-top:40px">
         <button class="btn-primary" style="animation:none">
-          噫 莉翫☆縺仙ｧ九ａ繧・        </button>
+          💰 今すぐ見る
+        </button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
+<hr class="glow-divider">
+
+<!-- CONCERNS -->
+<section class="section" id="concerns">
+  <div class="section-inner">
+    <div class="section-num">10 &nbsp; Concerns</div>
+    <h2 class="section-title reveal">現実的な懸念点</h2>
+    <p class="section-sub reveal">反対意見を認めた上で、それを超える戦略を提示する。<br>アンチの指摘と、私たちの対抗姿勢。</p>
+
+    <div class="concern-group reveal">
+      <h3>1. 市場規模・獲得の懸念</h3>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ CAC（顧客獲得コスト）が甘い</h4>
+          <p>「300〜500円」は楽観的。実際は1,000〜3,000円。初期投資で赤字になる。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 段階的スケーリングで対抗</h4>
+          <p>Year 1ではCAC 0円（SNS＆オーガニック）で開始。Year 2で有料広告化。赤字を避ける。</p>
+        </div>
+      </div>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ 「金融知識ゼロ層」獲得が困難</h4>
+          <p>市場規模4,000万人は幻想。実際の対象は700〜1,000万人程度。70〜80%減少の可能性。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 小さく確実に始める</h4>
+          <p>Year 1目標：10万ユーザー。Year 2：50万。段階的成長で投資家の信頼獲得。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concern-group reveal">
+      <h3>2. リテンションの懸念</h3>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ リテンション 40〜60% は楽観的</h4>
+          <p>Duolingo比較は誤り。経済学習は強制的に感じられやすい。実際は15〜25%の可能性。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 現実連動性で差別化</h4>
+          <p>「現実の経済ニュース」がゲーム内イベント化される。Duolingoにない「現在進行形の体験」。</p>
+        </div>
+      </div>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ 「学習」と「娯楽」の矛盾</h4>
+          <p>ゲーム内成功 ≠ 実運用成功。むしろ「勘違い」を招き、実運用で失敗→信用失墜。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 「ゲーム」と「学習」を分離</h4>
+          <p>「マネぼう 標準版」（ゲーム性優先）＆「アカデミック版」（学習性優先）の2つをリリース。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concern-group reveal">
+      <h3>3. マネタイズの懸念</h3>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ 広告単価が誤算</h4>
+          <p>月額ARPU 50〜100円は幻想。実際は3〜10円。広告モデルでは赤字確実。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 複合的マネタイズ</h4>
+          <p>Year 1：無料。Year 2：月額980円（Level 1）。Year 3：企業向けB2B。段階的課金化。</p>
+        </div>
+      </div>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ B2B提携は幻想</h4>
+          <p>証券会社は既に自社ツール保有。わざわざライセンス料を払う理由がない。年間10〜50億円は非現実的。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 段階的B2B化</h4>
+          <p>Year 1〜2は個人向け。Year 3でB2B提携申し込み。「成功実績」を見てから提携交渉。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concern-group reveal">
+      <h3>4. 技術・運用の懸念</h3>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ ボード毎年更新は持続不可能</h4>
+          <p>年間5〜10億円のコスト。経済学者5〜10人必須。2人チームでは絶対不可能。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ AIによる自動生成</h4>
+          <p>Claudeで自動生成 → 経済学者1人がレビュー（月50万円）。年間コスト270万円で実現。1000倍のコスト削減。</p>
+        </div>
+      </div>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ 経済データの正確性問題</h4>
+          <p>キャラ効果値に根拠がない。教科書と違う。不正確な経済教育ツールとして信用失墜。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 2つのバージョン</h4>
+          <p>「ゲーム版」（バランス優先）と「アカデミック版」（正確性優先）を分離。各用途に対応。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concern-group reveal">
+      <h3>5. 規制・リスク</h3>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ 金融商品取引法の対象</h4>
+          <p>規制当局から指導される可能性。弁護士・コンプライアンス費用で年間1〜3億円必要。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ 事前相談で対応</h4>
+          <p>金融庁に事前相談。適切な免責事項を用意。むしろ「教育志向」として認識獲得。弁護士費用：年間300〜400万円。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concern-group reveal">
+      <h3>6. 人・コスト面での懸念</h3>
+      <div class="vs-box">
+        <div class="vs-left">
+          <h4>❌ 2人では開発不可能</h4>
+          <p>76〜122人チーム、20〜30億円が必要。初期投資40〜70億円。2人では絶対不可能。</p>
+        </div>
+        <div class="vs-right">
+          <h4>✓ AIによる「力の外注化」</h4>
+          <p>Claude Code + ChatGPT + Midjourneyで、実質10人分の生産性を実現。初期投資1,000万円程度で可能。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- COUNTER-STRATEGY -->
+<section class="section" id="counter">
+  <div class="section-inner">
+    <div class="section-num">11 &nbsp; Counter Strategy</div>
+    <h2 class="section-title reveal">対抗戦略</h2>
+    <p class="section-sub reveal">2人チーム × AIという武器で、従来の常識を覆す。<br>「野心的だが無謀」ではなく、「謙虚だが確実」な戦略。</p>
+
+    <div class="highlight-box reveal">
+      アンチの批判は「100人チーム、50億円投資」を前提にしている。しかし、<strong>2人チーム × AIツール駆使</strong>なら、完全に異なる勝ち方がある。「野心的だが無謀」ではなく、「謙虚だが確実」な戦略で対抗する。
+    </div>
+
+    <h3 style="font-size:20px;font-weight:700;margin:40px 0 20px;color:var(--text)" class="reveal">2人チームの3つの逆説的強み</h3>
+    <div class="grid-3" style="margin-bottom:48px">
+      <div class="strength-card reveal stagger-1">
+        <h4>1️⃣ スピード感</h4>
+        <p>大企業：決定→承認→企画→設計→開発 = 6〜12ヶ月<br><br>2人チーム：決定→開発 = 1〜2週間<br><br>市場機会を素早く掴める。ユーザーフィードバックを即座に反映。競合より「反復スピード」で勝つ。</p>
+      </div>
+      <div class="strength-card reveal stagger-2">
+        <h4>2️⃣ フットワーク</h4>
+        <p>「500万人のユーザーを抱えるDuolingo」と競わない。「金融教育に熱狂する1万人のコミュニティ」を作ることに注力。<br><br>Twitter、Discord、RedditでのDM。ユーザーとの距離感が強み。</p>
+      </div>
+      <div class="strength-card reveal stagger-3">
+        <h4>3️⃣ AIによる「力の外注化」</h4>
+        <p>人間2人 + AI（Claude, ChatGPT, Midjourney）= 実質的に「10人チーム」相当の生産性<br><br>コード生成、問題生成、イラスト生成、テスト生成を全てAIに任せる。人間はクリエイティブ決定のみ。</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:20px;font-weight:700;margin:40px 0 20px;color:var(--text)" class="reveal">AIツール駆使による開発戦略</h3>
+    <div class="ai-table-wrap reveal">
+      <table class="ai-table">
+        <tr>
+          <th>ツール</th>
+          <th>用途</th>
+          <th>月額コスト</th>
+        </tr>
+        <tr>
+          <td>Claude / Claude Code</td>
+          <td>メイン開発エンジン</td>
+          <td>$20〜120</td>
+        </tr>
+        <tr>
+          <td>ChatGPT-4</td>
+          <td>クイズ・ストーリー生成</td>
+          <td>$20</td>
+        </tr>
+        <tr>
+          <td>Midjourney</td>
+          <td>キャラ・イラスト自動生成</td>
+          <td>$10〜30</td>
+        </tr>
+        <tr>
+          <td>GitHub Copilot</td>
+          <td>コード補完</td>
+          <td>$10</td>
+        </tr>
+        <tr>
+          <td>Firebase</td>
+          <td>バックエンド（BaaS）</td>
+          <td>$0〜100</td>
+        </tr>
+        <tr>
+          <td>合計月額</td>
+          <td>従来予想（20〜30億円）の1000倍削減</td>
+          <td>$80〜280</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3 style="font-size:20px;font-weight:700;margin:40px 0 20px;color:var(--text)" class="reveal">12ヶ月開発ロードマップ</h3>
+    <div class="dev-roadmap-grid">
+      <div class="dev-box reveal stagger-1">
+        <h5>📅 Month 1〜2：企画・設計フェーズ</h5>
+        <ul>
+          <li>全体設計書作成（Claude Codeのアシスト利用）</li>
+          <li>技術設計・API設計</li>
+          <li>初期50問のクイズ作成（ChatGPTアシスト）</li>
+          <li>キャラ4体の設定書作成</li>
+        </ul>
+      </div>
+      <div class="dev-box reveal stagger-2">
+        <h5>📅 Month 3〜4：ボードゲームエンジン開発</h5>
+        <ul>
+          <li>Unityで基本エンジン実装（Claude Codeで50%自動生成）</li>
+          <li>224マスのボード可視化</li>
+          <li>キャラ配置ロジック実装</li>
+          <li>資産推移計算エンジン</li>
+        </ul>
+      </div>
+      <div class="dev-box reveal stagger-3">
+        <h5>📅 Month 5〜6：Duolingo学習パート開発</h5>
+        <ul>
+          <li>Firebaseでバックエンド構築</li>
+          <li>クイズ100問作成・実装（ChatGPT+手動調整）</li>
+          <li>プッシュ通知システム</li>
+          <li>ストリーク・ボーナス機能</li>
+        </ul>
+      </div>
+      <div class="dev-box reveal stagger-4">
+        <h5>📅 Month 7〜8：キャラ・イラスト作成</h5>
+        <ul>
+          <li>キャラ4体のイラスト生成（Midjourneyで自動化）</li>
+          <li>UI/UXデザイン（Figma）</li>
+          <li>アニメーション・SE実装</li>
+          <li>ローカライズ（言語対応）</li>
+        </ul>
+      </div>
+      <div class="dev-box reveal stagger-5">
+        <h5>📅 Month 9：テスト・リリース準備</h5>
+        <ul>
+          <li>自動テスト実行（AIが生成したテストスイート）</li>
+          <li>バグ修正・最適化</li>
+          <li>iOS/Androidビルド</li>
+          <li>App Store/Google Play申請</li>
+        </ul>
+      </div>
+      <div class="dev-box reveal stagger-6">
+        <h5>📅 Month 10〜11：マーケティング＆ローンチ</h5>
+        <ul>
+          <li>Twitter/Xでの告知・YouTuber無料提供</li>
+          <li>大学・高校でのベータテスト</li>
+          <li>iOS/Android同時リリース</li>
+          <li>初期ユーザー：1,000〜10,000人（Day 1）</li>
+        </ul>
+      </div>
+      <div class="dev-box reveal stagger-1">
+        <h5>📅 Month 12：検証・Year 2計画</h5>
+        <ul>
+          <li>リテンション測定</li>
+          <li>DAU/MAU分析</li>
+          <li>ユーザー満足度調査</li>
+          <li>Year 2戦略を決定</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-size:20px;font-weight:700;margin:48px 0 20px;color:var(--text)" class="reveal">各懸念点への具体的対抗策</h3>
+    <div class="counter-box reveal">
+      <h5>🎯 対抗1：CAC問題</h5>
+      <ul>
+        <li><strong>Phase 1（Year 1）：</strong>SNS・YouTuber・学校でのベータテストでCAC 0円</li>
+        <li><strong>初期10万ユーザー取得</strong>でオーガニック成長実現</li>
+        <li><strong>Phase 2（Year 2）：</strong>初期ユーザーの成功実績をベースに、有料広告開始</li>
+        <li>実CACは500〜1000円程度に留まる可能性（早期ユーザーなので相対的に低い）</li>
+      </ul>
+    </div>
+    <div class="counter-box reveal">
+      <h5>🎯 対抗2：リテンション問題</h5>
+      <ul>
+        <li><strong>現実連動性で差別化：</strong>「毎週のニュース配置チャレンジ」（Duolingoにない機能）</li>
+        <li><strong>スコア予測レース：</strong>「2027年の日本経済ステージ最終スコアはいくら？」をプレイヤーが予測</li>
+        <li><strong>月次ランキング：</strong>世界中のプレイヤーと同時競争</li>
+        <li>→ リテンション35〜45%の達成を目指す</li>
+      </ul>
+    </div>
+    <div class="counter-box reveal">
+      <h5>🎯 対抗3：グローバル展開問題</h5>
+      <ul>
+        <li><strong>Phase 1（Year 1〜2）：</strong>日本特化。他国版は「翻訳のみ」</li>
+        <li><strong>Phase 2（Year 2）：</strong>英語版リリース（米国経済ステージ追加）</li>
+        <li><strong>Claudeで自動翻訳 → 人間がレビュー</strong>で、100〜200人チーム不要</li>
+        <li><strong>Phase 3（Year 3+）：</strong>クラウドソーシング。各国ユーザーが自国版開発に参加</li>
+      </ul>
+    </div>
+    <div class="counter-box reveal">
+      <h5>🎯 対抗4：ボード毎年更新問題</h5>
+      <ul>
+        <li><strong>Step 1：</strong>日銀、IMFのAPIから経済データを自動取得</li>
+        <li><strong>Step 2：</strong>Claudeで自動ストーリー生成</li>
+        <li><strong>Step 3：</strong>ChatGPT+統計でキャラ効果値を自動計算</li>
+        <li><strong>Step 4：</strong>経済学者1人（月50万円）がレビューのみ</li>
+        <li>→ 年間270万円で実現。従来の5〜10億円から1000倍削減</li>
+      </ul>
+    </div>
+    <div class="counter-box reveal">
+      <h5>🎯 対抗5：正確性問題</h5>
+      <ul>
+        <li><strong>2つのバージョンを用意：</strong></li>
+        <li>「マネぼう 標準版」：ゲーム性優先。免責事項あり。娯楽として位置付け</li>
+        <li>「マネぼう アカデミック版」：学習性優先。経済学者が監修。学校向け</li>
+        <li>→ 各用途に対応。信用問題を回避</li>
+      </ul>
+    </div>
+    <div class="counter-box reveal">
+      <h5>🎯 対抗6：規制リスク</h5>
+      <ul>
+        <li><strong>リリース前に金融庁に相談申し込み</strong></li>
+        <li>「マネぼうは投資教育ゲーム。金融商品取引法の対象ですか？」</li>
+        <li><strong>弁護士による法的アドバイス取得</strong>（月額20〜30万円）</li>
+        <li>→ むしろ「教育志向」として金融庁に認識獲得</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- CHECKLIST -->
+<section class="section" id="checklist">
+  <div class="section-inner">
+    <div class="section-num">12 &nbsp; Checklist</div>
+    <h2 class="section-title reveal">実行チェックリスト</h2>
+    <p class="section-sub reveal">12ヶ月で確実に実現するための行動計画。フェーズごとに確認していく。</p>
+
+    <div class="checklist-phase reveal">
+      <h4>🔥 今月中にやること</h4>
+      <ul>
+        <li>金融庁に相談窓口を探す</li>
+        <li>Claude Codeの実装試験（開発時間50%削減の検証）</li>
+        <li>ユーザーインタビュー（5〜10人）</li>
+        <li>マーケティング戦略立案（有料広告なしで10万人到達の可能性を検証）</li>
+        <li>パートナーとの役割分担確定</li>
+      </ul>
+    </div>
+
+    <div class="checklist-phase reveal">
+      <h4>📐 Month 1〜2：企画・設計フェーズ</h4>
+      <ul>
+        <li>全体設計書（Claudeアシスト）</li>
+        <li>技術設計書（パートナー主導）</li>
+        <li>初期50問のクイズ作成</li>
+        <li>キャラ4体の設定書</li>
+      </ul>
+    </div>
+
+    <div class="checklist-phase reveal">
+      <h4>🔨 Month 3〜9：開発フェーズ</h4>
+      <ul>
+        <li>ボードゲームエンジン開発</li>
+        <li>Duolingo学習パート開発</li>
+        <li>キャラ・イラスト作成（Midjourney）</li>
+        <li>テスト・ビルド・最適化</li>
+      </ul>
+    </div>
+
+    <div class="checklist-phase reveal">
+      <h4>🚀 Month 10〜11：ローンチ準備＆ローンチ</h4>
+      <ul>
+        <li>iOS/Androidストア申請</li>
+        <li>SNS・YouTuber・大学でのマーケティング</li>
+        <li>ローンチ（Day 1目標：1,000〜10,000ダウンロード）</li>
+      </ul>
+    </div>
+
+    <div class="checklist-phase reveal">
+      <h4>📊 Month 12：検証・Year 2計画</h4>
+      <ul>
+        <li>リテンション・DAU/MAU測定</li>
+        <li>ユーザー満足度調査</li>
+        <li>Year 2戦略決定</li>
+      </ul>
+    </div>
+
+    <div class="highlight-box reveal" style="margin-top:40px;border-left-color:var(--gold);background:rgba(245,200,66,.06)">
+      <p style="font-size:16px;line-height:2;text-align:center">
+        確かに、Duolingoのような大企業と、従来型の100人チームでは、この構想は実現不可能です。<br>
+        ただし私たちは <strong>2人チーム × AI</strong> です。<br>
+        第1年目は <strong>「10万ユーザー、月売上1000万円」</strong> という小さな目標で確実に実現します。<br>
+        その実績を元に、Year 2でスケーリングを判断します。<br>
+        <strong>「野心的だが無謀」ではなく、「謙虚だが確実」な戦略です。</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-logo">腸 繝槭ロ縺ｼ縺・譁ｰ讒区Φ</div>
+  <div class="footer-logo">💰 マネぼう 新構想</div>
   <div class="footer-tagline">
-    Duolingo ﾃ・RPG ﾃ・繝懊・繝峨ご繝ｼ繝 ﾃ・邨梧ｸ医す繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ<br>
-    = 螳悟・縺ｫ譁ｰ縺励＞繧ｸ繝｣繝ｳ繝ｫ縺ｮ隱慕函
+    Duolingo × RPG × ボードゲーム × 経済シミュレーション<br>
+    = 完全に新しいジャンルの誕生
   </div>
   <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:24px">
-    <span class="badge">式 邨梧ｸ亥ｭｦ鄙偵Γ繧ｿ繧ｲ繝ｼ繝</span>
-    <span class="badge">訣 100+繧ｫ蝗ｽ蟇ｾ蠢應ｺ亥ｮ・/span>
-    <span class="badge">笙ｾ・・豌ｸ驕縺ｫ譖ｴ譁ｰ</span>
+    <span class="badge">🎯 経済学習メタゲーム</span>
+    <span class="badge">🌏 100+カ国対応予定</span>
+    <span class="badge">♾️ 毎年に更新</span>
   </div>
   <div class="footer-sep"></div>
-  <div class="footer-copy">ﾂｩ 2024-2026 繝槭ロ縺ｼ縺・ｧ区Φ All Rights Reserved</div>
+  <div class="footer-copy">© 2024-2026 マネぼう 新構想 All Rights Reserved</div>
 </footer>
 
 <script>
@@ -1407,12 +1534,12 @@ body{
 /* ===== FLOATING COINS ===== */
 (function(){
   const wrap=document.getElementById('coins-wrap');
-  const coins=['腸','ｪ・,'超','跳','諜','嶋','笨ｨ'];
+  const coins=['💰','🪙','💴','💵','💳','📈','✨'];
   for(let i=0;i<12;i++){
     const d=document.createElement('div');
     d.className='coin';
     d.textContent=coins[Math.floor(Math.random()*coins.length)];
-    d.style.cssText=`left:${Math.random()*100}vw;--dur:${8+Math.random()*10}s;--delay:${Math.random()*8}s;font-size:${14+Math.random()*16}px`;
+    d.style.cssText=`left:${Math.random()*100}vw;--dur:${8+Math.random()*10}s;--delay:${Math.random()*8}s;font-size:${14+Math.random()*10}px`;
     wrap.appendChild(d);
   }
 })();
@@ -1453,44 +1580,6 @@ const counterObs=new IntersectionObserver(entries=>{
 },{threshold:.5});
 document.querySelectorAll('.counter').forEach(el=>counterObs.observe(el));
 
-/* ===== XP BAR ANIMATION ===== */
-const xpObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      setTimeout(()=>{e.target.style.width=e.target.style.width||'0%'},200);
-      xpObs.unobserve(e.target);
-    }
-  });
-},{threshold:.5});
-document.querySelectorAll('.chara-xp-fill').forEach(el=>{
-  const w=el.style.width;el.style.width='0%';
-  xpObs.observe(el);
-  el.addEventListener('transitionend',()=>{},false);
-  setTimeout(()=>observer.observe(el.closest('.chara-card')||el),100);
-});
-
-/* ===== STAR VISIONS ===== */
-(function(){
-  const vision=document.querySelector('.vision-section');
-  if(!vision)return;
-  for(let i=0;i<20;i++){
-    const s=document.createElement('div');
-    s.className='vision-star';
-    const size=Math.random()*3+1;
-    s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*3}s;--delay:${Math.random()*3}s`;
-    vision.appendChild(s);
-  }
-})();
-
-/* ===== SMOOTH PARALLAX ===== */
-let heroEl=document.querySelector('.hero');
-window.addEventListener('scroll',function(){
-  if(heroEl&&window.scrollY<window.innerHeight){
-    const y=window.scrollY*.4;
-    heroEl.querySelector('.hero-bg-glow').style.transform=`translateY(${y}px)`;
-  }
-},{passive:true});
-
 /* ===== XP FILL TRIGGER ===== */
 document.querySelectorAll('.chara-card').forEach(card=>{
   const fill=card.querySelector('.chara-xp-fill');
@@ -1505,7 +1594,27 @@ document.querySelectorAll('.chara-card').forEach(card=>{
   },{threshold:.3});
   cardObs.observe(card);
 });
+
+/* ===== STAR VISIONS ===== */
+(function(){
+  const vision=document.querySelector('.vision-section');
+  if(!vision)return;
+  for(let i=0;i<20;i++){
+    const s=document.createElement('div');
+    s.className='vision-star';
+    const size=Math.random()*3+1;
+    s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*3}s;--delay:${Math.random()*2}s`;
+    vision.appendChild(s);
+  }
+})();
+
+/* ===== PARALLAX ===== */
+let heroEl=document.querySelector('.hero');
+window.addEventListener('scroll',function(){
+  if(heroEl&&window.scrollY<window.innerHeight){
+    heroEl.querySelector('.hero-bg-glow').style.transform=`translateY(${window.scrollY*.4}px)`;
+  }
+},{passive:true});
 </script>
 </body>
 </html>
-
