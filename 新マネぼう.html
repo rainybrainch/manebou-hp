@@ -1,922 +1,1511 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マネぼう - 経済学習メタゲーム</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-        
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        
-        nav {
-            display: flex;
-            gap: 30px;
-        }
-        
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            transition: opacity 0.3s;
-        }
-        
-        nav a:hover {
-            opacity: 0.8;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 100px 20px;
-            text-align: center;
-        }
-        
-        .hero-content {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-        
-        .hero-subtitle {
-            font-size: 24px;
-            margin-bottom: 30px;
-            opacity: 0.95;
-        }
-        
-        .hero-description {
-            font-size: 18px;
-            margin-bottom: 40px;
-            opacity: 0.9;
-            line-height: 1.8;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: #ff6b6b;
-            color: white;
-            padding: 15px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .cta-button:hover {
-            background: #ff5252;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        section {
-            padding: 80px 20px;
-        }
-        
-        section:nth-child(odd) {
-            background: #f8f9fa;
-        }
-        
-        h2 {
-            font-size: 36px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #333;
-        }
-        
-        .section-subtitle {
-            font-size: 18px;
-            text-align: center;
-            color: #666;
-            margin-bottom: 50px;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-        
-        .card h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-        
-        .card p {
-            color: #666;
-            font-size: 15px;
-            line-height: 1.8;
-        }
-        
-        .feature-list {
-            list-style: none;
-            margin-top: 20px;
-        }
-        
-        .feature-list li {
-            padding: 10px 0;
-            color: #666;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .feature-list li:before {
-            content: "✓ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .flow-diagram {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 40px 0;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .flow-box {
-            background: white;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            min-width: 180px;
-            color: #333;
-        }
-        
-        .flow-box h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-        
-        .flow-arrow {
-            font-size: 30px;
-            color: #667eea;
-            margin: 0 10px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .stat-box {
-            background: white;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .stat-number {
-            font-size: 36px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-        
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-        
-        .timeline-item {
-            margin-bottom: 40px;
-            padding-left: 50px;
-            position: relative;
-        }
-        
-        .timeline-item:before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            background: #667eea;
-            border-radius: 50%;
-            border: 4px solid white;
-            box-shadow: 0 0 0 2px #667eea;
-        }
-        
-        .timeline-item:after {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 20px;
-            width: 4px;
-            height: 40px;
-            background: #667eea;
-        }
-        
-        .timeline-item:last-child:after {
-            display: none;
-        }
-        
-        .timeline-item h4 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-        
-        .tier-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-        
-        .tier-card {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .tier-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .tier-body {
-            padding: 30px 20px;
-        }
-        
-        .tier-body ul {
-            list-style: none;
-            color: #666;
-            font-size: 14px;
-        }
-        
-        .tier-body li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .tier-body li:before {
-            content: "→ ";
-            color: #667eea;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .vision-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 40px;
-        }
-        
-        .vision-box h3 {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-        
-        .vision-box p {
-            font-size: 18px;
-            line-height: 1.8;
-            opacity: 0.95;
-        }
-        
-        footer {
-            background: #222;
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-        }
-        
-        .highlight {
-            color: #667eea;
-            font-weight: bold;
-        }
-        
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 32px;
-            }
-            
-            .hero-subtitle {
-                font-size: 18px;
-            }
-            
-            h2 {
-                font-size: 24px;
-            }
-            
-            nav {
-                gap: 15px;
-                font-size: 12px;
-            }
-            
-            .flow-diagram {
-                flex-direction: column;
-            }
-            
-            .flow-arrow {
-                transform: rotate(90deg);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>繝槭ロ縺ｼ縺・譁ｰ讒区Φ - 邨梧ｸ亥ｭｦ鄙偵Γ繧ｿ繧ｲ繝ｼ繝</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050508;--surface:#0c0c1a;--card:#11112a;--border:#1e1e40;
+  --gold:#f5c842;--gold2:#ffd700;--purple:#7c3aed;--cyan:#5bc8e8;
+  --text:#e8e8f4;--muted:#8888aa;--green:#3fb950;--red:#f85149;
+  --grad1:linear-gradient(135deg,#7c3aed,#5bc8e8);
+  --grad2:linear-gradient(135deg,#f5c842,#ff9f00);
+  --grad3:linear-gradient(135deg,#7c3aed 0%,#c026d3 50%,#5bc8e8 100%);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Zen Maru Gothic',sans-serif;
+  overflow-x:hidden;line-height:1.7;
+}
+::selection{background:var(--gold);color:#000}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--surface)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+
+/* ===== SCROLL PROGRESS ===== */
+#scrollBar{
+  position:fixed;top:0;left:0;height:3px;
+  background:var(--grad2);z-index:9999;width:0%;
+  transition:width .1s;
+}
+
+/* ===== STARS BG ===== */
+#stars-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+/* ===== NAV ===== */
+.nav{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(5,5,8,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .3s;
+}
+.nav.scrolled{background:rgba(5,5,8,.97);box-shadow:0 4px 30px rgba(0,0,0,.6)}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;
+  font-size:20px;font-weight:900;
+  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 8px rgba(245,200,66,.4));
+}
+.nav-logo img{width:32px;height:32px;border-radius:8px}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{
+  color:var(--muted);text-decoration:none;font-size:13px;font-weight:500;
+  transition:all .2s;padding:4px 8px;border-radius:6px;
+}
+.nav-links a:hover{color:var(--gold);background:rgba(245,200,66,.1)}
+.nav-cta{
+  background:var(--grad2);color:#000;
+  padding:8px 20px;border-radius:20px;font-weight:700;font-size:13px;
+  text-decoration:none;border:none;cursor:pointer;font-family:inherit;
+  transition:all .2s;box-shadow:0 0 20px rgba(245,200,66,.3);
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(245,200,66,.5)}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:80px 20px;overflow:hidden;
+}
+.hero-bg-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 30%, rgba(124,58,237,.18) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 20% 60%, rgba(91,200,232,.1) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 50% at 80% 70%, rgba(245,200,66,.08) 0%, transparent 60%);
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(124,58,237,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,58,237,.06) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-content{position:relative;max-width:960px;margin:0 auto}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);
+  color:#c4b5fd;padding:6px 16px;border-radius:20px;font-size:13px;
+  margin-bottom:24px;font-weight:500;
+}
+.hero-tag::before{content:'笨ｦ';color:var(--purple);animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-chara{
+  width:140px;height:140px;margin:0 auto 20px;
+  filter:drop-shadow(0 0 30px rgba(245,200,66,.5));
+  animation:heroFloat 3s ease-in-out infinite;
+}
+@keyframes heroFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-16px) scale(1.04)}}
+.hero h1{
+  font-size:clamp(52px,10vw,96px);font-weight:900;line-height:1.1;
+  margin-bottom:8px;
+  background:linear-gradient(135deg,#fff 0%,var(--gold) 40%,#ff9f00 70%,var(--purple) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 40px rgba(245,200,66,.3));
+  animation:titleShimmer 4s ease-in-out infinite;
+}
+@keyframes titleShimmer{
+  0%,100%{filter:drop-shadow(0 0 30px rgba(245,200,66,.3))}
+  50%{filter:drop-shadow(0 0 60px rgba(245,200,66,.6))}
+}
+.hero-sub{
+  font-size:clamp(18px,3vw,26px);font-weight:700;
+  color:var(--cyan);margin-bottom:20px;letter-spacing:.05em;
+}
+.hero-desc{
+  font-size:clamp(14px,2vw,18px);color:var(--muted);
+  max-width:680px;margin:0 auto 40px;line-height:1.9;
+}
+.hero-desc strong{color:var(--text)}
+.hero-badges{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:48px;
+}
+.hero-badge{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;
+  transition:all .2s;
+}
+.hero-badge:hover{background:rgba(245,200,66,.1);border-color:var(--gold);color:var(--gold)}
+.hero-cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{
+  background:var(--grad2);color:#000;
+  padding:16px 40px;border-radius:50px;font-weight:900;font-size:16px;
+  border:none;cursor:pointer;font-family:inherit;text-decoration:none;
+  box-shadow:0 0 40px rgba(245,200,66,.4),0 8px 32px rgba(0,0,0,.4);
+  transition:all .3s;display:inline-flex;align-items:center;gap:8px;
+  animation:pulseCTA 2.5s ease-in-out infinite;
+}
+@keyframes pulseCTA{0%,100%{box-shadow:0 0 30px rgba(245,200,66,.4),0 8px 32px rgba(0,0,0,.4)}50%{box-shadow:0 0 60px rgba(245,200,66,.7),0 12px 40px rgba(0,0,0,.5)}}
+.btn-primary:hover{transform:translateY(-3px) scale(1.04)}
+.btn-secondary{
+  background:transparent;color:var(--text);
+  padding:16px 40px;border-radius:50px;font-weight:700;font-size:16px;
+  border:1px solid var(--border);cursor:pointer;font-family:inherit;text-decoration:none;
+  transition:all .3s;display:inline-flex;align-items:center;gap:8px;
+}
+.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(91,200,232,.08)}
+.hero-scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  color:var(--muted);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  animation:fadeInUp 1s 2s both;
+}
+.scroll-dot{width:4px;height:24px;border-radius:2px;background:var(--border);position:relative;overflow:hidden}
+.scroll-dot::after{
+  content:'';position:absolute;top:-100%;left:0;width:100%;height:100%;
+  background:var(--gold);border-radius:2px;animation:scrollAnim 1.8s ease-in-out infinite;
+}
+@keyframes scrollAnim{0%{top:-100%}50%,100%{top:100%}}
+
+/* ===== SECTION BASE ===== */
+.section{position:relative;z-index:1;padding:100px 20px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-num{
+  font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--purple);
+  text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;
+}
+.section-num::before{content:'';flex:none;width:24px;height:2px;background:var(--purple)}
+.section-title{
+  font-size:clamp(28px,5vw,48px);font-weight:900;margin-bottom:16px;
+  background:linear-gradient(135deg,var(--text),rgba(232,232,244,.6));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.section-title.gold{
+  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.section-sub{font-size:16px;color:var(--muted);max-width:640px;margin-bottom:60px;line-height:1.8}
+
+/* ===== REVEAL ANIMATIONS ===== */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s ease, transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s ease, transform .7s ease}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity .7s ease, transform .7s ease}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+.stagger-1{transition-delay:.1s}.stagger-2{transition-delay:.2s}.stagger-3{transition-delay:.3s}
+.stagger-4{transition-delay:.4s}.stagger-5{transition-delay:.5s}.stagger-6{transition-delay:.6s}
+
+/* ===== GLASS CARDS ===== */
+.glass-card{
+  background:rgba(17,17,42,.7);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:32px 28px;
+  backdrop-filter:blur(20px);
+  transition:all .3s;
+  position:relative;overflow:hidden;
+}
+.glass-card::before{
+  content:'';position:absolute;inset:0;border-radius:20px;
+  background:linear-gradient(135deg,rgba(255,255,255,.04),transparent);
+  pointer-events:none;
+}
+.glass-card:hover{
+  border-color:rgba(245,200,66,.3);
+  transform:translateY(-6px);
+  box-shadow:0 20px 60px rgba(0,0,0,.4),0 0 0 1px rgba(245,200,66,.1);
+}
+.glass-card .card-icon{font-size:40px;margin-bottom:16px;display:block;filter:drop-shadow(0 0 12px rgba(245,200,66,.4));transition:transform .3s}
+.glass-card:hover .card-icon{transform:scale(1.2) rotate(-5deg)}
+.glass-card h3{font-size:18px;font-weight:700;color:var(--text);margin-bottom:10px}
+.glass-card p{font-size:14px;color:var(--muted);line-height:1.8}
+
+/* ===== GRID ===== */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+
+/* ===== CONCEPT SECTION ===== */
+.concept-bg{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,.08) 0%, transparent 70%);
+}
+.concept-chara{
+  position:absolute;right:5%;top:10%;
+  width:180px;opacity:.7;
+  filter:drop-shadow(0 0 40px rgba(245,200,66,.4));
+  animation:heroFloat 4s ease-in-out infinite;
+}
+
+/* ===== FLOW SECTION ===== */
+.flow-wrap{
+  display:flex;align-items:stretch;gap:0;
+  background:var(--card);border:1px solid var(--border);border-radius:24px;
+  overflow:hidden;margin-bottom:60px;
+}
+.flow-step{
+  flex:1;padding:32px 24px;text-align:center;
+  border-right:1px solid var(--border);
+  position:relative;transition:all .3s;
+}
+.flow-step:last-child{border-right:none}
+.flow-step:hover{background:rgba(245,200,66,.04)}
+.flow-step-icon{
+  font-size:36px;margin-bottom:12px;display:block;
+  filter:drop-shadow(0 0 10px rgba(245,200,66,.3));
+}
+.flow-step-time{
+  font-size:11px;font-weight:700;color:var(--gold);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;
+}
+.flow-step h4{font-size:16px;font-weight:700;margin-bottom:6px}
+.flow-step p{font-size:12px;color:var(--muted)}
+.flow-step-xp{
+  display:inline-block;margin-top:10px;
+  background:rgba(245,200,66,.15);border:1px solid rgba(245,200,66,.3);
+  color:var(--gold);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700;
+}
+.flow-arrow-wrap{
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px;color:var(--gold);font-size:20px;flex-shrink:0;
+}
+
+/* ===== CHAPTER CARDS ===== */
+.chapter-card{
+  border-radius:20px;overflow:hidden;
+  border:1px solid var(--border);
+  transition:all .3s;position:relative;
+}
+.chapter-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.chapter-header{padding:24px;position:relative}
+.chapter-header::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom, transparent 50%, rgba(5,5,8,.8));
+  pointer-events:none;
+}
+.chapter-num{
+  font-size:11px;font-weight:700;letter-spacing:.1em;opacity:.8;margin-bottom:6px;
+}
+.chapter-header h3{font-size:22px;font-weight:900}
+.chapter-body{background:var(--card);padding:24px}
+.chapter-rule{
+  background:rgba(255,255,255,.04);border-radius:10px;padding:10px 14px;
+  font-size:13px;color:var(--muted);margin-bottom:14px;font-weight:500;
+}
+.chapter-list{list-style:none}
+.chapter-list li{
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  font-size:13px;color:var(--muted);
+  display:flex;align-items:center;gap:8px;
+}
+.chapter-list li::before{content:'竊・;color:var(--gold);font-weight:700;flex-shrink:0}
+.chapter-list li:last-child{border:none}
+.chapter-score{
+  margin-top:16px;padding:12px;border-radius:10px;
+  text-align:center;font-weight:900;font-size:20px;
+}
+
+/* ===== CHARACTER CARDS ===== */
+.chara-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  transition:all .3s;position:relative;
+}
+.chara-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  transition:opacity .3s;
+}
+.chara-card.common::before{background:var(--muted)}
+.chara-card.rare::before{background:linear-gradient(90deg,#5bc8e8,#7c3aed)}
+.chara-card.epic::before{background:linear-gradient(90deg,#c026d3,#7c3aed)}
+.chara-card.legend::before{background:var(--grad2)}
+.chara-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+  border-color:rgba(245,200,66,.3);
+}
+.chara-portrait{
+  height:140px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg, rgba(124,58,237,.1), rgba(5,5,8,.8));
+}
+.chara-portrait img{
+  height:120px;object-fit:contain;
+  filter:drop-shadow(0 0 20px rgba(245,200,66,.5));
+  transition:transform .3s;
+}
+.chara-card:hover .chara-portrait img{transform:scale(1.1)}
+.chara-portrait-icon{font-size:70px;filter:drop-shadow(0 0 16px rgba(245,200,66,.5))}
+.chara-rarity{
+  position:absolute;top:8px;right:8px;
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.chara-rarity.common{background:rgba(136,136,170,.2);color:var(--muted)}
+.chara-rarity.rare{background:rgba(91,200,232,.2);color:var(--cyan)}
+.chara-rarity.epic{background:rgba(192,38,211,.2);color:#c026d3}
+.chara-rarity.legend{background:rgba(245,200,66,.2);color:var(--gold)}
+.chara-body{padding:18px 20px}
+.chara-name{font-size:16px;font-weight:900;margin-bottom:6px}
+.chara-effect{
+  font-size:12px;color:var(--green);
+  background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.2);
+  padding:4px 10px;border-radius:6px;margin-bottom:10px;display:inline-block;
+}
+.chara-uses{font-size:12px;color:var(--muted);margin-bottom:12px}
+.chara-xp-bar{
+  background:rgba(255,255,255,.08);border-radius:4px;height:6px;overflow:hidden;
+}
+.chara-xp-fill{height:100%;border-radius:4px;background:var(--grad2);transition:width 1s ease}
+.chara-xp-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px}
+.chara-target{
+  font-size:11px;color:var(--muted);
+  background:rgba(255,255,255,.04);border-radius:6px;padding:6px 10px;
+  margin-top:10px;
+}
+
+/* ===== STATS ===== */
+.stat-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:20px;margin-bottom:60px;
+}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:28px 24px;text-align:center;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.stat-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:var(--grad2);transform:scaleX(0);transition:transform .3s;
+}
+.stat-card:hover::after{transform:scaleX(1)}
+.stat-card:hover{border-color:rgba(245,200,66,.2)}
+.stat-num{
+  font-size:40px;font-weight:900;
+  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:4px;
+}
+.stat-unit{font-size:18px;font-weight:700;color:var(--gold)}
+.stat-label{font-size:13px;color:var(--muted);margin-bottom:6px}
+.stat-note{font-size:11px;color:rgba(136,136,170,.7)}
+
+/* ===== LEVEL CARDS ===== */
+.level-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:28px;transition:all .3s;
+  position:relative;overflow:hidden;
+}
+.level-card:hover{border-color:rgba(124,58,237,.4);transform:translateY(-4px)}
+.level-badge{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:900;margin-bottom:16px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  box-shadow:0 4px 20px rgba(124,58,237,.4);
+}
+.level-card h3{font-size:16px;font-weight:900;margin-bottom:8px}
+.level-card .need{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px}
+.level-card .value{
+  font-size:13px;font-weight:700;
+  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.level-card .arpu{
+  margin-top:12px;font-size:12px;color:var(--muted);
+  background:rgba(255,255,255,.04);border-radius:8px;padding:8px 12px;
+}
+
+/* ===== MONETIZE ===== */
+.revenue-box{
+  background:var(--grad3);border-radius:24px;padding:48px;text-align:center;
+  margin:40px 0;position:relative;overflow:hidden;
+}
+.revenue-box::before{
+  content:'腸';position:absolute;font-size:200px;opacity:.05;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.revenue-box h3{font-size:14px;font-weight:700;letter-spacing:.1em;margin-bottom:16px;opacity:.8}
+.revenue-num{
+  font-size:clamp(40px,8vw,72px);font-weight:900;
+  color:#fff;text-shadow:0 0 40px rgba(255,255,255,.5);
+  margin-bottom:8px;
+}
+.revenue-sub{font-size:18px;opacity:.85}
+.monetize-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:28px;transition:all .3s;
+}
+.monetize-card:hover{border-color:rgba(245,200,66,.2);transform:translateY(-4px)}
+.monetize-card .m-icon{font-size:36px;margin-bottom:12px;display:block}
+.monetize-card h3{font-size:16px;font-weight:700;margin-bottom:8px}
+.monetize-card p{font-size:13px;color:var(--muted);line-height:1.7}
+.price-tag{
+  display:inline-block;margin-top:12px;
+  background:var(--grad2);color:#000;
+  padding:4px 14px;border-radius:20px;font-size:12px;font-weight:700;
+}
+
+/* ===== TIMELINE ===== */
+.timeline{position:relative;padding-left:40px}
+.timeline::before{
+  content:'';position:absolute;left:14px;top:0;bottom:0;
+  width:2px;background:linear-gradient(to bottom,var(--purple),var(--cyan),var(--gold));
+  border-radius:2px;
+}
+.tl-item{
+  position:relative;margin-bottom:48px;
+  opacity:0;transform:translateX(-20px);
+  transition:all .6s ease;
+}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{
+  position:absolute;left:-34px;top:6px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--surface);border:3px solid var(--purple);
+  box-shadow:0 0 0 4px rgba(124,58,237,.2),0 0 20px rgba(124,58,237,.4);
+  transition:all .3s;
+}
+.tl-item:hover .tl-dot{
+  border-color:var(--gold);
+  box-shadow:0 0 0 4px rgba(245,200,66,.2),0 0 20px rgba(245,200,66,.5);
+}
+.tl-phase{
+  font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--purple);
+  text-transform:uppercase;margin-bottom:6px;
+}
+.tl-item h4{font-size:20px;font-weight:900;margin-bottom:8px}
+.tl-item p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+.tl-target{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);
+  color:var(--gold);padding:6px 14px;border-radius:10px;font-size:13px;font-weight:700;
+}
+
+/* ===== COUNTRY CARDS ===== */
+.country-card{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  overflow:hidden;transition:all .3s;
+}
+.country-card:hover{border-color:rgba(91,200,232,.3);transform:translateY(-6px)}
+.country-header{
+  padding:20px 24px;background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(91,200,232,.1));
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;
+}
+.country-flag{font-size:32px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.4))}
+.country-name{font-size:18px;font-weight:700}
+.country-period{font-size:12px;color:var(--muted);margin-top:2px}
+.country-body{padding:20px 24px}
+.country-body h5{font-size:12px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.country-events{list-style:none}
+.country-events li{
+  padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;
+}
+.country-events li::before{content:'笆ｸ';color:var(--gold);font-size:11px;flex-shrink:0}
+.country-events li:last-child{border:none}
+.country-badge{
+  display:inline-block;margin-top:12px;
+  background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.2);
+  color:var(--cyan);padding:4px 12px;border-radius:10px;font-size:11px;font-weight:700;
+}
+
+/* ===== VISION SECTION ===== */
+.vision-section{
+  position:relative;z-index:1;padding:120px 20px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(124,58,237,.15) 0%,rgba(5,5,8,0) 50%,rgba(91,200,232,.1) 100%);
+}
+.vision-star{
+  position:absolute;pointer-events:none;
+  background:var(--gold);border-radius:50%;
+  animation:twinkling var(--dur) var(--delay) ease-in-out infinite alternate;
+}
+@keyframes twinkling{0%{opacity:.1;transform:scale(.8)}100%{opacity:.9;transform:scale(1.2)}}
+.vision-quote{
+  background:rgba(17,17,42,.8);border:1px solid var(--border);
+  border-left:4px solid var(--gold);border-radius:0 20px 20px 0;
+  padding:32px 36px;margin:40px 0;position:relative;
+}
+.vision-quote::before{
+  content:'"';position:absolute;top:-20px;left:24px;
+  font-size:80px;color:var(--gold);opacity:.3;line-height:1;font-family:serif;
+}
+.vision-quote p{font-size:20px;line-height:1.9;font-weight:500;color:var(--text)}
+.vision-quote strong{color:var(--gold)}
+.vision-chara{
+  position:absolute;right:60px;top:50%;transform:translateY(-50%);
+  width:200px;opacity:.8;
+  filter:drop-shadow(0 0 40px rgba(245,200,66,.4));
+  animation:heroFloat 5s ease-in-out infinite;
+}
+.final-box{
+  background:var(--grad3);border-radius:24px;padding:64px 40px;
+  text-align:center;position:relative;overflow:hidden;margin-top:60px;
+}
+.final-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 80% at 50% 100%, rgba(245,200,66,.15) 0%, transparent 70%);
+}
+.final-box h3{font-size:clamp(22px,4vw,36px);font-weight:900;color:#fff;margin-bottom:20px;position:relative}
+.final-box p{font-size:18px;line-height:2;opacity:.9;position:relative}
+.final-box strong{color:var(--gold)}
+
+/* ===== FEATURE LIST ===== */
+.feat-list{list-style:none}
+.feat-list li{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  font-size:14px;color:var(--muted);line-height:1.7;
+  transition:color .2s;
+}
+.feat-list li:hover{color:var(--text)}
+.feat-list li::before{
+  content:'笨・;flex-shrink:0;width:22px;height:22px;
+  background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.3);
+  color:var(--green);border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;margin-top:2px;
+}
+.feat-list li strong{color:var(--text)}
+
+/* ===== FOOTER ===== */
+.footer{
+  position:relative;z-index:1;
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:60px 20px 40px;text-align:center;
+}
+.footer-logo{
+  font-size:28px;font-weight:900;margin-bottom:12px;
+  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.footer-tagline{font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.7}
+.footer-sep{width:60px;height:2px;background:var(--border);margin:32px auto}
+.footer-copy{font-size:12px;color:rgba(136,136,170,.5)}
+
+/* ===== FLOATING CHARA ===== */
+.floating-chara{
+  position:absolute;pointer-events:none;
+  filter:drop-shadow(0 0 24px rgba(245,200,66,.35));
+  opacity:.65;
+}
+
+/* ===== GLOW DIVIDER ===== */
+.glow-divider{
+  height:1px;background:linear-gradient(90deg,transparent,var(--purple),var(--cyan),transparent);
+  margin:0;border:none;opacity:.4;
+}
+
+/* ===== HIGHLIGHT TEXT ===== */
+.hl-gold{
+  background:var(--grad2);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  font-weight:700;
+}
+.hl-cyan{color:var(--cyan);font-weight:700}
+.hl-purple{color:#c4b5fd;font-weight:700}
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(245,200,66,.1);border:1px solid rgba(245,200,66,.2);
+  color:var(--gold);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;
+  white-space:nowrap;
+}
+
+/* ===== COINS FLOAT ===== */
+.coin{
+  position:fixed;pointer-events:none;z-index:0;
+  font-size:20px;opacity:0;
+  animation:coinFall var(--dur) var(--delay) linear infinite;
+}
+@keyframes coinFall{
+  0%{transform:translateY(-60px) rotate(0);opacity:.7}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0}
+}
+
+/* ===== BACK TO TOP ===== */
+#backTop{
+  position:fixed;bottom:28px;right:28px;z-index:500;
+  width:46px;height:46px;border-radius:50%;
+  background:var(--grad2);color:#000;font-size:18px;
+  border:none;cursor:pointer;font-family:inherit;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(245,200,66,.4);
+  opacity:0;transform:scale(0);transition:all .3s;
+}
+#backTop.show{opacity:1;transform:scale(1)}
+#backTop:hover{transform:scale(1.1)}
+
+/* ===== MEDIA ===== */
+@media(max-width:768px){
+  .flow-wrap{flex-direction:column}
+  .flow-step{border-right:none;border-bottom:1px solid var(--border)}
+  .flow-step:last-child{border-bottom:none}
+  .flow-arrow-wrap{display:none}
+  .nav-links{display:none}
+  .concept-chara{display:none}
+  .vision-chara{display:none}
+  .hero h1{font-size:clamp(40px,12vw,72px)}
+}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+</style>
 </head>
 <body>
-    <!-- ナビゲーション -->
-    <header>
-        <div class="navbar">
-            <div class="logo">💰 マネぼう</div>
-            <nav>
-                <a href="#concept">コンセプト</a>
-                <a href="#features">特徴</a>
-                <a href="#gameplay">ゲーム体験</a>
-                <a href="#target">ターゲット</a>
-                <a href="#monetize">マネタイズ</a>
-                <a href="#vision">ビジョン</a>
-            </nav>
+
+<!-- SCROLL PROGRESS -->
+<div id="scrollBar"></div>
+
+<!-- STARS CANVAS -->
+<canvas id="stars-canvas"></canvas>
+
+<!-- FLOATING COINS -->
+<div id="coins-wrap"></div>
+
+<!-- BACK TO TOP -->
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">竊・/button>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <img src="./images/logo.webp" alt="logo" onerror="this.style.display='none'">
+    腸 繝槭ロ縺ｼ縺・  </div>
+  <ul class="nav-links">
+    <li><a href="#concept">繧ｳ繝ｳ繧ｻ繝励ヨ</a></li>
+    <li><a href="#gameplay">繧ｲ繝ｼ繝菴馴ｨ・/a></li>
+    <li><a href="#characters">繧ｭ繝｣繝ｩ</a></li>
+    <li><a href="#world">繝ｯ繝ｼ繝ｫ繝・/a></li>
+    <li><a href="#vision">繝薙ず繝ｧ繝ｳ</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('gameplay').scrollIntoView({behavior:'smooth'})">莉翫☆縺蝉ｽ馴ｨ・/button>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">笨ｦ 螳悟・縺ｫ譁ｰ縺励＞繧ｸ繝｣繝ｳ繝ｫ縺ｮ隱慕函</div>
+    <img src="./images/cert/char-tam-0.png" alt="" class="hero-chara" onerror="this.style.display='none'">
+    <h1>繝槭ロ縺ｼ縺・/h1>
+    <p class="hero-sub">邨梧ｸ亥ｭｦ鄙偵Γ繧ｿ繧ｲ繝ｼ繝 譁ｰ讒区Φ</p>
+    <p class="hero-desc">
+      <strong>Duolingo縺ｮ邯咏ｶ壽ｧ</strong> ﾃ・<strong>RPG縺ｮ謌宣聞螳滓─</strong> ﾃ・<strong>繝懊・繝峨ご繝ｼ繝縺ｮ謌ｦ逡･諤ｧ</strong><br>
+      豈取律縺ｮ邨梧ｸ亥ｭｦ鄙偵′繧ｲ繝ｼ繝蜀・・蠑ｷ縺輔↓逶ｴ邨舌☆繧九∽ｸ也阜蛻昴・繧ｸ繝｣繝ｳ繝ｫ
+    </p>
+    <div class="hero-badges">
+      <span class="hero-badge">式 224繝槭せ ﾃ・4菴馴・鄂ｮ</span>
+      <span class="hero-badge">答 Duolingo騾｣蜍・/span>
+      <span class="hero-badge">訣 100+繧ｫ蝗ｽ蟇ｾ蠢・/span>
+      <span class="hero-badge">笙ｾ・・豈主ｹｴ閾ｪ蜍墓峩譁ｰ</span>
+    </div>
+    <div class="hero-cta-group">
+      <button class="btn-primary" onclick="document.getElementById('concept').scrollIntoView({behavior:'smooth'})">
+        噫 讒区Φ繧定ｪｭ繧
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('characters').scrollIntoView({behavior:'smooth'})">
+        鹿 繧ｭ繝｣繝ｩ繧定ｦ九ｋ
+      </button>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== CONCEPT ===== -->
+<section class="section" id="concept">
+  <div class="concept-bg"></div>
+  <img src="./images/cert/char-kau-0.png" alt="" class="floating-chara concept-chara" onerror="this.style.display='none'">
+  <div class="section-inner">
+    <div class="section-num">01 &nbsp; Concept</div>
+    <h2 class="section-title reveal">繧ｳ繝ｳ繧ｻ繝励ヨ</h2>
+    <p class="section-sub reveal">56蟷ｴ縺ｮ邨梧ｸ域ｭｴ蜿ｲ繧偵√く繝｣繝ｩ驟咲ｽｮ縺ｧ菴馴ｨ薙☆繧九ご繝ｼ繝縲・br>縺薙ｌ縺ｾ縺ｧ荳也阜縺ｫ蟄伜惠縺励↑縺九▲縺溘ず繝｣繝ｳ繝ｫ縺後∽ｻ翫％縺薙↓隱慕函縺吶ｋ縲・/p>
+
+    <div class="grid-3">
+      <div class="glass-card reveal stagger-1">
+        <span class="card-icon">答</span>
+        <h3>Duolingo逧・ｿ呈・蛹・/h3>
+        <p>豈取律15蛻・・繧ｯ繧､繧ｺ蟄ｦ鄙偵′繝励ャ繧ｷ繝･騾夂衍縺ｧ蛯ｬ菫・＆繧後ｋ縲ゅえ繧｣繧ｸ繧ｧ繝・ヨ縺ｮ縺九ｏ縺・＞繧ｭ繝｣繝ｩ縺悟ｭｦ鄙偵ｒ菫・＠縲√せ繝医Μ繝ｼ繧ｯ縺檎ｶ咏ｶ壹・險ｼ縺ｫ縺ｪ繧九・/p>
+      </div>
+      <div class="glass-card reveal stagger-2">
+        <span class="card-icon">式</span>
+        <h3>RPG逧・・髟ｷ</h3>
+        <p>繝ｬ繝吶Ν縲∫ｵ碁ｨ灘､縲√く繝｣繝ｩ繧ｯ繧ｿ繝ｼ縲∫ｧｰ蜿ｷ縲ゅ・繝ｬ繧､繝､繝ｼ縺ｨ繧ｭ繝｣繝ｩ縺悟・縺ｫ謌宣聞縺励∝ｭｦ鄙偵・謌先棡縺梧焚蛟､縺ｧ蜿ｯ隕門喧縺輔ｌ繧九・/p>
+      </div>
+      <div class="glass-card reveal stagger-3">
+        <span class="card-icon">笙滂ｸ・/span>
+        <h3>謌ｦ逡･逧・・繝ｼ繝峨ご繝ｼ繝</h3>
+        <p>224繝槭せ縺ｫ繧ｭ繝｣繝ｩ繧帝・鄂ｮ縲る・鄂ｮ縺ｮ譛驕ｩ縺輔′譛邨りｳ・肇鬘阪ｒ蟾ｦ蜿ｳ縺吶ｋ縲よｯ主屓繝励Ξ繧､縺ｧ逡ｰ縺ｪ繧区姶逡･縺悟撫繧上ｌ繧九・/p>
+      </div>
+      <div class="glass-card reveal stagger-4">
+        <span class="card-icon">訣</span>
+        <h3>繧ｰ繝ｭ繝ｼ繝舌Ν邨梧ｸ井ｽ馴ｨ・/h3>
+        <p>譌･譛ｬ縺縺代〒縺ｪ縺上√い繝｡繝ｪ繧ｫ繝ｻ荳ｭ蝗ｽ繝ｻ繝ｭ繧ｷ繧｢繝ｻEU窶ｦ荳也阜100雜・・蝗ｽ縲・・邨梧ｸ医ｒ蜷後§繧ｷ繧ｹ繝・Β縺ｧ菴馴ｨ薙〒縺阪ｋ縲・/p>
+      </div>
+      <div class="glass-card reveal stagger-5">
+        <span class="card-icon">嶋</span>
+        <h3>豌ｸ驕縺ｮ譖ｴ譁ｰ</h3>
+        <p>豈主ｹｴ1譛・譌･縲∝・繧ｹ繝・・繧ｸ縺瑚・蜍墓峩譁ｰ縲・027蟷ｴ縺ｮ邨梧ｸ医う繝吶Φ繝医′霑ｽ蜉縺輔ｌ繧九ょｮ梧・縺励↑縺・ご繝ｼ繝縲・/p>
+      </div>
+      <div class="glass-card reveal stagger-6">
+        <span class="card-icon">売</span>
+        <h3>蟄ｦ鄙・竊・繧ｲ繝ｼ繝縺ｮ螳悟・蠕ｪ迺ｰ</h3>
+        <p>Duolingo縺ｧ蟄ｦ縺ｶ 竊・繧ｲ繝ｼ繝縺ｧ螳溯ｷｵ 竊・繧ｹ繧ｳ繧｢UP 竊・譁ｰ繧ｭ繝｣繝ｩ隗｣謾ｾ 竊・繧ゅ▲縺ｨ蟄ｦ縺ｳ縺溘￥縺ｪ繧九ょ･ｽ蠕ｪ迺ｰ縺梧ｭ｢縺ｾ繧峨↑縺・・/p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== GAMEPLAY ===== -->
+<section class="section" id="gameplay">
+  <div class="section-inner">
+    <div class="section-num">02 &nbsp; Gameplay</div>
+    <h2 class="section-title gold reveal">繧ｲ繝ｼ繝菴馴ｨ薙ヵ繝ｭ繝ｼ</h2>
+    <p class="section-sub reveal">豈取律縺ｮ繝励Ξ繧､繧ｵ繧､繧ｯ繝ｫ縲よ悃縺ｮ5蛻・°繧蛾ｱ譛ｫ縺ｮ40蛻・∪縺ｧ縲√≠縺ｪ縺溘・繝壹・繧ｹ縺ｧ邨梧ｸ医ｒ蟄ｦ縺ｶ縲・/p>
+
+    <div class="flow-wrap reveal">
+      <div class="flow-step">
+        <span class="flow-step-icon">桁</span>
+        <div class="flow-step-time">Morning</div>
+        <h4>譛昴・繧ｯ繧､繧ｺ</h4>
+        <p>繝励ャ繧ｷ繝･騾夂衍縺ｧ襍ｷ蠎・/p>
+        <p>Duolingo繧ｯ繧､繧ｺ 5蝠・/p>
+        <span class="flow-step-xp">XP +30</span>
+      </div>
+      <div class="flow-arrow-wrap">竊・/div>
+      <div class="flow-step">
+        <span class="flow-step-icon">笘・・/span>
+        <div class="flow-step-time">Afternoon</div>
+        <h4>蠕ｩ鄙貞ｭｦ鄙・/h4>
+        <p>髢馴＆縺医◆蝠城｡後ｒ蠕ｩ鄙・/p>
+        <p>逅・ｧ｣蠎ｦ繝√ぉ繝・け</p>
+        <span class="flow-step-xp">XP +50</span>
+      </div>
+      <div class="flow-arrow-wrap">竊・/div>
+      <div class="flow-step">
+        <span class="flow-step-icon">嫌</span>
+        <div class="flow-step-time">Evening</div>
+        <h4>霑ｽ蜉繧ｯ繧､繧ｺ</h4>
+        <p>譁ｰ繝・・繝槭・蟄ｦ鄙・/p>
+        <p>繧ｭ繝｣繝ｩ驟咲ｽｮ譫 +1</p>
+        <span class="flow-step-xp">XP +80</span>
+      </div>
+      <div class="flow-arrow-wrap">竊・/div>
+      <div class="flow-step">
+        <span class="flow-step-icon">式</span>
+        <div class="flow-step-time">Weekend</div>
+        <h4>繝｡繧､繝ｳ繧ｯ繧ｨ繧ｹ繝・/h4>
+        <p>繝懊・繝峨ご繝ｼ繝譛ｬ逡ｪ</p>
+        <p>56蟷ｴ縺ｮ繧ｷ繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ</p>
+        <span class="flow-step-xp">笘・繝ｩ繝ｳ繧ｭ繝ｳ繧ｰ蜿肴丐</span>
+      </div>
+    </div>
+
+    <h3 style="text-align:center;font-size:clamp(20px,3vw,28px);font-weight:900;margin-bottom:40px" class="reveal">
+      <span class="hl-gold">繝｡繧､繝ｳ繧ｯ繧ｨ繧ｹ繝・/span>・・6蟷ｴ縺ｮ繝懊・繝峨ご繝ｼ繝
+    </h3>
+
+    <div class="grid-3">
+      <div class="chapter-card reveal stagger-1" style="background:linear-gradient(135deg,rgba(248,81,73,.06),var(--card))">
+        <div class="chapter-header" style="background:linear-gradient(135deg,#f85149,#c0392b)">
+          <div class="chapter-num" style="color:rgba(255,255,255,.7)">CHAPTER 01</div>
+          <h3 style="color:#fff">隨ｬ1遶・夂ｰ｡譏鍋沿</h3>
         </div>
-    </header>
-
-    <!-- ヒーロー -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>マネぼう</h1>
-            <p class="hero-subtitle">経済学習メタゲーム</p>
-            <p class="hero-description">
-                Duolingoの継続性 × RPGの成長実感 × ボードゲームの戦略性<br>
-                <span class="highlight">毎日の経済学習がゲーム内の強さに直結</span>する新しいジャンル
-            </p>
-            <button class="cta-button">構想書を読む</button>
+        <div class="chapter-body">
+          <div class="chapter-rule">泙 繝ｫ繝ｼ繝ｫ・壹す繝ｳ繝励Ν</div>
+          <ul class="chapter-list">
+            <li>遞朱≡繝ｻ謇区焚譁吶↑縺・/li>
+            <li>邏皮ｲ九↑雉・肇謗ｨ遘ｻ縺ｮ縺ｿ</li>
+            <li>蛻晏ｿ・・髄縺大・髢</li>
+            <li>繝√Η繝ｼ繝医Μ繧｢繝ｫ莉倥″</li>
+          </ul>
+          <div class="chapter-score" style="background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.2);color:#f85149">
+            譛溷ｾ・せ繧ｳ繧｢ <strong>150荳・・</strong>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- コンセプト -->
-    <section id="concept">
-        <div class="container">
-            <h2>コンセプト</h2>
-            <p class="section-subtitle">56年の経済歴史を、キャラ配置で体験するゲーム</p>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>📚 Duolingo的習慣化</h3>
-                    <p>毎日15分のクイズ学習がプッシュ通知で催促される。ウィジェットに表示されたかわいいキャラが、学習を促す。</p>
-                </div>
-                <div class="card">
-                    <h3>🎮 RPG的成長</h3>
-                    <p>レベル、経験値、キャラクター、称号。プレイヤーとキャラが共に成長し、学習の成果が数値で可視化される。</p>
-                </div>
-                <div class="card">
-                    <h3>♟️ 戦略的ボードゲーム</h3>
-                    <p>224マス（56年×4出来事）にキャラを配置。配置の最適さが最終資産額を左右する。毎回プレイで結果が変わる。</p>
-                </div>
-                <div class="card">
-                    <h3>🌍 グローバル経済体験</h3>
-                    <p>日本だけでなく、アメリカ、中国、ロシア、EU...世界100超の国々の経済を同じシステムで体験できる。</p>
-                </div>
-                <div class="card">
-                    <h3>📈 永遠の更新</h3>
-                    <p>毎年1月1日、全ステージが自動更新。2027年の経済イベントが追加される。完成しないゲーム。</p>
-                </div>
-                <div class="card">
-                    <h3>🔄 学習 ↔ ゲームの完全循環</h3>
-                    <p>Duolingoで学ぶ → ボードゲームで実践 → スコアUP → 新キャラ解放 → もっと学びたくなる</p>
-                </div>
-            </div>
+      <div class="chapter-card reveal stagger-2" style="background:linear-gradient(135deg,rgba(240,184,0,.06),var(--card))">
+        <div class="chapter-header" style="background:linear-gradient(135deg,#f0b800,#e67e22)">
+          <div class="chapter-num" style="color:rgba(255,255,255,.7)">CHAPTER 02</div>
+          <h3 style="color:#fff">隨ｬ2遶・壻ｸｭ邏夂沿</h3>
         </div>
-    </section>
-
-    <!-- ゲーム体験フロー -->
-    <section id="gameplay">
-        <div class="container">
-            <h2>ゲーム体験フロー</h2>
-            <p class="section-subtitle">毎日のプレイサイクル</p>
-            
-            <div class="flow-diagram">
-                <div class="flow-box">
-                    <h4>🌅 朝</h4>
-                    <p>プッシュ通知で起床</p>
-                    <p style="font-size: 12px; margin-top: 10px;">Duolingoクイズ 5問</p>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-box">
-                    <h4>☀️ 昼</h4>
-                    <p>復習学習</p>
-                    <p style="font-size: 12px; margin-top: 10px;">経験値+50</p>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-box">
-                    <h4>🌙 夜</h4>
-                    <p>追加クイズ</p>
-                    <p style="font-size: 12px; margin-top: 10px;">キャラ配置+1</p>
-                </div>
-                <div class="flow-arrow">→</div>
-                <div class="flow-box">
-                    <h4>🎮 週末</h4>
-                    <p>メインクエスト</p>
-                    <p style="font-size: 12px; margin-top: 10px;">ボードゲーム40分</p>
-                </div>
-            </div>
-
-            <h3 style="text-align: center; margin-top: 60px; color: #667eea;">メインクエスト：56年のボードゲーム</h3>
-            
-            <div class="grid" style="margin-top: 40px;">
-                <div class="card" style="background: linear-gradient(135deg, #ffe5e5 0%, #fff9f9 100%);">
-                    <h3 style="color: #ff6b6b;">第1章：簡易版</h3>
-                    <p><strong>ルール：シンプル</strong></p>
-                    <ul class="feature-list">
-                        <li>税金・手数料なし</li>
-                        <li>純粋な資産推移のみ</li>
-                        <li>初心者向け</li>
-                        <li>期待スコア：150万円</li>
-                    </ul>
-                </div>
-                <div class="card" style="background: linear-gradient(135deg, #fff4e5 0%, #fffaf0 100%);">
-                    <h3 style="color: #ff9f00;">第2章：中級版</h3>
-                    <p><strong>新ルール：税金・手数料追加</strong></p>
-                    <ul class="feature-list">
-                        <li>株式益20%課税</li>
-                        <li>取引手数料-1%</li>
-                        <li>NISA導入</li>
-                        <li>期待スコア：125万円</li>
-                    </ul>
-                </div>
-                <div class="card" style="background: linear-gradient(135deg, #e5f5ff 0%, #f0f9ff 100%);">
-                    <h3 style="color: #0066cc;">第3章：上級版</h3>
-                    <p><strong>新ルール：複雑な制度実装</strong></p>
-                    <ul class="feature-list">
-                        <li>累進課税・iDeCo</li>
-                        <li>インフレ調整</li>
-                        <li>信託報酬・固定資産税</li>
-                        <li>期待スコア：110万円</li>
-                    </ul>
-                </div>
-            </div>
-
-            <p style="text-align: center; margin-top: 40px; color: #666; font-size: 16px;">
-                <strong>重要：同じ56年を3度プレイするが、ルール追加により毎回戦略が大きく変わる</strong>
-            </p>
+        <div class="chapter-body">
+          <div class="chapter-rule">泯 譁ｰ繝ｫ繝ｼ繝ｫ・夂ｨ朱≡繝ｻ謇区焚譁呵ｿｽ蜉</div>
+          <ul class="chapter-list">
+            <li>譬ｪ蠑冗寢20%隱ｲ遞・/li>
+            <li>蜿門ｼ墓焔謨ｰ譁・-1%</li>
+            <li>NISA蛻ｶ蠎ｦ蟆主・</li>
+            <li>驟榊ｽ馴≡繝ｻ隍・茜</li>
+          </ul>
+          <div class="chapter-score" style="background:rgba(240,184,0,.1);border:1px solid rgba(240,184,0,.2);color:var(--gold)">
+            譛溷ｾ・せ繧ｳ繧｢ <strong>125荳・・</strong>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- 特徴 -->
-    <section id="features">
-        <div class="container">
-            <h2>5つの革新的特徴</h2>
-            <p class="section-subtitle">これまで世界に存在しなかったジャンル</p>
-            
-            <div class="grid">
-                <div class="card">
-                    <h3>🎯 224マス × 4体キャラ配置</h3>
-                    <p>56年×4出来事=224マス。各マスで最大4体のキャラを配置。配置の戦略性が最終スコアを大きく左右する。</p>
-                </div>
-                <div class="card">
-                    <h3>📊 知識が直結する</h3>
-                    <p>「オイルショック＝金が上がる」を学ぶ → ゲーム内で金のハンターを配置 → 実際に利益UP</p>
-                </div>
-                <div class="card">
-                    <h3>🌏 グローバルな多次元性</h3>
-                    <p>日本、アメリカ、中国、ロシアなど複数国をプレイ。毎年新国が追加される。完成しないプラットフォーム。</p>
-                </div>
-                <div class="card">
-                    <h3>♻️ 完全な循環メカニクス</h3>
-                    <p>学習 → キャラ獲得 → ゲーム有利化 → スコアUP → もっと学びたい → 新キャラ欲しい → ゲーム再挑戦</p>
-                </div>
-                <div class="card">
-                    <h3>🏆 多様な成長指標</h3>
-                    <p>レベル、経験値、キャラ数、称号、スコア、ランキング。成長が多角的に可視化される。</p>
-                </div>
-                <div class="card">
-                    <h3>🔔 Duolingoレベルの習慣化</h3>
-                    <p>ウィジェット、プッシュ通知、ストリーク、連続達成ボーナス。Duolingoと同等の継続性メカニクス。</p>
-                </div>
-            </div>
+      <div class="chapter-card reveal stagger-3" style="background:linear-gradient(135deg,rgba(91,200,232,.06),var(--card))">
+        <div class="chapter-header" style="background:linear-gradient(135deg,#5bc8e8,#0066cc)">
+          <div class="chapter-num" style="color:rgba(255,255,255,.7)">CHAPTER 03</div>
+          <h3 style="color:#fff">隨ｬ3遶・壻ｸ顔ｴ夂沿</h3>
         </div>
-    </section>
-
-    <!-- キャラシステム -->
-    <section>
-        <div class="container">
-            <h2>キャラクター・スキルシステム</h2>
-            <p class="section-subtitle">タワーディフェンスの投資版</p>
-            
-            <h3 style="text-align: center; margin-top: 40px; color: #667eea;">基本キャラ（4体）</h3>
-            <div class="grid" style="margin-top: 30px;">
-                <div class="card">
-                    <h3>🚀 高度経済成長の鬼</h3>
-                    <p><strong>効果：</strong>成長期+20%</p>
-                    <p><strong>配置回数：</strong>50回</p>
-                    <p><strong>対象：</strong>成長期イベント</p>
-                </div>
-                <div class="card">
-                    <h3>💰 金のハンター</h3>
-                    <p><strong>効果：</strong>有事資産+30%</p>
-                    <p><strong>配置回数：</strong>30回</p>
-                    <p><strong>対象：</strong>危機・有事イベント</p>
-                </div>
-                <div class="card">
-                    <h3>🏛️ 保守投資家</h3>
-                    <p><strong>効果：</strong>国債・銀行+10%</p>
-                    <p><strong>配置回数：</strong>15回</p>
-                    <p><strong>対象：</strong>全イベント対応</p>
-                </div>
-                <div class="card">
-                    <h3>💵 ドル狙い撃ち</h3>
-                    <p><strong>効果：</strong>ドル+25%</p>
-                    <p><strong>配置回数：</strong>20回</p>
-                    <p><strong>対象：</strong>為替変動イベント</p>
-                </div>
-            </div>
-
-            <h3 style="text-align: center; margin-top: 50px; color: #667eea;">追加キャラ（段階的解放）</h3>
-            <ul class="feature-list" style="max-width: 600px; margin: 30px auto;">
-                <li><strong>税制マスター：</strong>全資産-10%税率（第2章で習得「税金」テーマ時に解放）</li>
-                <li><strong>リスク回避者：</strong>暴落時マイナス-50%カット（第2章ボス戦クリア時に解放）</li>
-                <li><strong>インフレ予見者：</strong>金+25%、インフレ資産+20%（Duolingo「インフレ」テーマ習得時）</li>
-                <li><strong>iDeCo最適化者：</strong>iDeCo効果+50%（Duolingo「iDeCo」テーマ習得時）</li>
-                <li><strong>その他：</strong>合計15体以上のキャラが段階的に解放される</li>
-            </ul>
+        <div class="chapter-body">
+          <div class="chapter-rule">鳩 譁ｰ繝ｫ繝ｼ繝ｫ・壹Μ繧｢繝ｫ蛻ｶ蠎ｦ螳悟・螳溯｣・/div>
+          <ul class="chapter-list">
+            <li>邏ｯ騾ｲ隱ｲ遞弱・iDeCo</li>
+            <li>繧､繝ｳ繝輔Ξ隱ｿ謨ｴ繝ｻ螳溯ｳｪ蛻ｩ蝗槭ｊ</li>
+            <li>菫｡險怜ｱ驟ｬ繝ｻ蝗ｺ螳夊ｳ・肇遞・/li>
+            <li>轤ｺ譖ｿ繝倥ャ繧ｸ繧ｳ繧ｹ繝・/li>
+          </ul>
+          <div class="chapter-score" style="background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.2);color:var(--cyan)">
+            譛溷ｾ・せ繧ｳ繧｢ <strong>110荳・・</strong>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
 
-    <!-- ステージ拡張 -->
-    <section>
-        <div class="container">
-            <h2>グローバルステージ拡張</h2>
-            <p class="section-subtitle">複数国の経済を同じシステムで体験</p>
-            
-            <div class="tier-grid" style="margin-top: 40px;">
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <h3>🇯🇵 日本経済</h3>
-                        <p style="font-size: 14px; margin-top: 5px;">1970-2026年</p>
-                    </div>
-                    <div class="tier-body">
-                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
-                        <ul>
-                            <li>高度経済成長</li>
-                            <li>オイルショック</li>
-                            <li>プラザ合意</li>
-                            <li>バブル崩壊</li>
-                            <li>リーマンショック</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <h3>🇺🇸 アメリカ経済</h3>
-                        <p style="font-size: 14px; margin-top: 5px;">1970-2026年</p>
-                    </div>
-                    <div class="tier-body">
-                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
-                        <ul>
-                            <li>スタグフレーション</li>
-                            <li>ブラックマンデー</li>
-                            <li>ITバブル</li>
-                            <li>リーマンショック</li>
-                            <li>利上げサイクル</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <h3>🇨🇳 中国経済</h3>
-                        <p style="font-size: 14px; margin-top: 5px;">1978-2026年</p>
-                    </div>
-                    <div class="tier-body">
-                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
-                        <ul>
-                            <li>改革開放</li>
-                            <li>高成長期</li>
-                            <li>米中貿易戦争</li>
-                            <li>不動産危機</li>
-                            <li>経済減速</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <h3>🇷🇺 ロシア経済</h3>
-                        <p style="font-size: 14px; margin-top: 5px;">1970-2026年</p>
-                    </div>
-                    <div class="tier-body">
-                        <h4 style="color: #667eea; margin-bottom: 15px;">主要イベント</h4>
-                        <ul>
-                            <li>冷戦経済</li>
-                            <li>ソビエト崩壊</li>
-                            <li>通貨危機</li>
-                            <li>エネルギー好況</li>
-                            <li>経済制裁</li>
-                        </ul>
-                    </div>
-                </div>
+    <p style="text-align:center;margin-top:32px;color:var(--muted);font-size:15px;font-weight:500" class="reveal">
+      庁 蜷後§56蟷ｴ繧・蠎ｦ繝励Ξ繧､縺吶ｋ縺後√Ν繝ｼ繝ｫ霑ｽ蜉縺ｫ繧医ｊ豈主屓謌ｦ逡･縺悟､ｧ縺阪￥螟峨ｏ繧・    </p>
+  </div>
+</section>
 
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <h3>🌍 EU・その他</h3>
-                        <p style="font-size: 14px; margin-top: 5px;">2027年以降追加</p>
-                    </div>
-                    <div class="tier-body">
-                        <h4 style="color: #667eea; margin-bottom: 15px;">拡張予定</h4>
-                        <ul>
-                            <li>EU経済ステージ</li>
-                            <li>インド経済</li>
-                            <li>ブラジル経済</li>
-                            <li>台湾経済</li>
-                            <li>他50+国</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="tier-card">
-                    <div class="tier-header">
-                        <h3>♻️ 毎年自動更新</h3>
-                        <p style="font-size: 14px; margin-top: 5px;">永遠に成長</p>
-                    </div>
-                    <div class="tier-body">
-                        <h4 style="color: #667eea; margin-bottom: 15px;">更新内容</h4>
-                        <ul>
-                            <li>全ステージ拡張</li>
-                            <li>新経済イベント</li>
-                            <li>新キャラ実装</li>
-                            <li>Duolingo新テーマ</li>
-                            <li>新国の追加</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+<hr class="glow-divider">
+
+<!-- ===== FEATURES ===== -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-num">03 &nbsp; Features</div>
+    <h2 class="section-title reveal">5縺､縺ｮ髱ｩ譁ｰ逧・音蠕ｴ</h2>
+    <p class="section-sub reveal">縺薙ｌ縺ｾ縺ｧ荳也阜縺ｫ蟄伜惠縺励↑縺九▲縺溘ず繝｣繝ｳ繝ｫ縲・br>蟄ｦ鄙偵・繧ｲ繝ｼ繝繝ｻ謌宣聞縺ｮ荳我ｽ堺ｸ菴薙ｒ螳溽樟縲・/p>
+
+    <div class="grid-2">
+      <div class="glass-card reveal stagger-1">
+        <span class="card-icon">識</span>
+        <h3>224繝槭せ ﾃ・4菴薙く繝｣繝ｩ驟咲ｽｮ</h3>
+        <p>56蟷ｴﾃ・蜃ｺ譚･莠・224繝槭せ縲ょ推繝槭せ縺ｧ譛螟ｧ4菴薙・繧ｭ繝｣繝ｩ繧帝・鄂ｮ縲る・鄂ｮ縺ｮ謌ｦ逡･諤ｧ縺梧怙邨ゅせ繧ｳ繧｢繧貞､ｧ縺阪￥蟾ｦ蜿ｳ縺吶ｋ縲・/p>
+        <ul class="feat-list" style="margin-top:16px">
+          <li><strong>驟咲ｽｮ謨ｰ</strong>縺悟ｭｦ鄙帝㍼縺ｫ騾｣蜍・/li>
+          <li>驟咲ｽｮ繝溘せ縺ｯ蜊ｳ繧ｹ繧ｳ繧｢繝繧ｦ繝ｳ</li>
+          <li>譛驕ｩ隗｣縺ｯ辟｡髯宣壹ｊ蟄伜惠縺吶ｋ</li>
+        </ul>
+      </div>
+      <div class="glass-card reveal stagger-2">
+        <span class="card-icon">投</span>
+        <h3>遏･隴倥′繝ｪ繧｢繝ｫ縺ｫ逶ｴ邨・/h3>
+        <p>縲後が繧､繝ｫ繧ｷ繝ｧ繝・け・晞≡縺御ｸ翫′繧九阪ｒ蟄ｦ縺ｶ 竊・繧ｲ繝ｼ繝蜀・〒驥代・繝上Φ繧ｿ繝ｼ繧帝・鄂ｮ 竊・螳滄圀縺ｫ蛻ｩ逶涯P縲ら衍隴倥′蜉帙↓縺ｪ繧狗椪髢薙′菴馴ｨ薙〒縺阪ｋ縲・/p>
+        <ul class="feat-list" style="margin-top:16px">
+          <li><strong>蟄ｦ鄙貞・螳ｹ</strong>縺碁・鄂ｮ繝ｫ繝ｼ繝ｫ縺ｫ蜿肴丐</li>
+          <li>遏･隴倥↑縺励〒縺ｯ鬮倥せ繧ｳ繧｢荳榊庄閭ｽ</li>
+          <li>縲後↑繧九⊇縺ｩ・√阪・迸ｬ髢薙ｒ險ｭ險・/li>
+        </ul>
+      </div>
+      <div class="glass-card reveal stagger-3">
+        <span class="card-icon">笙ｻ・・/span>
+        <h3>螳悟・縺ｪ蠕ｪ迺ｰ繝｡繧ｫ繝九け繧ｹ</h3>
+        <p>蟄ｦ鄙・竊・繧ｭ繝｣繝ｩ迯ｲ蠕・竊・繧ｲ繝ｼ繝譛牙茜蛹・竊・繧ｹ繧ｳ繧｢UP 竊・繧ゅ▲縺ｨ蟄ｦ縺ｳ縺溘＞ 竊・譁ｰ繧ｭ繝｣繝ｩ谺ｲ縺励＞ 竊・繧ｲ繝ｼ繝蜀肴倦謌ｦ縲ょ･ｽ蠕ｪ迺ｰ縺梧ｭ｢縺ｾ繧峨↑縺・ｨｭ險医・/p>
+      </div>
+      <div class="glass-card reveal stagger-4">
+        <span class="card-icon">醇</span>
+        <h3>螟壽ｧ倥↑謌宣聞謖・ｨ・/h3>
+        <p>繝ｬ繝吶Ν縲∫ｵ碁ｨ灘､縲√く繝｣繝ｩ謨ｰ縲∫ｧｰ蜿ｷ縲√せ繧ｳ繧｢縲√Λ繝ｳ繧ｭ繝ｳ繧ｰ縲よ・髟ｷ縺悟､夊ｧ堤噪縺ｫ蜿ｯ隕門喧縺輔ｌ繧九ゅ←縺ｮ謖・ｨ吶〒繧ゅ御ｸ企＃縲阪ｒ諢溘§繧峨ｌ繧九・/p>
+      </div>
+      <div class="glass-card reveal stagger-5">
+        <span class="card-icon">粕</span>
+        <h3>Duolingo繝ｬ繝吶Ν縺ｮ鄙呈・蛹・/h3>
+        <p>繧ｦ繧｣繧ｸ繧ｧ繝・ヨ縲√・繝・す繝･騾夂衍縲√せ繝医Μ繝ｼ繧ｯ縲・｣邯夐＃謌舌・繝ｼ繝翫せ縲・uolingo縺ｨ蜷檎ｭ峨・鄙呈・蛹悶Γ繧ｫ繝九け繧ｹ繧堤ｵ梧ｸ亥ｭｦ鄙偵↓驕ｩ逕ｨ縲・/p>
+      </div>
+      <div class="glass-card reveal stagger-6">
+        <span class="card-icon">件</span>
+        <h3>繧ｰ繝ｭ繝ｼ繝舌Ν縺ｪ螟壽ｬ｡蜈・ｧ</h3>
+        <p>譌･譛ｬ縲√い繝｡繝ｪ繧ｫ縲∽ｸｭ蝗ｽ縲√Ο繧ｷ繧｢縺ｪ縺ｩ隍・焚蝗ｽ繧偵・繝ｬ繧､縲よｯ主ｹｴ譁ｰ蝗ｽ縺瑚ｿｽ蜉縺輔ｌ縲∵ｯ碑ｼ・ｵ梧ｸ亥ｭｦ縺瑚・辟ｶ縺ｫ霄ｫ縺ｫ縺､縺上・/p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== CHARACTERS ===== -->
+<section class="section" id="characters">
+  <div class="section-inner">
+    <div class="section-num">04 &nbsp; Characters</div>
+    <h2 class="section-title gold reveal">繧ｭ繝｣繝ｩ繧ｯ繧ｿ繝ｼ繝ｻ繧ｹ繧ｭ繝ｫ繧ｷ繧ｹ繝・Β</h2>
+    <p class="section-sub reveal">繧ｿ繝ｯ繝ｼ繝・ぅ繝輔ぉ繝ｳ繧ｹ縺ｮ謚戊ｳ・沿縲ゅく繝｣繝ｩ繧帝寔繧√∵怙蠑ｷ縺ｮ驟咲ｽｮ繧定ｦ九▽縺代ｍ縲・br>Duolingo縺ｮ蟄ｦ鄙偵ユ繝ｼ繝槭ｒ繧ｯ繝ｪ繧｢縺吶ｋ縺ｨ譁ｰ繧ｭ繝｣繝ｩ縺瑚ｧ｣謾ｾ縺輔ｌ繧九・/p>
+
+    <!-- Basic Characters -->
+    <h3 style="font-size:18px;font-weight:700;color:var(--muted);margin-bottom:24px;letter-spacing:.05em;text-transform:uppercase" class="reveal">
+      蝓ｺ譛ｬ繧ｭ繝｣繝ｩ・・菴難ｼ・    </h3>
+    <div class="grid-4" style="margin-bottom:48px">
+      <div class="chara-card legend reveal stagger-1">
+        <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(245,200,66,.2),rgba(255,159,0,.1))">
+          <img src="./images/cert/char-oru-2.png" alt="" onerror="this.style.display='none'">
+          <span class="chara-portrait-icon" style="display:none">噫</span>
+          <span class="chara-rarity legend">LEGEND</span>
         </div>
-    </section>
-
-    <!-- ターゲット層 -->
-    <section id="target">
-        <div class="container">
-            <h2>ターゲット層 - 投資ニーズ段階別</h2>
-            <p class="section-subtitle">全ての経済学習段階に対応</p>
-            
-            <div class="stats-grid" style="margin-top: 40px;">
-                <div class="stat-box">
-                    <div class="stat-number">4,000万</div>
-                    <div class="stat-label">金融知識ゼロ層</div>
-                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「ゲーム感覚で金融教育」が入口</p>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">1,200万</div>
-                    <div class="stat-label">基礎知識習得層</div>
-                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「投資への第一歩」を踏み出す</p>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">600万</div>
-                    <div class="stat-label">実投資層</div>
-                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「運用の最適化」をシミュレーション</p>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">400万</div>
-                    <div class="stat-label">既投資家・プロ層</div>
-                    <p style="margin-top: 10px; font-size: 14px; color: #666;">「戦略検証」プラットフォーム</p>
-                </div>
-            </div>
-
-            <div class="grid" style="margin-top: 50px;">
-                <div class="card">
-                    <h3>🎮 Level 0: 金融知識ゼロ層</h3>
-                    <p><strong>ニーズ：</strong>敷居の低さ、習慣化、楽しさ</p>
-                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「人生を変える金融教育の入口」</p>
-                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額100-150円</p>
-                </div>
-                <div class="card">
-                    <h3>📚 Level 1: 基礎知識習得層</h3>
-                    <p><strong>ニーズ：</strong>実践的知識、不安払拭</p>
-                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「投資への第一歩」</p>
-                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額3,480円</p>
-                </div>
-                <div class="card">
-                    <h3>💼 Level 2: 実投資層</h3>
-                    <p><strong>ニーズ：</strong>シミュレーション、最適化</p>
-                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「運用の最適化ツール」</p>
-                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額8,000円</p>
-                </div>
-                <div class="card">
-                    <h3>🏆 Level 3-4: プロ層</h3>
-                    <p><strong>ニーズ：</strong>戦略検証、データ</p>
-                    <p style="margin-top: 10px;"><strong>マネぼウの価値：</strong><br>「専門プラットフォーム」</p>
-                    <p style="margin-top: 10px; font-size: 14px; color: #667eea;">期待ARPU：月額15,000円</p>
-                </div>
-            </div>
+        <div class="chara-body">
+          <div class="chara-name">噫 鬮伜ｺｦ邨梧ｸ域・髟ｷ縺ｮ鬯ｼ</div>
+          <div class="chara-effect">+20% 謌宣聞譛溘・繝ｼ繝翫せ</div>
+          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・0蝗・・・蟇ｾ雎｡・壽・髟ｷ繧､繝吶Φ繝・/div>
+          <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:90%"></div></div>
+          <div class="chara-xp-label"><span>XP 4500</span><span>Lv.MAX</span></div>
+          <div class="chara-target">套 1970蟷ｴ莉｣蜑榊濠縲懊ヰ繝悶Ν譛溘↓譛蠑ｷ</div>
         </div>
-    </section>
+      </div>
 
-    <!-- マネタイズ -->
-    <section id="monetize">
-        <div class="container">
-            <h2>マネタイズ戦略</h2>
-            <p class="section-subtitle">段階的・多層的な収益化</p>
-            
-            <h3 style="text-align: center; margin-top: 40px; color: #667eea;">推定年間売上（日本国内）</h3>
-            <div class="stats-grid" style="margin-top: 30px;">
-                <div class="stat-box">
-                    <div class="stat-number">24</div>
-                    <div class="stat-label">Level 0 売上<br>（広告 + 低額課金）</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">40</div>
-                    <div class="stat-label">Level 1 売上<br>（月額980円）</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">39</div>
-                    <div class="stat-label">Level 2 売上<br>（月額2,980円）</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-number">66</div>
-                    <div class="stat-label">Level 3 売上<br>（月額9,980円 + B2B）</div>
-                </div>
-            </div>
-
-            <h3 style="text-align: center; margin-top: 50px; color: #667eea;">合計推定売上</h3>
-            <div class="vision-box">
-                <h3>年間 150-210億円（日本国内）</h3>
-                <p>グローバル展開時：1,500-2,100億円</p>
-            </div>
-
-            <h3 style="text-align: center; margin-top: 50px; color: #667eea;">マネタイズモデル</h3>
-            <div class="grid" style="margin-top: 30px;">
-                <div class="card">
-                    <h3>📱 アプリ内広告</h3>
-                    <p>金融サービス、証券会社の広告。Level 0のユーザーに表示。</p>
-                </div>
-                <div class="card">
-                    <h3>💳 月額課金</h3>
-                    <p>Level 1: 月額980円<br>Level 2: 月額2,980円<br>Level 3: 月額9,980円</p>
-                </div>
-                <div class="card">
-                    <h3>🎲 ガチャシステム</h3>
-                    <p>1回100円、10回800円。新キャラ獲得で配置回数UP。</p>
-                </div>
-                <div class="card">
-                    <h3>🏢 B2B提携</h3>
-                    <p>証券会社・銀行・学校向けの教育ツール販売。月額数百万円～。</p>
-                </div>
-            </div>
+      <div class="chara-card epic reveal stagger-2">
+        <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(245,200,66,.15),rgba(92,92,255,.1))">
+          <img src="./images/cert/char-oru-3.png" alt="" onerror="this.style.display='none'">
+          <span class="chara-portrait-icon" style="display:none">腸</span>
+          <span class="chara-rarity epic">EPIC</span>
         </div>
-    </section>
-
-    <!-- ロードマップ -->
-    <section>
-        <div class="container">
-            <h2>展開ロードマップ</h2>
-            <p class="section-subtitle">段階的なグローバル展開</p>
-            
-            <div class="timeline" style="margin-top: 40px;">
-                <div class="timeline-item">
-                    <h4>フェーズ1：日本・東アジア（Year 1-2）</h4>
-                    <p>日本経済ステージ完成、韓国・台湾経済実装、アジア市場開拓</p>
-                    <p style="margin-top: 10px; color: #667eea;"><strong>売上目標：150-200億円/年</strong></p>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>フェーズ2：グローバル展開（Year 2-3）</h4>
-                    <p>アメリカ、ヨーロッパ、中国市場本格展開。各国向けカスタマイズ。B2B提携加速。</p>
-                    <p style="margin-top: 10px; color: #667eea;"><strong>売上目標：1,000-1,500億円/年</strong></p>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>フェーズ3：無限拡張（Year 3+）</h4>
-                    <p>100超の国々の経済ステージ実装。データセット化。機関投資家向けサービス。</p>
-                    <p style="margin-top: 10px; color: #667eea;"><strong>売上目標：3,000-5,000億円/年（+グローバル）</strong></p>
-                </div>
-            </div>
+        <div class="chara-body">
+          <div class="chara-name">腸 驥代・繝上Φ繧ｿ繝ｼ</div>
+          <div class="chara-effect">+30% 譛我ｺ玖ｳ・肇繝懊・繝翫せ</div>
+          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・0蝗・・・蟇ｾ雎｡・壼些讖溘・譛我ｺ・/div>
+          <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:75%"></div></div>
+          <div class="chara-xp-label"><span>XP 3000</span><span>Lv.15</span></div>
+          <div class="chara-target">套 繧ｪ繧､繝ｫ繧ｷ繝ｧ繝・け繝ｻ繝ｪ繝ｼ繝槭Φ譎ゅ↓霈昴￥</div>
         </div>
-    </section>
+      </div>
 
-    <!-- ビジョン -->
-    <section id="vision" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 100px 20px;">
-        <div class="container">
-            <h2 style="color: white;">ビジョン</h2>
-            
-            <div class="vision-box" style="background: rgba(255,255,255,0.1); border: 2px solid white;">
-                <h3 style="color: white;">それは、ゲームではない</h3>
-                <p style="margin-top: 20px;">
-                    「<span class="highlight" style="color: #ffeb3b;">人類の経済活動そのもの</span>」を、<br>
-                    ゲーミフィケーションされた形で、<br>
-                    永遠に体験し続けられるプラットフォーム
-                </p>
-            </div>
-
-            <h3 style="text-align: center; margin-top: 60px; color: white;">マネぼウが実現するもの</h3>
-            <div class="grid" style="margin-top: 40px; color: #333;">
-                <div class="card">
-                    <h3 style="color: #667eea;">🎓 金融リテラシーの民主化</h3>
-                    <p>高額なセミナーやコンサル不要。すべての人が無料で金融教育を受けられる。</p>
-                </div>
-                <div class="card">
-                    <h3 style="color: #667eea;">🌍 グローバル経済の理解</h3>
-                    <p>世界100超の国々を体験することで、複雑な経済相互関係を直感的に理解。</p>
-                </div>
-                <div class="card">
-                    <h3 style="color: #667eea;">📈 投資文化の健全化</h3>
-                    <p>ゲーム感覚で始まった学習が、実投資への確信と知識に進化。</p>
-                </div>
-                <div class="card">
-                    <h3 style="color: #667eea;">♾️ 完成しないプラットフォーム</h3>
-                    <p>毎年新国追加、毎年ボード拡張。永遠に新しい体験ができる。</p>
-                </div>
-            </div>
-
-            <div class="vision-box" style="background: rgba(255,255,255,0.15); border: 2px solid white; margin-top: 60px;">
-                <h3 style="color: white;">最終的な位置付け</h3>
-                <p style="font-size: 20px;">
-                    Duolingoが言語学習を民主化したように、<br>
-                    <strong style="color: #ffeb3b;">マネぼうが経済・金融教育を民主化する</strong><br><br>
-                    これが完成したとき、<br>
-                    <strong>世界中の金融教育は変わる。</strong>
-                </p>
-            </div>
+      <div class="chara-card rare reveal stagger-3">
+        <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(91,200,232,.15),rgba(0,102,204,.1))">
+          <img src="./images/cert/char-oru-4.png" alt="" onerror="this.style.display='none'">
+          <span class="chara-portrait-icon" style="display:none">鋤・・/span>
+          <span class="chara-rarity rare">RARE</span>
         </div>
-    </section>
-
-    <!-- フッター -->
-    <footer>
-        <div class="container">
-            <h3>マネぼう - 経済学習メタゲーム</h3>
-            <p style="margin-top: 20px;">2024-2026年 構想</p>
-            <p style="margin-top: 20px; opacity: 0.7;">
-                Duolingo × RPG × ボードゲーム × 経済シミュレーション<br>
-                = 完全に新しいジャンルの誕生
-            </p>
-            <div style="margin-top: 40px; border-top: 1px solid #555; padding-top: 20px;">
-                <p style="opacity: 0.6;">© 2024 マネぼう構想 All Rights Reserved</p>
-            </div>
+        <div class="chara-body">
+          <div class="chara-name">鋤・・菫晏ｮ域兜雉・ｮｶ</div>
+          <div class="chara-effect">+10% 蝗ｽ蛯ｵ繝ｻ驫陦後・繝ｼ繝翫せ</div>
+          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・5蝗・・・蟇ｾ雎｡・壼・繧､繝吶Φ繝・/div>
+          <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:55%" style="background:linear-gradient(90deg,#5bc8e8,#7c3aed)"></div></div>
+          <div class="chara-xp-label"><span>XP 1650</span><span>Lv.11</span></div>
+          <div class="chara-target">套 繝舌ヶ繝ｫ蟠ｩ螢翫・繝・ヵ繝ｬ譛溘・螳医ｊ逾・/div>
         </div>
-    </footer>
+      </div>
+
+      <div class="chara-card rare reveal stagger-4">
+        <div class="chara-portrait" style="background:linear-gradient(135deg,rgba(63,185,80,.15),rgba(0,180,120,.1))">
+          <img src="./images/cert/char-oru-5.png" alt="" onerror="this.style.display='none'">
+          <span class="chara-portrait-icon" style="display:none">跳</span>
+          <span class="chara-rarity rare">RARE</span>
+        </div>
+        <div class="chara-body">
+          <div class="chara-name">跳 繝峨Ν迢吶＞謦・■</div>
+          <div class="chara-effect">+25% 繝峨Ν繝懊・繝翫せ</div>
+          <div class="chara-uses">驟咲ｽｮ蝗樊焚・・0蝗・・・蟇ｾ雎｡・夂ぜ譖ｿ螟牙虚</div>
+          <div class="chara-xp-bar"><div class="chara-xp-fill" style="width:60%"></div></div>
+          <div class="chara-xp-label"><span>XP 2000</span><span>Lv.12</span></div>
+          <div class="chara-target">套 蜀・ｮ牙ｱ髱｢・・022縲・5蟷ｴ・峨〒螟ｧ豢ｻ霄・/div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unlock Characters -->
+    <h3 style="font-size:18px;font-weight:700;color:var(--muted);margin-bottom:24px;letter-spacing:.05em;text-transform:uppercase" class="reveal">
+      霑ｽ蜉繧ｭ繝｣繝ｩ・域ｮｵ髫守噪隗｣謾ｾ・・    </h3>
+    <div class="grid-3">
+      <div class="glass-card reveal stagger-1">
+        <span class="card-icon">笞厄ｸ・/span>
+        <h3>遞主宛繝槭せ繧ｿ繝ｼ</h3>
+        <p>蜈ｨ雉・肇縺ｮ遞守紫繧・10%霆ｽ貂帙・/p>
+        <div style="margin-top:12px"><span class="badge">隨ｬ2遶縲檎ｨ朱≡縲阪ユ繝ｼ繝樒ｿ貞ｾ玲凾</span></div>
+      </div>
+      <div class="glass-card reveal stagger-2">
+        <span class="card-icon">孱・・/span>
+        <h3>繝ｪ繧ｹ繧ｯ蝗樣∩閠・/h3>
+        <p>證ｴ關ｽ譎ゅ・繝槭う繝翫せ繧・0%繧ｫ繝・ヨ縲ょｮ医ｊ縺ｮ繧ｨ繝ｼ繧ｹ縲・/p>
+        <div style="margin-top:12px"><span class="badge">隨ｬ2遶繝懊せ謌ｦ繧ｯ繝ｪ繧｢譎・/span></div>
+      </div>
+      <div class="glass-card reveal stagger-3">
+        <span class="card-icon">醗</span>
+        <h3>繧､繝ｳ繝輔Ξ莠郁ｦ玖・/h3>
+        <p>驥・25%縲√う繝ｳ繝輔Ξ雉・肇+20%縲ゅう繝ｳ繝輔Ξ譎ゆｻ｣繧貞宛縺吶ｋ縲・/p>
+        <div style="margin-top:12px"><span class="badge">縲後う繝ｳ繝輔Ξ縲阪ユ繝ｼ繝樒ｿ貞ｾ玲凾</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== WORLD STAGE ===== -->
+<section class="section" id="world">
+  <div class="section-inner">
+    <div class="section-num">05 &nbsp; World</div>
+    <h2 class="section-title reveal">繧ｰ繝ｭ繝ｼ繝舌Ν繧ｹ繝・・繧ｸ諡｡蠑ｵ</h2>
+    <p class="section-sub reveal">譌･譛ｬ縺縺代§繧・↑縺・ゆｸ也阜100雜・・蝗ｽ縲・・邨梧ｸ医ｒ縲∝酔縺倥す繧ｹ繝・Β縺ｧ菴馴ｨ薙○繧医・/p>
+
+    <div class="grid-3">
+      <div class="country-card reveal stagger-1">
+        <div class="country-header">
+          <span class="country-flag">・・</span>
+          <div>
+            <div class="country-name">譌･譛ｬ邨梧ｸ・/div>
+            <div class="country-period">1970 窶・2026蟷ｴ</div>
+          </div>
+          <span class="badge" style="margin-left:auto">隗｣謾ｾ貂医∩</span>
+        </div>
+        <div class="country-body">
+          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <ul class="country-events">
+            <li>鬮伜ｺｦ邨梧ｸ域・髟ｷ繝ｻ荳・忽</li>
+            <li>繧ｪ繧､繝ｫ繧ｷ繝ｧ繝・け</li>
+            <li>繝励Λ繧ｶ蜷域э繝ｻ繝舌ヶ繝ｫ</li>
+            <li>繝舌ヶ繝ｫ蟠ｩ螢翫・螟ｱ繧上ｌ縺滓凾莉｣</li>
+            <li>繝ｪ繝ｼ繝槭Φ繝ｻ繧｢繝吶ヮ繝溘け繧ｹ</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card reveal stagger-2">
+        <div class="country-header">
+          <span class="country-flag">・・</span>
+          <div>
+            <div class="country-name">繧｢繝｡繝ｪ繧ｫ邨梧ｸ・/div>
+            <div class="country-period">1970 窶・2026蟷ｴ</div>
+          </div>
+          <span class="badge" style="margin-left:auto">Year2 隗｣謾ｾ</span>
+        </div>
+        <div class="country-body">
+          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <ul class="country-events">
+            <li>繧ｹ繧ｿ繧ｰ繝輔Ξ繝ｼ繧ｷ繝ｧ繝ｳ</li>
+            <li>繝ｬ繝ｼ繧ｬ繝弱Α繧ｯ繧ｹ</li>
+            <li>IT繝舌ヶ繝ｫ蟠ｩ螢・/li>
+            <li>繝ｪ繝ｼ繝槭Φ繧ｷ繝ｧ繝・け</li>
+            <li>蛻ｩ荳翫￡繧ｵ繧､繧ｯ繝ｫ</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card reveal stagger-3">
+        <div class="country-header">
+          <span class="country-flag">・・</span>
+          <div>
+            <div class="country-name">荳ｭ蝗ｽ邨梧ｸ・/div>
+            <div class="country-period">1978 窶・2026蟷ｴ</div>
+          </div>
+          <span class="badge" style="margin-left:auto">Year2 隗｣謾ｾ</span>
+        </div>
+        <div class="country-body">
+          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <ul class="country-events">
+            <li>謾ｹ髱ｩ髢区叛繝ｻ鬮俶・髟ｷ譛・/li>
+            <li>螟ｩ螳蛾摩莠倶ｻｶ</li>
+            <li>WTO蜉逶・/li>
+            <li>邀ｳ荳ｭ雋ｿ譏捺姶莠・/li>
+            <li>荳榊虚逕｣蜊ｱ讖溘・邨梧ｸ域ｸ幃・/li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card reveal stagger-4">
+        <div class="country-header">
+          <span class="country-flag">・・</span>
+          <div>
+            <div class="country-name">繝ｭ繧ｷ繧｢邨梧ｸ・/div>
+            <div class="country-period">1970 窶・2026蟷ｴ</div>
+          </div>
+          <span class="badge" style="margin-left:auto">Year3 隗｣謾ｾ</span>
+        </div>
+        <div class="country-body">
+          <h5>荳ｻ隕√う繝吶Φ繝・/h5>
+          <ul class="country-events">
+            <li>蜀ｷ謌ｦ邨梧ｸ医・霆肴僑</li>
+            <li>繧ｽ繝薙お繝亥ｴｩ螢・/li>
+            <li>騾夊ｲｨ蜊ｱ讖・/li>
+            <li>繧ｨ繝阪Ν繧ｮ繝ｼ螂ｽ豕∵悄</li>
+            <li>邨梧ｸ亥宛陬√・萓ｵ謾ｻ</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="country-card reveal stagger-5">
+        <div class="country-header">
+          <span class="country-flag">・・</span>
+          <div>
+            <div class="country-name">EU邨梧ｸ・/div>
+            <div class="country-period">2027蟷ｴ莉･髯崎ｿｽ蜉</div>
+          </div>
+          <span class="badge" style="margin-left:auto;background:rgba(136,136,170,.1);border-color:rgba(136,136,170,.2);color:var(--muted)">霑第律蜈ｬ髢・/span>
+        </div>
+        <div class="country-body">
+          <h5>諡｡蠑ｵ莠亥ｮ・/h5>
+          <ul class="country-events">
+            <li>EU邨ｱ蜷医・繝ｦ繝ｼ繝ｭ隱慕函</li>
+            <li>谺ｧ蟾槫し蜍吝些讖・/li>
+            <li>Brexit</li>
+            <li>繧ｨ繝阪Ν繧ｮ繝ｼ霆｢謠・/li>
+            <li>縺昴・莉・0+蝗ｽ</li>
+          </ul>
+          <span class="country-badge">繧､繝ｳ繝峨・蜿ｰ貉ｾ繝ｻ繝悶Λ繧ｸ繝ｫ繧りｿｽ蜉莠亥ｮ・/span>
+        </div>
+      </div>
+
+      <div class="country-card reveal stagger-6" style="border-style:dashed;border-color:rgba(124,58,237,.3)">
+        <div class="country-header" style="background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(5,5,8,0))">
+          <span class="country-flag">笙ｾ・・/span>
+          <div>
+            <div class="country-name">豈主ｹｴ閾ｪ蜍墓峩譁ｰ</div>
+            <div class="country-period">豌ｸ驕縺ｫ謌宣聞縺礼ｶ壹￠繧・/div>
+          </div>
+        </div>
+        <div class="country-body">
+          <h5>譖ｴ譁ｰ蜀・ｮｹ</h5>
+          <ul class="country-events">
+            <li>蜈ｨ繧ｹ繝・・繧ｸ1蟷ｴ蛻・僑蠑ｵ</li>
+            <li>譁ｰ邨梧ｸ医う繝吶Φ繝郁ｿｽ蜉</li>
+            <li>譁ｰ繧ｭ繝｣繝ｩ螳溯｣・/li>
+            <li>Duolingo譁ｰ繝・・繝・/li>
+            <li>譁ｰ蝗ｽ縺ｮ霑ｽ蜉</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== TARGET ===== -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-num">06 &nbsp; Target</div>
+    <h2 class="section-title reveal">繧ｿ繝ｼ繧ｲ繝・ヨ螻､</h2>
+    <p class="section-sub reveal">謚戊ｳ・ル繝ｼ繧ｺ谿ｵ髫主挨縺ｫ縲∝・縺ｦ縺ｮ邨梧ｸ亥ｭｦ鄙呈ｮｵ髫弱↓蟇ｾ蠢懊・br>驥題檮遏･隴倥ぞ繝ｭ縺九ｉ讖滄未謚戊ｳ・ｮｶ縺ｾ縺ｧ縲・/p>
+
+    <div class="stat-grid">
+      <div class="stat-card reveal stagger-1">
+        <div class="stat-num"><span class="counter" data-target="4000">0</span><span class="stat-unit">荳・/span></div>
+        <div class="stat-label">驥題檮遏･隴倥ぞ繝ｭ螻､</div>
+        <div class="stat-note">縲後ご繝ｼ繝諢溯ｦ壹〒驥題檮謨呵ご縲阪′蜈･蜿｣</div>
+      </div>
+      <div class="stat-card reveal stagger-2">
+        <div class="stat-num"><span class="counter" data-target="1200">0</span><span class="stat-unit">荳・/span></div>
+        <div class="stat-label">蝓ｺ遉守衍隴倡ｿ貞ｾ怜ｱ､</div>
+        <div class="stat-note">縲梧兜雉・∈縺ｮ隨ｬ荳豁ｩ縲阪ｒ雕上∩蜃ｺ縺・/div>
+      </div>
+      <div class="stat-card reveal stagger-3">
+        <div class="stat-num"><span class="counter" data-target="600">0</span><span class="stat-unit">荳・/span></div>
+        <div class="stat-label">螳滓兜雉・ｱ､</div>
+        <div class="stat-note">縲碁°逕ｨ縺ｮ譛驕ｩ蛹悶阪ｒ繧ｷ繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ</div>
+      </div>
+      <div class="stat-card reveal stagger-4">
+        <div class="stat-num"><span class="counter" data-target="400">0</span><span class="stat-unit">荳・/span></div>
+        <div class="stat-label">譌｢謚戊ｳ・ｮｶ繝ｻ繝励Ο螻､</div>
+        <div class="stat-note">縲梧姶逡･讀懆ｨｼ縲阪・繝ｩ繝・ヨ繝輔か繝ｼ繝</div>
+      </div>
+    </div>
+
+    <div class="grid-4">
+      <div class="level-card reveal stagger-1">
+        <div class="level-badge">Lv0</div>
+        <h3>驥題檮遏･隴倥ぞ繝ｭ螻､</h3>
+        <div class="need">繝九・繧ｺ・壽聞螻・・菴弱＆繝ｻ讌ｽ縺励＆</div>
+        <div class="value">縲御ｺｺ逕溘ｒ螟峨∴繧句・蜿｣縲・/div>
+        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・100縲・50蜀・/div>
+      </div>
+      <div class="level-card reveal stagger-2">
+        <div class="level-badge">Lv1</div>
+        <h3>蝓ｺ遉守衍隴倡ｿ貞ｾ怜ｱ､</h3>
+        <div class="need">繝九・繧ｺ・壼ｮ溯ｷｵ逧・衍隴倥・荳榊ｮ画鴛諡ｭ</div>
+        <div class="value">縲梧兜雉・∈縺ｮ隨ｬ荳豁ｩ縲・/div>
+        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・3,480蜀・/div>
+      </div>
+      <div class="level-card reveal stagger-3">
+        <div class="level-badge">Lv2</div>
+        <h3>螳滓兜雉・ｱ､</h3>
+        <div class="need">繝九・繧ｺ・壹す繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ繝ｻ譛驕ｩ蛹・/div>
+        <div class="value">縲碁°逕ｨ縺ｮ譛驕ｩ蛹悶ヤ繝ｼ繝ｫ縲・/div>
+        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・8,000蜀・/div>
+      </div>
+      <div class="level-card reveal stagger-4">
+        <div class="level-badge">Lv3</div>
+        <h3>繝励Ο螻､</h3>
+        <div class="need">繝九・繧ｺ・壽姶逡･讀懆ｨｼ繝ｻ繝・・繧ｿ豢ｻ逕ｨ</div>
+        <div class="value">縲悟ｰる摩繝励Λ繝・ヨ繝輔か繝ｼ繝縲・/div>
+        <div class="arpu">譛溷ｾ・RPU・壽怦鬘・15,000蜀・/div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== MONETIZE ===== -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-num">07 &nbsp; Monetize</div>
+    <h2 class="section-title gold reveal">繝槭ロ繧ｿ繧､繧ｺ謌ｦ逡･</h2>
+    <p class="section-sub reveal">谿ｵ髫守噪繝ｻ螟壼ｱ､逧・↑蜿守寢蛹悶ょｺ・相縺九ｉ豕穂ｺｺ螂醍ｴ・∪縺ｧ縲∝・譁ｹ菴阪・繝槭ロ繧ｿ繧､繧ｺ險ｭ險医・/p>
+
+    <div class="revenue-box reveal">
+      <h3>譌･譛ｬ蝗ｽ蜀・謗ｨ螳壼ｹｴ髢灘｣ｲ荳奇ｼ亥粋險茨ｼ・/h3>
+      <div class="revenue-num"><span class="counter" data-target="180">0</span>縲・span class="counter" data-target="210">0</span>蜆・・</div>
+      <div class="revenue-sub">繧ｰ繝ｭ繝ｼ繝舌Ν螻暮幕譎ゑｼ・,500縲・,100蜆・・</div>
+    </div>
+
+    <div class="grid-4">
+      <div class="monetize-card reveal stagger-1">
+        <span class="m-icon">導</span>
+        <h3>繧｢繝励Μ蜀・ｺ・相</h3>
+        <p>驥題檮繧ｵ繝ｼ繝薙せ繝ｻ險ｼ蛻ｸ莨夂､ｾ縺ｮ蠎・相縲・evel 0繝ｦ繝ｼ繧ｶ繝ｼ縺ｫ驟堺ｿ｡縲・/p>
+        <span class="price-tag">謗ｨ螳・24蜆・・/蟷ｴ</span>
+      </div>
+      <div class="monetize-card reveal stagger-2">
+        <span class="m-icon">諜</span>
+        <h3>譛磯｡崎ｪｲ驥・/h3>
+        <p>Lv1: 譛磯｡・80蜀・br>Lv2: 譛磯｡・,980蜀・br>Lv3: 譛磯｡・,980蜀・/p>
+        <span class="price-tag">謗ｨ螳・79蜆・・/蟷ｴ</span>
+      </div>
+      <div class="monetize-card reveal stagger-3">
+        <span class="m-icon">軸</span>
+        <h3>繧ｬ繝√Ε繧ｷ繧ｹ繝・Β</h3>
+        <p>1蝗・00蜀・・0蝗・00蜀・よ眠繧ｭ繝｣繝ｩ迯ｲ蠕励〒驟咲ｽｮ蝗樊焚UP縲ゅΞ繧｢繝ｪ繝・ぅ4谿ｵ髫弱・/p>
+        <span class="price-tag">謗ｨ螳・40蜆・・/蟷ｴ</span>
+      </div>
+      <div class="monetize-card reveal stagger-4">
+        <span class="m-icon">召</span>
+        <h3>B2B謠先声</h3>
+        <p>險ｼ蛻ｸ莨夂､ｾ繝ｻ驫陦後・蟄ｦ譬｡蜷代￠謨呵ご繝・・繝ｫ縲よ怦鬘肴焚逋ｾ荳・・縲懊・/p>
+        <span class="price-tag">謗ｨ螳・66蜆・・/蟷ｴ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== ROADMAP ===== -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-num">08 &nbsp; Roadmap</div>
+    <h2 class="section-title reveal">螻暮幕繝ｭ繝ｼ繝峨・繝・・</h2>
+    <p class="section-sub reveal">谿ｵ髫守噪縺ｪ繧ｰ繝ｭ繝ｼ繝舌Ν螻暮幕縲ゅ∪縺壹・譌･譛ｬ縺九ｉ縲∽ｸ也阜縺ｸ縲・/p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Phase 1 窶・Year 1縲・</div>
+        <h4>譌･譛ｬ繝ｻ譚ｱ繧｢繧ｸ繧｢</h4>
+        <p>譌･譛ｬ邨梧ｸ医せ繝・・繧ｸ螳梧・縲る沒蝗ｽ繝ｻ蜿ｰ貉ｾ邨梧ｸ医ｒ螳溯｣・＠繧｢繧ｸ繧｢蟶ょｴ繧帝幕諡薙・uolingo騾｣謳ｺ繧ｷ繧ｹ繝・Β讒狗ｯ峨・2B謠先声繧帝≡陞肴･ｭ逡後〒髢句ｧ九・/p>
+        <span class="tl-target">腸 螢ｲ荳顔岼讓呻ｼ・50縲・00蜆・・/蟷ｴ</span>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Phase 2 窶・Year 2縲・</div>
+        <h4>繧ｰ繝ｭ繝ｼ繝舌Ν螻暮幕</h4>
+        <p>繧｢繝｡繝ｪ繧ｫ繝ｻ繝ｨ繝ｼ繝ｭ繝・ヱ繝ｻ荳ｭ蝗ｽ蟶ょｴ縺ｮ譛ｬ譬ｼ螻暮幕縲ょ推蝗ｽ蜷代￠繧ｫ繧ｹ繧ｿ繝槭う繧ｺ縺ｨ螟夊ｨ隱槫ｯｾ蠢懊・2B謠先声蜉騾溘よｩ滄未謚戊ｳ・ｮｶ蜷代￠繝励Ξ繝溘い繝繝励Λ繝ｳ縲・/p>
+        <span class="tl-target">腸 螢ｲ荳顔岼讓呻ｼ・,000縲・,500蜆・・/蟷ｴ</span>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">Phase 3 窶・Year 3+</div>
+        <h4>辟｡髯先僑蠑ｵ繝励Λ繝・ヨ繝輔か繝ｼ繝</h4>
+        <p>100雜・・蝗ｽ縲・・邨梧ｸ医せ繝・・繧ｸ螳溯｣・らｵ梧ｸ医ョ繝ｼ繧ｿ繧ｻ繝・ヨ蛹悶↓繧医ｋAPI謠蝉ｾ帙よｩ滄未謚戊ｳ・ｮｶ蜷代￠繧ｵ繝ｼ繝薙せ譛ｬ譬ｼ蛹悶ょｮ梧・縺励↑縺・・繝ｩ繝・ヨ繝輔か繝ｼ繝縺ｸ縲・/p>
+        <span class="tl-target">腸 螢ｲ荳顔岼讓呻ｼ・,000縲・,000蜆・・/蟷ｴ・・繧ｰ繝ｭ繝ｼ繝舌Ν・・/span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="glow-divider">
+
+<!-- ===== VISION ===== -->
+<section class="vision-section" id="vision">
+  <img src="./images/cert/char-end-2.png" alt="" class="floating-chara vision-chara" onerror="this.style.display='none'">
+  <div class="section-inner" style="position:relative;z-index:1">
+    <div class="section-num" style="color:rgba(245,200,66,.8)">09 &nbsp; Vision</div>
+    <h2 class="section-title gold reveal" style="font-size:clamp(32px,6vw,64px)">繝薙ず繝ｧ繝ｳ</h2>
+
+    <div class="vision-quote reveal">
+      <p>縺昴ｌ縺ｯ縲√ご繝ｼ繝縺ｧ縺ｯ縺ｪ縺・・br><strong>縲御ｺｺ鬘槭・邨梧ｸ域ｴｻ蜍輔◎縺ｮ繧ゅ・縲・/strong>繧偵・br>繧ｲ繝ｼ繝溘ヵ繧｣繧ｱ繝ｼ繧ｷ繝ｧ繝ｳ縺輔ｌ縺溷ｽ｢縺ｧ縲・br>豌ｸ驕縺ｫ菴馴ｨ薙＠邯壹￠繧峨ｌ繧九・繝ｩ繝・ヨ繝輔か繝ｼ繝縲・/p>
+    </div>
+
+    <div class="grid-2" style="margin:48px 0">
+      <div class="glass-card reveal stagger-1">
+        <span class="card-icon">雌</span>
+        <h3>驥題檮繝ｪ繝・Λ繧ｷ繝ｼ縺ｮ豌台ｸｻ蛹・/h3>
+        <p>鬮倬｡阪↑繧ｻ繝溘リ繝ｼ繧・さ繝ｳ繧ｵ繝ｫ荳崎ｦ√ゅ☆縺ｹ縺ｦ縺ｮ莠ｺ縺檎┌譁吶〒驥題檮謨呵ご繧貞女縺代ｉ繧後ｋ縲ら衍隴俶ｼ蟾ｮ繧偵ご繝ｼ繝縺ｧ蝓九ａ繧九・/p>
+      </div>
+      <div class="glass-card reveal stagger-2">
+        <span class="card-icon">訣</span>
+        <h3>繧ｰ繝ｭ繝ｼ繝舌Ν邨梧ｸ医・逅・ｧ｣</h3>
+        <p>荳也阜100雜・・蝗ｽ縲・ｒ菴馴ｨ薙☆繧九％縺ｨ縺ｧ縲∬､・尅縺ｪ邨梧ｸ育嶌莠帝未菫ゅｒ逶ｴ諢溽噪縺ｫ逅・ｧ｣縲ゅげ繝ｭ繝ｼ繝舌Ν蟶よｰ代ｒ閧ｲ縺ｦ繧九・/p>
+      </div>
+      <div class="glass-card reveal stagger-3">
+        <span class="card-icon">嶋</span>
+        <h3>謚戊ｳ・枚蛹悶・蛛･蜈ｨ蛹・/h3>
+        <p>繧ｲ繝ｼ繝諢溯ｦ壹〒蟋九∪縺｣縺溷ｭｦ鄙偵′縲∝ｮ滓兜雉・∈縺ｮ遒ｺ菫｡縺ｨ遏･隴倥↓騾ｲ蛹悶よ律譛ｬ縺ｮ謚戊ｳ・枚蛹悶ｒ螟峨∴繧九・/p>
+      </div>
+      <div class="glass-card reveal stagger-4">
+        <span class="card-icon">笙ｾ・・/span>
+        <h3>螳梧・縺励↑縺・・繝ｩ繝・ヨ繝輔か繝ｼ繝</h3>
+        <p>豈主ｹｴ譁ｰ蝗ｽ霑ｽ蜉縲∵ｯ主ｹｴ繝懊・繝画僑蠑ｵ縲よｰｸ驕縺ｫ譁ｰ縺励＞菴馴ｨ薙′縺ｧ縺阪ｋ縲よｭｴ蜿ｲ縺ｨ縺ｨ繧ゅ↓騾ｲ蛹悶☆繧九ご繝ｼ繝縲・/p>
+      </div>
+    </div>
+
+    <div class="final-box reveal">
+      <h3>Duolingo縺瑚ｨ隱槫ｭｦ鄙偵ｒ豌台ｸｻ蛹悶＠縺溘ｈ縺・↓縲・br><strong>繝槭ロ縺ｼ縺・′邨梧ｸ医・驥題檮謨呵ご繧呈ｰ台ｸｻ蛹悶☆繧・/strong></h3>
+      <p style="margin-top:24px">
+        縺薙ｌ縺悟ｮ梧・縺励◆縺ｨ縺阪・br>
+        <strong>荳也阜荳ｭ縺ｮ驥題檮謨呵ご縺ｯ螟峨ｏ繧九・/strong>
+      </p>
+      <div style="margin-top:40px">
+        <button class="btn-primary" style="animation:none">
+          噫 莉翫☆縺仙ｧ九ａ繧・        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-logo">腸 繝槭ロ縺ｼ縺・譁ｰ讒区Φ</div>
+  <div class="footer-tagline">
+    Duolingo ﾃ・RPG ﾃ・繝懊・繝峨ご繝ｼ繝 ﾃ・邨梧ｸ医す繝溘Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ<br>
+    = 螳悟・縺ｫ譁ｰ縺励＞繧ｸ繝｣繝ｳ繝ｫ縺ｮ隱慕函
+  </div>
+  <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:24px">
+    <span class="badge">式 邨梧ｸ亥ｭｦ鄙偵Γ繧ｿ繧ｲ繝ｼ繝</span>
+    <span class="badge">訣 100+繧ｫ蝗ｽ蟇ｾ蠢應ｺ亥ｮ・/span>
+    <span class="badge">笙ｾ・・豌ｸ驕縺ｫ譖ｴ譁ｰ</span>
+  </div>
+  <div class="footer-sep"></div>
+  <div class="footer-copy">ﾂｩ 2024-2026 繝槭ロ縺ｼ縺・ｧ区Φ All Rights Reserved</div>
+</footer>
+
+<script>
+/* ===== STARS ===== */
+(function(){
+  const c=document.getElementById('stars-canvas');
+  const ctx=c.getContext('2d');
+  let W,H,stars=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function initStars(){
+    stars=[];
+    for(let i=0;i<200;i++){
+      stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.3,a:Math.random(),speed:Math.random()*.4+.1,twinkle:Math.random()*Math.PI*2});
+    }
+  }
+  function drawStars(){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.twinkle+=.02;
+      const alpha=s.a*.5+Math.sin(s.twinkle)*.3+.2;
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,255,255,${Math.max(0,Math.min(1,alpha))})`;ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+  window.addEventListener('resize',()=>{resize();initStars()});
+  resize();initStars();drawStars();
+})();
+
+/* ===== FLOATING COINS ===== */
+(function(){
+  const wrap=document.getElementById('coins-wrap');
+  const coins=['腸','ｪ・,'超','跳','諜','嶋','笨ｨ'];
+  for(let i=0;i<12;i++){
+    const d=document.createElement('div');
+    d.className='coin';
+    d.textContent=coins[Math.floor(Math.random()*coins.length)];
+    d.style.cssText=`left:${Math.random()*100}vw;--dur:${8+Math.random()*10}s;--delay:${Math.random()*8}s;font-size:${14+Math.random()*16}px`;
+    wrap.appendChild(d);
+  }
+})();
+
+/* ===== SCROLL PROGRESS ===== */
+window.addEventListener('scroll',function(){
+  const bar=document.getElementById('scrollBar');
+  const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  bar.style.width=pct+'%';
+  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>60);
+  document.getElementById('backTop').classList.toggle('show',window.scrollY>400);
+},{passive:true});
+
+/* ===== REVEAL ON SCROLL ===== */
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.tl-item').forEach(el=>observer.observe(el));
+
+/* ===== COUNTER ANIMATION ===== */
+function animateCounter(el){
+  const target=parseInt(el.dataset.target);
+  const duration=1800;
+  const start=performance.now();
+  function step(now){
+    const elapsed=now-start;
+    const progress=Math.min(elapsed/duration,1);
+    const ease=1-Math.pow(1-progress,4);
+    el.textContent=Math.round(ease*target).toLocaleString();
+    if(progress<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const counterObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){animateCounter(e.target);counterObs.unobserve(e.target)}
+  });
+},{threshold:.5});
+document.querySelectorAll('.counter').forEach(el=>counterObs.observe(el));
+
+/* ===== XP BAR ANIMATION ===== */
+const xpObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      setTimeout(()=>{e.target.style.width=e.target.style.width||'0%'},200);
+      xpObs.unobserve(e.target);
+    }
+  });
+},{threshold:.5});
+document.querySelectorAll('.chara-xp-fill').forEach(el=>{
+  const w=el.style.width;el.style.width='0%';
+  xpObs.observe(el);
+  el.addEventListener('transitionend',()=>{},false);
+  setTimeout(()=>observer.observe(el.closest('.chara-card')||el),100);
+});
+
+/* ===== STAR VISIONS ===== */
+(function(){
+  const vision=document.querySelector('.vision-section');
+  if(!vision)return;
+  for(let i=0;i<20;i++){
+    const s=document.createElement('div');
+    s.className='vision-star';
+    const size=Math.random()*3+1;
+    s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*3}s;--delay:${Math.random()*3}s`;
+    vision.appendChild(s);
+  }
+})();
+
+/* ===== SMOOTH PARALLAX ===== */
+let heroEl=document.querySelector('.hero');
+window.addEventListener('scroll',function(){
+  if(heroEl&&window.scrollY<window.innerHeight){
+    const y=window.scrollY*.4;
+    heroEl.querySelector('.hero-bg-glow').style.transform=`translateY(${y}px)`;
+  }
+},{passive:true});
+
+/* ===== XP FILL TRIGGER ===== */
+document.querySelectorAll('.chara-card').forEach(card=>{
+  const fill=card.querySelector('.chara-xp-fill');
+  if(!fill)return;
+  const target=fill.style.width;
+  fill.style.width='0%';
+  const cardObs=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){
+      setTimeout(()=>{fill.style.width=target},300);
+      cardObs.disconnect();
+    }
+  },{threshold:.3});
+  cardObs.observe(card);
+});
+</script>
 </body>
 </html>
+
