@@ -1293,7 +1293,7 @@ body {
 }
 .wh-balance {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 20px; color: var(--gold); letter-spacing: 1px;
+  font-size: clamp(14px, 4.5vw, 20px); color: var(--gold); letter-spacing: 1px;
 }
 .wh-reset-btn {
   background: transparent; color: rgba(232,53,74,0.45);
@@ -1464,7 +1464,7 @@ body {
   border-radius: 10px;
   padding: 12px 16px;
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 24px;
+  font-size: clamp(16px, 5vw, 24px);
   color: var(--gold);
   text-align: right;
   margin-bottom: 10px;
@@ -1658,7 +1658,7 @@ body {
 }
 .sell-flow {
   display: flex; align-items: center; gap: 6px;
-  justify-content: center; flex-wrap: nowrap;
+  justify-content: center; flex-wrap: wrap;
 }
 .sell-flow-step {
   flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
@@ -1822,11 +1822,12 @@ body {
 }
 .tab-section-title {
   font-family: 'Dela Gothic One', sans-serif;
-  font-size: 14px;
+  font-size: clamp(11px, 3.5vw, 14px);
   color: var(--dark);
   margin-bottom: 14px;
   padding-bottom: 8px;
   border-bottom: 2px solid rgba(0,0,0,0.08);
+  overflow-wrap: break-word;
 }
 
 /* ─── Titles Player Card ─────────────────────────────────── */
@@ -2031,7 +2032,7 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 .pts-label { font-size: 10px; color: rgba(255,255,255,0.4); }
-.pts-val   { font-family: 'Dela Gothic One',sans-serif; font-size: 20px; color: var(--gold); }
+.pts-val   { font-family: 'Dela Gothic One',sans-serif; font-size: clamp(13px, 4vw, 20px); color: var(--gold); }
 .graph-labels {
   display: flex; justify-content: space-between;
   padding: 3px 14px 10px;
@@ -2625,7 +2626,7 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 /* ===== 賞状モーダル ===== */
 .cert-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.35s;backdrop-filter:blur(4px);}
 .cert-backdrop.open{opacity:1;pointer-events:all;}
-.cert-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-54%) scale(0.9);z-index:2001;background:#06060f;border:2px solid rgba(245,200,66,0.6);border-radius:18px;padding:18px 18px 14px;width:min(92vw,820px);pointer-events:none;opacity:0;transition:transform 0.35s cubic-bezier(0.22,1.2,0.5,1),opacity 0.28s;box-shadow:0 0 0 1px rgba(245,200,66,0.15),0 24px 80px rgba(0,0,0,0.9),0 0 40px rgba(245,200,66,0.08);}
+.cert-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-54%) scale(0.9);z-index:2001;background:#06060f;border:2px solid rgba(245,200,66,0.6);border-radius:18px;padding:18px 18px 14px;width:min(92vw,820px);max-height:92vh;overflow-y:auto;pointer-events:none;opacity:0;transition:transform 0.35s cubic-bezier(0.22,1.2,0.5,1),opacity 0.28s;box-shadow:0 0 0 1px rgba(245,200,66,0.15),0 24px 80px rgba(0,0,0,0.9),0 0 40px rgba(245,200,66,0.08);}
 .cert-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
 .cert-canvas{width:100%;height:auto;border-radius:10px;display:block;box-shadow:0 4px 24px rgba(0,0,0,0.6);}
 .cert-actions{display:flex;gap:10px;margin-top:14px;justify-content:center;}
@@ -2753,6 +2754,7 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   <div class="user-menu-group" id="userMenuGroup"></div>
   <hr class="user-menu-divider">
   <a class="user-menu-btn" href="home.html">🏠 アカウントページへ</a>
+  <a class="user-menu-btn" href="textbook.html">📚 教科書を見る</a>
   <a class="user-menu-btn" href="https://rainybrainch.github.io/manebou-todo/manebou-pin.html" target="_blank" rel="noopener">📋 マネぼうPinへ</a>
   <button class="user-menu-btn" onclick="openGroupModal()">👥 グループ管理</button>
   <button class="user-menu-btn" onclick="cloudSaveNow()">☁️ 今すぐ保存</button>
@@ -5578,7 +5580,7 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   ctx.fillText('💴 現金', aLeft + 4, cashY);
   ctx.fillStyle = '#f5c842';
   ctx.textAlign = 'right';
-  ctx.fillText(Math.floor(snapCash).toLocaleString() + '円', aRight - 5, cashY);
+  ctx.fillText(Math.floor(snapCash || 0).toLocaleString() + '円', aRight - 5, cashY);
   ctx.textAlign = 'center';
 
   // ─── 15. 資産推移グラフ ─────────────────────────────────────
@@ -5636,7 +5638,7 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
     const peak = toXY(maxV, peakIdx);
     ctx.fillStyle = 'rgba(245,200,66,0.8)';
     ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText(Math.floor(maxV / 10000) + '万', peak.x, peak.y - 3);
+    ctx.fillText(Math.floor(maxV / 10000) + '万', peak.x, Math.max(yBase + 10, peak.y - 3));
 
     if (snapHistory[0] && snapHistory[0]['年']) {
       ctx.fillStyle = 'rgba(255,255,255,0.3)';
