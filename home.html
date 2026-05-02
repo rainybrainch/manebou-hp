@@ -1282,6 +1282,10 @@ async function saveProfile() {
       await _db.collection('users').doc(user.uid).set(
         { name, photoURL }, { merge: true }
       );
+      if (_groupId) {
+        _db.collection('groups').doc(_groupId).collection('members').doc(user.uid)
+          .set({ name, photoURL }, { merge: true }).catch(() => {});
+      }
     }
     // Update displayed info
     document.getElementById('myName').textContent = name;

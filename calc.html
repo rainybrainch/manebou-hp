@@ -2451,6 +2451,17 @@ body {
 .member-cash { font-size: 11px; color: var(--gold); }
 .member-year { font-size: 10px; color: rgba(255,255,255,0.4); }
 .member-tap-hint { font-size: 9px; color: var(--sky); opacity: 0.7; margin-top: 2px; }
+/* ─── Next-Confirm Checkboxes ─── */
+.next-warn-box { background: rgba(255,150,50,0.08); border: 1px solid rgba(255,150,50,0.25); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+.next-warn-title { font-size: 11px; font-weight: 700; color: rgba(255,180,80,0.9); margin-bottom: 10px; }
+.next-chk-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; cursor: pointer; }
+.next-chk-row:last-child { margin-bottom: 0; }
+.next-chk-row input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; margin-top: 1px; accent-color: var(--gold); cursor: pointer; }
+.next-chk-text { font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+/* ─── Group Compare ─── */
+.compare-toggle-row { display: flex; align-items: center; gap: 8px; margin: 4px 0 8px; }
+.compare-toggle-btn { font-size: 11px; padding: 4px 10px; border-radius: 16px; border: 1px solid rgba(91,200,232,0.4); background: rgba(91,200,232,0.07); color: var(--sky); cursor: pointer; transition: background 0.15s; }
+.compare-toggle-btn.active { background: rgba(91,200,232,0.22); border-color: var(--sky); font-weight: 700; }
 /* ─── Member Detail Modal ─── */
 .member-detail-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; text-align:left; }
 .member-detail-avatar { width:52px; height:52px; border-radius:50%; border:2px solid var(--gold); object-fit:cover; flex-shrink:0; }
@@ -2612,27 +2623,29 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
 
 <!-- ════ NEXT CONFIRM ════ -->
 <div class="auth-overlay" id="nextConfirmOverlay">
-  <div class="auth-box" style="text-align:center;max-width:300px">
-    <h2 style="font-size:18px;margin-bottom:8px">⏩ 次へ進む</h2>
-    <p id="nextConfirmMsg" style="font-size:13px;color:rgba(255,255,255,0.65);margin-bottom:20px;line-height:1.6">この操作は取り消せません。<br>これでいいですか？</p>
-    <button class="btn-google" style="background:var(--gold);color:var(--dark);margin-bottom:10px;font-weight:700" onclick="confirmNext()">✅ 進む</button>
+  <div class="auth-box" style="text-align:left;max-width:340px">
+    <h2 style="font-size:18px;margin-bottom:6px;text-align:center">⏩ 次へ進む</h2>
+    <p id="nextConfirmMsg" style="font-size:12px;color:rgba(255,255,255,0.55);margin-bottom:14px;line-height:1.6;text-align:center"></p>
+    <div class="next-warn-box">
+      <div class="next-warn-title">⚠️ 進む前に確認してください</div>
+      <label class="next-chk-row">
+        <input type="checkbox" id="nxtChk1" onchange="updateNextBtn()">
+        <span class="next-chk-text">📋 カートの取引を確認・実行した（またはカートを空にした）</span>
+      </label>
+      <label class="next-chk-row">
+        <input type="checkbox" id="nxtChk2" onchange="updateNextBtn()">
+        <span class="next-chk-text">📅 今の年のイベント・テキストを確認した</span>
+      </label>
+      <label class="next-chk-row">
+        <input type="checkbox" id="nxtChk3" onchange="updateNextBtn()">
+        <span class="next-chk-text">⚠️ 「次へ」は取り消しできないことを理解した</span>
+      </label>
+    </div>
+    <button id="confirmNextBtn" class="btn-google" style="background:rgba(245,200,66,0.3);color:rgba(255,255,255,0.35);margin-bottom:10px;font-weight:700;cursor:not-allowed;transition:all 0.2s" onclick="confirmNext()" disabled>✅ 進む（全項目にチェックを入れてください）</button>
     <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);border:1.5px solid rgba(255,255,255,0.15)" onclick="cancelNext()">✕ キャンセル</button>
   </div>
 </div>
 
-<!-- ════ CLOUD CONFIRM ════ -->
-<div class="auth-overlay" id="cloudConfirmOverlay">
-  <div class="auth-box">
-    <h2>☁️ クラウドデータ</h2>
-    <p>クラウドにセーブデータが<br>見つかりました。読み込みますか？</p>
-    <button class="btn-google" style="background:var(--sky);color:var(--dark);margin-bottom:10px" onclick="confirmCloudLoad()">
-      ✅ 読み込む
-    </button>
-    <button class="btn-google" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1.5px solid rgba(255,255,255,0.15)" onclick="skipCloudLoad()">
-      🆕 新規ゲームをはじめる
-    </button>
-  </div>
-</div>
 
 <!-- ════ GROUP MODAL ════ -->
 <div class="modal-overlay" id="groupModal">
@@ -3202,6 +3215,10 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
         <div class="portfolio-total-strip">
           <span class="pts-label">💰 累計総資産</span>
           <span class="pts-val" id="portfolioTotal">─</span>
+        </div>
+        <div class="compare-toggle-row" id="compareToggleRow" style="display:none">
+          <button class="compare-toggle-btn" id="compareToggleBtn" onclick="toggleGroupCompare()">👥 他のメンバーと比較</button>
+          <span id="compareLegend" style="font-size:10px;color:rgba(255,255,255,0.4)"></span>
         </div>
         <div class="graph-svg-wrap">
           <svg id="portfolioSvg" viewBox="0 0 600 180" preserveAspectRatio="none"
@@ -4789,6 +4806,8 @@ function assetReset() {
   pendingSell = 0;
   showToast('資産をリセットしました');
   updateDisplay();
+  saveGame();
+  cloudSaveNow(true);
 }
 
 function animateStep(callback) {
@@ -4916,15 +4935,48 @@ function askConfirmNext() {
   const ni = currentIndex + 1;
   if (ni >= masterData.length) return;
   const nextRow = masterData[ni];
-  let msg = 'この操作は取り消せません。<br>これでいいですか？';
+  let msg = '';
   if (nextRow && nextRow.年 > 0) {
     const label = nextRow.イベント === 1
       ? `${nextRow.年}年 イベント1`
       : `${nextRow.年}年 イベント${nextRow.イベント}`;
-    msg = `<strong>${label}</strong> へ進みます。<br>取り消しはできません。<br>これでいいですか？`;
+    msg = `<strong style="color:var(--gold)">${label}</strong> へ進みます`;
   }
   document.getElementById('nextConfirmMsg').innerHTML = msg;
+  ['nxtChk1','nxtChk2','nxtChk3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = false;
+  });
+  const btn = document.getElementById('confirmNextBtn');
+  if (btn) {
+    btn.disabled = true;
+    btn.style.background = 'rgba(245,200,66,0.3)';
+    btn.style.color = 'rgba(255,255,255,0.35)';
+    btn.style.cursor = 'not-allowed';
+    btn.textContent = '✅ 進む（全項目にチェックを入れてください）';
+  }
   document.getElementById('nextConfirmOverlay').classList.add('open');
+}
+
+function updateNextBtn() {
+  const allChecked = ['nxtChk1','nxtChk2','nxtChk3'].every(id => {
+    const el = document.getElementById(id);
+    return el && el.checked;
+  });
+  const btn = document.getElementById('confirmNextBtn');
+  if (!btn) return;
+  btn.disabled = !allChecked;
+  if (allChecked) {
+    btn.style.background = 'var(--gold)';
+    btn.style.color = 'var(--dark)';
+    btn.style.cursor = 'pointer';
+    btn.textContent = '✅ 進む';
+  } else {
+    btn.style.background = 'rgba(245,200,66,0.3)';
+    btn.style.color = 'rgba(255,255,255,0.35)';
+    btn.style.cursor = 'not-allowed';
+    btn.textContent = '✅ 進む（全項目にチェックを入れてください）';
+  }
 }
 
 function playCuckoo() {
@@ -5116,6 +5168,7 @@ function updateDisplay() {
   renderTitles();
   updateCharSpeech(row.年, row.イベント);
   saveGame();
+  cloudSaveNow(true);
   // 2025年イベント4 = ゲーム完走
   if (currentIndex >= masterData.length - 1) {
     setTimeout(showEnding, 1200);
@@ -5209,31 +5262,31 @@ function calcToSim() {
 
 // ════ 賞状システム ════
 const CERT_MILESTONES = {
-  tutorial: { bgIdx:1,  title:'チュートリアル完了',  sub:'投資の第一歩を踏み出した',
+  tutorial: { bgIdx:1,  charFile:'images/cert/char-oru-1.png', title:'チュートリアル完了',  sub:'投資の第一歩を踏み出した',
     period:'ゲーム開始', era:'現金管理とリスクの本質を体験。\n投資の基礎をここで学んだ。' },
-  '1974':   { bgIdx:2,  title:'1974年の壁を突破',    sub:'石油ショック時代を乗り越えた',
+  '1974':   { bgIdx:2,  charFile:'images/cert/char-end-1.png', title:'1974年の壁を突破',    sub:'石油ショック時代を乗り越えた',
     period:'1970〜1974年', era:'石油ショックが世界を揺るがした激動期。\nエネルギー危機と高インフレに翻弄された。' },
-  '1979':   { bgIdx:3,  title:'1979年の壁を突破',    sub:'第二次石油危機を生き抜いた',
+  '1979':   { bgIdx:3,  charFile:'images/cert/char-oru-2.png', title:'1979年の壁を突破',    sub:'第二次石油危機を生き抜いた',
     period:'1975〜1979年', era:'第二次石油危機でスタグフレーションが深刻化。\n適応力と忍耐が問われた5年間。' },
-  '1984':   { bgIdx:4,  title:'1984年の壁を突破',    sub:'バブル前夜の波に乗った',
+  '1984':   { bgIdx:4,  charFile:'images/cert/char-end-2.png', title:'1984年の壁を突破',    sub:'バブル前夜の波に乗った',
     period:'1980〜1984年', era:'日本経済が復活し株価・地価が上昇へ。\nバブル前夜の恩恵を受けた黄金期。' },
-  '1989':   { bgIdx:5,  title:'1989年の壁を突破',    sub:'バブル絶頂期を制した',
+  '1989':   { bgIdx:5,  charFile:'images/cert/char-oru-3.png', title:'1989年の壁を突破',    sub:'バブル絶頂期を制した',
     period:'1985〜1989年', era:'バブル経済の絶頂。資産価格が歴史的高値。\nプラザ合意後の円高・株高が同時進行。' },
-  '1994':   { bgIdx:6,  title:'1994年の壁を突破',    sub:'バブル崩壊後を生き残った',
+  '1994':   { bgIdx:6,  charFile:'images/cert/char-end-3.png', title:'1994年の壁を突破',    sub:'バブル崩壊後を生き残った',
     period:'1990〜1994年', era:'バブル崩壊と「失われた10年」の始まり。\n忍耐と分散投資が生存の鍵となった。' },
-  '1999':   { bgIdx:7,  title:'1999年の壁を突破',    sub:'ITバブルの波を乗りこなした',
+  '1999':   { bgIdx:7,  charFile:'images/cert/char-oru-4.png', title:'1999年の壁を突破',    sub:'ITバブルの波を乗りこなした',
     period:'1995〜1999年', era:'ITバブルの熱狂とゼロ金利政策の時代。\nテクノロジー株が急騰した。' },
-  '2004':   { bgIdx:8,  title:'2004年の壁を突破',    sub:'ITバブル崩壊から立ち直った',
+  '2004':   { bgIdx:8,  charFile:'images/cert/char-end-4.png', title:'2004年の壁を突破',    sub:'ITバブル崩壊から立ち直った',
     period:'2000〜2004年', era:'ITバブル崩壊と911テロの衝撃の時代。\n堅実な投資姿勢が光った。' },
-  '2009':   { bgIdx:9,  title:'2009年の壁を突破',    sub:'リーマンショックを乗り越えた',
+  '2009':   { bgIdx:9,  charFile:'images/cert/char-oru-5.png', title:'2009年の壁を突破',    sub:'リーマンショックを乗り越えた',
     period:'2005〜2009年', era:'リーマンショックで世界金融危機が勃発。\n史上最大級の暴落を生き延びた。' },
-  '2014':   { bgIdx:10, title:'2014年の壁を突破',    sub:'アベノミクス時代に挑んだ',
+  '2014':   { bgIdx:10, charFile:'images/cert/char-end-5.png', title:'2014年の壁を突破',    sub:'アベノミクス時代に挑んだ',
     period:'2010〜2014年', era:'アベノミクスと量的緩和で株価が急回復。\n円安・株高の追い風に乗った。' },
-  '2019':   { bgIdx:11, title:'2019年の壁を突破',    sub:'コロナ前夜を経験した',
+  '2019':   { bgIdx:11, charFile:'images/cert/char-oru-6.png', title:'2019年の壁を突破',    sub:'コロナ前夜を経験した',
     period:'2015〜2019年', era:'米中貿易戦争と低金利の安定成長期。\nコロナ直前の最後の平和な時代。' },
-  '2024':   { bgIdx:12, title:'2024年の壁を突破',    sub:'令和の投資家になった',
+  '2024':   { bgIdx:12, charFile:'images/cert/char-end-6.png', title:'2024年の壁を突破',    sub:'令和の投資家になった',
     period:'2020〜2024年', era:'コロナショックと歴史的回復、インフレの時代。\n日銀利上げと円安が同時進行した。' },
-  '2025':   { bgIdx:13, title:'全課程修了',           sub:'マネぼう塾を完全制覇した',
+  '2025':   { bgIdx:13, charFile:'images/cert/char-oru-7.png', title:'全課程修了',           sub:'マネぼう塾を完全制覇した',
     period:'1970〜2025年（全55年）', era:'55年の投資人生をついに完走。\n激動の時代を共に歩み抜いた。' },
 };
 
@@ -5273,8 +5326,8 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
     img.src = src;
   });
 
-  // 1. background image (full bleed)
-  const bgImg = await loadImg('images/cert/cert-' + m.bgIdx + '.png');
+  // 1. background image (full bleed) — use bg-N.png from 現金/背景
+  const bgImg = await loadImg('images/cert/bg-' + m.bgIdx + '.png');
   if (bgImg) {
     ctx.drawImage(bgImg, 0, 0, W, H);
   } else {
@@ -5296,14 +5349,24 @@ async function _renderCertCanvas(canvas, certKey, playerName, assets, dateStr) {
   bg2.addColorStop(0,'rgba(0,0,0,0)'); bg2.addColorStop(1,'rgba(0,0,0,0.6)');
   ctx.fillStyle = bg2; ctx.fillRect(0,H*0.78,W,H*0.22);
 
-  // 3. character image (right side, bottom-anchored)
-  const charImg = await loadImg('images/img5.webp');
+  // 3. character image (right side, bottom-anchored, clipped to right 45%)
+  const charSrc = m.charFile || 'images/img5.webp';
+  const charImg = await loadImg(charSrc);
   if (charImg) {
-    const ch = H * 0.88;
-    const cw = charImg.naturalWidth * (ch / charImg.naturalHeight);
+    const maxCharH = H * 0.92;
+    const aspectRatio = charImg.naturalWidth / charImg.naturalHeight;
+    let finalH = maxCharH;
+    let finalW = finalH * aspectRatio;
+    const maxCharW = W * 0.44;
+    if (finalW > maxCharW) { finalW = maxCharW; finalH = finalW / aspectRatio; }
+    const cx = W - finalW;
+    const cy = H - finalH;
     ctx.save();
-    ctx.globalAlpha = 0.9;
-    ctx.drawImage(charImg, W - cw * 0.62, H - ch, cw, ch);
+    ctx.beginPath();
+    ctx.rect(W * 0.52, 0, W * 0.48, H);
+    ctx.clip();
+    ctx.globalAlpha = 0.95;
+    ctx.drawImage(charImg, cx, cy, finalW, finalH);
     ctx.globalAlpha = 1;
     ctx.restore();
   }
@@ -5785,6 +5848,31 @@ function drawPortfolioGraph() {
     svgContent += `<polyline points="${savPts}" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-dasharray="5,3"/>`;
     const lv = savMap[hist[n-1].年];
     if (lv) svgContent += `<text x="${(toX(n-1)-4).toFixed(0)}" y="${(toY(lv)-4).toFixed(0)}" text-anchor="end" fill="rgba(255,255,255,0.38)" font-size="7" font-family="sans-serif">貯金</text>`;
+  }
+
+  // グループメンバー比較ライン
+  const MEMBER_LINE_COLORS = ['#5bc8e8','#f5c842','#e74c3c','#8bc34a','#e67e22','#9c27b0'];
+  if (_groupCompareOn && _memberDetails.length > 0) {
+    let colorIdx = 0;
+    const legendParts = [];
+    _memberDetails.forEach(m => {
+      if (!m.portfolioHistory || m.portfolioHistory.length < 2) return;
+      const mHist = m.portfolioHistory;
+      const color = MEMBER_LINE_COLORS[colorIdx % MEMBER_LINE_COLORS.length];
+      colorIdx++;
+      const mMaxY = Math.max(...mHist.map(h => h.total || 0));
+      const effectiveMax = Math.max(maxY, mMaxY);
+      const mToY = v => PY + (1 - v / effectiveMax) * (H - 2 * PY);
+      const mN = mHist.length;
+      const mPts = mHist.map((h, i) => `${(PX + (i / (mN-1)) * (W - 2*PX)).toFixed(1)},${mToY(h.total||0).toFixed(1)}`).join(' ');
+      svgContent += `<polyline points="${mPts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-dasharray="4,2" opacity="0.8"/>`;
+      const lastName = _esc(m.name || 'メンバー');
+      const lastTotal = mHist[mHist.length-1].total || 0;
+      svgContent += `<text x="${(PX + (W - 2*PX) + 2).toFixed(0)}" y="${mToY(lastTotal).toFixed(0)}" fill="${color}" font-size="7" font-family="sans-serif" opacity="0.9">${lastName}</text>`;
+      legendParts.push(`<span style="color:${color}">─ ${lastName}</span>`);
+    });
+    const cl = document.getElementById('compareLegend');
+    if (cl) cl.innerHTML = legendParts.join('  ');
   }
 
   svg.innerHTML = svgContent;
@@ -6904,6 +6992,7 @@ async function cloudSaveNow(silent) {
     if (_groupId) {
       const holdingsSnap = {};
       ASSET_KEYS.forEach(a => { if ((holdings[a.id]||0) > 0) holdingsSnap[a.id] = holdings[a.id]; });
+      const histSnap = portfolioHistory.slice(-40).map(h => ({ 年: h.年, イベント: h.イベント, total: h.total }));
       await _db.collection('groups').doc(_groupId)
         .collection('members').doc(_fbUser.uid).set({
           name:        _fbUser.displayName || 'ユーザー',
@@ -6913,6 +7002,7 @@ async function cloudSaveNow(silent) {
           totalAssets,
           holdings:    holdingsSnap,
           badgeCount:  unlockedTitles.size,
+          portfolioHistory: histSnap,
           updatedAt:   new Date()
         }, { merge: true });
     }
@@ -7060,8 +7150,23 @@ function _ensureInstructorPanel() {
 }
 
 let _memberDetails = [];
+let _groupCompareOn = false;
+
+function toggleGroupCompare() {
+  _groupCompareOn = !_groupCompareOn;
+  const btn = document.getElementById('compareToggleBtn');
+  if (btn) btn.classList.toggle('active', _groupCompareOn);
+  if (!_groupCompareOn) {
+    const cl = document.getElementById('compareLegend');
+    if (cl) cl.innerHTML = '';
+  }
+  drawPortfolioGraph();
+}
+
 function _renderInstructorPanel(members) {
   _memberDetails = members;
+  const row = document.getElementById('compareToggleRow');
+  if (row) row.style.display = members.length > 0 ? '' : 'none';
   const el = document.getElementById('instructorPanelInner');
   if (!el) return;
   if (!members.length) {
