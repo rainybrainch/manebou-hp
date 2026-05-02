@@ -1,8 +1,21 @@
-const CACHE = 'manebou-v10';
+const CACHE = 'manebou-v15';
 const STATIC = [
   './calc.html',
   './home.html',
   './manifest.json',
+  './images/cert/cert-1.png',
+  './images/cert/cert-2.png',
+  './images/cert/cert-3.png',
+  './images/cert/cert-4.png',
+  './images/cert/cert-5.png',
+  './images/cert/cert-6.png',
+  './images/cert/cert-7.png',
+  './images/cert/cert-8.png',
+  './images/cert/cert-9.png',
+  './images/cert/cert-10.png',
+  './images/cert/cert-11.png',
+  './images/cert/cert-12.png',
+  './images/cert/cert-13.png',
   './images/img5.webp',
   './images/img5-2.webp',
   './images/img5-3.webp',
