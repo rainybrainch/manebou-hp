@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>マネぼうアプリ | マネぼう塾</title>
+<title>マネぼうアプリ 塾用 | マネぼう塾</title>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F5C842">
@@ -2704,23 +2704,11 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   </div>
 </div>
 
-<!-- ════ LOGIN OVERLAY ════ -->
+<!-- ════ LOGIN OVERLAY ════ (塾用：ニックネーム認証のみ) ════ -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box" style="max-width:360px;max-height:90vh;overflow-y:auto">
     <h2>🔐 アカウント</h2>
-    <!-- ソーシャルログイン（オンライン版） -->
-    <button class="btn-google" onclick="signInWithGoogle()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="G">
-      Googleでログイン
-    </button>
-    <button class="btn-google" style="background:#000;color:#fff;margin-top:6px;margin-bottom:0" onclick="signInWithTwitter()">
-      <span style="font-size:17px;line-height:1;font-weight:900">𝕏</span>
-      X（Twitter）でログイン
-    </button>
-    <button class="btn-google" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.75);border:1.5px solid rgba(255,255,255,0.2);margin-top:6px;margin-bottom:0" onclick="signInAsGuest()">
-      👤 ゲストとして遊ぶ
-    </button>
-    <div class="auth-divider">または ニックネームで</div>
+    <p style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:14px;text-align:center">ニックネームとパスワードで登録・ログイン</p>
     <!-- ニックネーム認証タブ -->
     <div class="auth-tab-row">
       <button class="auth-tab-btn active" id="authTabBtnLogin" onclick="switchAuthTab('login')">ログイン</button>
@@ -2823,7 +2811,7 @@ html.light .acv2-div.no { color: rgba(26,26,46,0.3); border-color: rgba(26,26,46
   <span class="nav-spacer"></span>
   <a class="nav-brand" href="home.html?noredirect" style="text-decoration:none;">
     <img class="nav-char" src="images/img5.webp" alt="おーる局長">
-    <span class="nav-title" id="navTitle">マネぼうアプリ Online</span>
+    <span class="nav-title" id="navTitle">マネぼうアプリ 塾用</span>
   </a>
   <div class="nav-side-ticker" id="navSideTicker">
     <span class="nav-side-text" id="navBannerText"></span>
